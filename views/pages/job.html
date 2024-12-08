@@ -1,0 +1,56 @@
+<div class="view-container">
+  <form id="jobForm" name="jobForm" model-name="job" date-format="M/d/yyyy">
+    <header>
+      <button type="button" id="btnBack" name="btnBack" class="btn-back"></button>
+      <h2>{{resource.job}}</h2>
+      <button class="btn-group btn-right"><i class="material-icons">group</i></button>
+    </header>
+    <div>
+      <section class="row">
+        <label class="col s6 m6 required">
+          {{resource.id}}
+          <input
+            type="text"
+            id="id"
+            name="id"
+            maxlength="60"
+            required
+            readonly
+            onblur="requiredOnBlur(event)"
+            placeholder="{{resource.id}}"
+            value="{{job.id}}"
+          />
+        </label>
+        <label class="col s6 m6 required">
+          {{resource.title}}
+          <input
+            type="text"
+            id="title"
+            name="title"
+            value="{{job.title}}"
+            maxlength="255"
+            required
+            onblur="requiredOnBlur(event)"
+            placeholder="{{resource.job_name}}"
+          />
+        </label>
+        <label class="col s12 m6">
+          {{resource.published_at}}
+          <input type="datetime-local" id="publishedAt" name="publishedAt" value="{{datetimeToString(job.publishedAt)}}" step=".010" />
+        </label>
+        <label class="col s12 m6">
+          {{resource.description}}
+          <input type="text" id="description" name="description" maxlength="800" placeholder="{{resource.description}}" value="{{job.description}}" />
+        </label>
+        <div class="col s12 m6 radio-section">
+          {{resource.status}}
+          <div class="radio-group">
+            <label><input type="radio" id="active" name="status" value="A" {% if job.status == "A" %} checked {% endif %}/>{{resource.active}}</label>
+            <label><input type="radio" id="inactive" name="status" value="I" {% if job.status == "I" %} checked {% endif %}/>{{resource.inactive}}</label>
+          </div>
+        </div>
+      </section>
+    </div>
+    <footer><button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)">{{resource.save}}</button></footer>
+  </form>
+</div>

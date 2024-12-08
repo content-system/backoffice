@@ -1,0 +1,98 @@
+<div class="view-container">
+  <form id="userForm" name="userForm" novalidate>
+    <header class="view-header">
+      <button type="button" id="btnBack" name="btnBack" class="btn-back"></button>
+      <h2 class="view-title">User</h2>
+      <div class="btn-group">
+        <button class="btn-group btn-right"><i class="material-icons">group</i></button>
+        <button class="btn-group btn-right"><i class="material-icons">group</i></button>
+      </div>
+    </header>
+    <div class="row">
+      <label class="col s12 m6 required">
+        {{resource.user_id}}
+        <input
+          type="text"
+          id="userId"
+          name="userId"
+          class="form-control"
+          readonly
+          maxlength="20"
+          required
+          placeholder="{{resource.user_id}}"
+          value="{{user.userId}}"
+        />
+      </label>
+      <label class="col s12 m6 required">
+        {{resource.username}}
+        <input
+          type="text"
+          id="username"
+          name="username"
+          class="form-control"
+          readonly=""
+          maxlength="40"
+          required
+          onblur="requiredOnBlur(event)"
+          placeholder="{{resource.username}}"
+          value="{{user.username}}"
+        />
+      </label>
+      <label class="col s12 m6 required">
+        {{resource.display_name}}
+        <input
+          type="text"
+          id="displayName"
+          name="displayName"
+          class="form-control"
+          maxlength="40"
+          required
+          onblur="requiredOnBlur(event)"
+          placeholder="{{resource.display_name}}"
+          value="{{user.displayName}}"
+        />
+      </label>
+      <label class="col s12 m6 flying">
+        {{resource.person_title}}
+        <select id="title" name="title" class="form-control" onblur="requiredOnBlur(event)">
+          <option value="">{{resource.please_select}}</option>
+          {% for title in titles %}
+          <option value="{{title.value}}" {% if title.value == user.title %}selected{% endif %}>{{title.text}}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label class="col s12 m6 flying">
+        {{resource.position}}
+        <select id="position" name="position" class="form-control" style="width: 99%" onblur="requiredOnBlur(event)">
+          <option value="">{{resource.please_select}}</option>
+          {% for position in positions %}
+          <option value="{{position.value}}" {% if position.value == user.position %}selected{% endif %}>{{position.text}}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label class="col s12 m6 flying">
+        {{resource.phone}}
+        <input type="tel" id="phone" name="phone" class="form-control" maxlength="17" placeholder="{{resource.phone}}" value="{{user.phone}}" />
+      </label>
+      <label class="col s12 m6 flying">
+        {{resource.email}}
+        <input type="text" id="email" name="email" data-type="email" maxlength="100" placeholder="{{resource.email}}" value="{{user.email}}" />
+      </label>
+      <label class="col s12 m6">
+        {{resource.gender}}
+        <div class="radio-group">
+          <label><input type="radio" id="gender" name="gender" disabled value="M" {% if user.gender == "M" %} checked {% endif %} />{{resource.male}}</label>
+          <label><input type="radio" id="gender" name="gender" disabled value="F" {% if user.gender == "F" %} checked {% endif %} />{{resource.female}}</label>
+        </div>
+      </label>
+      <div class="col s12 m6 radio-section">
+        {{resource.status}}
+        <div class="radio-group">
+          <label><input type="radio" id="active" name="status" value="A" {% if user.status == "A" %} checked {% endif %}/>{{resource.active}}</label>
+          <label><input type="radio" id="inactive" name="status" value="I" {% if user.status == "I" %} checked {% endif %}/>{{resource.inactive}}</label>
+        </div>
+      </div>
+    </div>
+    <footer class="view-footer"><button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)">{{resource.save}}</button></footer>
+  </form>
+</div>

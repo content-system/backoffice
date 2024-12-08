@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Web site created using create-react-app" />
+    <link rel="apple-touch-icon" href="/logo192.png" />
+    <link rel="stylesheet" href="/css/reset.css" />
+    <link rel="stylesheet" href="/fonts/material-icon/css/material-icons.css" />
+    <link rel="stylesheet" href="/fonts/Roboto/font.css" />
+    <link rel="stylesheet" href="/css/checkbox.css" />
+    <link rel="stylesheet" href="/css/radio.css" />
+    <link rel="stylesheet" href="/css/grid.css" />
+    <link rel="stylesheet" href="/css/alert.css" />
+    <link rel="stylesheet" href="/css/loader.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/form.css" />
+    <link rel="stylesheet" href="/css/list-view.css" />
+    <link rel="stylesheet" href="/css/table.css" />
+    <link rel="stylesheet" href="/css/list-detail.css" />
+    <link rel="stylesheet" href="/css/data-list.css" />
+    <link rel="stylesheet" href="/css/button.css" />
+    <link rel="stylesheet" href="/css/search.css" />
+    <link rel="stylesheet" href="/css/layout.css" />
+    <link rel="stylesheet" href="/css/navigation.css" />
+    <link rel="stylesheet" href="/css/pagination.css" />
+    <link rel="stylesheet" href="/css/theme.css" />
+    <link rel="stylesheet" href="/css/dark.css" />
+    <!--
+    manifest.json provides metadata used when your web app is installed on a
+    user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="/manifest.json" />
+    <title>CMS Back Office</title>
+  </head>
+  <body id="sysBody" class="full-header top-menu">
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="sysToast" class="toast-message alert-success"></div>
+    <div id="sysLoading" class="loader-wrapper" style="display: none">
+      <div class="loader-sign">
+        <div class="loader"></div>
+        <!-- <div class="loader-text">Please wait</div> -->
+      </div>
+    </div>
+    <div id="sysAlert" class="alert-wrapper">
+      <div class="alert">
+        <div>
+          <div id="sysIcon" class="alert-icon"></div>
+          <h4
+            id="sysMessageHeader"
+            data-confirm="{{resource.header_confirm}}"
+            data-error="{{resource.header_error}}"
+            data-warning="{{resource.header_warning}}"
+            data-info="{{resource.header_info}}"
+            data-success="{{resource.header_success}}"
+            data-ok="{{resource.button_ok}}"
+          ></h4>
+          <p id="sysMessage"></p>
+        </div>
+        <footer>
+          <button type="button" id="sysNo" name="btnCancel" class="btn-cancel" onclick="noOnClick()" data-text="{{resource.button_no}}"></button>
+          <button type="submit" id="sysYes" name="btnAccept" class="btn-accept" onclick="yesOnClick()" data-text="{{resource.button_yes}}"></button>
+        </footer>
+      </div>
+    </div>
+    <div id="root">
+      <div class="sidebar-parent menu-on">
+        <div class="top-banner">
+          <div class="logo-banner-wrapper">
+            <img src="https://jacobspradlin.files.wordpress.com/2014/10/banner-people-connected.png" alt="Banner of The Company" />
+            <img src="https://jacobspradlin.files.wordpress.com/2014/10/banner-people-connected.png" class="banner-logo-title" alt="Logo of The Company" />
+          </div>
+        </div>
+        <div class="menu sidebar">{% include "partials/navigation.html" %}</div>
+        <div id="pageContainer" class="page-container">
+          {% include "partials/header.html" %}
+          <div id="pageBody" class="page-body">{% block content %}{% endblock %}</div>
+        </div>
+      </div>
+    </div>
+    <script data-nscript="afterInteractive">
+      const resource = {
+        msg_confirm_save: "{{resource.msg_confirm_save}}",
+        msg_save_success: "{{resource.msg_save_success}}",
+
+        error_undefined: "{{resource.error_undefined}}",
+        error_exp: "{{resource.error_exp}}",
+        error_type: "{{resource.error_type}}",
+
+        error_boolean: "{{resource.error_boolean}}",
+        error_strings: "{{resource.error_strings}}",
+        error_numbers: "{{resource.error_numbers}}",
+        error_integers: "{{resource.error_integers}}",
+        error_datetimes: "{{resource.error_datetimes}}",
+        error_dates: "{{resource.error_dates}}",
+
+        error_required: "{{resource.error_required}}",
+        error_minlength: "{{resource.error_minlength}}",
+        error_maxlength: "{{resource.error_maxlength}}",
+
+        error_email: "{{resource.error_email}}",
+        error_integer: "{{resource.error_integer}}",
+        error_number: "{{resource.error_number}}",
+        error_precision: "{{resource.error_precision}}",
+        error_scale: "{{resource.error_scale}}",
+        error_phone: "{{resource.error_phone}}",
+        error_fax: "{{resource.error_fax}}",
+        error_url: "{{resource.error_url}}",
+        error_ipv4: "{{resource.error_ipv4}}",
+        error_ipv6: "{{resource.error_ipv6}}",
+        error_digit: "{{resource.error_digit}}",
+        error_dash_digit: "{{resource.error_dash_digit}}",
+        error_code: "{{resource.error_code}}",
+        error_dash_code: "{{resource.error_dash_code}}",
+        error_routing_number: "{{resource.error_routing_number}}",
+        error_post_code: "{{resource.error_post_code}}",
+        error_ca_post_code: "{{resource.error_ca_post_code}}",
+        error_us_post_code: "{{resource.error_us_post_code}}",
+
+        error_min: "{{resource.error_min}}",
+        error_max: "{{resource.error_max}}",
+        error_gt: "{{resource.error_gt}}",
+        error_lt: "{{resource.error_lt}}",
+        error_equal: "{{resource.error_equal}}",
+        error_date: "{{resource.error_date}}",
+        error_min_date: "{{resource.error_min_date}}",
+        error_max_date: "{{resource.error_max_date}}",
+        error_from_now: "{{resource.error_from_now}}",
+        error_from_tomorrow: "{{resource.error_from_tomorrow}}",
+        error_from: "{{resource.error_from}}",
+        error_after_now: "{{resource.error_after_now}}",
+        error_after_tomorrow: "{{resource.error_after_tomorrow}}",
+        error_after: "{{resource.error_after}}",
+
+        error_400: "{{resource.error_400}}",
+        error_409: "{{resource.error_409}}",
+        error_submit_failed: "{{resource.error_submit_failed}}",
+        error_submitting_form: "{{resource.error_submitting_form}}",
+      }
+      function getResource() {
+        return resource
+      }
+    </script>
+    <script src="/static/ui.js" data-nscript="afterInteractive"></script>
+    <script src="/static/validator.js" data-nscript="afterInteractive"></script>
+    <script src="/static/script.js" data-nscript="afterInteractive"></script>
+    <script src="/static/layout.js" data-nscript="afterInteractive"></script>
+  </body>
+</html>

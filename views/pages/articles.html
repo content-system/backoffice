@@ -1,0 +1,68 @@
+<div class="view-container">
+  <header><h2>{{resource.news}}</h2></header>
+  <div>
+    <form id="articlesForm" name="articlesForm" novalidate="">
+      <section class="row search-group">{% include "partials/search.html" %} {% include "partials/pagination.html" %}</section>
+      <section class="row search-group inline advance-search">
+        <label class="col s12 m6">
+          {{resource.published_at_from}}
+          <input
+            type="datetime-local"
+            id="publishedAt_min"
+            name="publishedAt_min"
+            data-field="publishedAt.min"
+            value="{{datetimeToString(filter.publishedAt.min)}}"
+            step=".010"
+          />
+        </label>
+        <label class="col s12 m6">
+          {{resource.published_at_to}}
+          <input
+            type="datetime-local"
+            id="publishedAt_max"
+            name="publishedAt_max"
+            data-field="publishedAt.max"
+            value="{{datetimeToString(filter.publishedAt.max)}}"
+            step=".010"
+          />
+        </label>
+      </section>
+      <input type="hidden" id="page" name="page" value="{{filter.page}}" />
+      <input type="hidden" id="_message" name="_message" value="{{message}}" />
+    </form>
+    <form class="list-result">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th data-field="id">
+                <a href="{{sort.id.url}}">{{resource.id}} {{sort.id.tag}}</a>
+              </th>
+              <th data-field="title">
+                <a href="{{sort.title.url}}">{{resource.title}} {{sort.title.tag}}</a>
+              </th>
+              <th data-field="publishedAt" class="datetime">
+                <a href="{{sort.publishedAt.url}}">{{resource.published_at}} {{sort.publishedAt.tag}}</a>
+              </th>
+              <th data-field="description">
+                <a href="{{sort.description.url}}">{{resource.description}} {{sort.description.tag}}</a>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in list %}
+            <tr>
+              <td>
+                <a href="/articles/{{item.id}}" onclick="navigate(event)">{{item.id}}</a>
+              </td>
+              <td>{{item.title}}</td>
+              <td>{{item.publishedAt}}</td>
+              <td>{{item.description}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </form>
+  </div>
+</div>

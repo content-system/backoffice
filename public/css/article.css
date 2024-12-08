@@ -1,0 +1,12 @@
+.article,
+.article-header,
+.article-meta,
+.article-thumbnail,
+.article-description {
+  font-size: 12px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+.article-content {
+  font-size: 12px;
+}

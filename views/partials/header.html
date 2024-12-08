@@ -1,0 +1,43 @@
+<div class="page-header">
+  <form>
+    <div class="search-group">
+      <section>
+        <button type="button" class="toggle-menu" onclick="toggleMenu(event)"></button>
+        <button type="button" class="toggle-search" onclick="toggleUniversalSearch(event)"></button>
+        <button type="button" class="close-search" onclick="toggleUniversalSearch(event)"></button>
+      </section>
+      <div class="logo-wrapper">
+        <img class="logo" src="/images/logo.png" alt="Logo of The Company" />
+      </div>
+      <label class="search-input">
+        <input
+          type="text"
+          id="q"
+          name="q"
+          maxlength="400"
+          onchange="qOnChange(event)"
+          placeholder="{{resource.search}}"
+          autocomplete="off"
+          value=""
+          style="padding-left: 12px"
+        />
+        <button type="button" hidden class="btn-remove-text" onclick="clearText(event)"></button>
+        <button type="button" class="btn-search"></button>
+      </label>
+      <section class="quick-nav">
+        <div class="dropdown-menu-profile">
+          <i class="material-icons">person</i>
+          <ul id="dropdown-basic" class="dropdown-content-profile">
+            <li class="menu" onclick="changeMenu(event)" data-menu="Menu" data-sidebar="Sidebar"><i class="material-icons">credit_card</i><span>Menu</span></li>
+            <hr style="margin: 0px" />
+            <li onclick="changeMode()"><i class="material-icons">timelapse</i><span>Dark mode</span></li>
+            <hr style="margin: 0px" />
+            <li><i class="material-icons">account_circle</i><a href="/settings">kaka</a></li>
+            <hr style="margin: 0px" />
+            <li><i class="material-icons">exit_to_app</i><button>Sign out</button></li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </form>
+</div>

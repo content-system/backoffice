@@ -1,0 +1,12 @@
+node_modules
+.idea
+dist
+es5
+es6
+package-lock.json
+debug.log
+.docker
+.cache
+.DS_Store
+server.js.LICENSE.txt
+server.js

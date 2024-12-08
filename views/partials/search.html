@@ -1,0 +1,11 @@
+<label class="col s12 m6 search-input">
+  <select id="limit" name="limit" onchange="search(event)">
+    {% for pageSize in limits %}
+    <option value="{{pageSize}}" {% if pageSize == filter.limit %} selected {% endif %}>{{pageSize}}</option>
+    {% endfor %}
+  </select>
+  <input type="text" id="q" name="q" maxlength="255" onchange="qOnChange(event)" placeholder="{{resource.search}}" value="{{filter.q}}" />
+  <button type="button" hidden class="btn-remove-text" onclick="clearText(event)"></button>
+  <button type="button" class="btn-filter on" onclick="toggleSearch(event)"></button>
+  <button type="submit" class="btn-search" onclick="search(event)"></button>
+</label>

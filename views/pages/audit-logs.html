@@ -1,0 +1,66 @@
+<div class="view-container">
+  <header>
+    <h2>{{resource.audit_logs}}</h2>
+    <div class="btn-group float-left"><button type="button" id="btnListView" name="btnListView" class="btn-list-view" data-view="listview"></button></div>
+  </header>
+  <div>
+    <form id="auditLogsForm" name="rolesForm" novalidate>
+      <section class="row search-group">
+        <label class="col s12 m2 l4">
+          {{resource.action}}
+          <input type="text" id="action" name="action" maxlength="240" value="{{filter.action}}" />
+        </label>
+        <label class="col s12 m5 l4">
+          {{resource.audit_log_time_from}}
+          <input type="datetime-local" step=".010" id="time_min" name="time_min" data-field="time.min" value="{{datetimeToString(filter.time.min)}}" />
+        </label>
+        <label class="col s12 m5 l4">
+          {{resource.audit_log_time_to}}
+          <input type="datetime-local" step=".010" id="time_max" name="time_max" data-field="time.max" value="{{datetimeToString(filter.time.max)}}" />
+        </label>
+      </section>
+      <section class="btn-group">
+        <label>
+          {{resource.page_size}}
+          <select id="limit" name="limit" onchange="search(event)">
+            {% for pageSize in limits %}
+            <option value="{{pageSize}}" {% if pageSize == filter.limit %} selected {% endif %}>{{pageSize}}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <button type="submit" class="btn-search">{{resource.search}}</button>
+      </section>
+    </form>
+    <form class="list-result">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th data-field="time"><button type="button" id="sortTime">Time</button></th>
+              <th data-field="resource"><button type="button" id="sortResource">Resource</button></th>
+              <th data-field="action"><button type="button" id="sortAction">Action</button></th>
+              <th data-field="status"><button type="button" id="sortStatus">Status</button></th>
+              <th data-field="userId">Performed by</th>
+              <th data-field="ip"><button type="button" id="sortIp">IP</button></th>
+              <th data-field="remark"><button type="button" id="sortRemark">Remark</button></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in list %}
+            <tr>
+              <td>{{item.time}}</td>
+              <td>{{item.resource}}</td>
+              <td>{{item.action}}</td>
+              <td><span class="badge badge-sm badge-outline-success">success</span></td>
+              <td>{{item.userId}}</td>
+              <td>{{item.ip}}</td>
+              <td>{{item.remark}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% include "partials/pagination.html" %}
+    </form>
+  </div>
+</div>

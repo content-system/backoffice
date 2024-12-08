@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Web site created using create-react-app" />
+    <link rel="apple-touch-icon" href="/logo192.png" />
+    <link rel="stylesheet" href="/css/reset.css" />
+    <link rel="stylesheet" href="/fonts/material-icon/css/material-icons.css" />
+    <link rel="stylesheet" href="/fonts/Roboto/font.css" />
+    <link rel="stylesheet" href="/css/checkbox.css" />
+    <link rel="stylesheet" href="/css/radio.css" />
+    <link rel="stylesheet" href="/css/grid.css" />
+    <link rel="stylesheet" href="/css/alert.css" />
+    <link rel="stylesheet" href="/css/loader.css" />
+    <link rel="stylesheet" href="/css/page.css" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/form.css" />
+    <link rel="stylesheet" href="/css/list-view.css" />
+    <link rel="stylesheet" href="/css/table.css" />
+    <link rel="stylesheet" href="/css/list-detail.css" />
+    <link rel="stylesheet" href="/css/data-list.css" />
+    <link rel="stylesheet" href="/css/solid-container.css" />
+    <link rel="stylesheet" href="/css/button.css" />
+    <link rel="stylesheet" href="/css/search.css" />
+    <link rel="stylesheet" href="/css/layout.css" />
+    <link rel="stylesheet" href="/css/navigation.css" />
+    <link rel="stylesheet" href="/css/pagination.css" />
+    <link rel="stylesheet" href="/css/theme.css" />
+    <link rel="stylesheet" href="/css/dark.css" />
+    <!--
+    manifest.json provides metadata used when your web app is installed on a
+    user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="/manifest.json" />
+    <title>CMS Backoffice</title>
+  </head>
+  <body id="sysBody" class="full-header top-menu">
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="sysToast" class="toast-message alert-success"></div>
+    <div id="sysLoading" class="loader-wrapper" style="display: none">
+      <div class="loader-sign">
+        <div class="loader"></div>
+        <!-- <div class="loader-text">Please wait</div> -->
+      </div>
+    </div>
+    <div id="root">
+      <div id="pageContainer" class="view-container central-full sign-in-view-container">
+        <form id="signinForm" name="signinForm" novalidate autocomplete="off" method="post">
+          <div>
+            <img class="logo" src="/images/logo.png" alt="logo" />
+            <h2>{{resource.signin}}</h2>
+            <div class="message alert-error">{{message}}<span onclick="clearMessage(event)"></span></div>
+            <label class="required {{errors.username.invalid}}">
+              {{resource.username}}
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value="{{user.username}}"
+                maxlength="100"
+                required
+                placeholder="{{resource.placeholder_username}}"
+              />
+            </label>
+            <label class="required {{errors.password.invalid}}">
+              {{resource.password}}
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value="{{user.password}}"
+                maxlength="100"
+                required
+                placeholder="{{resource.placeholder_password}}"
+              />
+            </label>
+            <label class="col s12 checkbox-container"> <input type="checkbox" id="remember" name="remember" />{{resource.signin_remember_me}} </label>
+            <button type="submit" id="btnSignin" name="btnSignin">{{resource.button_signin}}</button>
+            <a id="btnForgotPassword" href="/forgot-password">{{resource.button_forgot_password}}</a>
+            <a id="btnSignup" href="/signup">{{resource.button_signup}}</a>
+            <a id="btnHome" href="/">{{resource.button_home}}</a>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script data-nscript="afterInteractive">
+      const resource = {
+        error_required: "{{resource.error_required}}",
+        error_email: "{{resource.error_email}}",
+
+        error_400: "{{resource.error_400}}",
+        error_409: "{{resource.error_409}}",
+        error_submit_failed: "{{resource.error_submit_failed}}",
+        error_submitting_form: "{{resource.error_submitting_form}}",
+      }
+      function getResource() {
+        return resource
+      }
+    </script>
+    <script src="/static/ui.js" data-nscript="afterInteractive"></script>
+    <script src="/static/validator.js" data-nscript="afterInteractive"></script>
+    <script src="/static/script.js" data-nscript="afterInteractive"></script>
+    <script src="/static/layout.js" data-nscript="afterInteractive"></script>
+  </body>
+</html>

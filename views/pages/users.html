@@ -1,0 +1,69 @@
+<div class="view-container">
+  <header><h2>{{resource.users}}</h2></header>
+  <div>
+    <form id="usersForm" name="usersForm" novalidate>
+      <section class="row search-group">{% include "partials/search.html" %} {% include "partials/pagination.html" %}</section>
+      <section class="row search-group inline advance-search">
+        <label class="col s12 m4">
+          {{resource.username}}
+          <input type="text" id="username" name="username" value="{{filter.username}}" />
+        </label>
+        <label class="col s12 m4">
+          {{resource.display_name}}
+          <input type="text" id="displayName" name="displayName" value="{{filter.displayName}}" />
+        </label>
+        <label class="col s12 m4 checkbox-section">
+          {{resource.status}}
+          <section class="checkbox-group">
+            <label>
+              <input type="checkbox" id="active" name="status" value="A" {% if checked(filter.status, 'A') %} checked {% endif %} />{{resource.active}}
+            </label>
+            <label>
+              <input type="checkbox" id="inactive" name="status" value="I" {% if checked(filter.status, 'I') %} checked {% endif %}/>{{resource.inactive}}
+            </label>
+          </section>
+        </label>
+      </section>
+      <input type="hidden" id="page" name="page" value="{{filter.page}}" />
+      <input type="hidden" id="_message" name="_message" value="{{message}}" />
+    </form>
+    <form class="list-result">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th data-field="userId">
+                <a id="sortUserId" href="{{sort.userId.url}}">{{resource.user_id}} {{sort.userId.tag}}</a>
+              </th>
+              <th data-field="username">
+                <a id="sortUsername" href="{{sort.username.url}}">{{resource.username}} {{sort.username.tag}}</a>
+              </th>
+              <th data-field="email" class="datetime">
+                <a id="sortEmail" href="{{sort.email.url}}">{{resource.email}} {{sort.email.tag}}</a>
+              </th>
+              <th data-field="displayName">
+                <a id="sortDisplayName" href="{{sort.displayName.url}}">{{resource.display_name}} {{sort.displayName.tag}}</a>
+              </th>
+              <th data-field="status">
+                <a id="sortStatus" href="{{sort.status.url}}">{{resource.status}} {{sort.status.tag}}</a>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in list %}
+            <tr>
+              <td>{{item.userId}}</td>
+              <td>
+                <a href="/users/{{item.userId}}" onclick="navigate(event)">{{item.username}}</a>
+              </td>
+              <td>{{item.email}}</td>
+              <td>{{item.displayName}}</td>
+              <td>{{item.status}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </form>
+  </div>
+</div>

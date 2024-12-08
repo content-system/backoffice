@@ -1,0 +1,20 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "pretty": true,
+    "target": "es5",
+    "baseUrl": "service",
+    "outDir": "./es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "strict": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "include": ["service/**/*.ts", "server.ts", "config.ts", "client/**/*.ts", "build/**/*.ts"],
+  "exclude": ["node_modules"]
+}
