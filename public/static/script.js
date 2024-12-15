@@ -4,6 +4,7 @@ const r2 = / |\.|\$|€|£|¥|'|٬|،| /g
 class resources {}
 resources.defaultLimit = 12
 resources.containerClass = "form-input"
+resources.hiddenMessage = "hidden-message"
 resources.num1 = / |,|\$|€|£|¥|'|٬|،| /g
 resources.num2 = / |\.|\$|€|£|¥|'|٬|،| /g
 resources.email = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,4})$/i
@@ -689,6 +690,12 @@ function changePage(e) {
             for (let i = 0; i < forms.length; i++) {
               registerEvents(forms[i])
             }
+            setTimeout(function () {
+              const msg = getHiddenMessage(forms, resources.hiddenMessage)
+              if (msg && msg.length > 0) {
+                toast(msg)
+              }
+            })
           }
           window.history.pushState(undefined, "Title", newUrl)
         })
@@ -732,6 +739,12 @@ function search(e) {
             for (let i = 0; i < forms.length; i++) {
               registerEvents(forms[i])
             }
+            setTimeout(function () {
+              const msg = getHiddenMessage(forms, resources.hiddenMessage)
+              if (msg && msg.length > 0) {
+                toast(msg)
+              }
+            })
           }
           window.history.pushState(undefined, "Title", newUrl)
         })
@@ -744,6 +757,40 @@ function search(e) {
       console.log("Error: " + err)
       alertError(resource.error_submitting_form, undefined, undefined, err)
     })
+}
+function getValue(form, name) {
+  if (form) {
+    for (let i = 0; i < form.length; i++) {
+      const ele = form[i]
+      if (ele.name === name) {
+        return ele.value
+      }
+    }
+  }
+  return null
+}
+function getHiddenMessage(nodes, name) {
+  if (nodes.length >= 1) {
+    const form = nodes[0]
+    const n = name && name.length > 0 ? name : "hidden-message"
+    const ele = form.querySelector("." + n)
+    if (ele) {
+      return ele.innerHTML
+    }
+  }
+  return null
+}
+function setInputValue(form, name, value) {
+  if (form) {
+    for (let i = 0; i < form.length; i++) {
+      const ele = form[i]
+      if (ele.name === name) {
+        ele.value = value
+        return true
+      }
+    }
+  }
+  return false
 }
 function submitFormData(e) {
   e.preventDefault()

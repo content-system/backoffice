@@ -15,7 +15,9 @@
   background-color: #f8d7da !important;
   border-color: #f5c6cb;
 }
-
+.hidden-message {
+  display: none;
+}
 .message {
   width: 100%;
   line-height: unset;

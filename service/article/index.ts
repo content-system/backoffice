@@ -1,12 +1,12 @@
 import { Request, Response } from "express"
 import {
+  buildMessage,
   buildPages,
   buildPageSearch,
-  buildSortFromRequest,
   buildSortSearch,
   cloneFilter,
+  escape,
   escapeArray,
-  escapeHTML,
   format,
   fromRequest,
   getSearch,
@@ -15,7 +15,7 @@ import {
   handleError,
   hasSearch,
   queryNumber,
-  resources,
+  resources
 } from "express-ext"
 import { Log, Manager, Search } from "onecore"
 import { DB, Repository, SearchBuilder } from "query-core"
@@ -49,7 +49,7 @@ export class ArticleController {
     this.service.load(id).then((article) => {
       res.render(getView(req, "article"), {
         resource,
-        article: escapeHTML(article),
+        article: escape(article),
       })
     })
   }
@@ -83,13 +83,12 @@ export class ArticleController {
     }
     const page = queryNumber(req, resources.page, 1)
     const limit = queryNumber(req, resources.limit, resources.defaultLimit)
-    this.service.search(cloneFilter(filter, page, limit), limit, page).then((result) => {
+    this.service.search(cloneFilter(filter, limit, page), limit, page).then((result) => {
       const list = escapeArray(result.list)
       for (const item of result.list) {
         item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
       }
       const search = getSearch(req.url)
-      const sort = buildSortFromRequest(req)
       res.render(getView(req, "articles"), {
         resource,
         limits: resources.limits,
@@ -97,7 +96,8 @@ export class ArticleController {
         list,
         pages: buildPages(limit, result.total),
         pageSearch: buildPageSearch(search),
-        sort: buildSortSearch(search, fields, sort),
+        sort: buildSortSearch(search, fields, filter.sort),
+        message: buildMessage(resource, list, limit, page, result.total)
       })
     })
   }

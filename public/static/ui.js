@@ -79,7 +79,7 @@ function fadeOut(ele) {
   ele.style.opacity = "1"
   ;(function fade() {
     let val = parseFloat(ele.style.opacity)
-    val -= 0.1
+    val = -0.1
     if (val < 0) {
       ele.style.display = "none"
     } else {

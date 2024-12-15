@@ -1,12 +1,12 @@
 import { Request, Response } from "express"
 import {
+  buildMessage,
   buildPages,
   buildPageSearch,
-  buildSortFromRequest,
   buildSortSearch,
   cloneFilter,
+  escape,
   escapeArray,
-  escapeHTML,
   fromRequest,
   getSearch,
   getStatusCode,
@@ -14,7 +14,7 @@ import {
   handleError,
   hasSearch,
   queryNumber,
-  resources,
+  resources
 } from "express-ext"
 import { Log } from "onecore"
 import { validate } from "xvalidators"
@@ -46,7 +46,7 @@ export class UserController {
     this.service.load(id).then((user) => {
       res.render(getView(req, "user"), {
         resource,
-        user: escapeHTML(user),
+        user: escape(user),
         titles,
         positions,
       })
@@ -80,10 +80,9 @@ export class UserController {
     }
     const page = queryNumber(req, resources.page, 1)
     const limit = queryNumber(req, resources.limit, resources.defaultLimit)
-    this.service.search(cloneFilter(filter, page, limit), limit, page).then((result) => {
+    this.service.search(cloneFilter(filter, limit, page), limit, page).then((result) => {
       const list = escapeArray(result.list)
       const search = getSearch(req.url)
-      const sort = buildSortFromRequest(req)
       res.render(getView(req, "users"), {
         resource,
         limits: resources.limits,
@@ -91,7 +90,8 @@ export class UserController {
         list,
         pages: buildPages(limit, result.total),
         pageSearch: buildPageSearch(search),
-        sort: buildSortSearch(search, fields, sort),
+        sort: buildSortSearch(search, fields, filter.sort),
+        message: buildMessage(resource, list, limit, page, result.total)
       })
     })
   }

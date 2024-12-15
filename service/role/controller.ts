@@ -1,12 +1,12 @@
 import { Request, Response } from "express"
 import {
+  buildMessage,
   buildPages,
   buildPageSearch,
-  buildSortFromRequest,
   buildSortSearch,
   cloneFilter,
+  escape,
   escapeArray,
-  escapeHTML,
   fromRequest,
   getSearch,
   getStatusCode,
@@ -14,7 +14,7 @@ import {
   handleError,
   hasSearch,
   queryNumber,
-  resources,
+  resources
 } from "express-ext"
 import { Log } from "onecore"
 import { getDateFormat } from "ui-formatter"
@@ -41,10 +41,10 @@ export class RoleController {
     const editMode = id !== "new"
     if (!editMode) {
       const role = createRole()
-      res.render(getView(req, "role"), { resource, role: escapeHTML(role), editMode })
+      res.render(getView(req, "role"), { resource, role: escape(role), editMode })
     } else {
       this.service.load(id).then((role) => {
-        res.render(getView(req, "role"), { resource, role: escapeHTML(role), editMode })
+        res.render(getView(req, "role"), { resource, role: escape(role), editMode })
       })
     }
   }
@@ -87,18 +87,18 @@ export class RoleController {
     }
     const page = queryNumber(req, resources.page, 1)
     const limit = queryNumber(req, resources.limit, resources.defaultLimit)
-    this.service.search(cloneFilter(filter, page, limit), limit, page).then((result) => {
+    this.service.search(cloneFilter(filter, limit, page), limit, page).then((result) => {
       const list = escapeArray(result.list)
       const search = getSearch(req.url)
-      const sort = buildSortFromRequest(req)
       res.render(getView(req, "roles"), {
         resource,
         limits: resources.limits,
         filter,
-        list: result.list,
+        list,
         pages: buildPages(limit, result.total),
         pageSearch: buildPageSearch(search),
-        sort: buildSortSearch(search, fields, sort),
+        sort: buildSortSearch(search, fields, filter.sort),
+        message: buildMessage(resource, list, limit, page, result.total)
       })
     })
   }

@@ -2,18 +2,19 @@ import { Request, Response } from "express"
 import {
   addDays,
   addSeconds,
+  buildMessage,
   buildPages,
   buildPageSearch,
-  buildSortFromRequest,
   buildSortSearch,
   cloneFilter,
+  escapeArray,
   format,
   fromRequest,
   getSearch,
   getView,
   hasSearch,
   queryNumber,
-  resources,
+  resources
 } from "express-ext"
 import { Log, Search } from "onecore"
 import { DB, SearchBuilder } from "query-core"
@@ -46,20 +47,21 @@ export class AuditLogController {
     }
     const page = queryNumber(req, resources.page, 1)
     const limit = queryNumber(req, resources.limit, resources.defaultLimit)
-    this.search(cloneFilter(filter, page, limit), limit, page).then((result) => {
+    this.search(cloneFilter(filter, limit, page), limit, page).then((result) => {
       for (const item of result.list) {
         item.time = formatFullDateTime(item.time, dateFormat)
       }
+      const list = escapeArray(result.list)
       const search = getSearch(req.url)
-      const sort = buildSortFromRequest(req)
       res.render(getView(req, "audit-logs"), {
         resource,
         limits: resources.limits,
         filter,
-        list: result.list,
+        list,
         pages: buildPages(limit, result.total),
         pageSearch: buildPageSearch(search),
-        sort: buildSortSearch(search, fields, sort),
+        sort: buildSortSearch(search, fields, filter.sort),
+        message: buildMessage(resource, list, limit, page, result.total)
       })
     })
   }

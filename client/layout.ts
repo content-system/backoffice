@@ -160,6 +160,12 @@ function navigate(e: Event) {
               for (let i = 0; i < forms.length; i++) {
                 registerEvents(forms[i])
               }
+              setTimeout(function () {
+                const msg = getHiddenMessage(forms, resources.hiddenMessage)
+                if (msg && msg.length > 0) {
+                  toast(msg)
+                }
+              })
             }
           })
         } else {

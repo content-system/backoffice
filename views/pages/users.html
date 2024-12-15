@@ -2,6 +2,7 @@
   <header><h2>{{resource.users}}</h2></header>
   <div>
     <form id="usersForm" name="usersForm" novalidate>
+      <span class="hidden-message">{{message}}</span>
       <section class="row search-group">{% include "partials/search.html" %} {% include "partials/pagination.html" %}</section>
       <section class="row search-group inline advance-search">
         <label class="col s12 m4">

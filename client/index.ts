@@ -8,6 +8,7 @@ interface Phones {
 class resources {
   static defaultLimit = 12
   static containerClass = "form-input"
+  static hiddenMessage = "hidden-message"
 
   static num1 = / |,|\$|€|£|¥|'|٬|،| /g
   static num2 = / |\.|\$|€|£|¥|'|٬|،| /g
@@ -738,6 +739,12 @@ function changePage(e: Event) {
             for (let i = 0; i < forms.length; i++) {
               registerEvents(forms[i])
             }
+            setTimeout(function () {
+              const msg = getHiddenMessage(forms, resources.hiddenMessage)
+              if (msg && msg.length > 0) {
+                toast(msg)
+              }
+            })
           }
           window.history.pushState(undefined, "Title", newUrl)
         })
@@ -782,6 +789,12 @@ function search(e: Event) {
             for (let i = 0; i < forms.length; i++) {
               registerEvents(forms[i])
             }
+            setTimeout(function () {
+              const msg = getHiddenMessage(forms, resources.hiddenMessage)
+              if (msg && msg.length > 0) {
+                toast(msg)
+              }
+            })
           }
           window.history.pushState(undefined, "Title", newUrl)
         })
@@ -794,6 +807,40 @@ function search(e: Event) {
       console.log("Error: " + err)
       alertError(resource.error_submitting_form, undefined, undefined, err)
     })
+}
+function getValue(form: HTMLFormElement | null | undefined, name: string): string | null {
+  if (form) {
+    for (let i = 0; i < form.length; i++) {
+      const ele = form[i] as HTMLInputElement
+      if (ele.name === name) {
+        return ele.value
+      }
+    }
+  }
+  return null
+}
+function getHiddenMessage(nodes: NodeListOf<HTMLFormElement>, name?: string): string | null {
+  if (nodes.length >= 1) {
+    const form = nodes[0]
+    const n = name && name.length > 0 ? name : "hidden-message"
+    const ele = form.querySelector("." + n)
+    if (ele) {
+      return ele.innerHTML
+    }
+  }
+  return null
+}
+function setInputValue(form: HTMLFormElement | null | undefined, name: string, value: string): boolean {
+  if (form) {
+    for (let i = 0; i < form.length; i++) {
+      const ele = form[i] as HTMLInputElement
+      if (ele.name === name) {
+        ele.value = value
+        return true
+      }
+    }
+  }
+  return false
 }
 function submitFormData(e: Event) {
   e.preventDefault()
