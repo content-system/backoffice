@@ -163,7 +163,7 @@ function navigate(e) {
                 if (msg && msg.length > 0) {
                   toast(msg)
                 }
-              })
+              }, 0)
             }
           })
         } else {
@@ -185,6 +185,12 @@ window.onload = function () {
       for (let i = 0; i < forms.length; i++) {
         registerEvents(forms[i])
       }
+      setTimeout(function () {
+        const msg = getHiddenMessage(forms, resources.hiddenMessage, 1)
+        if (msg && msg.length > 0) {
+          toast(msg)
+        }
+      }, 0)
     }
     const sysNav = document.getElementById("sysNav")
     if (sysNav) {

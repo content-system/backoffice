@@ -695,7 +695,7 @@ function changePage(e) {
               if (msg && msg.length > 0) {
                 toast(msg)
               }
-            })
+            }, 0)
           }
           window.history.pushState(undefined, "Title", newUrl)
         })
@@ -744,7 +744,7 @@ function search(e) {
               if (msg && msg.length > 0) {
                 toast(msg)
               }
-            })
+            }, 0)
           }
           window.history.pushState(undefined, "Title", newUrl)
         })
@@ -769,9 +769,10 @@ function getValue(form, name) {
   }
   return null
 }
-function getHiddenMessage(nodes, name) {
-  if (nodes.length >= 1) {
-    const form = nodes[0]
+function getHiddenMessage(nodes, name, i) {
+  const index = i !== undefined && i >= 0 ? i : 0
+  if (nodes.length > index) {
+    const form = nodes[index]
     const n = name && name.length > 0 ? name : "hidden-message"
     const ele = form.querySelector("." + n)
     if (ele) {
