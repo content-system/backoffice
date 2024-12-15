@@ -48,7 +48,7 @@
     </div>
     <div id="root">
       <div id="pageContainer" class="view-container central-full sign-in-view-container">
-        <form id="signinForm" name="signinForm" novalidate autocomplete="off" method="post">
+        <form id="signinForm" name="signinForm" novalidate autocomplete="off" onsubmit="return validateForm(this)" method="post">
           <div>
             <img class="logo" src="/images/logo.png" alt="logo" />
             <h2>{{resource.signin}}</h2>

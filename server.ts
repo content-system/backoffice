@@ -1,4 +1,5 @@
 import { merge } from "config-plus"
+import cookieParser from "cookie-parser"
 import dotenv from "dotenv"
 import express from "express"
 import { checked, loadTemplates, MiddlewareLogger } from "express-ext"
@@ -33,6 +34,7 @@ app.locals.checked = checked
 
 const logger = createLogger(cfg.log)
 const middleware = new MiddlewareLogger(logger.info, cfg.middleware)
+app.use(cookieParser())
 // app.use(allow(cfg.allow), json(), cookieParser(), middleware.log)
 
 const templates = loadTemplates(cfg.template, buildTemplates, trim, ["./config/query.xml"])

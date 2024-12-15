@@ -781,6 +781,16 @@ function getHiddenMessage(nodes, name, i) {
   }
   return null
 }
+function showErrorMessage(form, msg) {
+  const ele = form.querySelector(".message")
+  if (ele) {
+    if (!ele.classList.contains("alert-error")) {
+      ele.classList.add("alert-error")
+    }
+    ele.innerHTML = msg + '<span onclick="clearMessage(event)"></span>'
+  }
+  return false
+}
 function setInputValue(form, name, value) {
   if (form) {
     for (let i = 0; i < form.length; i++) {

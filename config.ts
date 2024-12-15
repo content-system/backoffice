@@ -45,68 +45,90 @@ export const config = {
   template: false,
   auth: {
     token: {
-      secret: "secretbackoffice",
+      secret: 'secretbackoffice',
       expires: 86400000,
     },
     status: {
       success: 1,
+      password_expired: 3,
+      locked: 4
     },
+    lockedMinutes: 2,
+    maxPasswordFailed: 2,
     payload: {
-      id: "id",
-      username: "username",
-      email: "email",
-      userType: "userType",
+      id: 'id',
+      username: 'username',
+      email: 'email',
+      userType: 'userType',
     },
     account: {
-      displayName: "displayname",
+      displayName: 'displayname',
     },
     userStatus: {
-      activated: "A",
-      deactivated: "D",
+      activated: 'A',
+      deactivated: 'D',
     },
     db: {
-      user: "users",
-      password: "passwords",
-      id: "id",
-      username: "username",
-      status: "status",
-      successTime: "",
-      failTime: "",
-      failCount: "",
-      lockedUntilTime: "",
+      user: 'users',
+      password: 'passwords',
+      id: 'user_id',
+      username: 'username',
+      status: 'status',
+      successTime: 'success_time',
+      failTime: 'fail_time',
+      failCount: 'fail_count',
+      lockedUntilTime: 'locked_until_time',
     },
-    query: "select userId as id, username, email, displayname, status from users where username = $1",
+    query: `
+      select u.user_id, u.username, u.display_name, email, u.status, p.* from users u
+      inner join passwords p
+        on u.user_id = p.user_id
+      where username = $1 and u.status = 'A'`,
+    expires: 500,
+    template: {
+      subject: 'Verification Code',
+      body: '%s Use this code for verification. This code will expire in %s minutes',
+    },
+  },
+  map: {
+    user_id: "id",
+    display_name: "displayName",
+    success_time: 'successTime',
+    fail_time: 'failTime',
+    fail_count: 'failCount',
+    locked_until_time: 'lockedUntilTime',
   },
   sql: {
     allPrivileges: `
-      select moduleId as id,
-        moduleName as name,
-        resourceKey as resource_key,
+      select module_id as id,
+        module_name as name,
+        resource_key,
         path,
         icon,
         parent,
+        actions,
         sequence
       from modules
       where status = 'A'`,
     privileges: `
-      select distinct m.moduleId as id, m.moduleName as name, m.resourceKey as resource,
-        m.path, m.icon, m.parent, m.sequence, rm.permissions
+      select distinct m.module_id as id, m.module_name as name, m.resource_key,
+        m.path, m.icon, m.parent, m.sequence, rm.permissions, m.actions
       from users u
-        inner join userRoles ur on u.userId = ur.userId
-        inner join roles r on ur.roleId = r.roleId
-        inner join roleModules rm on r.roleId = rm.roleId
-        inner join modules m on rm.moduleId = m.moduleId
-      where u.userId = $1 and r.status = 'A' and m.status = 'A'
+        inner join user_roles ur on u.user_id = ur.user_id
+        inner join roles r on ur.role_id = r.role_id
+        inner join role_modules rm on r.role_id = rm.role_id
+        inner join modules m on rm.module_id = m.module_id
+      where u.user_id = $1 and r.status = 'A' and m.status = 'A'
       order by sequence`,
     permission: `
       select distinct rm.permissions
       from users u
-        inner join userRoles ur on u.userId = ur.userId
-        inner join roles r on ur.roleId = r.roleId
-        inner join roleModules rm on r.roleId = rm.roleId
-        inner join modules m on rm.moduleId = m.moduleId
-      where u.userId = $1 and u.status = 'A' and r.status = 'A' and rm.moduleId = $2 and m.status = 'A'
-      order by sequence`,
+        inner join user_roles ur on u.user_id = ur.user_id
+        inner join roles r on ur.role_id = r.role_id
+        inner join role_modules rm on r.role_id = rm.role_id
+        inner join modules m on rm.module_id = m.module_id
+      where u.user_id = $1 and u.status = 'A' and r.status = 'A' and rm.module_id = $2 and m.status = 'A'
+        order by sequence`,
   },
 }
 export const env = {

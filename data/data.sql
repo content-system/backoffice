@@ -41,7 +41,15 @@ create table users (
   updated_at timestamptz,
   lastlogin timestamptz
 );
-
+create table passwords (
+    user_id varchar(40) primary key,
+    password varchar(255),
+    success_time timestamptz,
+    fail_time timestamptz,
+    fail_count integer,
+    locked_until_time timestamptz,
+    history character varying[]
+);
 create table roles (
   role_id varchar(40) primary key,
   role_name varchar(255) not null,
@@ -134,6 +142,10 @@ insert into users (user_id,username,email,display_name,image_url,status,gender,p
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('00040','marco.verratti','marco.verratti@gmail.com','Marco Verratti','https://upload.wikimedia.org/wikipedia/commons/d/d0/Kiev-PSG_%289%29.jpg','A','M','0987654321','Mr','E');
 
 update users set language = 'en', dateformat = 'd/M/yyyy';
+
+insert into passwords(user_id, password)
+select user_id, '$2b$10$LWBgFYSRFpw/lysdne3ybuODJRAk1/qi2z.nhu9fXKA5vH/10AYY.'
+from users;
 
 insert into user_roles(user_id, role_id) values ('00001','admin');
 insert into user_roles(user_id, role_id) values ('00003','admin');

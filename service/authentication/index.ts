@@ -1,6 +1,7 @@
+import { Authenticator } from "authen-service"
 import { Request, Response } from "express"
 import { toMap } from "express-ext"
-import { Attributes } from "onecore"
+import { Attributes, StringMap } from "onecore"
 import { validate } from "xvalidators"
 import { getResource } from "../resources"
 
@@ -19,8 +20,14 @@ export interface User {
   password: string
 }
 
+export const map: StringMap = {
+  "2": "fail_authentication",
+  "3": "fail_expired_password",
+  "4": "fail_locked_account",
+  "9": "fail_disabled_account",
+}
 export class LoginController {
-  constructor() {
+  constructor(private authenticator: Authenticator<User, string>) {
     this.render = this.render.bind(this)
     this.submit = this.submit.bind(this)
   }
@@ -30,7 +37,7 @@ export class LoginController {
       resource,
       user: {
         username: "kaka",
-        password: "1234",
+        password: "Password1!",
       },
       message: "Enter login",
     })
@@ -47,16 +54,24 @@ export class LoginController {
       res.render("login", {
         resource,
         user,
-        message: "Enter login",
+        message: errors[0].message,
         errors: errorMap,
       })
     } else {
-      console.log("Login successfully")
-      res.redirect("/users")
+      this.authenticator.authenticate(user).then(result => {
+        if (result.status === 1) {
+          if (result.user) {
+            res.cookie('token', result.user.token, { httpOnly: true, secure: true, sameSite: 'strict'});
+            console.log("Token " + result.user.token)
+          }
+          console.log("Login successfully")
+          res.redirect("/users")
+        } else {
+          let key: string| undefined = map["" + result.status]
+          const message = (key ? resource[key] : resource.fail_authentication)
+          res.render("login", { resource, user, message })
+        }
+      })
     }
   }
-}
-
-export function useLoginController(): LoginController {
-  return new LoginController()
 }

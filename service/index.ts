@@ -1,11 +1,10 @@
 import { Application, json, urlencoded } from "express"
-import multer from "multer"
 import { get, read, write } from "security-express"
 import { Context } from "./context"
 
 export * from "./context"
 
-const parser = multer()
+// const parser = multer()
 
 export function route(app: Application, ctx: Context, secure?: boolean): void {
   app.get("/health", ctx.health.check)
