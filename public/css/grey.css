@@ -224,10 +224,7 @@
 .grey .view-container > header > h5,
 .grey .view-header > h5,
 .grey .view-subtitle,
-.grey .subtitle,
-.grey .profile.view-container > form > .row > .col > div.card > section > p,
-.grey ul.list-view > li > section:first-child > div > h3.inactive,
-.grey ul.list-view > li > section:first-child > div > h3.inactive > a {
+.grey .subtitle {
   color: #657181;
 }
 
@@ -284,21 +281,16 @@
 .grey .section-body > p,
 .grey .brand,
 .grey .img-card > h4,
-.grey ul.list-view > li > section:first-child > div > h4,
-.grey ul.list-view > li > section:first-child > div > h4 > a,
 .grey .card > section > p,
 .grey .card > section > p > a,
 .grey .video > section > p,
 .grey .video > section > p > a,
-.grey li.video > h4 > a,
+.grey .video > p,
+.grey .video > h4 > a,
 .grey .img-card > p,
-.grey ul.list-view > li > section:first-child > div > p,
-.grey ul.list-view > li > div > h4,
-.grey ul.list-view > li > div > p,
-.grey ul.list-view > li > h4,
-.grey ul.list-view.horizon > li > a,
-.grey ul.list-view > li > p,
-.grey ul.list-view > li > p > a,
+.grey .horizon > li > a,
+.grey .list-item > a,
+.grey .img-item > a,
 .grey .table > thead > tr > th,
 .grey .table > thead > tr > th > a,
 .grey .table > thead > tr > th > button,
@@ -350,12 +342,6 @@
 .grey .view-body > label.focused,
 .grey .view-container > form > div > h2,
 .grey .card > section > h3,
-.grey ul.list-view > li > section:first-child > div > h3,
-.grey ul.list-view > li > section:first-child > div > h3 > a,
-.grey ul.list-view > li > div > h3,
-.grey ul.list-view > li > h3,
-.grey div.card > div > h3,
-.grey div.card > h3,
 .grey .card > footer > button,
 .grey .btn-select,
 .grey .btn-add,
@@ -543,8 +529,6 @@
 }
 
 .grey .diff .row .col p > span,
-.grey div.card > div > p,
-.grey article > address > label,
 .grey article > p > label,
 .grey section > p > label,
 .grey .view-container > form > div > section > article > p.remark,
@@ -646,13 +630,10 @@
   background: #fff;
   color: #fff;
 }
-.grey ul.list-view > li,
-.grey ul.list-view.row > li.col > *:last-child,
-.grey ul.list-view > li.section-container > section:first-child,
-.grey div.card,
+
 .grey .card > section,
 .grey .video > section,
-.grey ul.list-view.horizon > li.video {
+.grey .horizon > .video {
   border-color: #e0e0e0;
 }
 

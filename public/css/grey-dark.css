@@ -224,10 +224,7 @@
 .grey.dark .view-container > header > h5,
 .grey.dark .view-header > h5,
 .grey.dark .view-subtitle,
-.grey.dark .subtitle,
-.grey.dark .profile.view-container > form > .row > .col > div.card > section > p,
-.grey.dark ul.list-view > li > section:first-child > div > h3.inactive,
-.grey.dark ul.list-view > li > section:first-child > div > h3.inactive > a {
+.grey.dark .subtitle {
   color: #657181;
 }
 
@@ -284,21 +281,18 @@
 .grey.dark .section-body > p,
 .grey.dark .brand,
 .grey.dark .img-card > h4,
-.grey.dark ul.list-view > li > section:first-child > div > h4,
-.grey.dark ul.list-view > li > section:first-child > div > h4 > a,
 .grey.dark .card > section > p,
 .grey.dark .card > section > p > a,
 .grey.dark .video > section > p,
 .grey.dark .video > section > p > a,
-.grey.dark li.video > h4 > a,
+.grey.dark .video > p,
+.grey.dark .video > h4 > a,
+.grey.dark .video > p,
+.grey.dark .video > h4 > a,
 .grey.dark .img-card > p,
-.grey.dark ul.list-view > li > section:first-child > div > p,
-.grey.dark ul.list-view > li > div > h4,
-.grey.dark ul.list-view > li > div > p,
-.grey.dark ul.list-view > li > h4,
-.grey.dark ul.list-view.horizon > li > a,
-.grey.dark ul.list-view > li > p,
-.grey.dark ul.list-view > li > p > a,
+.grey.dark .horizon > li > a,
+.grey.dark .list-item > a,
+.grey.dark .img-item > a,
 .grey.dark .table > thead > tr > th,
 .grey.dark .table > thead > tr > th > a,
 .grey.dark .table > thead > tr > th > button,
@@ -350,12 +344,6 @@
 .grey.dark .view-body > label.focused,
 .grey.dark .view-container > form > div > h2,
 .grey.dark .card > section > h3,
-.grey.dark ul.list-view > li > section:first-child > div > h3,
-.grey.dark ul.list-view > li > section:first-child > div > h3 > a,
-.grey.dark ul.list-view > li > div > h3,
-.grey.dark ul.list-view > li > h3,
-.grey.dark div.card > div > h3,
-.grey.dark div.card > h3,
 .grey.dark .card > footer > button,
 .grey.dark .btn-select,
 .grey.dark .btn-add,
@@ -538,8 +526,6 @@
 }
 
 .grey.dark .diff .row .col p > span,
-.grey.dark div.card > div > p,
-.grey.dark article > address > label,
 .grey.dark article > p > label,
 .grey.dark section > p > label,
 .grey.dark .view-container > form > div > section > article > p.remark,
@@ -641,13 +627,10 @@
   background: #000;
   color: #000;
 }
-.grey.dark ul.list-view > li,
-.grey.dark ul.list-view.row > li.col > *:last-child,
-.grey.dark ul.list-view > li.section-container > section:first-child,
-.grey.dark div.card,
+
 .grey.dark .card > section,
 .grey.dark .video > section,
-.grey.dark ul.list-view.horizon > li.video {
+.grey.dark .horizon > .video {
   border-color: #1f1f1f;
 }
 

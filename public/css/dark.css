@@ -224,10 +224,7 @@
 .dark .view-container > header > h5,
 .dark .view-header > h5,
 .dark .view-subtitle,
-.dark .subtitle,
-.dark .profile.view-container > form > .row > .col > div.card > section > p,
-.dark ul.list-view > li > section:first-child > div > h3.inactive,
-.dark ul.list-view > li > section:first-child > div > h3.inactive > a {
+.dark .subtitle {
   color: #999999;
 }
 
@@ -284,21 +281,16 @@
 .dark .section-body > p,
 .dark .brand,
 .dark .img-card > h4,
-.dark ul.list-view > li > section:first-child > div > h4,
-.dark ul.list-view > li > section:first-child > div > h4 > a,
 .dark .card > section > p,
 .dark .card > section > p > a,
 .dark .video > section > p,
 .dark .video > section > p > a,
-.dark li.video > h4 > a,
+.dark .video > p,
+.dark .video > h4 > a,
 .dark .img-card > p,
-.dark ul.list-view > li > section:first-child > div > p,
-.dark ul.list-view > li > div > h4,
-.dark ul.list-view > li > div > p,
-.dark ul.list-view > li > h4,
-.dark ul.list-view.horizon > li > a,
-.dark ul.list-view > li > p,
-.dark ul.list-view > li > p > a,
+.dark .horizon > li > a,
+.dark .list-item > a,
+.dark .img-item > a,
 .dark .table > thead > tr > th,
 .dark .table > thead > tr > th > a,
 .dark .table > thead > tr > th > button,
@@ -336,7 +328,6 @@
 }
 /*
 .dark form.list-result > .table-responsive > table > thead > tr,
-.dark div.card {
   background-color: #141414;
 }
 */
@@ -350,12 +341,6 @@
 .dark .view-body > label.focused,
 .dark .view-container > form > div > h2,
 .dark .card > section > h3,
-.dark ul.list-view > li > section:first-child > div > h3,
-.dark ul.list-view > li > section:first-child > div > h3 > a,
-.dark ul.list-view > li > div > h3,
-.dark ul.list-view > li > h3,
-.dark div.card > div > h3,
-.dark div.card > h3,
 .dark .card > footer > button,
 .dark .btn-select,
 .dark .btn-add,
@@ -538,8 +523,6 @@
 }
 
 .dark .diff .row .col p > span,
-.dark div.card > div > p,
-.dark article > address > label,
 .dark article > p > label,
 .dark section > p > label,
 .dark .view-container > form > div > section > article > p.remark,
@@ -641,13 +624,10 @@
   background: #fff;
   color: #000;
 }
-.dark ul.list-view > li,
-.dark ul.list-view.row > li.col > *:last-child,
-.dark ul.list-view > li.section-container > section:first-child,
-.dark div.card,
+
 .dark .card > section,
 .dark .video > section,
-.dark ul.list-view.horizon > li.video {
+.dark .horizon > .video {
   border-color: #141414;
 }
 

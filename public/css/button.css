@@ -27,7 +27,6 @@ section > h4 > .btn-group > button {
 
 ul.list-view > li > section:first-child > button,
 ul.list-view > li > button,
-div.card > button,
 section > h4 > button,
 footer > .btn-accept,
 footer > .btn-next,
@@ -59,7 +58,6 @@ ul.list-view > li > section:first-child > button.btn-remove::before {
 
 ul.list-view > li > section:first-child > button.btn-pick,
 ul.list-view > li > button.btn-pick,
-div.card > button.btn-pick,
 .btn-pick {
   min-height: 12px;
   min-width: 18px;
