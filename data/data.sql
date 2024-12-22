@@ -50,6 +50,7 @@ create table passwords (
     locked_until_time timestamptz,
     history character varying[]
 );
+
 create table roles (
   role_id varchar(40) primary key,
   role_name varchar(255) not null,
@@ -295,7 +296,7 @@ insert into categories (id,name,status,path,resource_key,icon,sequence,actions,p
 insert into categories (id,name,status,path,resource_key,icon,sequence,actions,parent) values ('leadership','Leadership','A','/leadership','leadership','public',2,7,'about');
 insert into categories (id,name,status,path,resource_key,icon,sequence,actions,parent) values ('companies','companies','A','/companies','companies','zoom_in',2,7,'about');
 
-create table news (
+create table articles (
   id varchar(80) primary key,
   title varchar(255) not null,
   description varchar(1200) not null,
@@ -307,7 +308,7 @@ create table news (
   status char(1)
 );
 
-insert into news (id,title,description,content,published_at,tags,thumbnail,high_thumbnail,status) values
+insert into articles (id,title,description,content,published_at,tags,thumbnail,high_thumbnail,status) values
 	 ('20240917001','FPT Expands Global Workforce to 80,000 amid Its 36th Anniversary','FPT Corporation recently announced a significant milestone, passing 80,000 employees across 30 countries. The milestone coincides with the company’s 36th anniversary and underscores its remarkable growth and global expansion.','FPT Corporation recently announced a significant milestone, passing 80,000 employees across 30 countries. The milestone coincides with the company’s 36th anniversary and underscores its remarkable growth and global expansion.','2024-09-17 16:46:34.763+07','{}','https://fptsoftware.com/-/media/project/fpt-software/global/80000.png','https://fptsoftware.com/-/media/project/fpt-software/global/80000.png','A'),
 	 ('20240722001','FPT to Bolster Growth among Francophone Community, Emphasizing Workforce Development','FPT Corporation recently hosted the FPT Francophone Day, a dynamic networking and culture exchange platform for the French-speaking community in Vietnam. The event also marked the inauguration of FPT Francophone Association, highlighting the IT firm’s commitment to fostering its French-proficient professionals and nurturing opportunities for business and culture exchange.','Global technology corporation FPT recently hosted the FPT Francophone Day, a dynamic networking and culture exchange platform for the French-speaking community in Vietnam. At the event, FPT introduced the FPT Francophone Association, a move to foster its French-proficient professionals and nurture opportunities for business and culture exchange.','2024-07-22 17:06:23.844+07','{}','https://fptsoftware.com/-/media/project/fpt-software/global/common/fptsoftware_building_d/francophone-day-2024_1.webp','https://fptsoftware.com/-/media/project/fpt-software/global/common/fptsoftware_building_d/francophone-day-2024_1.webp','A'),
 	 ('20240912001','FPT Software Earns First Hong Kong Business Technology Excellence Award for its Agent Digital Platform in Insurtech','Global leading IT company FPT Software has earned recognition at the Hong Kong Business Technology Excellence Awards in the Software - Insurtech category. This marks the first time the company has received this prestigious award, reinforcing its status as a trusted service provider in the insurance sector.','Global leading IT company FPT Software has earned recognition at the Hong Kong Business Technology Excellence Awards in the Software - Insurtech category for its groundbreaking Agent Digital Platform (ADP). This marks the first time the company has received this prestigious award, reinforcing its status as a trusted service provider in the insurance sector.','2024-09-12 16:48:10.238+07','{}','https://fptsoftware.com/-/media/project/fpt-software/fso/675a1663.webp','https://fptsoftware.com/-/media/project/fpt-software/fso/675a1663.webp','A'),
@@ -342,7 +343,7 @@ The company champions complex business opportunities and challenges with its wor
 	 ('20240717001','FPT Software Adopts Green Tuesday Initiative to Accelerate Sustainable Movement','FPT Software officially became a partner of the Green Tuesday Initiative, aiming to cut down food-related footprint on the organizational scale. As the first Vietnamese enterprise to join the program, this move further highlights the IT firm''s steadfast progress and commitment to green transformation and sustainable development.','As part of the initiative, FPT Software targets to cut down on serving meat production in its campus cafeterias across Vietnam with more climate-friendly and plant-based alternatives once a week. To realize this goal, the Green Tuesday program will support participating organizations with training on low carbon footprint and climate-friendly diet, as well as auditing and conducting bi-yearly impact reports. Additionally, both sides will collaborate to raise awareness for FPT Software''s employees through a series of onsite promotional activities.','2024-07-17 17:08:14.069+07','{}','https://fptsoftware.com/-/media/project/fpt-software/fso/green-tuesday-initiative.webp','https://fptsoftware.com/-/media/project/fpt-software/fso/green-tuesday-initiative.webp','A'),
 	 ('20240709001','FPT Software and VinCSS Join Hands to Accelerate Cybersecurity in Automotive Industry','FPT Software and VinCSS recently signed a Memorandum of Understanding (MoU) targeting the automotive sector. The partnership enables both companies to enhance their solutions by leveraging each other’s resources, expertise, and network.','FPT Software and VinCSS recently signed a Memorandum of Understanding (MoU) targeting the automotive sector. The collaboration will benefit Original Equipment Manufacturers (OEMs) and Tier 1 suppliers by providing access to a broader range of solutions and services that comply with global industry standards. ','2024-07-09 17:11:14.232+07','{}','https://fptsoftware.com/-/media/project/fpt-software/fso/post_fso-x-vincss.png','https://fptsoftware.com/-/media/project/fpt-software/fso/post_fso-x-vincss.png','A'),
 	 ('20240708001','FPT Japan Joins Leading IT Companies in Forming the Vietnamese Association of Digital Transformation in Japan','The Vietnamese Association of Digital Transformation in Japan (VADX Japan) was officially launched in Tokyo, Japan, with FPT Japan serving as the Association''s Chair Company and Do Van Khac, Senior Executive Vice President of FPT Software and CEO of FPT Japan, serving as the company’s representative. This initiative represents FPT Japan’s ongoing commitment to enhancing cooperation and development in digital technology between Vietnam and Japan.','The Association''s launch event was attended by  Ambassador-Designate of the Socialist Republic of Viet Nam to Japan H.E. Pham Quang Hieu, Minister-Counselor Nguyen Duc Minh, representatives from Viet Nam’s Ministry of Science and Technology, Ministry of Planning and Investment, Ministry of Industry and Trade, and Ministry of Education and Training, Chairman of the Founding Council of the Vietnam Software and IT Services Association (VINASA) and Chairman of FPT Corporation Truong Gia Binh, and esteemed leaders of Vietnamese associations here.','2024-07-08 17:14:08.978+07','{}','https://fptsoftware.com/-/media/project/fpt-software/fso/newsroom/newsroom/news080724.webp','https://fptsoftware.com/-/media/project/fpt-software/fso/newsroom/newsroom/news080724.webp','A');
-insert into news (id,title,description,"content",published_at,tags,thumbnail,high_thumbnail,status) values
+insert into articles (id,title,description,"content",published_at,tags,thumbnail,high_thumbnail,status) values
 	 ('20240704001','FPT Software Welcomes First Batch of Global Interns to Vietnam for the Global Internship Program 2024','Returning for the second edition, the program has seen a fourfold increase in international student participation compared to last year, with students representing a wider variety of countries','On July 1, 2024, FPT Software welcomed the first cohort of international students to its Global Internship program, designed to provide students with opportunities to accelerate their technology careers through professional experiences at a leading global IT company. Returning for the second edition, the program has seen a fourfold increase in international student participation compared to last year, with students representing a wider variety of countries.','2024-07-04 17:19:23.269+07','{}','https://fptsoftware.com/-/media/project/fpt-software/global/common/fptsoftware_building_d/fpt-global-internship-frame-(8).webp','https://fptsoftware.com/-/media/project/fpt-software/global/common/fptsoftware_building_d/fpt-global-internship-frame-(8).webp','A'),
 	 ('20240701001','FPT Software Wins 2nd Runner-Up at SAP Hack2Build Contest','FPT Software Wins 2nd Runner-Up at SAP Hack2Build Contest','FPT Software has achieved the 2nd Runner Up at the SAP Hack2Build contest with its AI-enabled and innovative B2B retail solution, mySalesPro. Notably, FPT Software was the only Vietnam-headquartered company competing alongside top global firms such as EY, Deloitte, IBM, and PWC.','2024-07-01 17:21:19.512+07','{}','https://fptsoftware.com/-/media/project/fpt-software/fso/448926222_763543399021830_4527054500824727171_n.webp','https://fptsoftware.com/-/media/project/fpt-software/fso/448926222_763543399021830_4527054500824727171_n.webp','A'),
 	 ('20240605001','Vietnam Tech Revolution Story to Be Featured on Discovery Channel, With FPT in the Spotlight','FPT Corporation (FPT) collaborates with Warner Bros. Discovery in an upcoming documentary titled “Silicon Delta - The Story of Vietnam’s Tech Revolution.” The documentary highlights Vietnam as a leading digital economy of Southeast Asia, with FPT at the forefront of the country’s transformation into a global destination for business and innovation','The film features senior leaders from FPT and its subsidiary, including FPT Chairman Truong Gia Binh, FPT Software Chairwoman Chu Thi Thanh Ha, FPT Software CEO Pham Minh Tuan, FPT Software SEVP Nguyen Khai Hoan, and FPT Software Chief AI Officer Phong Nguyen; as well as other experts. They reflect on the stories of FPT’s establishment in the late 1980s with the goal of surviving poverty and the ambitious dream of bringing Vietnamese intelligence to the global stage. “From the sixties to the eighties, there’s constant hunger. I just need some company to help us survive. That’s why FPT [was founded]”, said FPT Chairman Truong Gia Binh.','2024-06-05 17:23:07.571+07','{}','https://fptsoftware.com/-/media/project/fpt-software/fso/newsroom/news---press-release/dsc00136.webp','https://fptsoftware.com/-/media/project/fpt-software/fso/newsroom/news---press-release/dsc00136.webp','A'),
@@ -354,6 +355,7 @@ create table jobs (
   description character varying(2000),
   published_at timestamptz,
   expired_at timestamptz,
+  position character varying(100),
   location character varying(1000),
   quantity integer default 1,
   applicant_count integer default 1,
@@ -363,13 +365,13 @@ create table jobs (
   company_id character varying(40)
 );
 
-insert into jobs(id, title, description, published_at, expired_at, location, quantity, applicant_count, requirements, benefit, company_id)  values ('senior-backend-developer', 'Senior Backend Developer (Java, Kotlin, MySQL)', '• Analyze and organize raw data
+insert into jobs(id, title, description, published_at, expired_at, position, location, quantity, applicant_count, requirements, benefit, company_id)  values ('senior-backend-developer', 'Senior Backend Developer (Java, Kotlin, MySQL)', '• Analyze and organize raw data
 • Build data systems and pipelines
 • Prepare data for prescriptive and predictive modeling
 • Combine raw information from different sources
 • Explore ways to enhance data quality and reliability
 • Identify opportunities for data acquisition
-• Data pipeline maintenance/testing.', '2023-05-24 17:00:00+00', '2023-05-29 17:00:00+00', 'Hanoi', 1, 1, 'asdsadasd', 'Analyze and organize raw data
+• Data pipeline maintenance/testing.', '2023-05-24 17:00:00+00', '2023-05-29 17:00:00+00', 'Senior Backend Developer', 'Hanoi', 1, 1, 'asdsadasd', 'Analyze and organize raw data
 
 Build data systems and pipelines
 
@@ -379,7 +381,7 @@ Combine raw information from different sources
 Explore ways to enhance data quality and reliability
 Identify opportunities for data acquisition
 Data pipeline maintenance/testing.', 'mb-bank');
-insert into jobs(id, title, description, published_at, expired_at, location, quantity, applicant_count, requirements, benefit, company_id) values ('business-analyst-jp', 'Business Analyst (Japanese)', 'Previous experience as a data engineer or in a similar role
+insert into jobs(id, title, description, published_at, expired_at, position, location, quantity, applicant_count, requirements, benefit, company_id) values ('business-analyst-jp', 'Business Analyst (Japanese)', 'Previous experience as a data engineer or in a similar role
 
 Technical expertise with data models, data mining, and segmentation techniques
 
@@ -391,16 +393,16 @@ Great numerical and analytical skills
 Degree in Computer Science, IT, or similar field; a Masters is a plus
 
 Data engineering certification (e.g IBM Certified Data Engineer) is a plus
-', '2023-05-24 17:00:00+00', '2023-05-30 17:00:00+00', 'Danang', 1, 2, '<ul style="padding: 0px 0px 0px 2rem; margin-right: 0px; margin-bottom: 1rem; margin-left: 0px; color: rgb(58, 58, 58); font-family: Roboto, sans-serif; font-size: 16px; letter-spacing: normal;"><li>Previous experience as a data engineer or in a similar role</li><li>Technical expertise with data models, data mining, and segmentation techniques</li><li>Knowledge of programming languages (e.g. Java and Python)</li><li>Experience with data architecture and data modeling</li><li>Hands-on experience with SQL database design</li><li>Great numerical and analytical skills</li><li>Degree in Computer Science, IT, or similar field; a Masters is a plus</li><li>Data engineering certification (e.g IBM Certified Data Engineer) is a plus</li></ul>', '• • • Previous experience as a data engineer or in a similar role
+', '2023-05-24 17:00:00+00', '2023-05-30 17:00:00+00', 'Business Analyst', 'Danang', 1, 2, '<ul style="padding: 0px 0px 0px 2rem; margin-right: 0px; margin-bottom: 1rem; margin-left: 0px; color: rgb(58, 58, 58); font-family: Roboto, sans-serif; font-size: 16px; letter-spacing: normal;"><li>Previous experience as a data engineer or in a similar role</li><li>Technical expertise with data models, data mining, and segmentation techniques</li><li>Knowledge of programming languages (e.g. Java and Python)</li><li>Experience with data architecture and data modeling</li><li>Hands-on experience with SQL database design</li><li>Great numerical and analytical skills</li><li>Degree in Computer Science, IT, or similar field; a Masters is a plus</li><li>Data engineering certification (e.g IBM Certified Data Engineer) is a plus</li></ul>', '• • • Previous experience as a data engineer or in a similar role
 • • • Technical expertise with data models, data mining, and segmentation techniques
 • • • Knowledge of programming languages (e.g. Java and Python)
 • • • Experience with data architecture and data modeling', 'mb-bank');
-insert into jobs(id, title, description, published_at, expired_at, location, quantity, applicant_count, requirements, benefit, company_id) values ('senior-devops-engineer', 'Senior DevOps Engineer - Salary Up to $2800', '1. Collaborate with Front-End Developers to integrate user-facing elements with server-side logic and other applications APIs;
+insert into jobs(id, title, description, published_at, expired_at, position, location, quantity, applicant_count, requirements, benefit, company_id) values ('senior-devops-engineer', 'Senior DevOps Engineer - Salary Up to $2800', '1. Collaborate with Front-End Developers to integrate user-facing elements with server-side logic and other applications APIs;
 2. Maintain and improve running-functionality as well as design and develop new system, new feature; d
 3. Develop and maintain Back-End Code that improves analytical and statistical modeling and forecasting methods to support business tribes in their decision-making process;
 4. Create data structures from scratch;
 5. Actively test and debug code defect;
-6. Research to learn technology and knowledge needed to develop products for the global market.', '2023-05-24 17:00:00+00', '2023-05-30 17:00:00+00', 'Cantho', 1, 1, '1. Analyze and organize raw data
+6. Research to learn technology and knowledge needed to develop products for the global market.', '2023-05-24 17:00:00+00', '2023-05-30 17:00:00+00', 'Senior Devops Engineer', 'Cantho', 1, 1, '1. Analyze and organize raw data
 2. Build data systems and pipelines
 3. Prepare data for prescriptive and predictive modeling
 4. Combine raw information from different sources
