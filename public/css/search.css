@@ -31,6 +31,11 @@
   box-shadow: none !important;
 }
 
+.row > label.col.search-input input:not([type="checkbox"]):not([type="radio"]):first-child,
+.view-container > form > div > label.search-input > *:first-child,
+.view-container > div > label.search-input > *:first-child,
+.view-body > label.search-input > *:first-child,
+.row > .col > label.search-input > *:first-child,
 .row > label.search-input > *:first-child,
 .search-input > *:first-child {
   padding-left: 12px;
