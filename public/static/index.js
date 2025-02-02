@@ -1,47 +1,30 @@
+"use strict"
 const r1 = / |,|\$|€|£|¥|'|٬|،| /g
 const r2 = / |\.|\$|€|£|¥|'|٬|،| /g
-
-interface Phones {
-  [key: string]: string
-}
-// tslint:disable-next-line:class-name
-class resources {
-  static defaultLimit = 12
-  static containerClass = "form-input"
-  static hiddenMessage = "hidden-message"
-  static token = "token"
-
-  static num1 = / |,|\$|€|£|¥|'|٬|،| /g
-  static num2 = / |\.|\$|€|£|¥|'|٬|،| /g
-  static phonecodes?: Phones
-  static email = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,4})$/i
-  static phone = /^\d{5,14}$/
-  static password = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-  static url = /[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
-  static digit = /^\d+$/
-  static amount = /^[0-9]{0,15}(?:\.[0-9]{1,3})?$/ // const regExp = /\d+\.\d+/;
-  static digitAndDash = /^[0-9-]*$/
-  static digitAndChar = /^\w*\d*$/
-  static checkNumber = /^\d{0,8}$/
-  static percentage = /^[1-9][0-9]?$|^100$/
-  static ipv4 = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/
-  static usPostcode = /(^\d{5}$)|(^\d{5}-\d{4}$)/
-  static caPostcode =
-    /^[ABCEGHJKLMNPRSTVXYabceghjklmnprstvxy][0-9][ABCEGHJKLMNPRSTVWXYZabceghjklmnprstvwxyz][ -]?[0-9][ABCEGHJKLMNPRSTVWXYZabceghjklmnprstvwxyz][0-9]$/
-
-  static ipv6 =
-    /^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/
-}
-
-interface Locale {
-  decimalSeparator: string
-  groupSeparator: string
-  currencyCode: string
-  currencySymbol: string
-  currencyPattern: number
-}
-
-function parseDate(v: string, format?: string): Date {
+class resources {}
+resources.defaultLimit = 12
+resources.containerClass = "form-input"
+resources.hiddenMessage = "hidden-message"
+resources.token = "token"
+resources.num1 = / |,|\$|€|£|¥|'|٬|،| /g
+resources.num2 = / |\.|\$|€|£|¥|'|٬|،| /g
+resources.email = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,4})$/i
+resources.phone = /^\d{5,14}$/
+resources.password = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+resources.url = /[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
+resources.digit = /^\d+$/
+resources.amount = /^[0-9]{0,15}(?:\.[0-9]{1,3})?$/
+resources.digitAndDash = /^[0-9-]*$/
+resources.digitAndChar = /^\w*\d*$/
+resources.checkNumber = /^\d{0,8}$/
+resources.percentage = /^[1-9][0-9]?$|^100$/
+resources.ipv4 = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/
+resources.usPostcode = /(^\d{5}$)|(^\d{5}-\d{4}$)/
+resources.caPostcode =
+  /^[ABCEGHJKLMNPRSTVXYabceghjklmnprstvxy][0-9][ABCEGHJKLMNPRSTVWXYZabceghjklmnprstvwxyz][ -]?[0-9][ABCEGHJKLMNPRSTVWXYZabceghjklmnprstvwxyz][0-9]$/
+resources.ipv6 =
+  /^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/
+function parseDate(v, format) {
   if (!format || format.length === 0) {
     format = "MM/DD/YYYY"
   } else {
@@ -69,10 +52,9 @@ function parseDate(v: string, format?: string): Date {
   const day = parseInt(valueItems[iday], 10)
   return new Date(year, month, day)
 }
-
-let eleHtml: Element | undefined | null
+let eleHtml
 let isGetHtml = false
-function getLang(): string | undefined {
+function getLang() {
   if (!isGetHtml) {
     eleHtml = document.querySelector("html")
     isGetHtml = true
@@ -88,7 +70,7 @@ function getLang(): string | undefined {
 function getCurrentURL() {
   return window.location.origin + window.location.pathname
 }
-function getDecimalSeparator(ele: HTMLInputElement): string {
+function getDecimalSeparator(ele) {
   let separator = ele.getAttribute("data-decimal-separator")
   if (!separator) {
     const form = ele.form
@@ -98,17 +80,13 @@ function getDecimalSeparator(ele: HTMLInputElement): string {
   }
   return separator === "," ? "," : "."
 }
-//detect Ctrl + [a, v, c, x]
-function detectCtrlKeyCombination(e: KeyboardEvent) {
-  // list all CTRL + key combinations
+function detectCtrlKeyCombination(e) {
   var forbiddenKeys = new Array("v", "a", "x", "c")
   var key
   var isCtrl
   var browser = navigator.appName
-
   if (browser == "Microsoft Internet Explorer") {
     key = e.keyCode
-    // IE
     if (e.ctrlKey) {
       isCtrl = true
     } else {
@@ -117,13 +95,10 @@ function detectCtrlKeyCombination(e: KeyboardEvent) {
   } else {
     if (browser == "Netscape") {
       key = e.which
-      // firefox, Netscape
       if (e.ctrlKey) isCtrl = true
       else isCtrl = false
     } else return true
   }
-
-  // if ctrl is pressed check if other key is in forbidenKeys array
   if (isCtrl) {
     var chr = String.fromCharCode(key).toLowerCase()
     for (let i = 0; i < forbiddenKeys.length; i++) {
@@ -134,11 +109,11 @@ function detectCtrlKeyCombination(e: KeyboardEvent) {
   }
   return false
 }
-function digitOnKeyPress(e: KeyboardEvent) {
+function digitOnKeyPress(e) {
   if (detectCtrlKeyCombination(e)) {
     return true
   }
-  const key = window.event ? (e as any).keyCode : (e as any).which
+  const key = window.event ? e.keyCode : e.which
   if (key == 13 || key == 8 || key == 9 || key == 11 || key == 127 || key == "\t") {
     return key
   }
@@ -146,18 +121,18 @@ function digitOnKeyPress(e: KeyboardEvent) {
   var reg = /\d/
   return reg.test(keychar)
 }
-function integerOnKeyPress(e: KeyboardEvent) {
+function integerOnKeyPress(e) {
   if (detectCtrlKeyCombination(e)) {
     return true
   }
-  const key = window.event ? (e as any).keyCode : (e as any).which
+  const key = window.event ? e.keyCode : e.which
   if (key == 13 || key == 8 || key == 9 || key == 11 || key == 127 || key == "\t") {
     return key
   }
-  var ele = e.target as HTMLInputElement
+  var ele = e.target
   var keychar = String.fromCharCode(key)
   if (keychar == "-") {
-    if (ele.value.indexOf("-") >= 0 || isNaN(ele.min as any) || parseInt(ele.min) >= 0) {
+    if (ele.value.indexOf("-") >= 0 || isNaN(ele.min) || parseInt(ele.min) >= 0) {
       return false
     }
     return key
@@ -165,18 +140,18 @@ function integerOnKeyPress(e: KeyboardEvent) {
   var reg = /\d/
   return reg.test(keychar)
 }
-function numberOnKeyPress(e: KeyboardEvent) {
+function numberOnKeyPress(e) {
   if (detectCtrlKeyCombination(e)) {
     return true
   }
-  const key = window.event ? (e as any).keyCode : (e as any).which
+  const key = window.event ? e.keyCode : e.which
   if (key == 13 || key == 8 || key == 9 || key == 11 || key == 127 || key == "\t") {
     return key
   }
-  var ele = e.target as HTMLInputElement
+  var ele = e.target
   var keychar = String.fromCharCode(key)
   if (keychar == "-") {
-    if (ele.value.indexOf("-") >= 0 || isNaN(ele.min as any) || parseInt(ele.min) >= 0) {
+    if (ele.value.indexOf("-") >= 0 || isNaN(ele.min) || parseInt(ele.min) >= 0) {
       return false
     }
     return key
@@ -190,15 +165,15 @@ function numberOnKeyPress(e: KeyboardEvent) {
   var reg = /\d/
   return reg.test(keychar)
 }
-function trimTime(d: Date): Date {
+function trimTime(d) {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate())
 }
-function addDays(d: Date, n: number): Date {
+function addDays(d, n) {
   const newDate = new Date(d)
   newDate.setDate(newDate.getDate() + n)
   return newDate
 }
-function formatDate(d: Date | null | undefined, dateFormat?: string, full?: boolean, upper?: boolean): string {
+function formatDate(d, dateFormat, full, upper) {
   if (!d) {
     return ""
   }
@@ -234,7 +209,7 @@ function formatDate(d: Date | null | undefined, dateFormat?: string, full?: bool
   const l = items.length === 4 ? format[format.length - 1] : ""
   return arr[0] + s + arr[1] + e + arr[2] + l
 }
-function detectSeparator(format: string): string {
+function detectSeparator(format) {
   const len = format.length
   for (let i = 0; i < len; i++) {
     const c = format[i]
@@ -244,7 +219,7 @@ function detectSeparator(format: string): string {
   }
   return "/"
 }
-function detectLastSeparator(format: string): string {
+function detectLastSeparator(format) {
   const len = format.length - 3
   for (let i = len; i > -0; i--) {
     const c = format[i]
@@ -254,29 +229,29 @@ function detectLastSeparator(format: string): string {
   }
   return "/"
 }
-function getYear(y: number, full?: boolean): string {
+function getYear(y, full) {
   if (full || (y <= 99 && y >= -99)) {
     return y.toString()
   }
   const s = y.toString()
   return s.substring(s.length - 2)
 }
-function getD(n: number, fu: boolean): string {
+function getD(n, fu) {
   return fu ? pad(n) : n.toString()
 }
-function formatLongTime(d: Date): string {
+function formatLongTime(d) {
   return pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds())
 }
-function pad(n: number): string {
+function pad(n) {
   return n < 10 ? "0" + n : n.toString()
 }
-function pad3(n: number): string {
+function pad3(n) {
   if (n >= 100) {
     return n.toString()
   }
   return n < 10 ? "00" + n : "0" + n.toString()
 }
-function formatLongDateTime(date: Date | null | undefined, dateFormat?: string, full?: boolean, upper?: boolean): string {
+function formatLongDateTime(date, dateFormat, full, upper) {
   if (!date) {
     return ""
   }
@@ -286,11 +261,10 @@ function formatLongDateTime(date: Date | null | undefined, dateFormat?: string, 
   }
   return sd + " " + formatLongTime(date)
 }
-
-function getValue(form: HTMLFormElement | null | undefined, name: string): string | null {
+function getValue(form, name) {
   if (form) {
     for (let i = 0; i < form.length; i++) {
-      const ele = form[i] as HTMLInputElement
+      const ele = form[i]
       if (ele.name === name) {
         return ele.value
       }
@@ -298,7 +272,7 @@ function getValue(form: HTMLFormElement | null | undefined, name: string): strin
   }
   return null
 }
-function getElement(form: HTMLFormElement | undefined | null, name: string): Element | null {
+function getElement(form, name) {
   if (form) {
     const l = form.length
     for (let i = 0; i < l; i++) {
@@ -310,15 +284,14 @@ function getElement(form: HTMLFormElement | undefined | null, name: string): Ele
   }
   return null
 }
-
-function findParent(e: HTMLElement | null | undefined, className: string, nodeName?: string): HTMLElement | null {
+function findParent(e, className, nodeName) {
   if (!e) {
     return null
   }
   if (nodeName && e.nodeName === nodeName) {
     return e
   }
-  let p: HTMLElement | null = e
+  let p = e
   while (true) {
     p = p.parentElement
     if (!p) {
@@ -332,14 +305,14 @@ function findParent(e: HTMLElement | null | undefined, className: string, nodeNa
     }
   }
 }
-function findParentNode(e: HTMLElement | null | undefined, nodeName: string): HTMLElement | null {
+function findParentNode(e, nodeName) {
   if (!e) {
     return null
   }
   if (e.nodeName == nodeName || e.getAttribute("data-field")) {
     return e
   }
-  let p: HTMLElement | null = e
+  let p = e
   while (true) {
     p = p.parentElement
     if (!p) {
@@ -350,8 +323,7 @@ function findParentNode(e: HTMLElement | null | undefined, nodeName: string): HT
     }
   }
 }
-
-function toggleClass(e: HTMLElement | null | undefined, className: string): boolean {
+function toggleClass(e, className) {
   if (e) {
     if (e.classList.contains(className)) {
       e.classList.remove(className)
@@ -363,7 +335,7 @@ function toggleClass(e: HTMLElement | null | undefined, className: string): bool
   }
   return false
 }
-function addClass(ele: Element | null | undefined, className: string): boolean {
+function addClass(ele, className) {
   if (ele) {
     if (!ele.classList.contains(className)) {
       ele.classList.add(className)
@@ -372,7 +344,7 @@ function addClass(ele: Element | null | undefined, className: string): boolean {
   }
   return false
 }
-function addClasses(ele: Element | null | undefined, classes: string[]): number {
+function addClasses(ele, classes) {
   let count = 0
   if (ele) {
     for (let i = 0; i < classes.length; i++) {
@@ -383,7 +355,7 @@ function addClasses(ele: Element | null | undefined, classes: string[]): number 
   }
   return count
 }
-function removeClass(ele: Element | null | undefined, className: string): boolean {
+function removeClass(ele, className) {
   if (ele) {
     if (ele && ele.classList.contains(className)) {
       ele.classList.remove(className)
@@ -392,7 +364,7 @@ function removeClass(ele: Element | null | undefined, className: string): boolea
   }
   return false
 }
-function removeClasses(ele: Element | null | undefined, classes: string[]): number {
+function removeClasses(ele, classes) {
   let count = 0
   if (ele) {
     for (let i = 0; i < classes.length; i++) {
@@ -403,11 +375,10 @@ function removeClasses(ele: Element | null | undefined, classes: string[]): numb
   }
   return count
 }
-
-function getContainer(ele?: HTMLElement | null): HTMLElement | null {
+function getContainer(ele) {
   return findParent(ele, resources.containerClass, "LABEL")
 }
-function handleMaterialFocus(ele: HTMLInputElement) {
+function handleMaterialFocus(ele) {
   if (ele.disabled || ele.readOnly) {
     return
   }
@@ -415,8 +386,8 @@ function handleMaterialFocus(ele: HTMLInputElement) {
     addClass(getContainer(ele), "focused")
   }
 }
-function materialOnFocus(event: Event) {
-  const ele = event.currentTarget as HTMLInputElement
+function materialOnFocus(event) {
+  const ele = event.currentTarget
   if (ele.disabled || ele.readOnly) {
     return
   }
@@ -426,24 +397,27 @@ function materialOnFocus(event: Event) {
     }
   }, 0)
 }
-function materialOnBlur(event: Event): void {
-  const ele = event.currentTarget as HTMLInputElement
+function materialOnBlur(event) {
+  const ele = event.currentTarget
   setTimeout(() => {
     if (ele.nodeName === "INPUT" || ele.nodeName === "SELECT" || ele.nodeName === "TEXTAREA") {
       removeClasses(getContainer(ele), ["focused", "focus"])
     }
   }, 0)
 }
-function registerEvents(form: HTMLFormElement): void {
+function registerEvents(form) {
   const len = form.length
   for (let i = 0; i < len; i++) {
-    const ele = form[i] as HTMLInputElement
+    const ele = form[i]
     if (ele.nodeName === "INPUT" || ele.nodeName === "SELECT" || ele.nodeName === "TEXTAREA") {
       let type = ele.getAttribute("type")
       if (type != null) {
         type = type.toLowerCase()
       }
-      if (ele.nodeName === "INPUT" && (type === "checkbox" || type === "radio" || type === "submit" || type === "button" || type === "reset")) {
+      if (
+        ele.nodeName === "INPUT" &&
+        (type === "checkbox" || type === "radio" || type === "submit" || type === "button" || type === "reset")
+      ) {
         continue
       } else {
         const parent = ele.parentElement
@@ -451,7 +425,6 @@ function registerEvents(form: HTMLFormElement): void {
         if (parent) {
           if (
             parent.nodeName === "LABEL" &&
-            // tslint:disable-next-line:triple-equals
             required != null &&
             required !== undefined &&
             required != "false" &&
@@ -461,8 +434,8 @@ function registerEvents(form: HTMLFormElement): void {
           } else if (parent.classList.contains("form-group") || parent.classList.contains("field")) {
             const firstChild = parent.firstChild
             if (firstChild && firstChild.nodeName === "LABEL") {
-              if (!(firstChild as HTMLLabelElement).classList.contains("required")) {
-                ;(firstChild as HTMLLabelElement).classList.add("required")
+              if (!firstChild.classList.contains("required")) {
+                firstChild.classList.add("required")
               }
             }
           }
@@ -477,8 +450,7 @@ function registerEvents(form: HTMLFormElement): void {
     }
   }
 }
-
-function valueOf(obj: any, key: string): any {
+function valueOf(obj, key) {
   const mapper = key.split(".").map((item) => {
     return item.replace(/\[/g, ".[").replace(/\[|\]/g, "")
   })
@@ -491,13 +463,13 @@ function valueOf(obj: any, key: string): any {
     return value
   }, obj)
 }
-function getDirectValue(obj: any, key: string): any {
+function getDirectValue(obj, key) {
   if (obj && obj.hasOwnProperty(key)) {
     return obj[key]
   }
   return null
 }
-function setValue(obj: any, key: string, value: any): any {
+function setValue(obj, key, value) {
   let replaceKey = key.replace(/\[/g, ".[").replace(/\.\./g, ".")
   if (replaceKey.indexOf(".") === 0) {
     replaceKey = replaceKey.slice(1, replaceKey.length)
@@ -515,7 +487,7 @@ function setValue(obj: any, key: string, value: any): any {
   }
   return setKey(obj, isArrayKey, firstKey, value)
 }
-function setKey(_object: any, _isArrayKey: boolean, _key: string, _nextValue: any) {
+function setKey(_object, _isArrayKey, _key, _nextValue) {
   if (_isArrayKey) {
     if (_object.length > _key) {
       _object[_key] = _nextValue
@@ -527,16 +499,15 @@ function setKey(_object: any, _isArrayKey: boolean, _key: string, _nextValue: an
   }
   return _object
 }
-
-function decodeFromForm<T>(form: HTMLFormElement, currencySymbol?: string | null): T {
+function decodeFromForm(form, currencySymbol) {
   const dateFormat = form.getAttribute("data-date-format")
-  const obj = {} as T
+  const obj = {}
   const len = form.length
   for (let i = 0; i < len; i++) {
-    const ele = form[i] as HTMLInputElement
+    const ele = form[i]
     let name = ele.getAttribute("name")
     const id = ele.getAttribute("id")
-    let val: any
+    let val
     let isDate = false
     let dataField = ele.getAttribute("data-field")
     if (dataField && dataField.length > 0) {
@@ -561,17 +532,14 @@ function decodeFromForm<T>(form: HTMLFormElement, currencySymbol?: string | null
         switch (type) {
           case "checkbox":
             if (id && name !== id) {
-              // obj[name] = !obj[name] ? [] : obj[name];
-              val = valueOf(obj, name) // val = obj[name];
+              val = valueOf(obj, name)
               if (!val) {
                 val = []
               }
               if (ele.checked) {
                 val.push(ele.value)
-                // obj[name].push(ele.value);
               } else {
-                // tslint:disable-next-line: triple-equals
-                val = val.filter((item: string) => item != ele.value)
+                val = val.filter((item) => item != ele.value)
               }
             } else {
               val = ele.value.length > 0 ? ele.value : ele.checked
@@ -590,7 +558,7 @@ function decodeFromForm<T>(form: HTMLFormElement, currencySymbol?: string | null
           case "datetime-local":
             if (ele.value.length > 0) {
               try {
-                val = new Date(ele.value) // DateUtil.parse(ele.value, 'YYYY-MM-DD');
+                val = new Date(ele.value)
               } catch (err) {
                 val = null
               }
@@ -606,8 +574,8 @@ function decodeFromForm<T>(form: HTMLFormElement, currencySymbol?: string | null
           val = d.toString() === "Invalid Date" ? null : d
         }
         const datatype = ele.getAttribute("data-type")
-        let v: any = ele.value
-        let symbol: string | null | undefined
+        let v = ele.value
+        let symbol
         if (datatype === "currency" || datatype === "string-currency") {
           symbol = ele.getAttribute("data-currency-symbol")
           if (!symbol) {
@@ -622,34 +590,33 @@ function decodeFromForm<T>(form: HTMLFormElement, currencySymbol?: string | null
           v = decimalSeparator === "," ? v.replace(r2, "") : (v = v.replace(r1, ""))
           val = isNaN(v) ? null : parseFloat(v)
         }
-        setValue(obj, name, val) // obj[name] = val;
+        setValue(obj, name, val)
       }
     }
   }
   return obj
 }
-
-function hideElement(ele: HTMLElement | null | undefined): boolean {
+function hideElement(ele) {
   if (ele) {
     ele.hidden = true
     return true
   }
   return false
 }
-function unhideElement(ele: HTMLElement | null | undefined): boolean {
+function unhideElement(ele) {
   if (ele) {
     ele.hidden = false
     return true
   }
   return false
 }
-function isHidden(ele: HTMLElement | null | undefined): boolean {
+function isHidden(ele) {
   if (ele) {
     return ele.hidden || ele.style.display === "none"
   }
   return true
 }
-function getHiddenMessage(nodes: NodeListOf<HTMLFormElement>, name?: string, i?: number): string | null {
+function getHiddenMessage(nodes, name, i) {
   const index = i !== undefined && i >= 0 ? i : 0
   if (nodes.length > index) {
     const form = nodes[index]
@@ -661,8 +628,7 @@ function getHiddenMessage(nodes: NodeListOf<HTMLFormElement>, name?: string, i?:
   }
   return null
 }
-
-function removeMessage(ele?: Element | null): boolean {
+function removeMessage(ele) {
   if (ele) {
     removeClasses(ele, ["alert-error", "alert-warning", "alert-info"])
     ele.innerHTML = ""
@@ -670,7 +636,7 @@ function removeMessage(ele?: Element | null): boolean {
   }
   return false
 }
-function showErrorMessage(ele: Element | null, msg: string): boolean {
+function showErrorMessage(ele, msg) {
   if (ele) {
     removeClasses(ele, ["alert-warning", "alert-info"])
     if (!ele.classList.contains("alert-error")) {
@@ -680,11 +646,11 @@ function showErrorMessage(ele: Element | null, msg: string): boolean {
   }
   return false
 }
-function showErrorMessageOfForm(form: HTMLFormElement, msg: string): boolean {
+function showErrorMessageOfForm(form, msg) {
   const ele = form.querySelector(".message")
   return showErrorMessage(ele, msg)
 }
-function showWarningMessage(ele: Element | null, msg: string): boolean {
+function showWarningMessage(ele, msg) {
   if (ele) {
     removeClasses(ele, ["alert-error", "alert-info"])
     if (!ele.classList.contains("alert-warning")) {
@@ -694,11 +660,11 @@ function showWarningMessage(ele: Element | null, msg: string): boolean {
   }
   return false
 }
-function showWarningMessageOfForm(form: HTMLFormElement, msg: string): boolean {
+function showWarningMessageOfForm(form, msg) {
   const ele = form.querySelector(".message")
   return showWarningMessage(ele, msg)
 }
-function showInfoMessage(ele: Element | null, msg: string): boolean {
+function showInfoMessage(ele, msg) {
   if (ele) {
     removeClasses(ele, ["alert-error", "alert-warning"])
     if (!ele.classList.contains("alert-info")) {
@@ -708,16 +674,16 @@ function showInfoMessage(ele: Element | null, msg: string): boolean {
   }
   return false
 }
-function showInfoMessageOfForm(form: HTMLFormElement, msg: string): boolean {
+function showInfoMessageOfForm(form, msg) {
   const ele = form.querySelector(".message")
   return showInfoMessage(ele, msg)
 }
-function checkRequiredElements(form: HTMLFormElement, names: string[]): boolean {
+function checkRequiredElements(form, names) {
   const resource = getResource()
   const eleMsg = form.querySelector(".message")
   if (eleMsg) {
     for (let i = 0; i < names.length; i++) {
-      const ele = getElement(form, names[i]) as HTMLInputElement
+      const ele = getElement(form, names[i])
       if (ele) {
         if (ele.value === "") {
           const label = getLabel(ele)
@@ -730,10 +696,10 @@ function checkRequiredElements(form: HTMLFormElement, names: string[]): boolean 
   }
   return true
 }
-function setInputValue(form: HTMLFormElement | null | undefined, name: string, value: string): boolean {
+function setInputValue(form, name, value) {
   if (form) {
     for (let i = 0; i < form.length; i++) {
-      const ele = form[i] as HTMLInputElement
+      const ele = form[i]
       if (ele.name === name) {
         ele.value = value
         return true
@@ -742,36 +708,36 @@ function setInputValue(form: HTMLFormElement | null | undefined, name: string, v
   }
   return false
 }
-function getToken(): string | null {
+function getToken() {
   const token = localStorage.getItem(resources.token)
   return token
 }
-function getHeaders(): any {
+function getHeaders() {
   const token = getToken()
   const lang = getLang()
   if (lang) {
     if (token && token.length > 0) {
-      return { "Content-Language": lang, Authorization: `Bearer ${token}` } // Include the JWT
+      return { "Content-Language": lang, Authorization: `Bearer ${token}` }
     } else {
       return { "Content-Language": lang }
     }
   } else {
     if (token && token.length > 0) {
-      return { Authorization: `Bearer ${token}` } // Include the JWT
+      return { Authorization: `Bearer ${token}` }
     } else {
       return {}
     }
   }
 }
-function getHttpHeaders(): any {
+function getHttpHeaders() {
   const token = getToken()
   const lang = getLang()
   if (lang) {
     if (token && token.length > 0) {
       return {
-        "Content-Type": "application/json;charset=utf-8", // Ensure the server understands the content type
+        "Content-Type": "application/json;charset=utf-8",
         "Content-Language": lang,
-        Authorization: `Bearer ${token}`, // Include the JWT
+        Authorization: `Bearer ${token}`,
       }
     } else {
       return {
@@ -782,8 +748,8 @@ function getHttpHeaders(): any {
   } else {
     if (token && token.length > 0) {
       return {
-        "Content-Type": "application/json;charset=utf-8", // Ensure the server understands the content type
-        Authorization: `Bearer ${token}`, // Include the JWT
+        "Content-Type": "application/json;charset=utf-8",
+        Authorization: `Bearer ${token}`,
       }
     } else {
       return {
@@ -792,10 +758,10 @@ function getHttpHeaders(): any {
     }
   }
 }
-function submitFormData(e: Event) {
+function submitFormData(e) {
   e.preventDefault()
-  const target = e.target as HTMLButtonElement
-  const form = target.form as HTMLFormElement
+  const target = e.target
+  const form = target.form
   const valid = validateForm(form)
   if (!valid) {
     return
@@ -844,10 +810,10 @@ function submitFormData(e: Event) {
       })
   })
 }
-function submitForm(e: Event) {
+function submitForm(e) {
   e.preventDefault()
-  const target = e.target as HTMLButtonElement
-  const form = target.form as HTMLFormElement
+  const target = e.target
+  const form = target.form
   const valid = validateForm(form)
   if (!valid) {
     return
@@ -864,7 +830,7 @@ function submitForm(e: Event) {
     fetch(url, {
       method: "POST",
       headers: getHttpHeaders(),
-      body: JSON.stringify(data), // Convert the form data to JSON format
+      body: JSON.stringify(data),
     })
       .then((response) => {
         if (response.ok) {

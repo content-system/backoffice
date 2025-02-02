@@ -103,7 +103,7 @@ export class ArticleController {
   }
 }
 export function useArticleService(db: DB): ArticleService {
-  const builder = new SearchBuilder<Article, ArticleFilter>(db.query, "news", articleModel, db.driver)
+  const builder = new SearchBuilder<Article, ArticleFilter>(db.query, "articles", articleModel, db.driver)
   const repository = new SqlArticleRepository(db)
   return new ArticleUseCase(builder.search, repository)
 }

@@ -4,7 +4,8 @@
     <meta charset="utf-8" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#008577" />
     <meta name="description" content="Web site created using create-react-app" />
     <link rel="apple-touch-icon" href="/logo192.png" />
     <link rel="stylesheet" href="/css/reset.css" />
@@ -18,6 +19,7 @@
     <link rel="stylesheet" href="/css/page.css" />
     <link rel="stylesheet" href="/css/main.css" />
     <link rel="stylesheet" href="/css/form.css" />
+    <link rel="stylesheet" href="/css/article.css" />
     <link rel="stylesheet" href="/css/list-view.css" />
     <link rel="stylesheet" href="/css/table.css" />
     <link rel="stylesheet" href="/css/list-detail.css" />
@@ -81,7 +83,7 @@
         </div>
       </div>
     </div>
-    <script data-nscript="afterInteractive">
+    <script>
       const resource = {
         msg_confirm_save: "{{resource.msg_confirm_save}}",
         msg_save_success: "{{resource.msg_save_success}}",
@@ -144,9 +146,7 @@
         return resource
       }
     </script>
-    <script src="/static/ui.js" data-nscript="afterInteractive"></script>
-    <script src="/static/validator.js" data-nscript="afterInteractive"></script>
-    <script src="/static/script.js" data-nscript="afterInteractive"></script>
-    <script src="/static/layout.js" data-nscript="afterInteractive"></script>
+    <script src="/static/script.js"></script>
+    <script>function changeMenu(){var e=document.getElementById("sysBody");e&&e.classList.toggle("top-menu")}function changeMode(){var e=document.getElementById("sysBody");e&&e.classList.toggle("dark")}function toggleMenu(e){var t=findParent(e.target,"sidebar-parent");t&&t.classList.toggle("menu-on")}function toggleUniversalSearch(e){var t=findParent(e.target,"sidebar-parent");t&&t.classList.toggle("search")}function toggleMenuItem(e){e.preventDefault();var t=e.target,a=t.nextElementSibling;if(a){var r=t.querySelector(".menu-item > i.entity-icon");r&&(a.classList.contains("expanded")?(a.classList.remove("expanded"),r.classList.add("up"),r.classList.remove("down")):(a.classList.add("expanded"),r.classList.remove("up"),r.classList.add("down")))}var n=findParentNode(t,"LI");n&&n.classList.toggle("open")}function getFirstPath(e){var t=e.substring(8),a=t.indexOf("/");if(a<0||t.length-a<=1)return"/";var r=t.indexOf("/",a+1);return r>0?t.substring(a,r):t.substring(a)}function navigate(e){e.preventDefault();var t=e.target,a=findParentNode(t,"A"),r=getResource();if(a){var n=a.href;fetch(n+"?partial=true",{method:"GET",headers:getHeaders()}).then(function(e){e.ok?e.text().then(function(e){var r,i=document.getElementById("pageBody");if(i){i.innerHTML=e;var s=a.querySelector("span"),o=s?s.innerText:a.innerText;window.history.pushState({pageTitle:o},"",n);var l=findParentNode(t,"LI");if(l){var c=findParentNode(l,"NAV");if(c){var v=c.querySelector(".active");v&&v.classList.remove("active"),(v=c.querySelector(".active"))&&v.classList.remove("active"),(v=c.querySelector(".active"))&&v.classList.remove("active")}l.classList.add("active");var d=null===(r=l.parentElement)||void 0===r?void 0:r.parentElement;d&&"LI"===d.nodeName&&d.classList.add("active")}for(var g=i.querySelectorAll("form"),u=0;u<g.length;u++)registerEvents(g[u]);setTimeout(function(){var e=getHiddenMessage(g,resources.hiddenMessage);e&&e.length>0&&toast(e)},0)}}):(console.error("Error: ",e.statusText),alertError(r.error_submit_failed,e.statusText))}).catch(function(e){console.log("Error: "+e),alertError(r.error_submitting_form,e)})}}window.onload=function(){setTimeout(function(){var e,t=document.getElementById("pageContainer");if(t){for(var a=t.querySelectorAll("form"),r=0;r<a.length;r++)registerEvents(a[r]);setTimeout(function(){var e=getHiddenMessage(a,resources.hiddenMessage,1);e&&e.length>0&&toast(e)},0)}var n=document.getElementById("sysNav");if(n){for(var i=getFirstPath(window.location.origin+window.location.pathname),s=window.location.origin+i,o=n.querySelectorAll("a"),l=o.length,r=0;r<l;r++)if(o[r].href===s){var c=o[r].parentElement;if(c){c.classList.add("active");var v=null===(e=c.parentElement)||void 0===e?void 0:e.parentElement;v&&"LI"===v.nodeName&&v.classList.add("active")}return}}},50)};</script>
   </body>
 </html>

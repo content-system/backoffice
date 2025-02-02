@@ -223,7 +223,7 @@ function showConfirm(msg: string, yesCallback?: () => void, header?: string, btn
   const h = header ? header : sysMessageHeader.getAttribute("data-confirm")
   showAlert(msg, h, "Confirm", "Confirm", btnLeftText, btnRightText, yesCallback, noCallback)
 }
-function alertError(msg: string, callback?: () => void, header?: string, detail?: string): void {
+function alertError(msg: string, detail?: string, callback?: () => void, header?: string): void {
   const h = header ? header : sysMessageHeader.getAttribute("data-error")
   const buttonText = header ? header : sysMessageHeader.getAttribute("data-ok")
   showAlert(msg, h, "Alert", "Error", "", buttonText, callback, undefined, detail)

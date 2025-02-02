@@ -179,7 +179,7 @@ section.row.search-group nav.col {
 }
 .search.btn-group {
   position: relative;
-  height: 66px;
+  height: 68px;
   padding: 16px;
   display: flex;
   justify-content: flex-end;
@@ -189,9 +189,9 @@ section.row.search-group nav.col {
   top: 16px;
   left: 16px;
   width: 114px;
-  height: 34px;
+  height: 36px;
   border: 1px solid;
-  border-radius: 20px;
+  border-radius: 18px;
   padding-top: 6px;
   padding-left: 12px;
   padding-bottom: 4px;
@@ -208,12 +208,12 @@ section.row.search-group nav.col {
 
 section.btn-group > .btn-search {
   width: 114px;
-  height: 34px;
+  height: 36px;
   padding: 6px 30px;
   font-size: 15px;
   font-weight: 700;
   border: none;
-  border-radius: 20px;
+  border-radius: 18px;
 }
 
 section.btn-group > .btn-search:hover {

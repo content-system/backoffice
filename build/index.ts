@@ -25,9 +25,9 @@ function replaceFourSpaces(input: string): string {
 }
 
 export function buildJavascript() {
-  const desFile = "./es5/client/script.js"
-  const files: string[] = ["./es5/client/ui.js", "./es5/client/validator.js", "./es5/client/index.js", "./es5/client/layout.js"]
-  // const files: string[] = ["./es5/client/ui.js", "./es5/client/validator.js", "./es5/client/index.js"]
+  const desFile = "./es6/client/script.js"
+  const files: string[] = ["./es6/client/ui.js", "./es6/client/validator.js", "./es6/client/index.js", "./es6/client/search.js"]
+  // const files: string[] = ["./es5/client/ui.js", "./es5/client/validator.js", "./es5/client/index.js, "./es5/client/search.js""]
   mergeFiles(desFile, files, true)
 }
 
@@ -44,14 +44,17 @@ export function buildCSS() {
     "./public/css/main.css",
     "./public/css/form.css",
     "./public/css/list-view.css",
+    "./public/css/solid-container.css",
     "./public/css/table.css",
     "./public/css/list-detail.css",
     "./public/css/data-list.css",
     "./public/css/button.css",
     "./public/css/search.css",
     "./public/css/layout.css",
+    "./public/css/modal.css",
     "./public/css/navigation.css",
     "./public/css/pagination.css",
+    "./public/css/group.css",
     "./public/css/theme.css",
     "./public/css/dark.css",
   ]

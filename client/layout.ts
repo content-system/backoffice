@@ -1,22 +1,3 @@
-function findParentNode(e: HTMLElement | null | undefined, nodeName: string): HTMLElement | null {
-  if (!e) {
-    return null
-  }
-  if (e.nodeName == nodeName || e.getAttribute("data-field")) {
-    return e
-  }
-  let p: HTMLElement | null = e
-  while (true) {
-    p = p.parentElement
-    if (!p) {
-      return null
-    }
-    if (p.nodeName == nodeName || p.getAttribute("data-field")) {
-      return p
-    }
-  }
-}
-
 function changeMenu() {
   const body = document.getElementById("sysBody")
   if (body) {
@@ -65,56 +46,6 @@ function toggleMenuItem(e: Event) {
     parent.classList.toggle("open")
   }
 }
-function clearText(e: Event, name?: string) {
-  const n = name && name.length > 0 ? name : "q"
-  const btn = e.target as HTMLInputElement
-  const q = getElement(btn.form, n) as HTMLInputElement
-  if (q) {
-    btn.hidden = true
-    q.value = ""
-  }
-}
-function clearMessage(e: Event) {
-  const ele = e.target as HTMLInputElement
-  if (ele && ele.parentElement) {
-    removeClasses(ele.parentElement, ["alert-error", "alert-warning", "alert-info"])
-    ele.parentElement.innerText = ""
-  }
-}
-function qOnChange(e: Event) {
-  const text = e.target as HTMLInputElement
-  const form = text.form
-  if (form) {
-    const btn = form.querySelector(".btn-remove-text") as HTMLButtonElement
-    if (btn) {
-      btn.hidden = !(text.value.length > 0)
-    }
-  }
-}
-function toggleSearch(e: Event) {
-  const btn = e.target as HTMLInputElement
-  const form = btn.form
-  if (form) {
-    const advanceSearch = form.querySelector(".advance-search") as HTMLElement
-    if (advanceSearch) {
-      const onStatus = toggleClass(btn, "on")
-      advanceSearch.hidden = !onStatus
-    }
-  }
-}
-function toggleClass(e: HTMLElement | null | undefined, className: string): boolean {
-  if (e) {
-    if (e.classList.contains(className)) {
-      e.classList.remove(className)
-      return false
-    } else {
-      e.classList.add(className)
-      return true
-    }
-  }
-  return false
-}
-
 function getFirstPath(url: string): string {
   const s = url.substring(8)
   const i = s.indexOf("/")
@@ -135,7 +66,7 @@ function navigate(e: Event) {
   const resource = getResource()
   if (link) {
     const url = link.href
-    fetch(url + "?partial=true", { method: "GET" })
+    fetch(url + "?partial=true", { method: "GET", headers: getHeaders() })
       .then((response) => {
         if (response.ok) {
           response.text().then((data) => {
@@ -149,12 +80,24 @@ function navigate(e: Event) {
               if (parent) {
                 const nav = findParentNode(parent, "NAV")
                 if (nav) {
-                  const elI = nav.querySelector(".active")
+                  let elI = nav.querySelector(".active")
+                  if (elI) {
+                    elI.classList.remove("active")
+                  }
+                  elI = nav.querySelector(".active")
+                  if (elI) {
+                    elI.classList.remove("active")
+                  }
+                  elI = nav.querySelector(".active")
                   if (elI) {
                     elI.classList.remove("active")
                   }
                 }
                 parent.classList.add("active")
+                const pp = parent.parentElement?.parentElement
+                if (pp && pp.nodeName === "LI") {
+                  pp.classList.add("active")
+                }
               }
               const forms = pageBody.querySelectorAll("form")
               for (let i = 0; i < forms.length; i++) {
@@ -170,12 +113,12 @@ function navigate(e: Event) {
           })
         } else {
           console.error("Error: ", response.statusText)
-          alertError(resource.error_submit_failed, undefined, undefined, response.statusText)
+          alertError(resource.error_submit_failed, response.statusText)
         }
       })
       .catch((err) => {
         console.log("Error: " + err)
-        alertError(resource.error_submitting_form, undefined, undefined, err)
+        alertError(resource.error_submitting_form, err)
       })
   }
 }
@@ -206,6 +149,10 @@ window.onload = function () {
           const parent = elA[i].parentElement
           if (parent) {
             parent.classList.add("active")
+            const pp = parent.parentElement?.parentElement
+            if (pp && pp.nodeName === "LI") {
+              pp.classList.add("active")
+            }
           }
           return
         }
