@@ -4,32 +4,13 @@
     <meta charset="utf-8" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#fff" />
     <meta name="description" content="Web site created using create-react-app" />
     <link rel="apple-touch-icon" href="/logo192.png" />
-    <link rel="stylesheet" href="/css/reset.css" />
     <link rel="stylesheet" href="/fonts/material-icon/css/material-icons.css" />
     <link rel="stylesheet" href="/fonts/Roboto/font.css" />
-    <link rel="stylesheet" href="/css/checkbox.css" />
-    <link rel="stylesheet" href="/css/radio.css" />
-    <link rel="stylesheet" href="/css/grid.css" />
-    <link rel="stylesheet" href="/css/alert.css" />
-    <link rel="stylesheet" href="/css/loader.css" />
-    <link rel="stylesheet" href="/css/page.css" />
-    <link rel="stylesheet" href="/css/main.css" />
-    <link rel="stylesheet" href="/css/form.css" />
-    <link rel="stylesheet" href="/css/list-view.css" />
-    <link rel="stylesheet" href="/css/table.css" />
-    <link rel="stylesheet" href="/css/list-detail.css" />
-    <link rel="stylesheet" href="/css/data-list.css" />
-    <link rel="stylesheet" href="/css/solid-container.css" />
-    <link rel="stylesheet" href="/css/button.css" />
-    <link rel="stylesheet" href="/css/search.css" />
-    <link rel="stylesheet" href="/css/layout.css" />
-    <link rel="stylesheet" href="/css/navigation.css" />
-    <link rel="stylesheet" href="/css/pagination.css" />
-    <link rel="stylesheet" href="/css/theme.css" />
-    <link rel="stylesheet" href="/css/dark.css" />
+    <link rel="stylesheet" href="/css/style.css" />
     <!--
     manifest.json provides metadata used when your web app is installed on a
     user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -47,13 +28,13 @@
       </div>
     </div>
     <div id="root">
-      <div id="pageContainer" class="view-container central-full sign-in-view-container">
+      <div id="pageContainer" class="central-full">
         <form id="signinForm" name="signinForm" novalidate autocomplete="off" onsubmit="return validateForm(this)" method="post">
-          <div>
+          <div class="view-body row">
             <img class="logo" src="/images/logo.png" alt="logo" />
             <h2>{{resource.signin}}</h2>
             <div class="message alert-error">{{message}}<span onclick="clearMessage(event)"></span></div>
-            <label class="required {{errors.username.invalid}}">
+            <label class="col s12 required {{errors.username.invalid}}">
               {{resource.username}}
               <input
                 type="text"
@@ -65,7 +46,7 @@
                 placeholder="{{resource.placeholder_username}}"
               />
             </label>
-            <label class="required {{errors.password.invalid}}">
+            <label class="col s12 required {{errors.password.invalid}}">
               {{resource.password}}
               <input
                 type="password"
@@ -77,7 +58,9 @@
                 placeholder="{{resource.placeholder_password}}"
               />
             </label>
-            <label class="col s12 checkbox-container"> <input type="checkbox" id="remember" name="remember" />{{resource.signin_remember_me}} </label>
+            <label class="col s12 checkbox-container">
+              <input type="checkbox" id="remember" name="remember" />{{resource.signin_remember_me}}
+            </label>
             <button type="submit" id="btnSignin" name="btnSignin">{{resource.button_signin}}</button>
             <a id="btnForgotPassword" href="/forgot-password">{{resource.button_forgot_password}}</a>
             <a id="btnSignup" href="/signup">{{resource.button_signup}}</a>
@@ -95,6 +78,12 @@
         error_409: "{{resource.error_409}}",
         error_submit_failed: "{{resource.error_submit_failed}}",
         error_submitting_form: "{{resource.error_submitting_form}}",
+
+        fail_authentication: "{{resource.fail_authentication}}",
+        fail_expired_password: "{{resource.fail_expired_password}}",
+        fail_suspended_account: "{{resource.fail_suspended_account}}",
+        fail_locked_account: "{{resource.fail_locked_account}}",
+        fail_disabled_account: "{{resource.fail_disabled_account}}",
       }
       function getResource() {
         return resource

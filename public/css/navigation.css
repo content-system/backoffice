@@ -45,8 +45,8 @@
 }
 .toggle-menu::before {
   position: absolute;
-  top: -1px;
-  left: 6px;
+  top: -2px;
+  left: 14px;
 }
 .top-banner {
   display: none;
@@ -182,15 +182,16 @@
   position: relative;
   /*display: block;*/
   display: flex;
-  height: 38px;
+  height: 40px;
+  font-weight: 400;
   padding-left: 9px;
   padding-right: 9px;
   white-space: nowrap;
-  font-size: 13px;
+  font-size: 14px;
   text-transform: uppercase;
   outline: none;
   box-sizing: border-box;
-  color: white;
+  color: inherit;
   background-color: inherit;
 }
 
@@ -209,13 +210,13 @@
 }
 
 .sidebar > nav > ul > li > a.menu-item > i {
-  text-decoration: underline;
+  text-decoration: none;
 }
-
+/*
 .menu-on .sidebar > nav > ul > li > a.menu-item > i {
   text-decoration: none;
 }
-
+*/
 .sidebar li > div.menu-i,
 .sidebar nav ul {
   white-space: normal;
@@ -346,7 +347,7 @@ nav.collapsed-all .sidebar-off-menu > .collapse {
 
 .menu-on .menu.sidebar .btn-pin {
   right: 20px;
-  padding-top: 6px;
+  padding-top: 10px;
 }
 
 .menu-on .menu.sidebar .btn-pin::after {
@@ -354,13 +355,12 @@ nav.collapsed-all .sidebar-off-menu > .collapse {
   font-size: 15px;
   font-weight: 100;
   content: url("../images/pin.svg");
-  color: white;
 }
-
+/*
 .menu.sidebar nav ul li:hover button.btn-pin {
   display: inline-block;
 }
-
+*/
 .menu.sidebar .btn-pin .pinned {
   display: inline-block;
   transform: rotate(45deg);
@@ -506,7 +506,7 @@ nav.collapsed-all .sidebar-off-menu > .collapse {
   }
 
   .top-menu .menu.sidebar > nav > ul > li > ul.sub-list > li > ul.sub-list > li > a {
-    color: white;
+    color: inherit;
   }
 
   /* End level 2 menu */
@@ -611,4 +611,23 @@ nav.collapsed-all .sidebar-off-menu > .collapse {
   .top-menu .page-container {
     transition: none;
   }
+}
+
+.menu-on .menu-item {
+  max-width: 250px !important;
+}
+.sidebar-parent .menu-item {
+  max-width: 30px;
+  overflow: hidden;
+}
+.top-menu .sidebar-parent .menu-item {
+  max-width: unset;
+}
+
+.menu-on .menu.sidebar .btn-pin:hover,
+.menu-on .menu.sidebar .btn-pin {
+  font-size: 14px;
+  font-weight: 600;
+  height: 36px;
+  color: inherit;
 }

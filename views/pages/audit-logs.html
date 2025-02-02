@@ -1,10 +1,10 @@
-<div class="view-container">
+<div>
   <header>
     <h2>{{resource.audit_logs}}</h2>
     <div class="btn-group float-left"><button type="button" id="btnListView" name="btnListView" class="btn-list-view" data-view="listview"></button></div>
   </header>
   <div>
-    <form id="auditLogsForm" name="rolesForm" novalidate>
+    <form id="auditLogsForm" name="auditLogsForm" class="form" novalidate>
       <span class="hidden-message">{{message}}</span>
       <section class="row search-group">
         <label class="col s12 m2 l4">
@@ -20,7 +20,7 @@
           <input type="datetime-local" step=".010" id="time_max" name="time_max" data-field="time.max" value="{{datetimeToString(filter.time.max)}}" />
         </label>
       </section>
-      <section class="btn-group">
+      <section class="search btn-group">
         <label>
           {{resource.page_size}}
           <select id="limit" name="limit" onchange="search(event)">

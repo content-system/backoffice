@@ -25,8 +25,8 @@ section > h4 > .btn-group > button {
   background-color: transparent;
 }
 
-ul.list-view > li > section:first-child > button,
-ul.list-view > li > button,
+ul.list > li > section:first-child > button,
+ul.list > li > button,
 section > h4 > button,
 footer > .btn-accept,
 footer > .btn-next,
@@ -34,7 +34,7 @@ footer > .btn-cancel {
   border: 0;
   background-color: transparent;
 }
-.view-container > form > footer > button.btn-secondary,
+.form > footer > button.btn-secondary,
 .btn-secondary {
   background-color: transparent;
   border: 1px solid;
@@ -52,12 +52,12 @@ footer > .btn-cancel {
   content: "\203A";
 }
 
-ul.list-view > li > section:first-child > button.btn-remove::before {
+ul.list > li > section:first-child > button.btn-remove::before {
   top: 0;
 }
 
-ul.list-view > li > section:first-child > button.btn-pick,
-ul.list-view > li > button.btn-pick,
+ul.list > li > section:first-child > button.btn-pick,
+ul.list > li > button.btn-pick,
 .btn-pick {
   min-height: 12px;
   min-width: 18px;
@@ -69,21 +69,15 @@ ul.list-view > li > button.btn-pick,
   background-position-y: center;
   background-repeat: no-repeat;
 }
-.view-container > header > .btn-group > .btn-new,
-.view-container > header > .btn-group > .btn-table,
-.view-container > header > .btn-group > .btn-list-view,
-.view-container > header > .btn-group > .btn-grid,
-.view-container > header > .btn-group > .btn-map,
-.view-container > header > .btn-new,
-.view-container > form > footer .btn-cancel,
-.view-container > footer .btn-cancel,
-.view-footer .btn-cancel,
-.view-container > form > footer .btn-accept,
-.view-container > footer .btn-accept,
-.view-footer .btn-accept,
-.view-container > form > footer .btn-next,
-.view-container > footer .btn-next,
-.view-footer .btn-next {
+
+.btn-new,
+.btn-table,
+.btn-list,
+.btn-grid,
+.btn-map,
+.btn-cancel,
+.btn-accept,
+.btn-next {
   width: fit-content;
   padding: 0;
   border: 0;
@@ -92,19 +86,19 @@ ul.list-view > li > button.btn-pick,
   background-color: transparent;
   background-size: 40px 40px;
 }
-.view-container > header > .btn-group > button,
-.view-container > header > .btn-group > .btn-new {
+.btn-group > button,
+.btn-group > .btn-new {
   height: 100%;
   margin-left: 8px;
 }
-.view-container > header > .btn-group > .btn-new {
+.btn-group > .btn-new {
   position: relative;
   width: 22px;
 }
+.modal-portal-content > div > footer > button,
 section.footer > button,
 .detail-content > form > footer > button,
-.view-container > form > footer > button,
-.view-container > footer > button,
+.form > footer > button,
 .view-footer > button {
   width: 200px;
   height: 40px;
@@ -147,11 +141,7 @@ footer > button.btn-cancel:hover {
   box-shadow: none;
 }
 
-.view-container > form > footer .btn-accept,
-.view-container > footer .btn-accept,
 .view-footer .btn-accept,
-.view-container > form > footer .btn-next,
-.view-container > footer .btn-next,
 .view-footer .btn-next {
   right: 14px;
   padding-right: 45px;
@@ -228,7 +218,7 @@ footer > .btn-next {
 }
 .btn-back::before {
   position: absolute;
-  top: -7px;
+  top: -8px;
   left: 3px;
   font-size: 36px;
   font-weight: 300;
@@ -250,7 +240,7 @@ footer > .btn-next {
   content: "\2573";
 }
 
-.view-container > form > header > .btn,
+.form > header > .btn,
 .btn-group,
 .btn-new,
 .btn-add,
@@ -267,9 +257,11 @@ footer > .btn-next {
   color: inherit;
   background-color: transparent;
 }
+/*
 .btn-group.btn-right {
   color: inherit;
 }
+*/
 .btn-edit {
   width: 18px;
   height: 18px;
@@ -280,11 +272,11 @@ footer > .btn-next {
   transform: rotate(90deg);
 }
 
-ul.list-view > li .btn-group > button {
+ul.list > li .btn-group > button {
   margin-left: 6px;
 }
 
-ul.list-view > li .btn-group > .btn-edit,
+ul.list > li .btn-group > .btn-edit,
 td > .btn-edit {
   width: unset;
   height: unset;
@@ -326,7 +318,7 @@ h4 > .btn-edit {
   transform: scale(1.5, 1.5);
 }
 
-ul.list-view > li .btn-group > .btn-remove::before,
+ul.list > li .btn-group > .btn-remove::before,
 td > .btn-remove::before {
   position: unset;
   top: unset;
@@ -365,17 +357,17 @@ h4 > .btn-add {
   font-size: 36px;
   content: "+";
   position: absolute;
-  top: -6px;
+  top: -7px;
   left: 1px;
 }
-.view-container > header > .btn-group > .btn-list-view {
+header > .btn-group > .btn-list {
   padding-top: 0;
 }
-.btn-list-view::before {
+.btn-list::before {
   font-size: 23px;
   content: "\2630";
 }
-.view-container > header > .btn-group > .btn-grid {
+header > .btn-group > .btn-grid {
   position: relative;
   width: 22px;
 }
@@ -394,20 +386,19 @@ h4 > .btn-add {
   font-size: 25px;
   content: "\25F3";
 }
-.list-content > header > .btn-new,
-.view-container > header > .btn-new,
-.view-container > form > header > .btn-right,
-.view-container > header > .btn-group {
+header > .btn-new,
+header > .btn-right,
+header > .btn-group {
   position: absolute;
   top: 0;
   right: 16px;
-  padding-top: 0px;
+  padding-top: 4px;
   height: 100%;
 }
-.modal-portal-content .view-container > header > .btn-group {
+.modal-portal-content header > .btn-group {
   right: 39px;
 }
-.view-container > header > .btn-group {
+.page-body > div > header > .btn-group {
   display: flex;
   flex-direction: row;
 }

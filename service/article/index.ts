@@ -27,7 +27,7 @@ export * from "./article"
 
 export class SqlArticleRepository extends Repository<Article, string> implements ArticleRepository {
   constructor(db: DB) {
-    super(db, "news", articleModel)
+    super(db, "articles", articleModel)
   }
 }
 export class ArticleUseCase extends Manager<Article, string, ArticleFilter> implements ArticleService {
