@@ -149,7 +149,9 @@ label.focused > span.span-error,
 .form-group.focused > span.span-error {
   display: flex;
 }
-
+.form .row > label.textarea-container {
+  height: unset;
+}
 .form > div > .form-group,
 .form .row > label,
 .form > label,
