@@ -465,6 +465,14 @@ label.checkbox-group > input[type="checkbox"]:not(.modal-trigger):not(.toggle):n
   top: 18px;
 }
 
+.central-full .row label.col.checkbox-container {
+  padding-left: 32px;
+}
+.central-full label.checkbox-container > input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]) {
+  left: 8px;
+  padding-left: 32px;
+}
+
 label.switch-container > input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]) {
   position: absolute;
   top: 16px;
@@ -2410,6 +2418,8 @@ td > button {
 .view-body.row {
   margin-left: 0;
   margin-right: 0;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
 .modal-portal-content > div > header {
@@ -2473,13 +2483,12 @@ td > button {
   background-color: inherit;
   background-image: inherit;
 }
-
-.page-body > .form > div > section,
-.form-body > section,
-.view-body > section {
+.section {
   background-color: inherit;
   background-image: inherit;
-  padding-bottom: 16px;
+  padding-left: 8px;
+  padding-right: 8px;
+  margin: 16px 0;
 }
 
 .page-body > .form > div.background-content > section:nth-child(2),
@@ -2570,34 +2579,33 @@ h1 {
 h1,
 h2,
 h3,
-h4,
-section > a {
+h4 {
   width: 100%;
-  min-height: 40px;
   display: flex;
   align-items: center;
   margin: 0;
   padding: 0 16px;
   background-color: inherit;
 }
-section > a,
+.section > * {
+  padding-left: 8px;
+  padding-right: 8px;
+}
 h4 {
   position: relative;
   font-size: 16px;
   font-weight: 500;
 }
-header > h1,
-header > h2 {
-  height: unset;
-  color: inherit;
-  background-color: transparent;
-}
-
 /*
 h4:not(:first-child):not(:nth-child(2)) {
   margin-top: 10px;
 }
 */
+header > h1,
+header > h2 {
+  color: inherit;
+  background-color: transparent;
+}
 @media screen and (max-width: 600px) {
   header > h1,
   header > h2 {
@@ -2605,6 +2613,18 @@ h4:not(:first-child):not(:nth-child(2)) {
   }
   h4 {
     justify-content: space-between;
+  }
+  .header {
+    min-height: 40px;
+    width: calc(100% + 16px);
+    margin-left: -8px;
+    margin-right: -8px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .section:first-child > h3:first-child,
+  .section:first-child > h4:first-child {
+    margin-top: -16px;
   }
 }
 
@@ -2710,11 +2730,14 @@ form label > select::-ms-expand {
     margin-top: 0px;
   }
 }
-
+.grid {
+  padding-left: 8px;
+  padding-right: 8px;
+}
 .row .col {
   width: 100%;
-  padding-left: 16px;
-  padding-right: 16px;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
 .detail .row.no-margin,
@@ -2832,8 +2855,8 @@ label.focused > span.span-error,
   height: 64px;
   padding-top: 8px;
   margin-bottom: 1px;
-  padding-left: 16px;
-  padding-right: 16px;
+  padding-left: 8px;
+  padding-right: 8px;
   text-align: left;
   background-color: inherit;
   background-image: inherit;
@@ -3113,12 +3136,13 @@ section > .row.radio-group {
   flex-wrap: wrap;
   width: 100%;
 }
-
+/* 
 section.row {
   margin-left: 0;
   margin-right: 0;
-  /* height: 100%; */
+  height: 100%;
 }
+*/
 /*
 section > p > label {
   font-weight: 400;
@@ -3134,17 +3158,13 @@ section > p > label {
 
 label.required:before {
   position: absolute;
-  left: 7px;
+  left: -2px;
   content: "*";
 }
 
 .form-group > label.required:before {
   left: -9px;
 }
-.form > section.inline {
-  padding-bottom: 8px;
-}
-.row.inline > label:last-child,
 .row.inline > label {
   display: inline-flex;
   justify-content: space-between;
@@ -3163,8 +3183,10 @@ label.required:before {
   width: 1%;
 }
 
-.row.inline > label > section.checkbox-group {
+.row.inline > label > section.checkbox-group,
+.row.inline > label > section.radio-group {
   margin-left: 0;
+  min-height: unset;
 }
 
 .row.inline > label > span.span-error {
@@ -3258,7 +3280,7 @@ label > .DayPickerInput {
 }
 
 .list {
-  padding: 0;
+  margin: 16px 0;
 }
 
 .list.horizon {
@@ -3291,8 +3313,7 @@ label > .DayPickerInput {
 }
 
 .list.row {
-  margin-left: 0;
-  margin-right: 0;
+  padding: 0 8px;
 }
 
 ul.list > li {
@@ -3322,29 +3343,12 @@ ul.list.row > li.col {
 .small.img-item > .btn-detail {
   top: 3px;
 }
-.card-grid {
-  padding-left: 12px;
-  padding-right: 12px;
-}
-@media screen and (max-width: 600px) {
-  .card-grid {
-    padding-left: 8px;
-    padding-right: 8px;
-  }
-}
-.card,
-.video {
-  margin-top: 6px;
-  margin-bottom: 6px;
-}
-.card {
-  margin-bottom: 6px;
-}
+
 ul.list.row > li.col > h3,
 ul.list.row > li.col > h4,
 ul.list.row > li.col > a,
 ul.list.row > li.col > p {
-  width: calc(100% - 32px);
+  width: calc(100% - 16px);
 }
 /*
 ul.list.row > li.col > *:first-child {
@@ -3356,23 +3360,6 @@ ul.list.row > li.col > *:first-child {
   border-bottom: 1px solid #ebebeb;
 }
 
-.card > *:first-child,
-.video > *:first-child {
-  padding-top: 0;
-}
-.img-card > *:last-child,
-.card > *:last-child,
-.video > *:last-child {
-  padding-bottom: 8px;
-}
-
-.video > section:first-child,
-.card > section:first-child {
-  display: flex;
-  margin: 0 16px;
-  align-items: center;
-}
-
 .round-border {
   border-radius: 50%;
   border: 1px solid;
@@ -3380,7 +3367,7 @@ ul.list.row > li.col > *:first-child {
 
 .img-item > img {
   position: absolute;
-  left: 16px;
+  left: 8px;
   width: 56px;
   height: 56px;
 }
@@ -3439,10 +3426,6 @@ ul.list.row > li.col > *:first-child {
 .small.img-item > a {
   padding-top: 2px;
 }
-.img-card > h4 {
-  padding-top: 4px;
-  padding-bottom: 2px;
-}
 .img-item > h4 {
   padding-bottom: 0;
 }
@@ -3495,19 +3478,8 @@ li.video > section > a {
 }
 
 .list-item,
-.img-item,
-.img-card {
+.img-item {
   padding-top: 8px;
-}
-@media screen and (max-width: 600px) {
-  .img-card h4,
-  .video-container h4,
-  .video h4,
-  .card h4,
-  .list-item h4,
-  .img-item h4 {
-    background-color: inherit;
-  }
 }
 .img-item > p {
   font-size: 16px;
@@ -3519,12 +3491,6 @@ li.video > section > a {
 .img-item > p {
   margin-block-end: 0;
   padding-block-end: 8px;
-}
-
-.card > section > p > a,
-.video > section > p > a {
-  font-size: inherit;
-  font-weight: inherit;
 }
 
 ul.list > li > section:first-child > div > p {
@@ -3590,7 +3556,52 @@ ul.list > li > section:first-child > div > p {
 
 .card > section:first-child,
 .video > section:first-child {
-  width: calc(100% - 10px);
+  width: calc(100% - 16px);
+}
+.card,
+.video {
+  margin-bottom: 16px;
+}
+.video > section:first-child,
+.card > section:first-child {
+  display: flex;
+  align-items: center;
+  margin: 0 16px;
+  padding-bottom: 8px;
+}
+.card > *:first-child,
+.video > *:first-child {
+  padding-top: 0;
+}
+
+.card > section > h3,
+.card > section > a,
+.card > section > p,
+.video > section > p {
+  width: calc(100% - 24px);
+  padding-top: 8px;
+  font-weight: 400;
+}
+.card > section > a {
+  font-size: 16px;
+  font-weight: 600;
+}
+.card > section > p > a,
+.video > section > p > a {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.card .cover,
+.video .cover {
+  flex: none;
+  width: 100%;
+  height: 220px;
+  margin-right: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: center;
 }
 
 .video > section:first-child {
@@ -3645,30 +3656,6 @@ i.date {
   right: 6px;
 }
 
-.card > section > h3,
-.card > section > a,
-.card > section > p,
-.video > section > p {
-  width: calc(100% - 24px);
-  padding-top: 8px;
-  font-weight: 400;
-}
-.card > section > a {
-  font-size: 16px;
-  font-weight: 600;
-  padding: 8px 0 0 0;
-}
-.card .cover,
-.video .cover {
-  flex: none;
-  width: 100%;
-  height: 220px;
-  margin-right: 0;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position-x: center;
-  background-position-y: center;
-}
 .video > section:first-child > .title {
   cursor: pointer;
 }
@@ -3695,9 +3682,17 @@ i.date {
   background: #000;
   color: #fff;
 }
+
+.img-card {
+  margin-bottom: 16px;
+}
 .img-card > img {
-  max-width: calc(100% - 32px);
+  max-width: calc(100% - 16px);
   height: auto;
+}
+.img-card > h4 {
+  padding-top: 4px;
+  padding-bottom: 2px;
 }
 .img-card > h4.center,
 .img-card > p.center {
@@ -3819,7 +3814,7 @@ i.date {
 }
 
 .central-full > .form > div > button {
-  width: calc(100% - 32px);
+  width: calc(100% - 16px);
   height: 48px;
   border: none;
   font-size: 15px;
@@ -4042,10 +4037,11 @@ th.action {
 
 .data-list {
   width: 100%;
+  margin: 16px 0;
 }
 .data-list.row {
-  margin-left: 0;
-  margin-right: 0;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 .data-list > dt {
   font-size: 14px;
@@ -4727,52 +4723,57 @@ section.row nav.col {
   margin-bottom: 4px;
 }
 .search-group {
-  padding-bottom: 8px;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 section.row.search-group nav.col {
   margin-top: 0;
   margin-bottom: 0;
 }
-.search.btn-group {
+.section.search {
   position: relative;
-  height: 66px;
-  padding: 16px;
+  padding: 0 16px;
   display: flex;
   justify-content: flex-end;
 }
-.search.btn-group > label {
+.section.search > label {
   position: absolute;
-  top: 16px;
+  display: inline-flex;
+  top: 0;
   left: 16px;
-  width: 114px;
-  height: 34px;
+  width: 118px;
+  height: 36px;
   border: 1px solid;
-  border-radius: 20px;
+  border-radius: 18px;
   padding-top: 6px;
   padding-left: 12px;
   padding-bottom: 4px;
 }
-.search.btn-group > label > select {
+.section.search > label > select {
+  margin-top: -2px;
+  padding-top: 0;
+  padding-left: 10px;
   border: none;
   outline: none;
   width: 30px;
-  padding-left: 5px;
   font-size: 14px;
   font-weight: 400;
   background-image: none !important;
 }
 
-section.btn-group > .btn-search {
-  width: 114px;
-  height: 34px;
+.section.search > .btn-search {
+  width: 118px;
+  height: 36px;
   padding: 6px 30px;
   font-size: 15px;
   font-weight: 700;
   border: none;
-  border-radius: 20px;
+  border-radius: 18px;
 }
 
-section.btn-group > .btn-search:hover {
+.section.search > .btn-search:hover {
   box-shadow: 0 1px 3px 1px darkgrey;
 }
 
@@ -6030,6 +6031,7 @@ nav.collapsed-all .sidebar-off-menu > .collapse {
 .row.group {
   overflow-y: auto;
   max-height: calc(100vh - 52px - 44px);
+  padding: 16px 24px;
 }
 @media screen and (min-width: 769px) {
   .top-menu .view-container.menu {
@@ -6154,14 +6156,11 @@ h3 {
 }
 
 @media screen and (max-width: 600px) {
-  h3 {
-    background-color: #e1ebe9;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  h4 {
+  .header {
     background-color: #f2f2f2;
+  }
+  h3.header {
+    background-color: #e1ebe9;
   }
 }
 
@@ -6231,6 +6230,7 @@ header > h5,
 .table > thead > tr,
 */
 .btn-more,
+h1,
 h2,
 .img-card h3,
 .row .form-group.focused label,
@@ -6238,8 +6238,6 @@ h2,
 .row > .col label.focused,
 label.focused,
 .view-body > label.focused,
-.form > div > h1,
-.form > div > h2,
 .card > footer > button,
 .btn-select,
 .btn-add,
@@ -6272,8 +6270,6 @@ header > .btn-group > button,
 
 .diff .row .col p > span,
 .data-list dt,
-article > p > label,
-section > p > label,
 .remark,
 .article-notice,
 .btn-detail,
@@ -6320,7 +6316,7 @@ footer > .btn-cancel::before {
 
 footer > .btn-accept::after,
 footer > .btn-next::after,
-section.btn-group > .btn-search,
+.section.search > .btn-search,
 .central-full > form > div > button,
 .page-body > .form > footer > button,
 .page-body > .form > footer > section.footer > button,
@@ -6508,12 +6504,6 @@ label.required:before,
   border-color: #dbdbdb;
 }
 
-.pagination > li > a,
-.pagination > li > span {
-  border-color: #999999;
-  background-color: inherit;
-}
-
 ul.list > li.highlight {
   background-color: #f2f2f2;
 }
@@ -6575,6 +6565,11 @@ ul.list > li.highlight {
   color: #f0f0f0;
 }
 
+.pagination > li > a,
+.pagination > li > span {
+  border-color: #999999;
+  background-color: inherit;
+}
 /* bootstrap */
 /*.panel-heading,*/
 .result .active,
@@ -6731,14 +6726,11 @@ ul.list > li.highlight {
 }
 
 @media screen and (max-width: 600px) {
-  .dark h3 {
-    background-color: #242424;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .dark h4 {
+  .dark .header {
     background-color: #0d0d0d;
+  }
+  .dark h3.header {
+    background-color: #242424;
   }
 }
 
@@ -6812,6 +6804,7 @@ ul.list > li.highlight {
 }
 */
 .dark .btn-more,
+.dark h1,
 .dark h2,
 .dark .img-card h3,
 .dark .row .form-group.focused label,
@@ -6820,8 +6813,6 @@ ul.list > li.highlight {
 .dark .view-container > form > div > label.focused,
 .dark .view-container > div > label.focused,
 .dark .view-body > label.focused,
-.dark .form > div > h1,
-.dark .form > div > h2,
 .dark .view-container > form > div > h2,
 .dark .card > footer > button,
 .dark .btn-select,
@@ -6854,8 +6845,6 @@ ul.list > li.highlight {
 
 .dark .diff .row .col p > span,
 .dark .data-list dt,
-.dark article > p > label,
-.dark section > p > label,
 .dark .remark,
 .dark .article-notice,
 .dark .btn-detail,
@@ -6902,7 +6891,7 @@ ul.list > li.highlight {
 
 .dark footer > .btn-accept::after,
 .dark footer > .btn-next::after,
-.dark section.btn-group > .btn-search,
+.dark .section.search > .btn-search,
 .dark .central-full > form > div > button,
 .dark .page-body > .form > footer > button,
 .dark .page-body > .form > footer > section.footer > button,
@@ -7090,12 +7079,6 @@ ul.list > li.highlight {
   border-color: #242424;
 }
 
-.dark .pagination > li > a,
-.dark .pagination > li > span {
-  border-color: #666666;
-  background-color: inherit;
-}
-
 .dark ul.list > li.highlight {
   background-color: #242424;
 }
@@ -7183,6 +7166,11 @@ ul.list > li.highlight {
   color: #f0f0f0;
 }
 
+.dark .pagination > li > a,
+.dark .pagination > li > span {
+  border-color: #666666;
+  background-color: inherit;
+}
 /* bootstrap */
 /*.panel-heading,*/
 .dark .result .active,
