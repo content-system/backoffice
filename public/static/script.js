@@ -758,9 +758,9 @@ function checkDate(ele, label, resource, dateOnly) {
   else {
     if (ele.min.length > 0) {
       if (ele.min === "now") {
-        var d = new Date();
-        if (v < d) {
-          if (v < d) {
+        var d_1 = new Date();
+        if (v < d_1) {
+          if (v < d_1) {
             var msg = format(resource.error_from_now, label);
             addErrorMessage(ele, msg);
             return msg;
@@ -768,17 +768,17 @@ function checkDate(ele, label, resource, dateOnly) {
         }
       }
       else if (ele.min === "tomorrow") {
-        var d = addDays(trimTime(new Date()), 1);
-        if (v < d) {
+        var d_2 = addDays(trimTime(new Date()), 1);
+        if (v < d_2) {
           var msg = format(resource.error_from_tomorrow, label);
           addErrorMessage(ele, msg);
           return msg;
         }
       }
       else {
-        var d = new Date(ele.min);
-        if (!isNaN(d.getTime())) {
-          var v2 = dateOnly ? formatDate(d, "YYYY-MM-DD") : formatLongDateTime(d, "YYYY-MM-DD");
+        var d_3 = new Date(ele.min);
+        if (!isNaN(d_3.getTime())) {
+          var v2 = dateOnly ? formatDate(d_3, "YYYY-MM-DD") : formatLongDateTime(d_3, "YYYY-MM-DD");
           var msg = format(resource.error_from, label, v2);
           addErrorMessage(ele, msg);
           return msg;
@@ -787,9 +787,9 @@ function checkDate(ele, label, resource, dateOnly) {
     }
     if (ele.max.length > 0) {
       if (ele.max === "now") {
-        var d = new Date();
-        if (v < d) {
-          if (v < d) {
+        var d_4 = new Date();
+        if (v < d_4) {
+          if (v < d_4) {
             var msg = format(resource.error_after_now, label);
             addErrorMessage(ele, msg);
             return msg;
@@ -797,17 +797,17 @@ function checkDate(ele, label, resource, dateOnly) {
         }
       }
       else if (ele.max === "tomorrow") {
-        var d = addDays(trimTime(new Date()), 1);
-        if (v < d) {
+        var d_5 = addDays(trimTime(new Date()), 1);
+        if (v < d_5) {
           var msg = format(resource.error_after_tomorrow, label);
           addErrorMessage(ele, msg);
           return msg;
         }
       }
       else {
-        var d = new Date(ele.max);
-        if (!isNaN(d.getTime())) {
-          var v2 = dateOnly ? formatDate(d, "YYYY-MM-DD") : formatLongDateTime(d, "YYYY-MM-DD");
+        var d_6 = new Date(ele.max);
+        if (!isNaN(d_6.getTime())) {
+          var v2 = dateOnly ? formatDate(d_6, "YYYY-MM-DD") : formatLongDateTime(d_6, "YYYY-MM-DD");
           var msg = format(resource.error_after, label, v2);
           addErrorMessage(ele, msg);
           return msg;
@@ -1460,6 +1460,16 @@ function getDecimalSeparator(ele) {
   }
   return separator === "," ? "," : ".";
 }
+var d = "data-value";
+function selectOnChange(ele, attr) {
+  var at = attr && attr.length > 0 ? attr : d;
+  if (ele.value === "") {
+    ele.removeAttribute(at);
+  }
+  else {
+    ele.setAttribute(at, ele.value);
+  }
+}
 //detect Ctrl + [a, v, c, x]
 function detectCtrlKeyCombination(e) {
   // list all CTRL + key combinations
@@ -1971,8 +1981,8 @@ function decodeFromForm(form, currencySymbol) {
             val = ele.value;
         }
         if (isDate && dateFormat && dateFormat.length > 0) {
-          var d = parseDate(val, dateFormat);
-          val = d.toString() === "Invalid Date" ? null : d;
+          var d_1 = parseDate(val, dateFormat);
+          val = d_1.toString() === "Invalid Date" ? null : d_1;
         }
         var datatype = ele.getAttribute("data-type");
         var v = ele.value;

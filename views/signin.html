@@ -29,7 +29,7 @@
     </div>
     <div id="root">
       <div id="pageContainer" class="central-full">
-        <form id="signinForm" name="signinForm" novalidate autocomplete="off" onsubmit="return validateForm(this)" method="post">
+        <form id="signinForm" name="signinForm" class="form" novalidate autocomplete="off" onsubmit="return validateForm(this)" method="post">
           <div class="view-body row">
             <img class="logo" src="/images/logo.png" alt="logo" />
             <h2>{{resource.signin}}</h2>
@@ -49,13 +49,24 @@
             <label class="col s12 required {{errors.password.invalid}}">
               {{resource.password}}
               <input
-                type="password"
+                type="text"
                 id="password"
                 name="password"
                 value="{{user.password}}"
                 maxlength="100"
                 required
                 placeholder="{{resource.placeholder_password}}"
+              />
+            </label>
+            <label class="col s12 required {{errors.passcode.invalid}}" hidden>
+              {{resource.passcode}}
+              <input
+                type="text"
+                id="passcode"
+                name="passcode"
+                value="{{user.passcode}}"
+                maxlength="100"
+                placeholder="{{resource.placeholder_passcode}}"
               />
             </label>
             <label class="col s12 checkbox-container">
@@ -89,9 +100,6 @@
         return resource
       }
     </script>
-    <script src="/static/ui.js" data-nscript="afterInteractive"></script>
-    <script src="/static/validator.js" data-nscript="afterInteractive"></script>
-    <script src="/static/script.js" data-nscript="afterInteractive"></script>
-    <script src="/static/layout.js" data-nscript="afterInteractive"></script>
+    <script src="/static/script.js"></script>
   </body>
 </html>

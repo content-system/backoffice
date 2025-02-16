@@ -53,7 +53,7 @@
     </label>
     <label class="col s12 m6 flying">
       {{resource.person_title}}
-      <select id="title" name="title" class="form-control" onblur="requiredOnBlur(event)">
+      <select id="title" name="title" class="form-control" onchange="selectOnChange(this)" onblur="requiredOnBlur(event)" data-value="{{user.title}}">
         <option value="">{{resource.please_select}}</option>
         {% for title in titles %}
         <option value="{{title.value}}" {% if title.value == user.title %}selected{% endif %}>{{title.text}}</option>
@@ -62,7 +62,7 @@
     </label>
     <label class="col s12 m6 flying">
       {{resource.position}}
-      <select id="position" name="position" class="form-control" style="width: 99%" onblur="requiredOnBlur(event)">
+      <select id="position" name="position" class="form-control" onchange="selectOnChange(this)" onblur="requiredOnBlur(event)" data-value="{{user.position}}">
         <option value="">{{resource.please_select}}</option>
         {% for position in positions %}
         <option value="{{position.value}}" {% if position.value == user.position %}selected{% endif %}>{{position.text}}</option>

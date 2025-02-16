@@ -33,7 +33,7 @@ export class LoginController {
   }
   render(req: Request, res: Response) {
     const resource = getResource()
-    res.render("login", {
+    res.render("signin", {
       resource,
       user: {
         username: "kaka",
@@ -51,7 +51,7 @@ export class LoginController {
       console.log("Login error")
       const errorMap = toMap(errors)
       console.log("Errors: " + JSON.stringify(errorMap))
-      res.render("login", {
+      res.render("signin", {
         resource,
         user,
         message: errors[0].message,
@@ -69,7 +69,7 @@ export class LoginController {
         } else {
           let key: string| undefined = map["" + result.status]
           const message = (key ? resource[key] : resource.fail_authentication)
-          res.render("login", { resource, user, message })
+          res.render("signin", { resource, user, message })
         }
       })
     }

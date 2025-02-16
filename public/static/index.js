@@ -1,3 +1,4 @@
+"use strict"
 const r1 = / |,|\$|€|£|¥|'|٬|،| /g
 const r2 = / |\.|\$|€|£|¥|'|٬|،| /g
 class resources {}

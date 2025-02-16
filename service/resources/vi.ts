@@ -247,6 +247,7 @@ export const vi = {
   id: "Id",
   title: "Title",
   content: "Content",
+  thumbnail: "Thumbnail",
   published_at: "Published At",
   published_at_from: "Published At From",
   published_at_to: "Published At To",

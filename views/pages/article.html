@@ -21,6 +21,19 @@
         />
       </label>
       <label class="col s6 m6 required">
+        {{resource.thumbnail}}
+        <input
+          type="text"
+          id="thumbnail"
+          name="thumbnail"
+          value="{{article.thumbnail}}"
+          maxlength="255"
+          required
+          onblur="requiredOnBlur(event)"
+          placeholder="{{resource.thumbnail}}"
+        />
+      </label>
+      <label class="col s6 m6 required">
         {{resource.title}}
         <input
           type="text"
