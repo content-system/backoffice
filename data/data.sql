@@ -88,7 +88,7 @@ create table audit_logs (
   status varchar(255),
   remark varchar(255)
 );
-insert into modules (module_id,module_name,status,path,resource_key,icon,sequence,actions,parent) values ('dashboard','Dashboard','A','/dashboard','dashboard','assignments',1,7,'');
+insert into modules (module_id,module_name,status,path,resource_key,icon,sequence,actions,parent) values ('dashboard','Dashboard','A','/dashboard','dashboard','assignment',1,7,'');
 insert into modules (module_id,module_name,status,path,resource_key,icon,sequence,actions,parent) values ('admin','Admin','A','/admin','admin','contacts',2,7,'');
 insert into modules (module_id,module_name,status,path,resource_key,icon,sequence,actions,parent) values ('setup','Setup','A','/setup','setup','settings',3,7,'');
 insert into modules (module_id,module_name,status,path,resource_key,icon,sequence,actions,parent) values ('report','Report','A','/report','report','pie_chart',4,7,'');
@@ -290,10 +290,10 @@ news
 careers
 contact
 */
-insert into categories (id,name,status,path,resource_key,icon,sequence,actions,parent) values ('about','About','A','/about','about','assignments',1,7,'');
-insert into categories (id,name,status,path,resource_key,icon,sequence,actions,parent) values ('works','Works','A','/works','works','assignments',2,7,'');
+insert into categories (id,name,status,path,resource_key,icon,sequence,actions,parent) values ('about','About','A','/about','about','assignment',1,7,'');
+insert into categories (id,name,status,path,resource_key,icon,sequence,actions,parent) values ('works','Works','A','/works','works','assignment',2,7,'');
 insert into categories (id,name,status,path,resource_key,icon,sequence,actions,parent) values ('services','Services','A','/services','services','settings',3,7,'');
-insert into categories (id,name,status,path,resource_key,icon,sequence,actions,parent) values ('news','News','A','/news','news','assignments',4,7,'');
+insert into categories (id,name,status,path,resource_key,icon,sequence,actions,parent) values ('news','News','A','/news','news','assignment',4,7,'');
 insert into categories (id,name,status,path,resource_key,icon,sequence,actions,parent) values ('careers','Careers','A','/careers','careers','pie_chart',5,7,'');
 insert into categories (id,name,status,path,resource_key,icon,sequence,actions,parent) values ('contact','contact','A','/contact','contact','contacts',6,7,'');
 

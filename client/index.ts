@@ -98,6 +98,15 @@ function getDecimalSeparator(ele: HTMLInputElement): string {
   }
   return separator === "," ? "," : "."
 }
+const d = "data-value"
+function selectOnChange(ele: HTMLSelectElement, attr?: string): void {
+  const at = attr && attr.length > 0 ? attr : d
+  if (ele.value === "") {
+    ele.removeAttribute(at)
+  } else {
+    ele.setAttribute(at, ele.value)
+  }
+}
 //detect Ctrl + [a, v, c, x]
 function detectCtrlKeyCombination(e: KeyboardEvent) {
   // list all CTRL + key combinations

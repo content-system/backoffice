@@ -3,9 +3,13 @@
 }
 
 .list {
-  margin: 16px 0;
+  margin: 4px 0 16px 0;
 }
-
+/*
+.list:last-child {
+  margin-bottom: 0;
+}
+*/
 .list.horizon {
   display: flex;
   flex-direction: row;
@@ -38,7 +42,11 @@
 .list.row {
   padding: 0 8px;
 }
-
+.card-grid,
+.list.row.card-grid {
+  margin-top: 12px;
+  margin-bottom: 0;
+}
 ul.list > li {
   display: flex;
   flex-direction: column;
@@ -50,7 +58,11 @@ ul.list.row > li.col {
   padding-right: 0;
   border: none;
 }
-
+/*
+ul.list.row > li.col:last-child {
+  margin-bottom: 16px;
+}
+*/
 ul.list.row > li.col > h3,
 ul.list.row > li.col > h4,
 ul.list.row > li.col > a,
@@ -73,11 +85,12 @@ ul.list.row > li.col > *:first-child {
 .list-item > .btn-detail,
 .img-item > .btn-detail {
   position: absolute;
-  right: 16px;
+  right: 8px;
+  top: 12px;
 }
 .list-item > .btn-detail,
 .small.img-item > .btn-detail {
-  top: 3px;
+  top: 8px;
 }
 
 .list-item > *:last-child,
@@ -89,6 +102,9 @@ ul.list.row > li.col > *:first-child {
 }
 .img-item > *:last-child {
   min-height: 33px;
+}
+.small.img-item > *:last-child {
+  min-height: 30px;
 }
 .img-item > img {
   position: absolute;
@@ -102,7 +118,7 @@ ul.list.row > li.col > *:first-child {
 }
 .img-item > input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]) {
   position: absolute;
-  left: 16px;
+  left: 8px;
 }
 
 .img-item > h3,
@@ -448,4 +464,44 @@ i.date {
 .img-card > h4.center,
 .img-card > p.center {
   justify-content: center;
+}
+
+.card > section > p,
+.video > section > p,
+.video > p,
+.img-card > p,
+.horizon > li > a,
+.img-item > h3,
+.img-item > h4,
+.img-item > a,
+.img-item > p,
+.list-item > h3,
+.list-item > h4,
+.list-item > a,
+.list-item > p {
+  color: inherit;
+}
+
+.list-container .list.row {
+  padding: 0 4px;
+}
+ul.list .check-item {
+  display: flex;
+  flex-direction: row;
+  font-size: 16px;
+  font-weight: 500;
+}
+ul.list > .check-item > p {
+  font-size: inherit;
+  margin-left: 24px;
+  padding-top: 10px;
+  margin-bottom: 7px;
+}
+ul.list > .check-item.header {
+  margin-bottom: 4px;
+}
+ul.list > .check-item.header > p {
+  font-size: inherit;
+  margin-left: 22px;
+  font-weight: 600;
 }

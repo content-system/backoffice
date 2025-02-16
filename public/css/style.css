@@ -442,6 +442,20 @@ hr {
   width: 100%;
 }
 
+form,
+section,
+div,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  color: inherit;
+  background-color: inherit;
+}
+
 input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]) {
   cursor: pointer;
   left: 16px;
@@ -1873,7 +1887,9 @@ p.description > .star {
   display: inline-block;
   height: 32px;
   width: 32px;
-  margin-bottom: 10px;
+  padding-top: 3px;
+  padding-left: 1px;
+  margin-bottom: 12px;
   border: 1px solid;
   border-radius: 50%;
 }
@@ -1883,14 +1899,21 @@ p.description > .star {
   font-weight: 100;
   content: "\21";
 }
+.danger-icon .alert-icon {
+  padding-top: 3px;
+  padding-left: 2px;
+}
 .danger-icon .alert-icon::before {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 100;
   content: "\2715";
 }
-
+.success-icon .alert-icon {
+  padding-top: 3px;
+  padding-left: 1px;
+}
 .success-icon .alert-icon::before {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 100;
   content: "\2713";
   color: #4db6ac;
@@ -1920,9 +1943,9 @@ p.description > .star {
 
 .alert h4,
 .alert p {
-  padding-left: 16px;
-  padding-right: 16px;
-  margin-top: 6px;
+  font-size: 16px;
+  margin-top: 0;
+  margin-bottom: 12px;
   padding: 0;
   display: inline-block;
   background-color: inherit;
@@ -1936,8 +1959,7 @@ p.description > .star {
 }
 
 .alert h4 {
-  margin-top: 0;
-  margin-bottom: 0;
+  font-size: 18px;
   font-weight: 800;
 }
 
@@ -2204,7 +2226,7 @@ alert b {
 .view-body {
   padding: 0;
   padding-top: 44px;
-  padding-bottom: 20px;
+  padding-bottom: 0;
   right: 0;
   top: 0px;
   width: 100%;
@@ -2491,9 +2513,16 @@ td > button {
   background-image: inherit;
   padding-left: 8px;
   padding-right: 8px;
-  margin: 16px 0;
+  margin: 0 0 16px 0;
 }
-
+.section:first-child {
+  margin-top: 8px;
+}
+/*
+.section:last-child {
+  margin-bottom: 0;
+}
+*/
 .page-body > .form > div.background-content > section:nth-child(2),
 .view-body > section:nth-child(2) {
   background-image: none;
@@ -2599,6 +2628,12 @@ h4:not(:first-child):not(:nth-child(2)) {
   margin-top: 10px;
 }
 */
+.page-body > div > div > h2:first-child,
+.page-body > div > div > h3:first-child,
+.page-body > div > div > h4:first-child,
+.page-body > div > div > p:first-child {
+  margin-top: 8px;
+}
 header > h1,
 header > h2 {
   color: inherit;
@@ -2609,6 +2644,10 @@ header > h2 {
 .header {
   padding-left: 8px;
   padding-right: 8px;
+  margin-bottom: 8px;
+}
+.header:first-child {
+  margin-top: 8px;
 }
 @media screen and (max-width: 600px) {
   header > h1,
@@ -2630,10 +2669,14 @@ header > h2 {
     margin-right: -8px;
     padding-left: 16px;
     padding-right: 16px;
+    margin-bottom: 0;
+  }
+  .header:first-child {
+    margin-top: 0;
   }
   .section:first-child > h3:first-child,
   .section:first-child > h4:first-child {
-    margin-top: -16px;
+    margin-top: -8px;
   }
 }
 
@@ -2707,6 +2750,26 @@ section > h4.title > a {
   white-space: pre;
 }
 
+.form > div > section > p,
+.section-body > p,
+.brand,
+.table > thead > tr > th,
+.table > thead > tr > th > a,
+.table > thead > tr > th > button,
+.table > tbody > tr > td > a,
+.table > tbody > tr > td,
+h4,
+h5,
+h6,
+section > h4 > .btn-group > button,
+section > a,
+.section-header,
+.section-subheader,
+.diff .row .col p,
+.alert p {
+  color: inherit;
+}
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -2758,7 +2821,6 @@ form label > select::-ms-expand {
   padding-right: 8px;
 }
 
-.detail .row.no-margin,
 .row.no-margin {
   margin-left: 0;
   margin-right: 0;
@@ -2882,7 +2944,9 @@ label.focused > span.span-error,
   background-image: inherit;
   font-weight: 500;
 }
-
+.page-body > .form > .row > .col:last-child {
+  margin-bottom: 16px;
+}
 .row .form-group {
   width: 100%;
   font-size: 14px;
@@ -3258,22 +3322,6 @@ label.required:before {
   content: "\2B";
 }
 
-.detail > .row > span.col,
-.detail > .row > .col.row > span.col {
-  height: 28px;
-  padding-top: 6px;
-}
-
-.detail .row {
-  margin-right: -5px;
-  margin-left: -5px;
-}
-
-.detail .row .col {
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
 .text-right {
   text-align: right !important;
 }
@@ -3300,9 +3348,13 @@ label > .DayPickerInput {
 }
 
 .list {
-  margin: 16px 0;
+  margin: 4px 0 16px 0;
 }
-
+/*
+.list:last-child {
+  margin-bottom: 0;
+}
+*/
 .list.horizon {
   display: flex;
   flex-direction: row;
@@ -3335,7 +3387,11 @@ label > .DayPickerInput {
 .list.row {
   padding: 0 8px;
 }
-
+.card-grid,
+.list.row.card-grid {
+  margin-top: 12px;
+  margin-bottom: 0;
+}
 ul.list > li {
   display: flex;
   flex-direction: column;
@@ -3347,7 +3403,11 @@ ul.list.row > li.col {
   padding-right: 0;
   border: none;
 }
-
+/*
+ul.list.row > li.col:last-child {
+  margin-bottom: 16px;
+}
+*/
 ul.list.row > li.col > h3,
 ul.list.row > li.col > h4,
 ul.list.row > li.col > a,
@@ -3370,11 +3430,12 @@ ul.list.row > li.col > *:first-child {
 .list-item > .btn-detail,
 .img-item > .btn-detail {
   position: absolute;
-  right: 16px;
+  right: 8px;
+  top: 12px;
 }
 .list-item > .btn-detail,
 .small.img-item > .btn-detail {
-  top: 3px;
+  top: 8px;
 }
 
 .list-item > *:last-child,
@@ -3386,6 +3447,9 @@ ul.list.row > li.col > *:first-child {
 }
 .img-item > *:last-child {
   min-height: 33px;
+}
+.small.img-item > *:last-child {
+  min-height: 30px;
 }
 .img-item > img {
   position: absolute;
@@ -3399,7 +3463,7 @@ ul.list.row > li.col > *:first-child {
 }
 .img-item > input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]) {
   position: absolute;
-  left: 16px;
+  left: 8px;
 }
 
 .img-item > h3,
@@ -3747,6 +3811,46 @@ i.date {
   justify-content: center;
 }
 
+.card > section > p,
+.video > section > p,
+.video > p,
+.img-card > p,
+.horizon > li > a,
+.img-item > h3,
+.img-item > h4,
+.img-item > a,
+.img-item > p,
+.list-item > h3,
+.list-item > h4,
+.list-item > a,
+.list-item > p {
+  color: inherit;
+}
+
+.list-container .list.row {
+  padding: 0 4px;
+}
+ul.list .check-item {
+  display: flex;
+  flex-direction: row;
+  font-size: 16px;
+  font-weight: 500;
+}
+ul.list > .check-item > p {
+  font-size: inherit;
+  margin-left: 24px;
+  padding-top: 10px;
+  margin-bottom: 7px;
+}
+ul.list > .check-item.header {
+  margin-bottom: 4px;
+}
+ul.list > .check-item.header > p {
+  font-size: inherit;
+  margin-left: 22px;
+  font-weight: 600;
+}
+
 .full,
 .solid {
   height: 100vh;
@@ -3880,6 +3984,10 @@ i.date {
   margin-bottom: 1rem;
   background-color: transparent;
 }
+form > .table-responsive:last-child > .table {
+  margin-bottom: 0;
+}
+
 .table th,
 .table td {
   position: relative;
@@ -4018,8 +4126,7 @@ th.action {
 }
 
 .table-responsive {
-  margin-left: 16px;
-  margin-right: 16px;
+  margin: 12px 16px 16px 16px;
 }
 /*
 .table-responsive > table {
@@ -4088,8 +4195,8 @@ th.action {
   margin: 16px 0;
 }
 .data-list.row {
-  padding-left: 16px;
-  padding-right: 16px;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 .data-list > dt {
   font-size: 14px;
@@ -4275,18 +4382,17 @@ footer > .btn-accept::after {
   background-color: #4db6ac;
   display: inline-block;
   vertical-align: middle;
-  margin-left: 5px;
+  margin-left: 6px;
   line-height: 40px;
   font-size: 25px;
 }
-
 footer > .btn-cancel::before {
   content: "\2715";
   height: 40px;
   width: 40px;
   border-radius: 50%;
   display: inline-block;
-  margin-right: 5px;
+  margin-right: 6px;
   vertical-align: middle;
   line-height: 40px;
   color: #fff;
@@ -4428,10 +4534,6 @@ td > .btn-remove::before {
   top: unset;
 }
 
-.detail .row .col.btn-group > .btn-remove {
-  margin-top: 18px;
-}
-
 h4 > .btn-add {
   margin-left: 10px;
 }
@@ -4461,10 +4563,11 @@ h4 > .btn-add {
   font-size: 36px;
   content: "+";
   position: absolute;
-  top: -7px;
+  top: -2px;
   left: 1px;
 }
 header > .btn-group > .btn-list {
+  margin-top: -2px;
   padding-top: 0;
 }
 .btn-list::before {
@@ -4596,6 +4699,15 @@ header > .btn-group {
   margin-bottom: -10px;
   font-weight: 100;
   transform: scale(1.5, 1.5);
+}
+
+.btn-group .btn-edit,
+.btn-group .btn-approve,
+.btn-group .btn-copy,
+.btn-group .btn-history,
+.btn-group .btn-transfer,
+.btn-group .btn-divide {
+  color: inherit;
 }
 
 .search-input > *:first-child {
@@ -4755,6 +4867,7 @@ label.search-input > button.btn-search {
 }
 .toggle-search::before {
   top: 1px;
+  left: 5px;
 }
 .btn-remove-text {
   width: 20px;
@@ -4795,12 +4908,12 @@ section.row.search-group nav.col {
   height: 36px;
   border: 1px solid;
   border-radius: 18px;
-  padding-top: 6px;
+  padding-top: 9px;
   padding-left: 12px;
   padding-bottom: 4px;
 }
 .section.search > label > select {
-  margin-top: -2px;
+  margin-top: -4px;
   padding-top: 0;
   padding-left: 10px;
   border: none;
@@ -4974,11 +5087,9 @@ i.sort-down:after {
     border: none;
     background-color: transparent;
   }
-  .page-header .toggle-menu {
-    width: 32px;
-    height: 32px;
-    margin-left: 2px;
-    padding-top: 0;
+  .page-header .toggle-menu::before {
+    top: 1px;
+    left: 9px;
   }
   .page-header .search-input {
     display: none !important;
@@ -5710,11 +5821,13 @@ nav.collapsed-all .sidebar-off-menu > .collapse {
   font-weight: 100;
   content: url("../images/pin.svg");
 }
-/*
 .menu.sidebar nav ul li:hover button.btn-pin {
   display: inline-block;
 }
-*/
+.top-menu .menu.sidebar nav ul li:hover button.btn-pin {
+  display: none;
+}
+
 .menu.sidebar .btn-pin .pinned {
   display: inline-block;
   transform: rotate(45deg);
@@ -6160,13 +6273,6 @@ nav.collapsed-all .sidebar-off-menu > .collapse {
 
 body,
 .page-container,
-.page-body,
-.full-container,
-.page-header,
-.modal-portal-content,
-select,
-input,
-.alert-wrapper .alert,
 .dropdown-menu-profile {
   background-color: #fff;
 }
@@ -6174,8 +6280,7 @@ input,
   border-color: #eee;
 }
 
-.modal-portal-content > div > header,
-.view-header {
+.modal-portal-content > div > header {
   color: #fff;
   background-image: linear-gradient(90deg, #008577, #00574b);
 }
@@ -6215,33 +6320,11 @@ h3 {
 body,
 article,
 .data-list dd,
-.form > div > section > p,
-.section-body > p,
-.brand,
-.card > section > p,
-.video > section > p,
-.video > p,
-.img-card > p,
-.horizon > li > a,
-.img-item > h3,
-.img-item > a,
-.list-item > a,
-.table > thead > tr > th,
-.table > thead > tr > th > a,
-.table > thead > tr > th > button,
-h4,
-h5,
-h6,
-section > h4 > .btn-group > button,
-section > a,
-.section-header,
-.section-subheader,
-.diff .row .col p,
+.table > thead > tr,
+.btn-group,
 .btn-next,
 .btn-accept,
 .btn-cancel,
-.btn-group,
-.alert p,
 label.switch-container,
 label.checkbox-container,
 label.checkbox-group,
@@ -6252,9 +6335,6 @@ label.radio-group,
   color: #4d4d4d;
 }
 
-.table > tbody > tr > td > a,
-.table > tbody > tr > td,
-.row .form-group label,
 .card > footer > button.btn-cancel,
 .central-full > form > div > button.btn-cancel,
 header > h5,
@@ -6280,7 +6360,6 @@ header > h5,
 .btn-more,
 h1,
 h2,
-.img-card h3,
 .row .form-group.focused label,
 .row > label.focused,
 .row > .col label.focused,
@@ -6316,23 +6395,17 @@ header > .btn-group > button,
   }
 }
 
+label,
+.table > tbody,
 .diff .row .col p > span,
 .data-list dt,
-.remark,
-.article-notice,
 .btn-detail,
 .quick-nav,
 header > .btn-back,
 .btn-close,
 .btn-filter,
 .btn-remove-text,
-.btn-edit,
-.btn-approve,
-.btn-copy,
-.btn-history,
-.btn-transfer,
-.btn-divide,
-.form > footer > button.btn-secondary,
+.btn-group,
 .btn-secondary {
   color: #808080;
 }
@@ -6347,13 +6420,8 @@ header > .btn-back,
 }
 .modal-portal-content header > .btn-group > button,
 .modal-portal-content > div > header > .btn-close,
-.solid > form > div > p,
-.solid > div > p,
-.solid > .view-body > p,
-.solid > form > div > h5,
-.solid > div > h5,
-.solid > .view-body > h5,
-.form > div > section.header-container > p {
+.form > div > section.header-container > p,
+.solid {
   color: #fff;
 }
 
@@ -6624,6 +6692,15 @@ ul.list > li.highlight {
 /*
 .pagination > .active, 
 .pagination-page.active,*/
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus,
+.pagination > .active > a:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus,
 
 .table-striped tbody tr.active:nth-child(odd) td,
 .table-striped tbody tr.active:nth-child(odd) th,
@@ -6638,17 +6715,7 @@ ul.list > li.highlight {
 .table > tfoot > tr.active > td,
 .table > thead > tr.active > th,
 .table > tbody > tr.active > th,
-.table > tfoot > tr.active > th,
-
-.pagination > .active > a,
-.pagination > .active > span,
-.pagination > .active > a:hover,
-.pagination > .active > span:hover,
-.pagination > .active > a:focus,
-.pagination > .active > span:focus,
-.pagination > .active > a:hover,
-.pagination > .active > a:focus,
-.pagination > .active > span:focus {
+.table > tfoot > tr.active > th {
   background-color: #387ef5;
 }
 
@@ -6729,14 +6796,6 @@ ul.list > li.highlight {
 
 .dark body,
 .dark .page-container,
-.dark .page-body,
-.dark .view-container,
-.dark .full-container,
-.dark .page-header,
-.dark .modal-portal-content,
-.dark select,
-.dark input,
-.dark .alert-wrapper .alert,
 .dark .dropdown-menu-profile {
   background-color: #000;
 }
@@ -6744,8 +6803,7 @@ ul.list > li.highlight {
   border-color: #111;
 }
 
-.dark .modal-portal-content > div > header,
-.dark .view-header {
+.dark .modal-portal-content > div > header {
   color: #000;
   background-image: linear-gradient(90deg, #008577, #00574b);
 }
@@ -6785,31 +6843,11 @@ ul.list > li.highlight {
 .dark body,
 .dark article,
 .dark .data-list dd,
-.dark .form > div > section > p,
-.dark .section-body > p,
-.dark .brand,
-.dark .card > section > p,
-.dark .video > section > p,
-.dark .video > p,
-.dark .img-card > p,
-.dark .horizon > li > a,
-.dark .img-item > h3,
-.dark .img-item > a,
-.dark .list-item > a,
-.dark .table > thead > tr > th,
-.dark .table > thead > tr > th > a,
-.dark .table > thead > tr > th > button,
-.dark h4,
-.dark section > h4 > .btn-group > button,
-.dark section > a,
-.dark .section-header,
-.dark .section-subheader,
-.dark .diff .row .col p,
+.dark .table > thead > tr,
+.dark .btn-group,
 .dark .btn-next,
 .dark .btn-accept,
 .dark .btn-cancel,
-.dark .btn-group,
-.dark .alert p,
 .dark label.switch-container,
 .dark label.checkbox-container,
 .dark label.checkbox-group,
@@ -6820,9 +6858,6 @@ ul.list > li.highlight {
   color: #b2b2b2;
 }
 
-.dark .table > tbody > tr > td > a,
-.dark .table > tbody > tr > td,
-.dark .row .form-group label,
 .dark .card > footer > button.btn-cancel,
 .dark .central-full > form > div > button.btn-cancel,
 .dark header > h5,
@@ -6854,7 +6889,6 @@ ul.list > li.highlight {
 .dark .btn-more,
 .dark h1,
 .dark h2,
-.dark .img-card h3,
 .dark .row .form-group.focused label,
 .dark .row > label.focused,
 .dark .row > .col label.focused,
@@ -6891,6 +6925,8 @@ ul.list > li.highlight {
   }
 }
 
+.dark label,
+.dark .table > tbody,
 .dark .diff .row .col p > span,
 .dark .data-list dt,
 .dark .remark,
@@ -6901,13 +6937,7 @@ ul.list > li.highlight {
 .dark .btn-close,
 .dark .btn-filter,
 .dark .btn-remove-text,
-.dark .btn-edit,
-.dark .btn-approve,
-.dark .btn-copy,
-.dark .btn-history,
-.dark .btn-transfer,
-.dark .btn-divide,
-.dark .form > footer > button.btn-secondary,
+.dark .btn-group,
 .dark .btn-secondary {
   color: #7f7f7f;
 }
@@ -6922,13 +6952,8 @@ ul.list > li.highlight {
 }
 .dark .modal-portal-content header > .btn-group > button,
 .dark .modal-portal-content > div > header > .btn-close,
-.dark .solid > form > div > p,
-.dark .solid > div > p,
-.dark .solid > .view-body > p,
-.dark .solid > form > div > h5,
-.dark .solid > div > h5,
-.dark .solid > .view-body > h5,
-.dark .form > div > section.header-container > p {
+.dark .form > div > section.header-container > p,
+.dark .solid {
   color: #000;
 }
 
@@ -7225,6 +7250,15 @@ ul.list > li.highlight {
 /*
 .dark .pagination > .active, 
 .dark .pagination-page.active,*/
+.dark .pagination > .active > a,
+.dark .pagination > .active > span,
+.dark .pagination > .active > a:hover,
+.dark .pagination > .active > span:hover,
+.dark .pagination > .active > a:focus,
+.dark .pagination > .active > span:focus,
+.dark .pagination > .active > a:hover,
+.dark .pagination > .active > a:focus,
+.dark .pagination > .active > span:focus,
 
 .dark .table-striped tbody tr.active:nth-child(odd) td,
 .dark .table-striped tbody tr.active:nth-child(odd) th,
@@ -7239,17 +7273,7 @@ ul.list > li.highlight {
 .dark .table > tfoot > tr.active > td,
 .dark .table > thead > tr.active > th,
 .dark .table > tbody > tr.active > th,
-.dark .table > tfoot > tr.active > th,
-
-.dark .pagination > .active > a,
-.dark .pagination > .active > span,
-.dark .pagination > .active > a:hover,
-.dark .pagination > .active > span:hover,
-.dark .pagination > .active > a:focus,
-.dark .pagination > .active > span:focus,
-.dark .pagination > .active > a:hover,
-.dark .pagination > .active > a:focus,
-.dark .pagination > .active > span:focus {
+.dark .table > tfoot > tr.active > th {
   background-color: #387ef5;
 }
 
