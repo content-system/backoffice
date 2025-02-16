@@ -97,15 +97,17 @@ ul.list.row > li.col > *:first-child {
 .img-item > *:last-child {
   border-bottom: 1px solid #ebebeb;
 }
-.list-item > *:last-child {
-  min-height: 30px;
-}
+
 .img-item > *:last-child {
   min-height: 33px;
 }
 .small.img-item > *:last-child {
   min-height: 30px;
 }
+.list-item > *:last-child {
+  min-height: 30px;
+}
+
 .img-item > img {
   position: absolute;
   left: 8px;
