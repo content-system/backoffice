@@ -82,6 +82,11 @@
   color: #b2b2b2;
 }
 
+.dark .list-item > *:last-child,
+.dark .img-item > *:last-child {
+  border-bottom-color: #141414;
+}
+
 .dark .card > footer > button.btn-cancel,
 .dark .central-full > form > div > button.btn-cancel,
 .dark header > h5,
@@ -547,7 +552,7 @@
 .dark .table-bordered > tfoot > tr > th,
 .dark .table-bordered > thead > tr > td,
 .dark .table-bordered > thead > tr > th {
-  border-color: #ddd;
+  border-color: #222222;
 }
 
 .dark .table > tbody > tr:nth-of-type(odd),

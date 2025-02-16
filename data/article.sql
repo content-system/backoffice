@@ -8,7 +8,11 @@ create table articles (
   tags character varying[],
   thumbnail varchar(400),
   high_thumbnail varchar(400),
-  status char(1)
+  status char(1),
+  created_by varchar(40),
+  created_at timestamptz,
+  updated_by varchar(40),
+  updated_at timestamptz
 );
 
 insert into articles (id,title,description,content,published_at,tags,thumbnail,high_thumbnail,status) values

@@ -68,6 +68,11 @@ label.radio-group,
   color: #4d4d4d;
 }
 
+.list-item > *:last-child,
+.img-item > *:last-child {
+  border-bottom-color: #ebebeb;
+}
+
 .card > footer > button.btn-cancel,
 .central-full > form > div > button.btn-cancel,
 header > h5,

@@ -82,6 +82,11 @@
   color: #778497;
 }
 
+.grey.dark .list-item > *:last-child,
+.grey.dark .img-item > *:last-child {
+  border-bottom-color: #1f1f1f;
+}
+
 .grey.dark .table > tbody > tr > td > a,
 .grey.dark .table > tbody > tr > td,
 .grey.dark .row .form-group label,

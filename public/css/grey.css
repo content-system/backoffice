@@ -81,6 +81,11 @@
   color: #393f48;
 }
 
+.grey .list-item > *:last-child,
+.grey .img-item > *:last-child {
+  border-bottom-color: #e0e0e0;
+}
+
 .grey .card > footer > button.btn-cancel,
 .grey .view-container.central-full > form > div > button.btn-cancel,
 .grey header > h5,
