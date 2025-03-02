@@ -101,9 +101,10 @@ function getDecimalSeparator(ele: HTMLInputElement): string {
 const histories: string[] = []
 const historyMax = 10
 function goBack() {
-  const url = histories.pop()
+  let url = histories.pop()
   if (url) {
-    fetch(url + "?partial=true", { method: "GET", headers: getHeaders() })
+    url = url.indexOf("?") >= 0 ? url + "&partial=true" : url + "?partial=true"
+    fetch(url, { method: "GET", headers: getHeaders() })
       .then((response) => {
         if (response.ok) {
           response.text().then((data) => {
@@ -487,7 +488,10 @@ function registerEvents(form: HTMLFormElement): void {
       if (type != null) {
         type = type.toLowerCase()
       }
-      if (ele.nodeName === "INPUT" && (type === "checkbox" || type === "radio" || type === "submit" || type === "button" || type === "reset")) {
+      if (
+        ele.nodeName === "INPUT" &&
+        (type === "checkbox" || type === "radio" || type === "submit" || type === "button" || type === "reset")
+      ) {
         continue
       } else {
         const parent = ele.parentElement
