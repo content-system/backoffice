@@ -14,7 +14,8 @@ import {
   handleError,
   hasSearch,
   queryNumber,
-  resources
+  resources,
+  toString
 } from "express-ext"
 import { Log } from "onecore"
 import { getDateFormat } from "ui-formatter"
@@ -36,7 +37,7 @@ export class RoleController {
     this.search = this.search.bind(this)
   }
   view(req: Request, res: Response) {
-    const resource = getResource()
+    const resource = getResource(req)
     const id = req.params["id"]
     const editMode = id !== "new"
     if (!editMode) {
@@ -44,12 +45,19 @@ export class RoleController {
       res.render(getView(req, "role"), { resource, role: escape(role), editMode })
     } else {
       this.service.load(id).then((role) => {
-        res.render(getView(req, "role"), { resource, role: escape(role), editMode })
+        if (!role) {
+          res.render(getView(req, "error-404"), {resource})
+        } else {
+          res.render(getView(req, "role"), { resource, role: escape(role), editMode })
+        }
+      }).catch(err => {
+        this.log(toString(err))
+        res.render(getView(req, "error-500"), {resource})
       })
     }
   }
   submit(req: Request, res: Response) {
-    const resource = getResource()
+    const resource = getResource(req)
     const role = req.body
     console.log("role " + JSON.stringify(role))
     const errors = validate<Role>(role, roleModel, resource)
@@ -77,7 +85,7 @@ export class RoleController {
   }
   search(req: Request, res: Response) {
     const dateFormat = getDateFormat()
-    const resource = getResource()
+    const resource = getResource(req)
     let filter: RoleFilter = {
       q: "",
       limit: resources.defaultLimit,
@@ -100,6 +108,9 @@ export class RoleController {
         sort: buildSortSearch(search, fields, filter.sort),
         message: buildMessage(resource, list, limit, page, result.total)
       })
+    }).catch(err => {
+      this.log(toString(err))
+      res.render(getView(req, "error-500"), {resource})
     })
   }
 }

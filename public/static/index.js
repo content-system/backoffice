@@ -1,4 +1,3 @@
-"use strict"
 const r1 = / |,|\$|€|£|¥|'|٬|،| /g
 const r2 = / |\.|\$|€|£|¥|'|٬|،| /g
 class resources {}
@@ -79,6 +78,41 @@ function getDecimalSeparator(ele) {
     }
   }
   return separator === "," ? "," : "."
+}
+const histories = []
+const historyMax = 10
+function goBack() {
+  const url = histories.pop()
+  if (url) {
+    fetch(url + "?partial=true", { method: "GET", headers: getHeaders() })
+      .then((response) => {
+        if (response.ok) {
+          response.text().then((data) => {
+            const pageBody = document.getElementById("pageBody")
+            if (pageBody) {
+              pageBody.innerHTML = data
+              const forms = pageBody.querySelectorAll("form")
+              for (let i = 0; i < forms.length; i++) {
+                registerEvents(forms[i])
+              }
+              setTimeout(function () {
+                const msg = getHiddenMessage(forms, resources.hiddenMessage)
+                if (msg && msg.length > 0) {
+                  toast(msg)
+                }
+              }, 0)
+            }
+          })
+        } else {
+          console.error("Error: ", response.statusText)
+          alertError(resource.error_submit_failed, response.statusText)
+        }
+      })
+      .catch((err) => {
+        console.log("Error: " + err)
+        alertError(resource.error_submitting_form, err)
+      })
+  }
 }
 const d = "data-value"
 function selectOnChange(ele, attr) {

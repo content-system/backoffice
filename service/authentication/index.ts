@@ -32,7 +32,7 @@ export class LoginController {
     this.submit = this.submit.bind(this)
   }
   render(req: Request, res: Response) {
-    const resource = getResource()
+    const resource = getResource(req)
     res.render("signin", {
       resource,
       user: {
@@ -43,7 +43,7 @@ export class LoginController {
     })
   }
   submit(req: Request, res: Response) {
-    const resource = getResource()
+    const resource = getResource(req)
     const user: User = req.body
     console.log("user " + JSON.stringify(user))
     const errors = validate<User>(user, userModel, resource, true)
@@ -58,17 +58,17 @@ export class LoginController {
         errors: errorMap,
       })
     } else {
-      this.authenticator.authenticate(user).then(result => {
+      this.authenticator.authenticate(user).then((result) => {
         if (result.status === 1) {
           if (result.user) {
-            res.cookie('token', result.user.token, { httpOnly: true, secure: true, sameSite: 'strict'});
+            res.cookie("token", result.user.token, { httpOnly: true, secure: true, sameSite: "strict" })
             console.log("Token " + result.user.token)
           }
           console.log("Login successfully")
           res.redirect("/users")
         } else {
-          let key: string| undefined = map["" + result.status]
-          const message = (key ? resource[key] : resource.fail_authentication)
+          let key: string | undefined = map["" + result.status]
+          const message = key ? resource[key] : resource.fail_authentication
           res.render("signin", { resource, user, message })
         }
       })

@@ -26,39 +26,37 @@
       <input type="hidden" id="page" name="page" value="{{filter.page}}" />
       <input type="hidden" id="_message" name="_message" value="{{message}}" />
     </form>
-    <form class="list-result">
-      <div class="table-responsive">
-        <table class="table">
-          <thead>
-            <tr>
-              <th data-field="roleId">
-                <a id="sortRoleId" href="{{sort.roleId.url}}">{{resource.role_id}} {{sort.roleId.tag}}</a>
-              </th>
-              <th data-field="roleName">
-                <a id="sortRoleName" href="{{sort.roleName.url}}">{{resource.role_name}} {{sort.roleName.tag}}</a>
-              </th>
-              <th data-field="remark">
-                <a id="sortRemark" href="{{sort.remark.url}}">{{resource.remark}} {{sort.remark.tag}}</a>
-              </th>
-              <th data-field="status">
-                <a id="sortStatus" href="{{sort.status.url}}">{{resource.status}} {{sort.status.tag}}</a>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for item in list %}
-            <tr>
-              <td>
-                <a href="/roles/{{item.roleId}}" onclick="navigate(event)">{{item.roleId}}</a>
-              </td>
-              <td>{{item.roleName}}</td>
-              <td>{{item.remark}}</td>
-              <td>{{item.status}}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </form>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th data-field="roleId">
+              <a id="sortRoleId" href="{{sort.roleId.url}}">{{resource.role_id}} {{sort.roleId.tag}}</a>
+            </th>
+            <th data-field="roleName">
+              <a id="sortRoleName" href="{{sort.roleName.url}}">{{resource.role_name}} {{sort.roleName.tag}}</a>
+            </th>
+            <th data-field="remark">
+              <a id="sortRemark" href="{{sort.remark.url}}">{{resource.remark}} {{sort.remark.tag}}</a>
+            </th>
+            <th data-field="status">
+              <a id="sortStatus" href="{{sort.status.url}}">{{resource.status}} {{sort.status.tag}}</a>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in list %}
+          <tr>
+            <td>
+              <a href="/roles/{{item.roleId}}" onclick="navigate(event)">{{item.roleId}}</a>
+            </td>
+            <td>{{item.roleName}}</td>
+            <td>{{item.remark}}</td>
+            <td>{{item.status}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

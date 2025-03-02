@@ -1,11 +1,11 @@
 <form id="roleForm" name="roleForm" class="form" novalidate>
   <header>
-    <button type="button" id="btnBack" name="btnBack" class="btn-back"></button>
+    <button type="button" id="btnBack" name="btnBack" class="btn-back" onclick="goBack()"></button>
     <h2>{{resource.role}}</h2>
     <button class="btn-group btn-right"><i class="material-icons">group</i></button>
   </header>
   <div>
-    <section class="row">
+    <section class="row section">
       <label class="col s6 m6 required">
         {{resource.role_id}}
         <input
@@ -47,5 +47,5 @@
       </div>
     </section>
   </div>
-  <footer class="view-footer"><button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)">{{resource.save}}</button></footer>
+  <footer><button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)">{{resource.save}}</button></footer>
 </form>

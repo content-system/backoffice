@@ -166,6 +166,11 @@ export const vi = {
   error_404: "Item was not found." /* error_not_found  */,
   error_403: "You do not have permission for this page or for this action." /* error_forbidden */,
 
+  error_404_title: "404 Not found",
+  error_404_message: "Sorry, the page you are looking for could not be found.",
+  error_500_title: "500 Internal Server Error",
+  error_500_message: "Sorry, the server is wrong. Please try again later.",
+
   error_version: "Data has been changed by someone. Please refresh screen and continue.",
   error_data_corrupt: "Data has been corrupt. You cannot proceed this business.",
   error_required_id: "You must input id.",
@@ -242,8 +247,11 @@ export const vi = {
   timestamp: "Timestamp",
   ip: "IP",
 
-  news: "News",
+  contact: "Contact",
+  articles: "Articles",
+  article: "Article",
   jobs: "Jobs",
+  job: "Job",
   id: "Id",
   title: "Title",
   content: "Content",
@@ -254,7 +262,11 @@ export const vi = {
   company: "Company",
   job_title: "Job Title",
   requirements: "Requirements",
+  location: "Location",
+  position: "Position",
   quantity: "Quantity",
+  min_salary: "Min Salary",
+  max_salary: "Max Salary",
 
   contacts: "Contacts",
   submitted_at: "Submitted At",

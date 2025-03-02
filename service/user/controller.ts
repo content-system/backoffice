@@ -14,7 +14,8 @@ import {
   handleError,
   hasSearch,
   queryNumber,
-  resources
+  resources,
+  toString,
 } from "express-ext"
 import { verifyToken } from "jsonwebtoken-plus"
 import { Log } from "onecore"
@@ -43,19 +44,29 @@ export class UserController {
     this.search = this.search.bind(this)
   }
   view(req: Request, res: Response) {
-    const resource = getResource()
+    const resource = getResource(req)
     const id = req.params["id"]
-    this.service.load(id).then((user) => {
-      res.render(getView(req, "user"), {
-        resource,
-        user: escape(user),
-        titles,
-        positions,
+    this.service
+      .load(id)
+      .then((user) => {
+        if (!user) {
+          res.render(getView(req, "error-404"), {resource})
+        } else {
+          res.render(getView(req, "user"), {
+            resource,
+            user: escape(user),
+            titles,
+            positions,
+          })
+        }
       })
-    })
+      .catch((err) => {
+        this.log(toString(err))
+        res.render(getView(req, "error-500"), {resource})
+      })
   }
   submit(req: Request, res: Response) {
-    const resource = getResource()
+    const resource = getResource(req)
     const user = req.body
     console.log("user " + JSON.stringify(user))
     const errors = validate<User>(user, userModel, resource)
@@ -74,35 +85,40 @@ export class UserController {
   search(req: Request, res: Response) {
     const token = req.cookies.token
     if (token) {
-      verifyToken(token, config.auth.token.secret).then(payload => {
-        console.log("Payload " + JSON.stringify(payload))
-        const resource = getResource()
-        let filter: UserFilter = {
-          q: "",
-          limit: resources.defaultLimit,
-        }
-        if (hasSearch(req)) {
-          filter = fromRequest<UserFilter>(req, ["status"])
-        }
-        const page = queryNumber(req, resources.page, 1)
-        const limit = queryNumber(req, resources.limit, resources.defaultLimit)
-        this.service.search(cloneFilter(filter, limit, page), limit, page).then((result) => {
-          const list = escapeArray(result.list)
-          const search = getSearch(req.url)
-          res.render(getView(req, "users"), {
-            resource,
-            limits: resources.limits,
-            filter,
-            list,
-            pages: buildPages(limit, result.total),
-            pageSearch: buildPageSearch(search),
-            sort: buildSortSearch(search, fields, filter.sort),
-            message: buildMessage(resource, list, limit, page, result.total)
+      verifyToken(token, config.auth.token.secret)
+        .then((payload) => {
+          console.log("Payload " + JSON.stringify(payload))
+          const resource = getResource(req)
+          let filter: UserFilter = {
+            q: "",
+            limit: resources.defaultLimit,
+          }
+          if (hasSearch(req)) {
+            filter = fromRequest<UserFilter>(req, ["status"])
+          }
+          const page = queryNumber(req, resources.page, 1)
+          const limit = queryNumber(req, resources.limit, resources.defaultLimit)
+          this.service.search(cloneFilter(filter, limit, page), limit, page).then((result) => {
+            const list = escapeArray(result.list)
+            const search = getSearch(req.url)
+            res.render(getView(req, "users"), {
+              resource,
+              limits: resources.limits,
+              filter,
+              list,
+              pages: buildPages(limit, result.total),
+              pageSearch: buildPageSearch(search),
+              sort: buildSortSearch(search, fields, filter.sort),
+              message: buildMessage(resource, list, limit, page, result.total),
+            })
+          }).catch((err) => {
+            this.log(toString(err))
+            res.render(getView(req, "error-500"), {resource})
           })
         })
-      }).catch(err => {
-        res.status(401).end("Failed " + err)
-      })
+        .catch((err) => {
+          res.status(401).end("Failed " + err)
+        })
     }
   }
 }

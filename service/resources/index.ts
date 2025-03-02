@@ -1,3 +1,5 @@
+import { Request } from "express"
+
 import { en as adminEN } from "./admin/en"
 import { vi as adminVI } from "./admin/vi"
 import { en as authenticationEN } from "./authentication/en"
@@ -33,8 +35,9 @@ export const resources: Resources = {
   vi: vi,
 }
 
-export function getResource(lang?: string): StringMap {
-  const l = lang ? lang : "en"
+export function getResource(req: Request): StringMap {
+  // const l = lang ? lang : "en"
+  const l = "en"
   const r = resources[l]
   return r ? r : resources["en"]
 }

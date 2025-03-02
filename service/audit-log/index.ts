@@ -14,7 +14,8 @@ import {
   getView,
   hasSearch,
   queryNumber,
-  resources
+  resources,
+  toString,
 } from "express-ext"
 import { Log, Search } from "onecore"
 import { DB, SearchBuilder } from "query-core"
@@ -32,7 +33,7 @@ export class AuditLogController {
   }
   render(req: Request, res: Response) {
     const dateFormat = getDateFormat()
-    const resource = getResource()
+    const resource = getResource(req)
     const now = new Date()
     let filter: AuditLogFilter = {
       limit: resources.defaultLimit,
@@ -47,23 +48,28 @@ export class AuditLogController {
     }
     const page = queryNumber(req, resources.page, 1)
     const limit = queryNumber(req, resources.limit, resources.defaultLimit)
-    this.search(cloneFilter(filter, limit, page), limit, page).then((result) => {
-      for (const item of result.list) {
-        item.time = formatFullDateTime(item.time, dateFormat)
-      }
-      const list = escapeArray(result.list)
-      const search = getSearch(req.url)
-      res.render(getView(req, "audit-logs"), {
-        resource,
-        limits: resources.limits,
-        filter,
-        list,
-        pages: buildPages(limit, result.total),
-        pageSearch: buildPageSearch(search),
-        sort: buildSortSearch(search, fields, filter.sort),
-        message: buildMessage(resource, list, limit, page, result.total)
+    this.search(cloneFilter(filter, limit, page), limit, page)
+      .then((result) => {
+        for (const item of result.list) {
+          item.time = formatFullDateTime(item.time, dateFormat)
+        }
+        const list = escapeArray(result.list)
+        const search = getSearch(req.url)
+        res.render(getView(req, "audit-logs"), {
+          resource,
+          limits: resources.limits,
+          filter,
+          list,
+          pages: buildPages(limit, result.total),
+          pageSearch: buildPageSearch(search),
+          sort: buildSortSearch(search, fields, filter.sort),
+          message: buildMessage(resource, list, limit, page, result.total),
+        })
       })
-    })
+      .catch((err) => {
+        this.log(toString(err))
+        res.render(getView(req, "error-500"), { resource })
+      })
   }
 }
 

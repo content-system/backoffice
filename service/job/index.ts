@@ -15,7 +15,8 @@ import {
   handleError,
   hasSearch,
   queryNumber,
-  resources
+  resources,
+  toString,
 } from "express-ext"
 import { Log, Manager, Search } from "onecore"
 import { DB, Repository, SearchBuilder } from "query-core"
@@ -44,17 +45,27 @@ export class JobController {
     this.search = this.search.bind(this)
   }
   view(req: Request, res: Response) {
-    const resource = getResource()
+    const resource = getResource(req)
     const id = req.params["id"]
-    this.jobService.load(id).then((job) => {
-      res.render(getView(req, "job"), {
-        resource,
-        job: escape(job),
+    this.jobService
+      .load(id)
+      .then((job) => {
+        if (!job) {
+          res.render(getView(req, "error-404"), { resource })
+        } else {
+          res.render(getView(req, "job"), {
+            resource,
+            job: escape(job),
+          })
+        }
       })
-    })
+      .catch((err) => {
+        this.log(toString(err))
+        res.render(getView(req, "error-500"), { resource })
+      })
   }
   submit(req: Request, res: Response) {
-    const resource = getResource()
+    const resource = getResource(req)
     const job = req.body
     console.log("job " + JSON.stringify(job))
     const errors = validate<Job>(job, jobModel, resource)
@@ -72,7 +83,7 @@ export class JobController {
   }
   search(req: Request, res: Response) {
     const dateFormat = getDateFormat()
-    const resource = getResource()
+    const resource = getResource(req)
     let filter: JobFilter = {
       limit: resources.defaultLimit,
       // title: "Java",
@@ -83,23 +94,29 @@ export class JobController {
     }
     const page = queryNumber(req, resources.page, 1)
     const limit = queryNumber(req, resources.limit, resources.defaultLimit)
-    this.jobService.search(cloneFilter(filter, limit, page), limit, page).then((result) => {
-      const list = escapeArray(result.list)
-      for (const item of list) {
-        item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
-      }
-      const search = getSearch(req.url)
-      res.render(getView(req, "jobs"), {
-        resource,
-        limits: resources.limits,
-        filter,
-        list,
-        pages: buildPages(limit, result.total),
-        pageSearch: buildPageSearch(search),
-        sort: buildSortSearch(search, fields, filter.sort),
-        message: buildMessage(resource, list, limit, page, result.total)
+    this.jobService
+      .search(cloneFilter(filter, limit, page), limit, page)
+      .then((result) => {
+        const list = escapeArray(result.list)
+        for (const item of list) {
+          item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
+        }
+        const search = getSearch(req.url)
+        res.render(getView(req, "jobs"), {
+          resource,
+          limits: resources.limits,
+          filter,
+          list,
+          pages: buildPages(limit, result.total),
+          pageSearch: buildPageSearch(search),
+          sort: buildSortSearch(search, fields, filter.sort),
+          message: buildMessage(resource, list, limit, page, result.total),
+        })
       })
-    })
+      .catch((err) => {
+        this.log(toString(err))
+        res.render(getView(req, "error-500"), { resource })
+      })
   }
 }
 
