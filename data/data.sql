@@ -97,9 +97,10 @@ insert into modules (module_id,module_name,status,path,resource_key,icon,sequenc
 insert into modules (module_id,module_name,status,path,resource_key,icon,sequence,actions,parent) values ('role','Role Management','A','/roles','role','credit_card',2,7,'admin');
 insert into modules (module_id,module_name,status,path,resource_key,icon,sequence,actions,parent) values ('audit_log','Audit Log','A','/audit-logs','audit_log','zoom_in',4,1,'admin');
 
-insert into modules (module_id,module_name,status,path,resource_key,icon,sequence,actions,parent) values ('article','Article','A','/articles','article','public',1,7,'setup');
-insert into modules (module_id,module_name,status,path,resource_key,icon,sequence,actions,parent) values ('job','Job','A','/jobs','jobs','local_atm',2,7,'setup');
-insert into modules (module_id,module_name,status,path,resource_key,icon,sequence,actions,parent) values ('contact','Contact','A','/contacts','contact','public',3,7,'setup');
+insert into modules (module_id,module_name,status,path,resource_key,icon,sequence,actions,parent) values ('content','Content','A','/contents','content','public',1,7,'setup');
+insert into modules (module_id,module_name,status,path,resource_key,icon,sequence,actions,parent) values ('article','Article','A','/articles','article','public',2,7,'setup');
+insert into modules (module_id,module_name,status,path,resource_key,icon,sequence,actions,parent) values ('job','Job','A','/jobs','jobs','local_atm',3,7,'setup');
+insert into modules (module_id,module_name,status,path,resource_key,icon,sequence,actions,parent) values ('contact','Contact','A','/contacts','contact','public',4,7,'setup');
 
 insert into roles (role_id, role_name, status, remark) values ('admin','Admin','A','Admin');
 insert into roles (role_id, role_name, status, remark) values ('call_center','Call Center','A','Call Center');
@@ -150,8 +151,8 @@ insert into users (user_id,username,email,display_name,image_url,status,gender,p
 update users set language = 'en', dateformat = 'd/M/yyyy';
 
 insert into passwords(user_id, password)
-select user_id, '$2b$10$LWBgFYSRFpw/lysdne3ybuODJRAk1/qi2z.nhu9fXKA5vH/10AYY.'
-from users;
+select user_id, '$2b$10$LWBgFYSRFpw/lysdne3ybuODJRAk1/qi2z.nhu9fXKA5vH/10AYY.' from users;
+/* Password1! */
 
 insert into user_roles(user_id, role_id) values ('00001','admin');
 insert into user_roles(user_id, role_id) values ('00003','admin');
@@ -179,6 +180,7 @@ insert into role_modules(role_id, module_id, permissions) values ('it_support', 
 insert into role_modules(role_id, module_id, permissions) values ('it_support', 'role', 7);
 insert into role_modules(role_id, module_id, permissions) values ('it_support', 'audit_log', 7);
 insert into role_modules(role_id, module_id, permissions) values ('it_support', 'setup', 7);
+insert into role_modules(role_id, module_id, permissions) values ('it_support', 'content', 7);
 insert into role_modules(role_id, module_id, permissions) values ('it_support', 'article', 7);
 insert into role_modules(role_id, module_id, permissions) values ('it_support', 'job', 7);
 insert into role_modules(role_id, module_id, permissions) values ('it_support', 'contact', 7);

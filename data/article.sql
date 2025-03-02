@@ -1,4 +1,3 @@
-
 create table articles (
   id varchar(80) primary key,
   title varchar(255) not null,

@@ -65,7 +65,7 @@ function navigate(e: Event) {
   const link = findParentNode(target, "A") as HTMLLinkElement
   const resource = getResource()
   if (link) {
-    histories.push(window.location.origin + window.location.pathname)
+    histories.push(window.location.origin + window.location.pathname + window.location.search)
     if (histories.length > historyMax) {
       histories.shift()
     }

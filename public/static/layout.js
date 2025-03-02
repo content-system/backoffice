@@ -65,7 +65,7 @@ function navigate(e) {
   const link = findParentNode(target, "A")
   const resource = getResource()
   if (link) {
-    histories.push(window.location.origin + window.location.pathname)
+    histories.push(window.location.origin + window.location.pathname + window.location.search)
     if (histories.length > historyMax) {
       histories.shift()
     }
@@ -127,9 +127,16 @@ function navigate(e) {
       })
   }
 }
+
 window.onload = function () {
   setTimeout(function () {
-    var _a
+    /*************  ✨ Codeium Command ⭐  *************/
+    /**
+     * This onload function is called after the page is loaded. It registers form events to all forms on the page,
+     * and also adds an active class to the main navigation link that is currently active.
+     * @param {Event} e - The event object.
+     */
+    /******  0a1e4901-1840-48b6-8a28-7dfae29a70e3  *******/ var _a
     const page = document.getElementById("pageContainer")
     if (page) {
       const forms = page.querySelectorAll("form")
