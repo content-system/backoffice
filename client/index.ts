@@ -98,6 +98,41 @@ function getDecimalSeparator(ele: HTMLInputElement): string {
   }
   return separator === "," ? "," : "."
 }
+const histories: string[] = []
+const historyMax = 10
+function goBack() {
+  const url = histories.pop()
+  if (url) {
+    fetch(url + "?partial=true", { method: "GET", headers: getHeaders() })
+      .then((response) => {
+        if (response.ok) {
+          response.text().then((data) => {
+            const pageBody = document.getElementById("pageBody")
+            if (pageBody) {
+              pageBody.innerHTML = data
+              const forms = pageBody.querySelectorAll("form")
+              for (let i = 0; i < forms.length; i++) {
+                registerEvents(forms[i])
+              }
+              setTimeout(function () {
+                const msg = getHiddenMessage(forms, resources.hiddenMessage)
+                if (msg && msg.length > 0) {
+                  toast(msg)
+                }
+              }, 0)
+            }
+          })
+        } else {
+          console.error("Error: ", response.statusText)
+          alertError(resource.error_submit_failed, response.statusText)
+        }
+      })
+      .catch((err) => {
+        console.log("Error: " + err)
+        alertError(resource.error_submitting_form, err)
+      })
+  }
+}
 const d = "data-value"
 function selectOnChange(ele: HTMLSelectElement, attr?: string): void {
   const at = attr && attr.length > 0 ? attr : d

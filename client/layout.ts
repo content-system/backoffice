@@ -65,6 +65,10 @@ function navigate(e: Event) {
   const link = findParentNode(target, "A") as HTMLLinkElement
   const resource = getResource()
   if (link) {
+    histories.push(window.location.origin + window.location.pathname)
+    if (histories.length > historyMax) {
+      histories.shift()
+    }
     const url = link.href
     fetch(url + "?partial=true", { method: "GET", headers: getHeaders() })
       .then((response) => {

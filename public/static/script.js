@@ -1460,6 +1460,42 @@ function getDecimalSeparator(ele) {
   }
   return separator === "," ? "," : ".";
 }
+var histories = [];
+var historyMax = 10;
+function goBack() {
+  var url = histories.pop();
+  if (url) {
+    fetch(url + "?partial=true", { method: "GET", headers: getHeaders() })
+      .then(function (response) {
+      if (response.ok) {
+        response.text().then(function (data) {
+          var pageBody = document.getElementById("pageBody");
+          if (pageBody) {
+            pageBody.innerHTML = data;
+            var forms_1 = pageBody.querySelectorAll("form");
+            for (var i = 0; i < forms_1.length; i++) {
+              registerEvents(forms_1[i]);
+            }
+            setTimeout(function () {
+              var msg = getHiddenMessage(forms_1, resources.hiddenMessage);
+              if (msg && msg.length > 0) {
+                toast(msg);
+              }
+            }, 0);
+          }
+        });
+      }
+      else {
+        console.error("Error: ", response.statusText);
+        alertError(resource.error_submit_failed, response.statusText);
+      }
+    })
+      .catch(function (err) {
+      console.log("Error: " + err);
+      alertError(resource.error_submitting_form, err);
+    });
+  }
+}
 var d = "data-value";
 function selectOnChange(ele, attr) {
   var at = attr && attr.length > 0 ? attr : d;

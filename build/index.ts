@@ -57,6 +57,8 @@ export function buildCSS() {
     "./public/css/group.css",
     "./public/css/theme.css",
     "./public/css/dark.css",
+    "./public/css/grey.css",
+    "./public/css/grey-dark.css",
   ]
   mergeFiles(desFile, files)
 }

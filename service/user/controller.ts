@@ -50,7 +50,7 @@ export class UserController {
       .load(id)
       .then((user) => {
         if (!user) {
-          res.render(getView(req, "error-404"), {resource})
+          res.render(getView(req, "error-404"), { resource })
         } else {
           res.render(getView(req, "user"), {
             resource,
@@ -62,7 +62,7 @@ export class UserController {
       })
       .catch((err) => {
         this.log(toString(err))
-        res.render(getView(req, "error-500"), {resource})
+        res.render(getView(req, "error-500"), { resource })
       })
   }
   submit(req: Request, res: Response) {
@@ -98,23 +98,26 @@ export class UserController {
           }
           const page = queryNumber(req, resources.page, 1)
           const limit = queryNumber(req, resources.limit, resources.defaultLimit)
-          this.service.search(cloneFilter(filter, limit, page), limit, page).then((result) => {
-            const list = escapeArray(result.list)
-            const search = getSearch(req.url)
-            res.render(getView(req, "users"), {
-              resource,
-              limits: resources.limits,
-              filter,
-              list,
-              pages: buildPages(limit, result.total),
-              pageSearch: buildPageSearch(search),
-              sort: buildSortSearch(search, fields, filter.sort),
-              message: buildMessage(resource, list, limit, page, result.total),
+          this.service
+            .search(cloneFilter(filter, limit, page), limit, page)
+            .then((result) => {
+              const list = escapeArray(result.list)
+              const search = getSearch(req.url)
+              res.render(getView(req, "users"), {
+                resource,
+                limits: resources.limits,
+                filter,
+                list,
+                pages: buildPages(limit, result.total),
+                pageSearch: buildPageSearch(search),
+                sort: buildSortSearch(search, fields, filter.sort),
+                message: buildMessage(resource, list, limit, page, result.total),
+              })
             })
-          }).catch((err) => {
-            this.log(toString(err))
-            res.render(getView(req, "error-500"), {resource})
-          })
+            .catch((err) => {
+              this.log(toString(err))
+              res.render(getView(req, "error-500"), { resource })
+            })
         })
         .catch((err) => {
           res.status(401).end("Failed " + err)

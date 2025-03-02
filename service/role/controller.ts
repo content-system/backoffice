@@ -15,7 +15,7 @@ import {
   hasSearch,
   queryNumber,
   resources,
-  toString
+  toString,
 } from "express-ext"
 import { Log } from "onecore"
 import { getDateFormat } from "ui-formatter"
@@ -44,16 +44,19 @@ export class RoleController {
       const role = createRole()
       res.render(getView(req, "role"), { resource, role: escape(role), editMode })
     } else {
-      this.service.load(id).then((role) => {
-        if (!role) {
-          res.render(getView(req, "error-404"), {resource})
-        } else {
-          res.render(getView(req, "role"), { resource, role: escape(role), editMode })
-        }
-      }).catch(err => {
-        this.log(toString(err))
-        res.render(getView(req, "error-500"), {resource})
-      })
+      this.service
+        .load(id)
+        .then((role) => {
+          if (!role) {
+            res.render(getView(req, "error-404"), { resource })
+          } else {
+            res.render(getView(req, "role"), { resource, role: escape(role), editMode })
+          }
+        })
+        .catch((err) => {
+          this.log(toString(err))
+          res.render(getView(req, "error-500"), { resource })
+        })
     }
   }
   submit(req: Request, res: Response) {
@@ -95,22 +98,25 @@ export class RoleController {
     }
     const page = queryNumber(req, resources.page, 1)
     const limit = queryNumber(req, resources.limit, resources.defaultLimit)
-    this.service.search(cloneFilter(filter, limit, page), limit, page).then((result) => {
-      const list = escapeArray(result.list)
-      const search = getSearch(req.url)
-      res.render(getView(req, "roles"), {
-        resource,
-        limits: resources.limits,
-        filter,
-        list,
-        pages: buildPages(limit, result.total),
-        pageSearch: buildPageSearch(search),
-        sort: buildSortSearch(search, fields, filter.sort),
-        message: buildMessage(resource, list, limit, page, result.total)
+    this.service
+      .search(cloneFilter(filter, limit, page), limit, page)
+      .then((result) => {
+        const list = escapeArray(result.list)
+        const search = getSearch(req.url)
+        res.render(getView(req, "roles"), {
+          resource,
+          limits: resources.limits,
+          filter,
+          list,
+          pages: buildPages(limit, result.total),
+          pageSearch: buildPageSearch(search),
+          sort: buildSortSearch(search, fields, filter.sort),
+          message: buildMessage(resource, list, limit, page, result.total),
+        })
       })
-    }).catch(err => {
-      this.log(toString(err))
-      res.render(getView(req, "error-500"), {resource})
-    })
+      .catch((err) => {
+        this.log(toString(err))
+        res.render(getView(req, "error-500"), { resource })
+      })
   }
 }
