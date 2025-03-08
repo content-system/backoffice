@@ -1088,13 +1088,7 @@ function validateElement(ele, locale, includeReadOnly) {
       addErrorMessage(ele, msg)
       return msg
     }
-  } else if (
-    datatype === "number" ||
-    datatype === "integer" ||
-    datatype === "currency" ||
-    datatype === "string-currency" ||
-    datatype === "percentage"
-  ) {
+  } else if (datatype === "number" || datatype === "integer" || datatype === "currency" || datatype === "string-currency" || datatype === "percentage") {
     var v = checkNumber(ele, locale, resource)
     var separator = getDecimalSeparator(ele)
     if (typeof v === "string") {
@@ -1389,14 +1383,15 @@ var historyMax = 10
 function goBack() {
   var url = histories.pop()
   if (url) {
-    url = url.indexOf("?") >= 0 ? url + "&partial=true" : url + "?partial=true"
-    fetch(url, { method: "GET", headers: getHeaders() })
+    var newUrl = url + (url.indexOf("?") >= 0 ? "&" : "?") + "partial=true"
+    fetch(newUrl, { method: "GET", headers: getHeaders() })
       .then(function (response) {
         if (response.ok) {
           response.text().then(function (data) {
             var pageBody = document.getElementById("pageBody")
             if (pageBody) {
               pageBody.innerHTML = data
+              window.history.pushState({ pageTitle: "" }, "", url)
               var forms_1 = pageBody.querySelectorAll("form")
               for (var i = 0; i < forms_1.length; i++) {
                 registerEvents(forms_1[i])
@@ -1768,10 +1763,7 @@ function registerEvents(form) {
       if (type != null) {
         type = type.toLowerCase()
       }
-      if (
-        ele.nodeName === "INPUT" &&
-        (type === "checkbox" || type === "radio" || type === "submit" || type === "button" || type === "reset")
-      ) {
+      if (ele.nodeName === "INPUT" && (type === "checkbox" || type === "radio" || type === "submit" || type === "button" || type === "reset")) {
         continue
       } else {
         var parent_1 = ele.parentElement

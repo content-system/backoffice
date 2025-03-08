@@ -70,7 +70,8 @@ function navigate(e) {
       histories.shift()
     }
     const url = link.href
-    fetch(url + "?partial=true", { method: "GET", headers: getHeaders() })
+    const newUrl = url + (url.indexOf("?") > 0 ? "&" : "?") + "partial=true"
+    fetch(newUrl, { method: "GET", headers: getHeaders() })
       .then((response) => {
         if (response.ok) {
           response.text().then((data) => {
@@ -127,16 +128,9 @@ function navigate(e) {
       })
   }
 }
-
 window.onload = function () {
   setTimeout(function () {
-    /*************  ✨ Codeium Command ⭐  *************/
-    /**
-     * This onload function is called after the page is loaded. It registers form events to all forms on the page,
-     * and also adds an active class to the main navigation link that is currently active.
-     * @param {Event} e - The event object.
-     */
-    /******  0a1e4901-1840-48b6-8a28-7dfae29a70e3  *******/ var _a
+    var _a
     const page = document.getElementById("pageContainer")
     if (page) {
       const forms = page.querySelectorAll("form")

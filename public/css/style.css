@@ -5577,10 +5577,11 @@ i.sort-down:after {
 */
 .sidebar > nav > ul > li > div.menu-item:hover > span,
 .sidebar > nav > ul > li:hover > .menu-item > i > span,
-.sidebar > nav > ul > li:hover > a > span,
-.sidebar > nav > ul > li > ul.sub-list > li:hover > a > span {
+.sidebar > nav > ul > li:hover > .menu-item > span,
+.sidebar > nav > ul > li > ul.sub-list > li:hover > .menu-item > span {
   position: fixed;
   padding: 10px;
+  padding-top: 1px;
   left: 46px;
   margin-top: -10px;
   min-width: 200px;
@@ -5590,10 +5591,11 @@ i.sort-down:after {
 
 .menu-on .sidebar > nav > ul > li > div.menu-item:hover > span,
 .menu-on .sidebar > nav > ul > li:hover > .menu-item > i > span,
-.menu-on .sidebar > nav > ul > li:hover > a > span,
-.menu-on .sidebar > nav > ul > li > ul.sub-list > li:hover > a > span {
+.menu-on .sidebar > nav > ul > li:hover > .menu-item > span,
+.menu-on .sidebar > nav > ul > li > ul.sub-list > li:hover > .menu-item > span {
   position: unset;
   padding: unset;
+  padding-top: 1px;
   left: unset;
   margin-top: unset;
   min-width: unset;
@@ -5678,7 +5680,9 @@ i.sort-down:after {
 .sidebar > nav > ul > li {
   background-color: inherit;
 }
-
+.sidebar .menu-item > span {
+  padding-top: 1px;
+}
 .sidebar > nav > ul > li > a.menu-item > i {
   text-decoration: none;
 }
@@ -5883,10 +5887,11 @@ nav.collapsed-all .sidebar-off-menu > .collapse {
 
   .top-menu .sidebar > nav > ul > li > div.menu-item:hover > span,
   .top-menu .sidebar > nav > ul > li:hover > .menu-item > i > span,
-  .top-menu .sidebar > nav > ul > li:hover > a > span,
-  .top-menu .sidebar > nav > ul > li > ul.sub-list > li:hover > a > span {
+  .top-menu .sidebar > nav > ul > li:hover > .menu-item > span,
+  .top-menu .sidebar > nav > ul > li > ul.sub-list > li:hover > .menu-item > span {
     position: unset;
     padding: unset;
+    padding-top: 1px;
     left: unset;
     margin-top: unset;
     min-width: unset;

@@ -70,7 +70,8 @@ function navigate(e: Event) {
       histories.shift()
     }
     const url = link.href
-    fetch(url + "?partial=true", { method: "GET", headers: getHeaders() })
+    const newUrl = url + (url.indexOf("?") > 0 ? "&" : "?") + "partial=true"
+    fetch(newUrl, { method: "GET", headers: getHeaders() })
       .then((response) => {
         if (response.ok) {
           response.text().then((data) => {
