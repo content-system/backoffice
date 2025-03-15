@@ -19,11 +19,11 @@ export interface User {
   roles?: string[]
 }
 export interface UserRepository {
-  search(filter: UserFilter, limit?: number, offset?: number | string, fields?: string[], ctx?: any): Promise<SearchResult<User>>
+  search(filter: UserFilter, limit?: number, page?: number | string, fields?: string[], ctx?: any): Promise<SearchResult<User>>
   getUsersOfRole(roleId: string): Promise<User[]>
 }
 export interface UserService {
-  search(filter: UserFilter, limit?: number, offset?: number | string, fields?: string[], ctx?: any): Promise<SearchResult<User>>
+  search(filter: UserFilter, limit?: number, page?: number | string, fields?: string[], ctx?: any): Promise<SearchResult<User>>
   getUsersOfRole(roleId: string): Promise<User[]>
 }
 

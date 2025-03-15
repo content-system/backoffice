@@ -29,8 +29,8 @@ export class SqlUserRepository implements UserRepository {
       order by userId`
     return this.db.query(q, [roleId], this.map)
   }
-  search(s: UserFilter, limit?: number, offset?: number | string, fields?: string[]): Promise<SearchResult<User>> {
-    return this.find(s, limit, offset, fields)
+  search(s: UserFilter, limit?: number, page?: number, fields?: string[]): Promise<SearchResult<User>> {
+    return this.find(s, limit, page, fields)
   }
 }
 

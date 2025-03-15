@@ -1,4 +1,4 @@
-import { Attributes, Filter, Repository, Service, TimeRange } from "onecore"
+import { Attributes, Filter, Result, SearchResult, TimeRange } from "onecore"
 
 export interface Job {
   id: string
@@ -31,8 +31,21 @@ export interface JobFilter extends Filter {
   status?: string
 }
 
-export interface JobRepository extends Repository<Job, string> {}
-export interface JobService extends Service<Job, string, JobFilter> {}
+export interface JobRepository {
+  load(id: string): Promise<Job | null>
+  create(job: Job): Promise<number>
+  update(job: Job): Promise<number>
+  patch(job: Partial<Job>): Promise<number>
+  delete(id: string): Promise<number>
+}
+export interface JobService {
+  search(filter: JobFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Job>>
+  load(id: string): Promise<Job | null>
+  create(job: Job): Promise<Result<Job>>
+  update(job: Job): Promise<Result<Job>>
+  patch(job: Partial<Job>): Promise<Result<Job>>
+  delete(id: string): Promise<number>
+}
 
 export const jobModel: Attributes = {
   id: {
@@ -63,6 +76,9 @@ export const jobModel: Attributes = {
   },
   skills: {
     type: "strings",
+  },
+  position: {
+    length: 100,
   },
   location: {
     length: 120,

@@ -1,32 +1,47 @@
-import { Attributes, Filter, Repository, Service, TimeRange } from "onecore"
+import { Attributes, Filter, Result, SearchResult, TimeRange } from "onecore"
 
 export interface Article {
   id: string
   title: string
   description?: string
-  content: string
   thumbnail?: string
   publishedAt: Date
   tags?: string[]
   type?: string
-  authorId?: string
+  content: string
+  author?: string
   status?: string
 }
-
 export interface ArticleFilter extends Filter {
   id?: string
   title?: string
   description?: string
   publishedAt?: TimeRange
-  tags?: string[]
 }
 
-export interface ArticleRepository extends Repository<Article, string> {}
-export interface ArticleService extends Service<Article, string, ArticleFilter> {}
+export interface ArticleRepository {
+  load(id: string): Promise<Article | null>
+  create(article: Article): Promise<number>
+  update(article: Article): Promise<number>
+  patch(article: Partial<Article>): Promise<number>
+  delete(id: string): Promise<number>
+}
+export interface ArticleService {
+  search(filter: ArticleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Article>>
+  load(id: string): Promise<Article | null>
+  create(article: Article): Promise<Result<Article>>
+  update(article: Article): Promise<Result<Article>>
+  patch(article: Partial<Article>): Promise<Result<Article>>
+  delete(id: string): Promise<number>
+}
 
 export const articleModel: Attributes = {
   id: {
     key: true,
+    length: 40,
+    required: true,
+  },
+  author: {
     length: 40,
     required: true,
   },
@@ -48,18 +63,8 @@ export const articleModel: Attributes = {
     length: 5000,
     required: true,
   },
-  thumbnail: {},
-  highThumbnail: {
-    column: "high_thumbnail",
-  },
   tags: {
     type: "strings",
   },
-  /*
-  author: {
-    length: 40,
-  },
-  */
   type: {},
-  status: {},
 }

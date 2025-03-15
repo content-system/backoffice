@@ -25,7 +25,7 @@ export interface UserRepository {
   update(user: User): Promise<number>
   patch(user: Partial<User>): Promise<number>
   delete(id: string): Promise<number>
-  search(filter: UserFilter, limit?: number, offset?: number | string, fields?: string[], ctx?: any): Promise<SearchResult<User>>
+  search(filter: UserFilter, limit?: number, page?: number | string, fields?: string[], ctx?: any): Promise<SearchResult<User>>
   getUsersOfRole(roleId: string): Promise<User[]>
 }
 export interface UserService {
@@ -35,7 +35,7 @@ export interface UserService {
   update(user: User): Promise<number>
   patch(user: Partial<User>): Promise<number>
   delete(id: string): Promise<number>
-  search(filter: UserFilter, limit?: number, offset?: number | string, fields?: string[], ctx?: any): Promise<SearchResult<User>>
+  search(filter: UserFilter, limit?: number, page?: number | string, fields?: string[], ctx?: any): Promise<SearchResult<User>>
   getUsersOfRole(roleId: string): Promise<User[]>
 }
 

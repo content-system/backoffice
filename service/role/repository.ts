@@ -34,7 +34,7 @@ interface Module {
   roleId?: string
   permissions?: number
 }
-export class SqlRoleService extends Service<Role, string, RoleFilter> {
+export class SqlRoleRepository extends Service<Role, string, RoleFilter> {
   private roleModuleMap: StringMap
   constructor(protected find: Search<Role, RoleFilter>, db: DB) {
     super(find, db, "users", roleModel)
