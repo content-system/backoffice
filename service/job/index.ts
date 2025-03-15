@@ -120,11 +120,9 @@ export class JobController {
   }
 }
 
-export function useJobService(db: DB): JobService {
+export function useJobController(db: DB, log: Log): JobController {
   const builder = new SearchBuilder<Job, JobFilter>(db.query, "jobs", jobModel, db.driver)
   const repository = new SqlJobRepository(db)
-  return new JobUseCase(builder.search, repository)
-}
-export function useJobController(db: DB, log: Log): JobController {
-  return new JobController(useJobService(db), log)
+  const service = new JobUseCase(builder.search, repository)
+  return new JobController(service, log)
 }

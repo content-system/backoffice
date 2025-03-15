@@ -16,6 +16,9 @@ interface UserRole {
 }
 
 export class SqlUserRepository implements UserRepository {
+  map?: StringMap
+  primaryKeys: Attribute[]
+  attributes: Attributes
   constructor(private find: Search<User, UserFilter>, private db: DB) {
     this.attributes = userModel
     const meta = metadata(userModel)
@@ -28,9 +31,6 @@ export class SqlUserRepository implements UserRepository {
     this.delete = this.delete.bind(this)
     this.map = buildMap(userModel)
   }
-  map?: StringMap
-  primaryKeys: Attribute[]
-  attributes: Attributes
 
   getUsersOfRole(roleId: string): Promise<User[]> {
     if (!roleId || roleId.length === 0) {
@@ -44,8 +44,8 @@ export class SqlUserRepository implements UserRepository {
       order by user_id`
     return this.db.query(q, [roleId], this.map)
   }
-  search(s: UserFilter, limit?: number, offset?: number | string, fields?: string[]): Promise<SearchResult<User>> {
-    return this.find(s, limit, offset, fields)
+  search(filter: UserFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<User>> {
+    return this.find(filter, limit, page, fields)
   }
   all(): Promise<User[]> {
     return this.db.query("select * from users order by user_id asc", undefined, this.map)
