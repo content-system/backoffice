@@ -1,58 +1,8 @@
 <nav id="sysNav" class="expanded-all">
   <ul>
     <li>
-      <p class="sidebar-off-menu"><button class="toggle" onclick="toggleMenu(event)"></button><i class="expand"></i><i class="collapse"></i></p>
+      <p class="sidebar-off-menu"><button class="toggle" onclick="toggleMenu(event)"></button></p>
     </li>
-    <li class="open">
-      <div class="menu-item" onclick="toggleMenuItem(event)">
-        <button type="button" class="btn-pin">
-          <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="16px" viewBox="0 0 24 24" width="16px" fill="currentColor">
-            <g><rect fill="none" height="24" width="24"></rect></g>
-            <g>
-              <path
-                d="M16,9V4l1,0c0.55,0,1-0.45,1-1v0c0-0.55-0.45-1-1-1H7C6.45,2,6,2.45,6,3v0 c0,0.55,0.45,1,1,1l1,0v5c0,1.66-1.34,3-3,3h0v2h5.97v7l1,1l1-1v-7H19v-2h0C17.34,12,16,10.66,16,9z"
-                fill-rule="evenodd"
-              ></path>
-            </g>
-          </svg>
-        </button>
-        <i class="material-icons">contacts</i><span>Admin</span><i class="entity-icon down"></i>
-      </div>
-      <ul class="sub-list expanded">
-        <li class="">
-          <a class="menu-item" href="/users" onclick="navigate(event)"><i class="material-icons">person</i><span>User</span></a>
-        </li>
-        <li class="">
-          <a class="menu-item" href="/roles" onclick="navigate(event)"><i class="material-icons">credit_card</i><span>Role</span></a>
-        </li>
-        <li class="">
-          <a class="menu-item" href="/audit-logs" onclick="navigate(event)"><i class="material-icons">zoom_in</i><span>Audit Log</span></a>
-        </li>
-      </ul>
-    </li>
-    <li class="open">
-      <div class="menu-item" onclick="toggleMenuItem(event)">
-        <button type="button" class="btn-pin">
-          <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="16px" viewBox="0 0 24 24" width="16px" fill="currentColor">
-            <g><rect fill="none" height="24" width="24"></rect></g>
-            <g>
-              <path
-                d="M16,9V4l1,0c0.55,0,1-0.45,1-1v0c0-0.55-0.45-1-1-1H7C6.45,2,6,2.45,6,3v0 c0,0.55,0.45,1,1,1l1,0v5c0,1.66-1.34,3-3,3h0v2h5.97v7l1,1l1-1v-7H19v-2h0C17.34,12,16,10.66,16,9z"
-                fill-rule="evenodd"
-              ></path>
-            </g>
-          </svg>
-        </button>
-        <i class="material-icons">settings</i><span>Setup</span><i class="entity-icon down"></i>
-      </div>
-      <ul class="sub-list expanded">
-        <li class="">
-          <a class="menu-item" href="/articles" onclick="navigate(event)"><i class="material-icons">local_atm</i><span>Article</span></a>
-        </li>
-        <li class="">
-          <a class="menu-item" href="/jobs" onclick="navigate(event)"><i class="material-icons">public</i><span>Job</span></a>
-        </li>
-      </ul>
-    </li>
+    {{menu}}
   </ul>
 </nav>

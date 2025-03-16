@@ -4,7 +4,7 @@ export const config = {
   key: "./config/key.pem",
   cert: "./config/cert.pem",
   secure: false,
-  cookie: false,
+  cookie: true,
   allow: {
     origin: ["http://localhost:3000", "http://localhost:3001"],
     credentials: "true",
@@ -45,39 +45,39 @@ export const config = {
   template: false,
   auth: {
     token: {
-      secret: 'secretbackoffice',
+      secret: "secretbackoffice",
       expires: 86400000,
     },
     status: {
       success: 1,
       password_expired: 3,
-      locked: 4
+      locked: 4,
     },
     lockedMinutes: 2,
     maxPasswordFailed: 2,
     payload: {
-      id: 'id',
-      username: 'username',
-      email: 'email',
-      userType: 'userType',
+      id: "id",
+      username: "username",
+      email: "email",
+      userType: "userType",
     },
     account: {
-      displayName: 'displayname',
+      displayName: "displayname",
     },
     userStatus: {
-      activated: 'A',
-      deactivated: 'D',
+      activated: "A",
+      deactivated: "D",
     },
     db: {
-      user: 'users',
-      password: 'passwords',
-      id: 'user_id',
-      username: 'username',
-      status: 'status',
-      successTime: 'success_time',
-      failTime: 'fail_time',
-      failCount: 'fail_count',
-      lockedUntilTime: 'locked_until_time',
+      user: "users",
+      password: "passwords",
+      id: "user_id",
+      username: "username",
+      status: "status",
+      successTime: "success_time",
+      failTime: "fail_time",
+      failCount: "fail_count",
+      lockedUntilTime: "locked_until_time",
     },
     query: `
       select u.user_id, u.username, u.display_name, email, u.status, p.* from users u
@@ -86,17 +86,17 @@ export const config = {
       where username = $1 and u.status = 'A'`,
     expires: 500,
     template: {
-      subject: 'Verification Code',
-      body: '%s Use this code for verification. This code will expire in %s minutes',
+      subject: "Verification Code",
+      body: "%s Use this code for verification. This code will expire in %s minutes",
     },
   },
   map: {
     user_id: "id",
     display_name: "displayName",
-    success_time: 'successTime',
-    fail_time: 'failTime',
-    fail_count: 'failCount',
-    locked_until_time: 'lockedUntilTime',
+    success_time: "successTime",
+    fail_time: "failTime",
+    fail_count: "failCount",
+    locked_until_time: "lockedUntilTime",
   },
   sql: {
     allPrivileges: `
@@ -127,8 +127,7 @@ export const config = {
         inner join roles r on ur.role_id = r.role_id
         inner join role_modules rm on r.role_id = rm.role_id
         inner join modules m on rm.module_id = m.module_id
-      where u.user_id = $1 and u.status = 'A' and r.status = 'A' and rm.module_id = $2 and m.status = 'A'
-        order by sequence`,
+      where u.user_id = $1 and u.status = 'A' and r.status = 'A' and rm.module_id = $2 and m.status = 'A'`,
   },
 }
 export const env = {

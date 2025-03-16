@@ -59,7 +59,7 @@ function getFirstPath(url: string): string {
     return s.substring(i)
   }
 }
-function navigate(e: Event) {
+function navigate(e: Event, ignoreLang?: boolean) {
   e.preventDefault()
   const target = e.target as HTMLElement
   const link = findParentNode(target, "A") as HTMLLinkElement
@@ -69,8 +69,14 @@ function navigate(e: Event) {
     if (histories.length > historyMax) {
       histories.shift()
     }
-    const url = link.href
-    const newUrl = url + (url.indexOf("?") > 0 ? "&" : "?") + "partial=true"
+    const search = window.location.search.length > 0 ? window.location.search.substring(1) : ""
+    const lang = getField(search, "lang")
+    let url = link.href
+    if (!ignoreLang && lang.length > 0) {
+      url = url + (url.indexOf("?") > 0 ? "&" : "?") + lang
+    }
+    const lang1 = lang.length > 0 && !ignoreLang ? "&" + lang : ""
+    const newUrl = url + (url.indexOf("?") > 0 ? "&" : "?") + "partial=true" + lang1
     fetch(newUrl, { method: "GET", headers: getHeaders() })
       .then((response) => {
         if (response.ok) {

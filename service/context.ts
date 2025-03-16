@@ -1,4 +1,4 @@
-import { Authenticator, initializeStatus, SqlAuthTemplateConfig, useUserRepository } from "authen-service"
+import { Authenticator, initializeStatus, PrivilegeRepository, SqlAuthTemplateConfig, useUserRepository } from "authen-service"
 import { compare } from "bcrypt"
 import { HealthController, LogController, Logger, Middleware, MiddlewareController, resources } from "express-ext"
 import { buildJwtError, generateToken, Payload, verify } from "jsonwebtoken-plus"
@@ -12,6 +12,8 @@ import { ArticleController, useArticleController } from "./article"
 import { AuditLogController, useAuditLogController } from "./audit-log"
 import { LoginController } from "./authentication"
 import { JobController, useJobController } from "./job"
+import { MenuBuilder } from "./navigation"
+import { getResourceByLang } from "./resources"
 import { RoleController, useRoleController } from "./role"
 import { UserController, useUserController } from "./user"
 
@@ -25,7 +27,7 @@ export interface Config {
     allPrivileges: string
     privileges: string
     permission: string
-  },
+  }
   map: StringMap
 }
 export interface Context {
@@ -33,6 +35,7 @@ export interface Context {
   log: LogController
   middleware: MiddlewareController
   authorize: Authorize
+  menu: MenuBuilder
   login: LoginController
   role: RoleController
   user: UserController
@@ -40,18 +43,21 @@ export interface Context {
   article: ArticleController
   job: JobController
 }
-export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: Config, mapper?: TemplateMap): Context {
-  const auth = conf.auth
+export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: Config, mapper?: TemplateMap): Context {
+  const auth = cfg.auth
   const log = new LogController(logger)
   const middleware = new MiddlewareController(midLogger)
   const sqlChecker = createChecker(db)
   const health = new HealthController([sqlChecker])
-  const privilegeLoader = new PrivilegeLoader(conf.sql.permission, db.query)
-  const token = useToken<Payload>(auth.token.secret, verify, buildJwtError, conf.cookie)
+  const privilegeLoader = new PrivilegeLoader(cfg.sql.permission, db.query)
+  const token = useToken<Payload>(auth.token.secret, verify, buildJwtError, cfg.cookie)
   const authorizer = new Authorizer<Payload>(token, privilegeLoader.privilege, buildJwtError, true)
 
-  const status = initializeStatus(conf.auth.status);
-  const userRepository = useUserRepository<string, SqlAuthTemplateConfig>(db, conf.auth, conf.map);
+  const privilegeRepository = new PrivilegeRepository(db.query, cfg.sql.privileges)
+  const menu = new MenuBuilder(getResourceByLang, privilegeRepository.privileges, ["en", "vi"], "en")
+
+  const status = initializeStatus(cfg.auth.status)
+  const userRepository = useUserRepository<string, SqlAuthTemplateConfig>(db, cfg.auth, cfg.map)
   const authenticator = new Authenticator(
     status,
     compare,
@@ -63,7 +69,7 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: 
     undefined,
     auth.lockedMinutes,
     2,
-  );
+  )
   const login = new LoginController(authenticator)
 
   const role = useRoleController(logger.error, db, mapper)
@@ -74,5 +80,5 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: 
   const article = useArticleController(db, logger.error)
   const job = useJobController(db, logger.error)
 
-  return { health, log, middleware, authorize: authorizer.authorize, login, role, user, auditLog, article, job }
+  return { health, log, middleware, authorize: authorizer.authorize, menu, login, role, user, auditLog, article, job }
 }

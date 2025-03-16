@@ -1,14 +1,52 @@
 "use strict"
-function changeMenu() {
+function changeMenu(e) {
   const body = document.getElementById("sysBody")
   if (body) {
-    body.classList.toggle("top-menu")
+    const menu = body.classList.toggle("top-menu")
+    let ele = e.target
+    if (ele) {
+      if (ele.nodeName !== "LI") {
+        ele = ele.parentElement
+      }
+      const attr = menu ? "data-sidebar" : "data-menu"
+      const icon = menu ? "view_list" : "credit_card"
+      const i = ele.querySelector("i")
+      if (i) {
+        i.innerText = icon
+      }
+      const text = ele.getAttribute(attr)
+      if (text) {
+        const span = ele.querySelector("span")
+        if (span) {
+          span.innerHTML = text
+        }
+      }
+    }
   }
 }
-function changeMode() {
+function changeMode(e) {
   const body = document.getElementById("sysBody")
   if (body) {
-    body.classList.toggle("dark")
+    const dark = body.classList.toggle("dark")
+    let ele = e.target
+    if (ele) {
+      if (ele.nodeName !== "LI") {
+        ele = ele.parentElement
+      }
+      const attr = dark ? "data-light" : "data-dark"
+      const icon = dark ? "radio_button_checked" : "timelapse"
+      const i = ele.querySelector("i")
+      if (i) {
+        i.innerText = icon
+      }
+      const text = ele.getAttribute(attr)
+      if (text) {
+        const span = ele.querySelector("span")
+        if (span) {
+          span.innerHTML = text
+        }
+      }
+    }
   }
 }
 function toggleMenu(e) {
@@ -59,7 +97,7 @@ function getFirstPath(url) {
     return s.substring(i)
   }
 }
-function navigate(e) {
+function navigate(e, ignoreLang) {
   e.preventDefault()
   const target = e.target
   const link = findParentNode(target, "A")
@@ -69,8 +107,14 @@ function navigate(e) {
     if (histories.length > historyMax) {
       histories.shift()
     }
-    const url = link.href
-    const newUrl = url + (url.indexOf("?") > 0 ? "&" : "?") + "partial=true"
+    const search = window.location.search.length > 0 ? window.location.search.substring(1) : ""
+    const lang = getField(search, "lang")
+    let url = link.href
+    if (!ignoreLang && lang.length > 0) {
+      url = url + (url.indexOf("?") > 0 ? "&" : "?") + lang
+    }
+    const lang1 = lang.length > 0 && !ignoreLang ? "&" + lang : ""
+    const newUrl = url + (url.indexOf("?") > 0 ? "&" : "?") + "partial=true" + lang1
     fetch(newUrl, { method: "GET", headers: getHeaders() })
       .then((response) => {
         if (response.ok) {

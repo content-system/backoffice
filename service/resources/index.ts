@@ -1,4 +1,4 @@
-import { Request } from "express"
+import { Request, Response } from "express"
 
 import { en as adminEN } from "./admin/en"
 import { vi as adminVI } from "./admin/vi"
@@ -40,4 +40,32 @@ export function getResource(req: Request): StringMap {
   const l = "en"
   const r = resources[l]
   return r ? r : resources["en"]
+}
+export function getResourceByLang(lang: string): StringMap {
+  if (lang) {
+    const r = resources[lang]
+    if (r) {
+      return r
+    }
+  }
+  return resources["en"]
+}
+
+export function buildError404(resource: StringMap, res: Response): any {
+  return {
+    message: {
+      title: resource.error_404_title,
+      description: resource.error_404_message,
+    },
+    menu: res.locals.menu,
+  }
+}
+export function buildError500(resource: StringMap, res: Response): any {
+  return {
+    message: {
+      title: resource.error_500_title,
+      description: resource.error_500_message,
+    },
+    menu: res.locals.menu,
+  }
 }

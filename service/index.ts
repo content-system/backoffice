@@ -16,9 +16,9 @@ export function route(app: Application, ctx: Context, secure?: boolean): void {
 
   const readRole = ctx.authorize("role", read)
   const writeRole = ctx.authorize("role", write)
-  app.get("/roles", ctx.role.search)
-  app.get("/roles/:id", ctx.role.view)
-  app.post("/roles/:id", json(), ctx.role.submit)
+  app.get("/roles", readRole, ctx.menu.build, ctx.role.search)
+  app.get("/roles/:id", readRole, ctx.menu.build, ctx.role.view)
+  app.post("/roles/:id", writeRole, json(), ctx.role.submit)
   /*
   put(app, "/roles/:id/assign", writeRole, ctx.role.assign, secure)
   get(app, "/roles", readRole, ctx.role.search, secure)
@@ -33,9 +33,9 @@ export function route(app: Application, ctx: Context, secure?: boolean): void {
   const readUser = ctx.authorize("user", read)
   const writeUser = ctx.authorize("user", write)
   // get(app, "/users", readUser, ctx.user.all, secure)
-  app.get("/users", ctx.user.search)
-  app.get("/users/:id", ctx.user.view)
-  app.post("/users/:id", json(), ctx.user.submit)
+  app.get("/users", readUser, ctx.menu.build, ctx.user.search)
+  app.get("/users/:id", readUser, ctx.menu.build, ctx.user.view)
+  app.post("/users/:id", writeUser, json(), ctx.user.submit)
   /*
   post(app, "/users/search", readUser, ctx.user.search, secure)
   get(app, "/users/search", readUser, ctx.user.search, secure)

@@ -2,7 +2,7 @@
   <form>
     <div class="search-group">
       <section>
-        <button type="button" class="toggle-menu" onclick="toggleMenu(event)"></button>
+        <button type="button" class="toggle-menu" onclick="toggleMenu(event)" data-menu="{{resource.menu}}" data-sidebar="{{resource.sidebar}}"></button>
         <button type="button" class="toggle-search" onclick="toggleUniversalSearch(event)"></button>
         <button type="button" class="close-search" onclick="toggleUniversalSearch(event)"></button>
       </section>
@@ -28,9 +28,13 @@
         <div class="dropdown-menu-profile">
           <i class="material-icons">person</i>
           <ul id="dropdown-basic" class="dropdown-content-profile">
-            <li class="menu" onclick="changeMenu(event)" data-menu="Menu" data-sidebar="Sidebar"><i class="material-icons">credit_card</i><span>Menu</span></li>
+            <li class="menu" onclick="changeMenu(event)" data-menu="{{resource.menu}}" data-sidebar="{{resource.sidebar}}">
+              <i class="material-icons">credit_card</i><span>{{resource.menu}}</span>
+            </li>
             <hr style="margin: 0px" />
-            <li onclick="changeMode()"><i class="material-icons">timelapse</i><span>Dark mode</span></li>
+            <li onclick="changeMode(event)" data-dark="{{resource.dark_mode}}" data-light="{{resource.light_mode}}">
+              <i class="material-icons">timelapse</i><span>{{resource.dark_mode}}</span>
+            </li>
             <hr style="margin: 0px" />
             <li><i class="material-icons">account_circle</i><a href="/settings">kaka</a></li>
             <hr style="margin: 0px" />
