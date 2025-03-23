@@ -55,7 +55,7 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: C
   const authorizer = new Authorizer<Payload>(token, privilegeLoader.privilege, buildJwtError, true)
 
   const privilegeRepository = new PrivilegeRepository(db.query, cfg.sql.privileges)
-  const menu = new MenuBuilder(getResourceByLang, privilegeRepository.privileges)
+  const menu = new MenuBuilder(getResourceByLang, privilegeRepository.privileges, "menu", "id", "lang", "account")
 
   const status = initializeStatus(cfg.auth.status)
   const userRepository = useUserRepository<string, SqlAuthTemplateConfig>(db, cfg.auth, cfg.map)
