@@ -45,28 +45,14 @@ export class MenuBuilder {
     this.build = this.build.bind(this)
   }
   build(req: Request, res: Response, next: NextFunction) {
-    let lang = req.params["lang"]
-    if (!lang || lang.length === 0) {
-      lang = query(req, "lang")
-    }
-    if (!lang || lang.length === 0) {
-      lang = req.params["id"]
-    }
-    if (!lang || lang.length === 0) {
-      lang = this.defaultLang
-    } else {
-      if (!(this.langs.includes(lang) && lang !== this.defaultLang)) {
-        lang = this.defaultLang
-      }
-    }
-    if (!this.langs.includes(lang)) {
-      lang = this.defaultLang
-    }
-    console.log("payload " + JSON.stringify(res.locals.token))
+    console.log("payload " + JSON.stringify(res.locals.account))
+    const lang = res.locals.account.lang
+    const userId = res.locals.account.id
+    res.locals.lang = lang
+    res.locals.userId = userId
     if (isPartial(req)) {
       next()
     } else {
-      const userId = res.locals.token.id
       this.load(userId)
         .then((items) => {
           const r = this.getResource(lang)

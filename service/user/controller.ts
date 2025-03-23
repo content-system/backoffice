@@ -44,7 +44,7 @@ export class UserController {
     this.search = this.search.bind(this)
   }
   view(req: Request, res: Response) {
-    const resource = getResource(req)
+    const resource = getResource(req, res)
     const id = req.params["id"]
     this.service
       .load(id)
@@ -66,7 +66,7 @@ export class UserController {
       })
   }
   submit(req: Request, res: Response) {
-    const resource = getResource(req)
+    const resource = getResource(req, res)
     const user = req.body
     console.log("user " + JSON.stringify(user))
     const errors = validate<User>(user, userModel, resource)
@@ -88,7 +88,7 @@ export class UserController {
       verifyToken(token, config.auth.token.secret)
         .then((payload) => {
           console.log("Payload " + JSON.stringify(payload))
-          const resource = getResource(req)
+          const resource = getResource(req, res)
           let filter: UserFilter = {
             q: "",
             limit: resources.defaultLimit,

@@ -33,7 +33,7 @@ export class AuditLogController {
   }
   render(req: Request, res: Response) {
     const dateFormat = getDateFormat()
-    const resource = getResource(req)
+    const resource = getResource(req, res)
     const now = new Date()
     let filter: AuditLogFilter = {
       limit: resources.defaultLimit,

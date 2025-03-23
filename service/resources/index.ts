@@ -35,10 +35,12 @@ export const resources: Resources = {
   vi: vi,
 }
 
-export function getResource(req: Request): StringMap {
-  // const l = lang ? lang : "en"
-  const l = "en"
-  const r = resources[l]
+export function getResource(req: Request, res: Response): StringMap {
+  let lang = res.locals.lang
+  if (lang !== "vi") {
+    lang = "en"
+  }
+  const r = resources[lang]
   return r ? r : resources["en"]
 }
 export function getResourceByLang(lang: string): StringMap {

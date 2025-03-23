@@ -32,7 +32,7 @@ export class LoginController {
     this.submit = this.submit.bind(this)
   }
   render(req: Request, res: Response) {
-    const resource = getResource(req)
+    const resource = getResource(req, res)
     res.render("signin", {
       resource,
       user: {
@@ -43,7 +43,7 @@ export class LoginController {
     })
   }
   submit(req: Request, res: Response) {
-    const resource = getResource(req)
+    const resource = getResource(req, res)
     const user: User = req.body
     console.log("user " + JSON.stringify(user))
     const errors = validate<User>(user, userModel, resource, true)

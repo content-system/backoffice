@@ -59,7 +59,7 @@ export const config = {
       id: "id",
       username: "username",
       email: "email",
-      userType: "userType",
+      language: "lang",
     },
     account: {
       displayName: "displayname",
@@ -80,7 +80,7 @@ export const config = {
       lockedUntilTime: "locked_until_time",
     },
     query: `
-      select u.user_id, u.username, u.display_name, email, u.status, p.* from users u
+      select u.user_id, u.username, u.display_name, language, email, u.status, p.* from users u
       inner join passwords p
         on u.user_id = p.user_id
       where username = $1 and u.status = 'A'`,
@@ -111,7 +111,7 @@ export const config = {
       from modules
       where status = 'A'`,
     privileges: `
-      select distinct m.module_id as id, m.module_name as name, m.resource_key,
+      select distinct m.module_id as id, m.module_name as name, m.resource_key as resource,
         m.path, m.icon, m.parent, m.sequence, rm.permissions, m.actions
       from users u
         inner join user_roles ur on u.user_id = ur.user_id

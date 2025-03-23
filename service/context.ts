@@ -50,7 +50,7 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: C
   const sqlChecker = createChecker(db)
   const health = new HealthController([sqlChecker])
   const privilegeLoader = new PrivilegeLoader(cfg.sql.permission, db.query)
-  const token = useToken<Payload>(auth.token.secret, verify, buildJwtError, cfg.cookie)
+  const token = useToken<Payload>(auth.token.secret, verify, buildJwtError, cfg.cookie, "account")
   const authorizer = new Authorizer<Payload>(token, privilegeLoader.privilege, buildJwtError, true)
 
   const privilegeRepository = new PrivilegeRepository(db.query, cfg.sql.privileges)

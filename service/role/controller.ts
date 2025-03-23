@@ -37,7 +37,7 @@ export class RoleController {
     this.search = this.search.bind(this)
   }
   view(req: Request, res: Response) {
-    const resource = getResource(req)
+    const resource = getResource(req, res)
     const id = req.params["id"]
     const editMode = id !== "new"
     if (!editMode) {
@@ -60,7 +60,7 @@ export class RoleController {
     }
   }
   submit(req: Request, res: Response) {
-    const resource = getResource(req)
+    const resource = getResource(req, res)
     const role = req.body
     console.log("role " + JSON.stringify(role))
     const errors = validate<Role>(role, roleModel, resource)
@@ -88,7 +88,7 @@ export class RoleController {
   }
   search(req: Request, res: Response) {
     const dateFormat = getDateFormat()
-    const resource = getResource(req)
+    const resource = getResource(req, res)
     let filter: RoleFilter = {
       q: "",
       limit: resources.defaultLimit,
