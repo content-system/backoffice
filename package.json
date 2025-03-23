@@ -12,6 +12,7 @@
   "keywords": [],
   "author": "",
   "dependencies": {
+    "admin-menu": "^0.0.2",
     "authen-service": "^0.1.0",
     "bcrypt": "^5.1.1",
     "bcrypt-plus": "^0.0.1",
