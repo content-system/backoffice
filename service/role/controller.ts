@@ -13,14 +13,14 @@ import {
   getView,
   handleError,
   hasSearch,
-  queryNumber,
+  queryLimit,
+  queryPage,
   resources,
   toString,
 } from "express-ext"
 import { Log } from "onecore"
-import { getDateFormat } from "ui-formatter"
 import { validate } from "xvalidators"
-import { getResource } from "../resources"
+import { buildError404, buildError500, getLang, getResource } from "../resources"
 import { Role, RoleFilter, roleModel, RoleService } from "./role"
 
 const fields = ["roleId", "roleName", "remark", "status"]
@@ -37,7 +37,8 @@ export class RoleController {
     this.search = this.search.bind(this)
   }
   view(req: Request, res: Response) {
-    const resource = getResource(req, res)
+    const lang = getLang(req, res)
+    const resource = getResource(lang)
     const id = req.params["id"]
     const editMode = id !== "new"
     if (!editMode) {
@@ -48,19 +49,20 @@ export class RoleController {
         .load(id)
         .then((role) => {
           if (!role) {
-            res.render(getView(req, "error-404"), { resource })
+            res.render(getView(req, "error"), buildError404(resource, res))
           } else {
             res.render(getView(req, "role"), { resource, role: escape(role), editMode })
           }
         })
         .catch((err) => {
           this.log(toString(err))
-          res.render(getView(req, "error-500"), { resource })
+          res.render(getView(req, "error"), buildError500(resource, res))
         })
     }
   }
   submit(req: Request, res: Response) {
-    const resource = getResource(req, res)
+    const lang = getLang(req, res)
+    const resource = getResource(lang)
     const role = req.body
     console.log("role " + JSON.stringify(role))
     const errors = validate<Role>(role, roleModel, resource)
@@ -87,8 +89,8 @@ export class RoleController {
     }
   }
   search(req: Request, res: Response) {
-    const dateFormat = getDateFormat()
-    const resource = getResource(req, res)
+    const lang = getLang(req, res)
+    const resource = getResource(lang)
     let filter: RoleFilter = {
       q: "",
       limit: resources.defaultLimit,
@@ -96,8 +98,8 @@ export class RoleController {
     if (hasSearch(req)) {
       filter = fromRequest<RoleFilter>(req, ["status"])
     }
-    const page = queryNumber(req, resources.page, 1)
-    const limit = queryNumber(req, resources.limit, resources.defaultLimit)
+    const page = queryPage(req, filter)
+    const limit = queryLimit(req)
     this.service
       .search(cloneFilter(filter, limit, page), limit, page)
       .then((result) => {
@@ -116,7 +118,7 @@ export class RoleController {
       })
       .catch((err) => {
         this.log(toString(err))
-        res.render(getView(req, "error-500"), { resource })
+        res.render(getView(req, "error"), buildError500(resource, res))
       })
   }
 }

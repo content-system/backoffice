@@ -5,7 +5,6 @@ import {
   buildPageSearch,
   buildSortSearch,
   cloneFilter,
-  escape,
   escapeArray,
   format,
   fromRequest,
@@ -14,7 +13,8 @@ import {
   getView,
   handleError,
   hasSearch,
-  queryNumber,
+  queryLimit,
+  queryPage,
   resources,
   toString,
 } from "express-ext"
@@ -22,7 +22,7 @@ import { Log, Manager, Search } from "onecore"
 import { DB, Repository, SearchBuilder } from "query-core"
 import { formatDateTime, getDateFormat } from "ui-formatter"
 import { validate } from "xvalidators"
-import { getResource } from "../resources"
+import { buildError404, buildError500, getLang, getResource } from "../resources"
 import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService } from "./article"
 export * from "./article"
 
@@ -45,27 +45,31 @@ export class ArticleController {
     this.search = this.search.bind(this)
   }
   view(req: Request, res: Response) {
-    const resource = getResource(req, res)
+    const lang = getLang(req, res)
+    const resource = getResource(lang)
+    const dateFormat = getDateFormat(lang)
     const id = req.params["id"]
     this.service
       .load(id)
       .then((article) => {
         if (!article) {
-          res.render(getView(req, "error-404"), { resource })
+          res.render(getView(req, "error"), buildError404(resource, res))
         } else {
+          article.publishedAt = formatDateTime(article.publishedAt, dateFormat)
           res.render(getView(req, "article"), {
             resource,
-            article: escape(article),
+            article,
           })
         }
       })
       .catch((err) => {
         this.log(toString(err))
-        res.render(getView(req, "error-500"), { resource })
+        res.render(getView(req, "error"), buildError500(resource, res))
       })
   }
   submit(req: Request, res: Response) {
-    const resource = getResource(req, res)
+    const lang = getLang(req, res)
+    const resource = getResource(lang)
     const article = req.body
     console.log("article " + JSON.stringify(article))
     const errors = validate<Article>(article, articleModel, resource)
@@ -82,8 +86,9 @@ export class ArticleController {
     }
   }
   search(req: Request, res: Response) {
-    const dateFormat = getDateFormat()
-    const resource = getResource(req, res)
+    const lang = getLang(req, res)
+    const resource = getResource(lang)
+    const dateFormat = getDateFormat(lang)
     let filter: ArticleFilter = {
       limit: resources.defaultLimit,
       q: "",
@@ -92,8 +97,8 @@ export class ArticleController {
       filter = fromRequest<ArticleFilter>(req)
       format(filter, ["publishedAt"])
     }
-    const page = queryNumber(req, resources.page, 1)
-    const limit = queryNumber(req, resources.limit, resources.defaultLimit)
+    const page = queryPage(req, filter)
+    const limit = queryLimit(req)
     this.service
       .search(cloneFilter(filter, limit, page), limit, page)
       .then((result) => {
@@ -115,7 +120,7 @@ export class ArticleController {
       })
       .catch((err) => {
         this.log(toString(err))
-        res.render(getView(req, "error-500"), { resource })
+        res.render(getView(req, "error"), buildError500(resource, res))
       })
   }
 }

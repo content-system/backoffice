@@ -13,14 +13,15 @@ import {
   getSearch,
   getView,
   hasSearch,
-  queryNumber,
+  queryLimit,
+  queryPage,
   resources,
   toString,
 } from "express-ext"
 import { Log, Search } from "onecore"
 import { DB, SearchBuilder } from "query-core"
 import { formatFullDateTime, getDateFormat } from "ui-formatter"
-import { getResource } from "../resources"
+import { buildError500, getLang, getResource } from "../resources"
 import { AuditLog, AuditLogFilter, auditLogModel } from "./audit-log"
 
 export * from "./audit-log"
@@ -32,8 +33,9 @@ export class AuditLogController {
     this.render = this.render.bind(this)
   }
   render(req: Request, res: Response) {
-    const dateFormat = getDateFormat()
-    const resource = getResource(req, res)
+    const lang = getLang(req, res)
+    const resource = getResource(lang)
+    const dateFormat = getDateFormat(lang)
     const now = new Date()
     let filter: AuditLogFilter = {
       limit: resources.defaultLimit,
@@ -46,8 +48,8 @@ export class AuditLogController {
       filter = fromRequest<AuditLogFilter>(req, ["status"])
       format(filter, ["timestamp"])
     }
-    const page = queryNumber(req, resources.page, 1)
-    const limit = queryNumber(req, resources.limit, resources.defaultLimit)
+    const page = queryPage(req, filter)
+    const limit = queryLimit(req)
     this.search(cloneFilter(filter, limit, page), limit, page)
       .then((result) => {
         for (const item of result.list) {
@@ -68,7 +70,7 @@ export class AuditLogController {
       })
       .catch((err) => {
         this.log(toString(err))
-        res.render(getView(req, "error-500"), { resource })
+        res.render(getView(req, "error"), buildError500(resource, res))
       })
   }
 }

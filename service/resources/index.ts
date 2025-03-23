@@ -1,5 +1,6 @@
 import { Request, Response } from "express"
 
+import { query } from "express-ext"
 import { en as adminEN } from "./admin/en"
 import { vi as adminVI } from "./admin/vi"
 import { en as authenticationEN } from "./authentication/en"
@@ -35,13 +36,40 @@ export const resources: Resources = {
   vi: vi,
 }
 
-export function getResource(req: Request, res: Response): StringMap {
-  let lang = res.locals.lang
-  if (lang !== "vi") {
-    lang = "en"
+export function getDateFormat(lang?: string): string {
+  if (lang === "vi") {
+    return "D/M/YYYY"
   }
-  const r = resources[lang]
-  return r ? r : resources["en"]
+  return "M/D/YYYY"
+}
+export function getLang(req: Request, res: Response): string {
+  let lang = res.locals.lang
+  if (!lang) {
+    lang = query(req, "lang")
+    if (lang !== "vi") {
+      lang = "en"
+    }
+  }
+  return lang
+}
+export function getResource(lang: string | Request): StringMap {
+  if (lang) {
+    if (typeof lang === "string") {
+      const r = resources[lang]
+      if (r) {
+        return r
+      }
+    } else {
+      const l = query(lang, "lang")
+      if (l) {
+        const r = resources[l]
+        if (r) {
+          return r
+        }
+      }
+    }
+  }
+  return resources["en"]
 }
 export function getResourceByLang(lang: string): StringMap {
   if (lang) {

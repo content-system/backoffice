@@ -13,15 +13,14 @@ import {
   getView,
   handleError,
   hasSearch,
-  queryNumber,
+  queryLimit,
+  queryPage,
   resources,
   toString,
 } from "express-ext"
-import { verifyToken } from "jsonwebtoken-plus"
 import { Log } from "onecore"
 import { validate } from "xvalidators"
-import { config } from "../../config"
-import { getResource } from "../resources"
+import { buildError404, buildError500, getLang, getResource } from "../resources"
 import { User, UserFilter, userModel, UserService } from "./user"
 
 const titles = [
@@ -44,13 +43,14 @@ export class UserController {
     this.search = this.search.bind(this)
   }
   view(req: Request, res: Response) {
-    const resource = getResource(req, res)
+    const lang = getLang(req, res)
+    const resource = getResource(lang)
     const id = req.params["id"]
     this.service
       .load(id)
       .then((user) => {
         if (!user) {
-          res.render(getView(req, "error-404"), { resource })
+          res.render(getView(req, "error"), buildError404(resource, res))
         } else {
           res.render(getView(req, "user"), {
             resource,
@@ -66,7 +66,8 @@ export class UserController {
       })
   }
   submit(req: Request, res: Response) {
-    const resource = getResource(req, res)
+    const lang = getLang(req, res)
+    const resource = getResource(lang)
     const user = req.body
     console.log("user " + JSON.stringify(user))
     const errors = validate<User>(user, userModel, resource)
@@ -83,45 +84,36 @@ export class UserController {
     }
   }
   search(req: Request, res: Response) {
-    const token = req.cookies.token
-    if (token) {
-      verifyToken(token, config.auth.token.secret)
-        .then((payload) => {
-          console.log("Payload " + JSON.stringify(payload))
-          const resource = getResource(req, res)
-          let filter: UserFilter = {
-            q: "",
-            limit: resources.defaultLimit,
-          }
-          if (hasSearch(req)) {
-            filter = fromRequest<UserFilter>(req, ["status"])
-          }
-          const page = queryNumber(req, resources.page, 1)
-          const limit = queryNumber(req, resources.limit, resources.defaultLimit)
-          this.service
-            .search(cloneFilter(filter, limit, page), limit, page)
-            .then((result) => {
-              const list = escapeArray(result.list)
-              const search = getSearch(req.url)
-              res.render(getView(req, "users"), {
-                resource,
-                limits: resources.limits,
-                filter,
-                list,
-                pages: buildPages(limit, result.total),
-                pageSearch: buildPageSearch(search),
-                sort: buildSortSearch(search, fields, filter.sort),
-                message: buildMessage(resource, list, limit, page, result.total),
-              })
-            })
-            .catch((err) => {
-              this.log(toString(err))
-              res.render(getView(req, "error-500"), { resource })
-            })
-        })
-        .catch((err) => {
-          res.status(401).end("Failed " + err)
-        })
+    const lang = getLang(req, res)
+    const resource = getResource(lang)
+    let filter: UserFilter = {
+      q: "",
+      limit: resources.defaultLimit,
     }
+    if (hasSearch(req)) {
+      filter = fromRequest<UserFilter>(req, ["status"])
+    }
+    const page = queryPage(req, filter)
+    const limit = queryLimit(req)
+    this.service
+      .search(cloneFilter(filter, limit, page), limit, page)
+      .then((result) => {
+        const list = escapeArray(result.list)
+        const search = getSearch(req.url)
+        res.render(getView(req, "users"), {
+          resource,
+          limits: resources.limits,
+          filter,
+          list,
+          pages: buildPages(limit, result.total),
+          pageSearch: buildPageSearch(search),
+          sort: buildSortSearch(search, fields, filter.sort),
+          message: buildMessage(resource, list, limit, page, result.total),
+        })
+      })
+      .catch((err) => {
+        this.log(toString(err))
+        res.render(getView(req, "error"), buildError500(resource, res))
+      })
   }
 }
