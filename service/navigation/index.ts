@@ -36,18 +36,41 @@ export function renderItems(items: Privilege[], r: StringMap): string {
 }
 
 export class MenuBuilder {
+  private menu: string
+  private userId: string
+  private lang: string
+  private account: string
   constructor(
     private getResource: (lang: string) => StringMap,
     private load: (userId: string) => Promise<Privilege[]>,
-    private langs: string[],
-    private defaultLang: string,
+    menu?: string,
+    userId?: string,
+    lang?: string,
+    account?: string,
   ) {
     this.build = this.build.bind(this)
+    this.menu = menu || "menu"
+    this.userId = userId || "id"
+    this.lang = lang || "lang"
+    this.account = account || "account"
   }
   build(req: Request, res: Response, next: NextFunction) {
     console.log("payload " + JSON.stringify(res.locals.account))
-    const lang = res.locals.account.lang
-    const userId = res.locals.account.id
+    const account = res.locals[this.account]
+    if (!account) {
+      res.status(403).end(`cannot get ${this.account} from res.locals`)
+      return
+    }
+    const lang = account[this.lang]
+    const userId = account[this.userId]
+    if (!userId) {
+      res.status(403).end(`${this.account} must contain ${this.userId}`)
+      return
+    }
+    if (!lang) {
+      res.status(403).end(`${this.account} must contain ${this.lang}`)
+      return
+    }
     res.locals.lang = lang
     res.locals.userId = userId
     if (isPartial(req)) {
@@ -56,8 +79,7 @@ export class MenuBuilder {
       this.load(userId)
         .then((items) => {
           const r = this.getResource(lang)
-          res.locals.menu = renderItems(items, r)
-          console.log("menu " + JSON.stringify(res.locals.menu))
+          res.locals[this.menu] = renderItems(items, r)
           next()
         })
         .catch((err) => {

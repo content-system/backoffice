@@ -1,5 +1,5 @@
 import { Application, json, urlencoded } from "express"
-import { get, read, write } from "security-express"
+import { read, write } from "security-express"
 import { Context } from "./context"
 
 export * from "./context"
@@ -27,13 +27,17 @@ export function route(app: Application, ctx: Context, secure?: boolean): void {
   app.post("/users/:id", writeUser, json(), ctx.user.submit)
 
   const readAuditLog = ctx.authorize("audit_log", read)
-  get(app, "/audit-logs", readAuditLog, ctx.auditLog.render, secure)
+  app.get("/audit-logs", readAuditLog, ctx.menu.build, ctx.auditLog.render)
 
-  app.get("/articles", ctx.article.search)
-  app.get("/articles/:id", ctx.article.view)
-  app.post("/articles/:id", json(), ctx.article.submit)
+  const readArticle = ctx.authorize("article", read)
+  const writeArticle = ctx.authorize("article", write)
+  app.get("/articles", readArticle, ctx.menu.build, ctx.article.search)
+  app.get("/articles/:id", readArticle, ctx.menu.build, ctx.article.view)
+  app.post("/articles/:id", writeArticle, ctx.menu.build, json(), ctx.article.submit)
 
-  app.get("/jobs", ctx.job.search)
-  app.get("/jobs/:id", ctx.job.view)
-  app.post("/jobs/:id", json(), ctx.job.submit)
+  const readJob = ctx.authorize("job", read)
+  const writeJob = ctx.authorize("job", write)
+  app.get("/jobs", readJob, ctx.menu.build, ctx.job.search)
+  app.get("/jobs/:id", readJob, ctx.menu.build, ctx.job.view)
+  app.post("/jobs/:id", writeJob, ctx.menu.build, json(), ctx.job.submit)
 }

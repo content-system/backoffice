@@ -43,6 +43,7 @@ export interface Context {
   article: ArticleController
   job: JobController
 }
+
 export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: Config, mapper?: TemplateMap): Context {
   const auth = cfg.auth
   const log = new LogController(logger)
@@ -54,7 +55,7 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: C
   const authorizer = new Authorizer<Payload>(token, privilegeLoader.privilege, buildJwtError, true)
 
   const privilegeRepository = new PrivilegeRepository(db.query, cfg.sql.privileges)
-  const menu = new MenuBuilder(getResourceByLang, privilegeRepository.privileges, ["en", "vi"], "en")
+  const menu = new MenuBuilder(getResourceByLang, privilegeRepository.privileges)
 
   const status = initializeStatus(cfg.auth.status)
   const userRepository = useUserRepository<string, SqlAuthTemplateConfig>(db, cfg.auth, cfg.map)
