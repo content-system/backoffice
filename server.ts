@@ -17,6 +17,9 @@ import { route, useContext } from "./service"
 dotenv.config()
 const cfg = merge(config, process.env, env, process.env.ENV)
 
+// buildJavascript()
+// buildCSS()
+
 const app = express()
 // Define public folder :
 app.use(express.static(__dirname + "/public"))

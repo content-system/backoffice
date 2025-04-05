@@ -2342,10 +2342,12 @@ function buildSearchUrl(ft, page, limit, fields) {
               for (var _b = 0, keysLvl2_1 = keysLvl2; _b < keysLvl2_1.length; _b++) {
                 var key2 = keysLvl2_1[_b]
                 var objValueLvl2 = objValue[key2]
-                if (objValueLvl2 instanceof Date) {
-                  url += getPrefix(url) + (key + "." + key2 + "=" + objValueLvl2.toISOString())
-                } else {
-                  url += getPrefix(url) + (key + "." + key2 + "=" + objValueLvl2)
+                if (objValueLvl2) {
+                  if (objValueLvl2 instanceof Date) {
+                    url += getPrefix(url) + (key + "." + key2 + "=" + objValueLvl2.toISOString())
+                  } else {
+                    url += getPrefix(url) + (key + "." + key2 + "=" + objValueLvl2)
+                  }
                 }
               }
             }

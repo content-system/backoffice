@@ -25,9 +25,9 @@ function replaceFourSpaces(input: string): string {
 }
 
 export function buildJavascript() {
-  const desFile = "./es6/client/script.js"
-  const files: string[] = ["./es6/client/ui.js", "./es6/client/validator.js", "./es6/client/index.js", "./es6/client/search.js"]
-  // const files: string[] = ["./es5/client/ui.js", "./es5/client/validator.js", "./es5/client/index.js, "./es5/client/search.js""]
+  const desFile = "./es5/client/script.js"
+  // const files: string[] = ["./es6/client/ui.js", "./es6/client/validator.js", "./es6/client/index.js", "./es6/client/search.js"]
+  const files: string[] = ["./es5/client/ui.js", "./es5/client/validator.js", "./es5/client/index.js", "./es5/client/search.js"]
   mergeFiles(desFile, files, true)
 }
 
