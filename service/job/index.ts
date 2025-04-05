@@ -40,9 +40,47 @@ export class JobUseCase extends Manager<Job, string, JobFilter> implements JobSe
 const fields = ["title", "publishedAt", "description"]
 export class JobController {
   constructor(private jobService: JobService, private log: Log) {
+    this.search = this.search.bind(this)
     this.view = this.view.bind(this)
     this.submit = this.submit.bind(this)
-    this.search = this.search.bind(this)
+  }
+  search(req: Request, res: Response) {
+    const lang = getLang(req, res)
+    const resource = getResource(lang)
+    const dateFormat = getDateFormat(lang)
+    let filter: JobFilter = {
+      limit: resources.defaultLimit,
+      // title: "Java",
+    }
+    if (hasSearch(req)) {
+      filter = fromRequest<JobFilter>(req)
+      format(filter, ["publishedAt"])
+    }
+    const page = queryNumber(req, resources.page, 1)
+    const limit = queryNumber(req, resources.limit, resources.defaultLimit)
+    this.jobService
+      .search(cloneFilter(filter, limit, page), limit, page)
+      .then((result) => {
+        const list = escapeArray(result.list)
+        for (const item of list) {
+          item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
+        }
+        const search = getSearch(req.url)
+        res.render(getView(req, "jobs"), {
+          resource,
+          limits: resources.limits,
+          filter,
+          list,
+          pages: buildPages(limit, result.total),
+          pageSearch: buildPageSearch(search),
+          sort: buildSortSearch(search, fields, filter.sort),
+          message: buildMessage(resource, list, limit, page, result.total),
+        })
+      })
+      .catch((err) => {
+        this.log(toString(err))
+        res.render(getView(req, "error"), buildError500(resource, res))
+      })
   }
   view(req: Request, res: Response) {
     const lang = getLang(req, res)
@@ -82,44 +120,6 @@ export class JobController {
         })
         .catch((err) => handleError(err, res, this.log))
     }
-  }
-  search(req: Request, res: Response) {
-    const lang = getLang(req, res)
-    const resource = getResource(lang)
-    const dateFormat = getDateFormat(lang)
-    let filter: JobFilter = {
-      limit: resources.defaultLimit,
-      // title: "Java",
-    }
-    if (hasSearch(req)) {
-      filter = fromRequest<JobFilter>(req)
-      format(filter, ["publishedAt"])
-    }
-    const page = queryNumber(req, resources.page, 1)
-    const limit = queryNumber(req, resources.limit, resources.defaultLimit)
-    this.jobService
-      .search(cloneFilter(filter, limit, page), limit, page)
-      .then((result) => {
-        const list = escapeArray(result.list)
-        for (const item of list) {
-          item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
-        }
-        const search = getSearch(req.url)
-        res.render(getView(req, "jobs"), {
-          resource,
-          limits: resources.limits,
-          filter,
-          list,
-          pages: buildPages(limit, result.total),
-          pageSearch: buildPageSearch(search),
-          sort: buildSortSearch(search, fields, filter.sort),
-          message: buildMessage(resource, list, limit, page, result.total),
-        })
-      })
-      .catch((err) => {
-        this.log(toString(err))
-        res.render(getView(req, "error"), buildError500(resource, res))
-      })
   }
 }
 

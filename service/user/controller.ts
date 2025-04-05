@@ -38,9 +38,42 @@ const fields = ["userId", "username", "email", "displayName", "status"]
 
 export class UserController {
   constructor(private service: UserService, private log: Log) {
+    this.search = this.search.bind(this)
     this.view = this.view.bind(this)
     this.submit = this.submit.bind(this)
-    this.search = this.search.bind(this)
+  }
+  search(req: Request, res: Response) {
+    const lang = getLang(req, res)
+    const resource = getResource(lang)
+    let filter: UserFilter = {
+      q: "",
+      limit: resources.defaultLimit,
+    }
+    if (hasSearch(req)) {
+      filter = fromRequest<UserFilter>(req, ["status"])
+    }
+    const page = queryPage(req, filter)
+    const limit = queryLimit(req)
+    this.service
+      .search(cloneFilter(filter, limit, page), limit, page)
+      .then((result) => {
+        const list = escapeArray(result.list)
+        const search = getSearch(req.url)
+        res.render(getView(req, "users"), {
+          resource,
+          limits: resources.limits,
+          filter,
+          list,
+          pages: buildPages(limit, result.total),
+          pageSearch: buildPageSearch(search),
+          sort: buildSortSearch(search, fields, filter.sort),
+          message: buildMessage(resource, list, limit, page, result.total),
+        })
+      })
+      .catch((err) => {
+        this.log(toString(err))
+        res.render(getView(req, "error"), buildError500(resource, res))
+      })
   }
   view(req: Request, res: Response) {
     const lang = getLang(req, res)
@@ -77,43 +110,13 @@ export class UserController {
       this.service
         .update(user)
         .then((result) => {
-          console.log("result " + result)
-          res.status(200).json(user).end()
+          if (result === 0) {
+            res.status(410).end()
+          } else {
+            res.status(200).json(user).end()
+          }
         })
         .catch((err) => handleError(err, res, this.log))
     }
-  }
-  search(req: Request, res: Response) {
-    const lang = getLang(req, res)
-    const resource = getResource(lang)
-    let filter: UserFilter = {
-      q: "",
-      limit: resources.defaultLimit,
-    }
-    if (hasSearch(req)) {
-      filter = fromRequest<UserFilter>(req, ["status"])
-    }
-    const page = queryPage(req, filter)
-    const limit = queryLimit(req)
-    this.service
-      .search(cloneFilter(filter, limit, page), limit, page)
-      .then((result) => {
-        const list = escapeArray(result.list)
-        const search = getSearch(req.url)
-        res.render(getView(req, "users"), {
-          resource,
-          limits: resources.limits,
-          filter,
-          list,
-          pages: buildPages(limit, result.total),
-          pageSearch: buildPageSearch(search),
-          sort: buildSortSearch(search, fields, filter.sort),
-          message: buildMessage(resource, list, limit, page, result.total),
-        })
-      })
-      .catch((err) => {
-        this.log(toString(err))
-        res.render(getView(req, "error"), buildError500(resource, res))
-      })
   }
 }

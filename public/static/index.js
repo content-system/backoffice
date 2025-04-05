@@ -883,6 +883,10 @@ function submitForm(e) {
             })
           } else if (response.status === 409) {
             alertError(resource.error_409)
+          } else if (response.status === 403) {
+            alertError(resource.error_403)
+          } else if (response.status === 410) {
+            alertError(resource.error_410)
           } else if (response.status === 400) {
             alertError(resource.error_400, response.statusText)
           } else {

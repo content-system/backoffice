@@ -32,9 +32,42 @@ function createRole(): Role {
 }
 export class RoleController {
   constructor(private service: RoleService, private log: Log) {
+    this.search = this.search.bind(this)
     this.view = this.view.bind(this)
     this.submit = this.submit.bind(this)
-    this.search = this.search.bind(this)
+  }
+  search(req: Request, res: Response) {
+    const lang = getLang(req, res)
+    const resource = getResource(lang)
+    let filter: RoleFilter = {
+      q: "",
+      limit: resources.defaultLimit,
+    }
+    if (hasSearch(req)) {
+      filter = fromRequest<RoleFilter>(req, ["status"])
+    }
+    const page = queryPage(req, filter)
+    const limit = queryLimit(req)
+    this.service
+      .search(cloneFilter(filter, limit, page), limit, page)
+      .then((result) => {
+        const list = escapeArray(result.list)
+        const search = getSearch(req.url)
+        res.render(getView(req, "roles"), {
+          resource,
+          limits: resources.limits,
+          filter,
+          list,
+          pages: buildPages(limit, result.total),
+          pageSearch: buildPageSearch(search),
+          sort: buildSortSearch(search, fields, filter.sort),
+          message: buildMessage(resource, list, limit, page, result.total),
+        })
+      })
+      .catch((err) => {
+        this.log(toString(err))
+        res.render(getView(req, "error"), buildError500(resource, res))
+      })
   }
   view(req: Request, res: Response) {
     const lang = getLang(req, res)
@@ -87,38 +120,5 @@ export class RoleController {
           .catch((err) => handleError(err, res, this.log))
       }
     }
-  }
-  search(req: Request, res: Response) {
-    const lang = getLang(req, res)
-    const resource = getResource(lang)
-    let filter: RoleFilter = {
-      q: "",
-      limit: resources.defaultLimit,
-    }
-    if (hasSearch(req)) {
-      filter = fromRequest<RoleFilter>(req, ["status"])
-    }
-    const page = queryPage(req, filter)
-    const limit = queryLimit(req)
-    this.service
-      .search(cloneFilter(filter, limit, page), limit, page)
-      .then((result) => {
-        const list = escapeArray(result.list)
-        const search = getSearch(req.url)
-        res.render(getView(req, "roles"), {
-          resource,
-          limits: resources.limits,
-          filter,
-          list,
-          pages: buildPages(limit, result.total),
-          pageSearch: buildPageSearch(search),
-          sort: buildSortSearch(search, fields, filter.sort),
-          message: buildMessage(resource, list, limit, page, result.total),
-        })
-      })
-      .catch((err) => {
-        this.log(toString(err))
-        res.render(getView(req, "error"), buildError500(resource, res))
-      })
   }
 }

@@ -40,9 +40,47 @@ export class ArticleUseCase extends Manager<Article, string, ArticleFilter> impl
 const fields = ["title", "publishedAt", "description"]
 export class ArticleController {
   constructor(private service: ArticleService, private log: Log) {
+    this.search = this.search.bind(this)
     this.view = this.view.bind(this)
     this.submit = this.submit.bind(this)
-    this.search = this.search.bind(this)
+  }
+  search(req: Request, res: Response) {
+    const lang = getLang(req, res)
+    const resource = getResource(lang)
+    const dateFormat = getDateFormat(lang)
+    let filter: ArticleFilter = {
+      limit: resources.defaultLimit,
+      q: "",
+    }
+    if (hasSearch(req)) {
+      filter = fromRequest<ArticleFilter>(req)
+      format(filter, ["publishedAt"])
+    }
+    const page = queryPage(req, filter)
+    const limit = queryLimit(req)
+    this.service
+      .search(cloneFilter(filter, limit, page), limit, page)
+      .then((result) => {
+        const list = escapeArray(result.list)
+        for (const item of result.list) {
+          item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
+        }
+        const search = getSearch(req.url)
+        res.render(getView(req, "articles"), {
+          resource,
+          limits: resources.limits,
+          filter,
+          list,
+          pages: buildPages(limit, result.total),
+          pageSearch: buildPageSearch(search),
+          sort: buildSortSearch(search, fields, filter.sort),
+          message: buildMessage(resource, list, limit, page, result.total),
+        })
+      })
+      .catch((err) => {
+        this.log(toString(err))
+        res.render(getView(req, "error"), buildError500(resource, res))
+      })
   }
   view(req: Request, res: Response) {
     const lang = getLang(req, res)
@@ -84,44 +122,6 @@ export class ArticleController {
         })
         .catch((err) => handleError(err, res, this.log))
     }
-  }
-  search(req: Request, res: Response) {
-    const lang = getLang(req, res)
-    const resource = getResource(lang)
-    const dateFormat = getDateFormat(lang)
-    let filter: ArticleFilter = {
-      limit: resources.defaultLimit,
-      q: "",
-    }
-    if (hasSearch(req)) {
-      filter = fromRequest<ArticleFilter>(req)
-      format(filter, ["publishedAt"])
-    }
-    const page = queryPage(req, filter)
-    const limit = queryLimit(req)
-    this.service
-      .search(cloneFilter(filter, limit, page), limit, page)
-      .then((result) => {
-        const list = escapeArray(result.list)
-        for (const item of result.list) {
-          item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
-        }
-        const search = getSearch(req.url)
-        res.render(getView(req, "articles"), {
-          resource,
-          limits: resources.limits,
-          filter,
-          list,
-          pages: buildPages(limit, result.total),
-          pageSearch: buildPageSearch(search),
-          sort: buildSortSearch(search, fields, filter.sort),
-          message: buildMessage(resource, list, limit, page, result.total),
-        })
-      })
-      .catch((err) => {
-        this.log(toString(err))
-        res.render(getView(req, "error"), buildError500(resource, res))
-      })
   }
 }
 
