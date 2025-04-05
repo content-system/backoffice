@@ -844,13 +844,7 @@ function validateElement(ele, locale, includeReadOnly) {
       addErrorMessage(ele, msg)
       return msg
     }
-  } else if (
-    datatype === "number" ||
-    datatype === "integer" ||
-    datatype === "currency" ||
-    datatype === "string-currency" ||
-    datatype === "percentage"
-  ) {
+  } else if (datatype === "number" || datatype === "integer" || datatype === "currency" || datatype === "string-currency" || datatype === "percentage") {
     const v = checkNumber(ele, locale, resource)
     const separator = getDecimalSeparator(ele)
     if (typeof v === "string") {

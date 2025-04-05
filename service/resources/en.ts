@@ -128,6 +128,8 @@ export const en = {
   error_after: "{0} cannot be after {1}.",
 
   error_400: "The server will not process the request due to the malformed request syntax.",
+  error_403: "You do not have permission for this page or for this action." /* error_forbidden */,
+  error_404: "The page is not found." /* error_not_found  */,
   error_409: "Request could not be processed because of conflict in the current state of the resource.",
   error_submit_failed: "Failed to submit data.",
   error_submitting_form: "An error occurred while submitting the form.",
@@ -163,8 +165,6 @@ export const en = {
   error_504: "Gateway Timeout",
 
   error_401: "You have not logged in or the session was expired. Please log in." /* error_unauthorized */,
-  error_404: "Item was not found." /* error_not_found  */,
-  error_403: "You do not have permission for this page or for this action." /* error_forbidden */,
 
   error_404_title: "404 Not found",
   error_404_message: "Sorry, the page you are looking for could not be found.",

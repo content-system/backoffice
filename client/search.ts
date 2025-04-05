@@ -126,10 +126,12 @@ function buildSearchUrl<F extends Filter>(ft: F, page?: string, limit?: string, 
               const keysLvl2 = Object.keys(objValue)
               for (const key2 of keysLvl2) {
                 const objValueLvl2 = objValue[key2]
-                if (objValueLvl2 instanceof Date) {
-                  url += getPrefix(url) + `${key}.${key2}=${objValueLvl2.toISOString()}`
-                } else {
-                  url += getPrefix(url) + `${key}.${key2}=${objValueLvl2}`
+                if (objValueLvl2) {
+                  if (objValueLvl2 instanceof Date) {
+                    url += getPrefix(url) + `${key}.${key2}=${objValueLvl2.toISOString()}`
+                  } else {
+                    url += getPrefix(url) + `${key}.${key2}=${objValueLvl2}`
+                  }
                 }
               }
             }

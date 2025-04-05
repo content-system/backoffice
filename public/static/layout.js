@@ -162,8 +162,14 @@ function navigate(e, ignoreLang) {
             }
           })
         } else {
-          console.error("Error: ", response.statusText)
-          alertError(resource.error_submit_failed, response.statusText)
+          if (response.status === 403) {
+            alertError(resource.error_403, response.statusText)
+          } else if (response.status === 404) {
+            alertError(resource.error_404, response.statusText)
+          } else {
+            console.error("Error: ", response.statusText)
+            alertError(resource.error_submit_failed, response.statusText)
+          }
         }
       })
       .catch((err) => {

@@ -1,13 +1,51 @@
-function changeMenu() {
+function changeMenu(e: Event) {
   const body = document.getElementById("sysBody")
   if (body) {
-    body.classList.toggle("top-menu")
+    const menu = body.classList.toggle("top-menu")
+    let ele = e.target as HTMLElement
+    if (ele) {
+      if (ele.nodeName !== "LI") {
+        ele = ele.parentElement as HTMLElement
+      }
+      const attr = menu ? "data-sidebar" : "data-menu"
+      const icon = menu ? "view_list" : "credit_card"
+      const i = ele.querySelector("i")
+      if (i) {
+        i.innerText = icon
+      }
+      const text = ele.getAttribute(attr)
+      if (text) {
+        const span = ele.querySelector("span")
+        if (span) {
+          span.innerHTML = text
+        }
+      }
+    }
   }
 }
-function changeMode() {
+function changeMode(e: Event) {
   const body = document.getElementById("sysBody")
   if (body) {
-    body.classList.toggle("dark")
+    const dark = body.classList.toggle("dark")
+    let ele = e.target as HTMLElement
+    if (ele) {
+      if (ele.nodeName !== "LI") {
+        ele = ele.parentElement as HTMLElement
+      }
+      const attr = dark ? "data-light" : "data-dark"
+      const icon = dark ? "radio_button_checked" : "timelapse"
+      const i = ele.querySelector("i")
+      if (i) {
+        i.innerText = icon
+      }
+      const text = ele.getAttribute(attr)
+      if (text) {
+        const span = ele.querySelector("span")
+        if (span) {
+          span.innerHTML = text
+        }
+      }
+    }
   }
 }
 function toggleMenu(e: Event) {
@@ -123,8 +161,14 @@ function navigate(e: Event, ignoreLang?: boolean) {
             }
           })
         } else {
-          console.error("Error: ", response.statusText)
-          alertError(resource.error_submit_failed, response.statusText)
+          if (response.status === 403) {
+            alertError(resource.error_403, response.statusText)
+          } else if (response.status === 404) {
+            alertError(resource.error_404, response.statusText)
+          } else {
+            console.error("Error: ", response.statusText)
+            alertError(resource.error_submit_failed, response.statusText)
+          }
         }
       })
       .catch((err) => {
