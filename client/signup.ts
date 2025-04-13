@@ -48,6 +48,7 @@ function signup(e: Event) {
   }
   const url = getCurrentURL()
   const user = { username, email, password }
+  showLoading()
   fetch(url, {
     method: "POST",
     headers: getHttpHeaders(),
@@ -58,22 +59,21 @@ function signup(e: Event) {
         showInfoMessage(eleMessage, resource.success_sign_up)
       } else {
         if (response.status === 409 || response.status === 422) {
-          response.json().then((errors: ErrorMessage[]) => {
-            if (Array.isArray(errors) && errors && errors.length > 0) {
-              showErrorMessage(eleMessage, "" + errors[0].message)
-            } else {
-              showErrorMessage(eleMessage, resource.fail_sign_up)
-            }
-          })
+          response
+            .json()
+            .then((errors: ErrorMessage[]) => {
+              if (Array.isArray(errors) && errors && errors.length > 0) {
+                showErrorMessage(eleMessage, "" + errors[0].message)
+              } else {
+                showErrorMessage(eleMessage, resource.fail_sign_up)
+              }
+            })
+            .catch((err) => handleError(err, resource.error_response_body))
         } else {
           console.error("Error: ", response.statusText)
           alertError(resource.error_submit_failed, response.statusText)
         }
       }
     })
-    .catch((err) => {
-      hideLoading()
-      console.log("Error: " + err)
-      alertError(resource.error_submitting_form, err)
-    })
+    .catch((err) => handleError(err, resource.error_network))
 }

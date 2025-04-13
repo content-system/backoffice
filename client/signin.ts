@@ -35,6 +35,7 @@ function signin(e: Event) {
   }
   const url = getCurrentURL()
   const formData = new FormData(form)
+  showLoading()
   fetch(url, {
     method: "POST",
     body: formData,
@@ -47,28 +48,30 @@ function signin(e: Event) {
         })
       } else {
         if (response.status === 403) {
-          response.json().then((result: SignInResult) => {
-            let key: string | undefined = map["" + result.status]
-            const message = key ? resource[key] : resource.fail_authentication
-            showErrorMessage(eleMessage, message)
-          })
+          response
+            .json()
+            .then((result: SignInResult) => {
+              let key: string | undefined = map["" + result.status]
+              const message = key ? resource[key] : resource.fail_authentication
+              showErrorMessage(eleMessage, message)
+            })
+            .catch((err) => handleError(err, resource.error_response_body))
         } else if (response.status === 422) {
-          response.json().then((errors: ErrorMessage[]) => {
-            if (errors && errors.length > 0) {
-              showErrorMessage(eleMessage, "" + errors[0].message)
-            } else {
-              showErrorMessage(eleMessage, resource.fail_authentication)
-            }
-          })
+          response
+            .json()
+            .then((errors: ErrorMessage[]) => {
+              if (errors && errors.length > 0) {
+                showErrorMessage(eleMessage, "" + errors[0].message)
+              } else {
+                showErrorMessage(eleMessage, resource.fail_authentication)
+              }
+            })
+            .catch((err) => handleError(err, resource.error_response_body))
         } else {
           console.error("Error: ", response.statusText)
           alertError(resource.error_submit_failed, response.statusText)
         }
       }
     })
-    .catch((err) => {
-      hideLoading()
-      console.log("Error: " + err)
-      alertError(resource.error_submitting_form, err)
-    })
+    .catch((err) => handleError(err, resource.error_network))
 }

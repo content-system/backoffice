@@ -96,7 +96,7 @@ function buildSearchUrl(ft, page, limit, fields) {
               url += getPrefix(url) + `${key}=${objValue}`
             }
           } else {
-            url += getPrefix(url) + `${key}=${objValue}`
+            url += getPrefix(url) + `${key}=${encodeURIComponent(objValue)}`
           }
         } else if (typeof objValue === "object") {
           if (objValue instanceof Date) {
@@ -107,7 +107,7 @@ function buildSearchUrl(ft, page, limit, fields) {
                 const strs = []
                 for (const subValue of objValue) {
                   if (typeof subValue === "string") {
-                    strs.push(subValue)
+                    strs.push(encodeURIComponent(subValue))
                   } else if (typeof subValue === "number") {
                     strs.push(subValue.toString())
                   }
@@ -122,7 +122,7 @@ function buildSearchUrl(ft, page, limit, fields) {
                   if (objValueLvl2 instanceof Date) {
                     url += getPrefix(url) + `${key}.${key2}=${objValueLvl2.toISOString()}`
                   } else {
-                    url += getPrefix(url) + `${key}.${key2}=${objValueLvl2}`
+                    url += getPrefix(url) + `${key}.${key2}=${encodeURIComponent(objValueLvl2)}`
                   }
                 }
               }
@@ -187,38 +187,31 @@ function changePage(e) {
     newUrl = newUrl + "?" + search
   }
   const resource = getResource()
+  showLoading()
   fetch(url, {
     method: "GET",
     headers: getHeaders(),
   })
     .then((response) => {
       if (response.ok) {
-        response.text().then((data) => {
-          const pageBody = document.getElementById("pageBody")
-          if (pageBody) {
-            pageBody.innerHTML = data
-            const forms = pageBody.querySelectorAll("form")
-            for (let i = 0; i < forms.length; i++) {
-              registerEvents(forms[i])
+        response
+          .text()
+          .then((data) => {
+            const pageBody = document.getElementById("pageBody")
+            if (pageBody) {
+              pageBody.innerHTML = data
+              afterLoaded(pageBody)
             }
-            setTimeout(function () {
-              const msg = getHiddenMessage(forms, resources.hiddenMessage)
-              if (msg && msg.length > 0) {
-                toast(msg)
-              }
-            }, 0)
-          }
-          window.history.pushState(undefined, "Title", newUrl)
-        })
+            window.history.pushState(undefined, "Title", newUrl)
+            hideLoading()
+          })
+          .catch((err) => handleError(err, resource.error_response_body))
       } else {
-        console.error("Error: ", response.statusText)
-        alertError(resource.error_submit_failed, response.statusText)
+        hideLoading()
+        handleGetError(response, resource)
       }
     })
-    .catch((err) => {
-      console.log("Error: " + err)
-      alertError(resource.error_submitting_form, err)
-    })
+    .catch((err) => handleError(err, resource.error_network))
 }
 function search(e) {
   e.preventDefault()
@@ -237,36 +230,29 @@ function search(e) {
     }
   }
   const resource = getResource()
+  showLoading()
   fetch(url, {
     method: "GET",
     headers: getHeaders(),
   })
     .then((response) => {
       if (response.ok) {
-        response.text().then((data) => {
-          const pageBody = document.getElementById("pageBody")
-          if (pageBody) {
-            pageBody.innerHTML = data
-            const forms = pageBody.querySelectorAll("form")
-            for (let i = 0; i < forms.length; i++) {
-              registerEvents(forms[i])
+        response
+          .text()
+          .then((data) => {
+            const pageBody = document.getElementById("pageBody")
+            if (pageBody) {
+              pageBody.innerHTML = data
+              afterLoaded(pageBody)
             }
-            setTimeout(function () {
-              const msg = getHiddenMessage(forms, resources.hiddenMessage)
-              if (msg && msg.length > 0) {
-                toast(msg)
-              }
-            }, 0)
-          }
-          window.history.pushState(undefined, "Title", newUrl)
-        })
+            window.history.pushState(undefined, "Title", newUrl)
+            hideLoading()
+          })
+          .catch((err) => handleError(err, resource.error_response_body))
       } else {
-        console.error("Error: ", response.statusText)
-        alertError(resource.error_submit_failed, response.statusText)
+        hideLoading()
+        handleGetError(response, resource)
       }
     })
-    .catch((err) => {
-      console.log("Error: " + err)
-      alertError(resource.error_submitting_form, err)
-    })
+    .catch((err) => handleError(err, resource.error_network))
 }

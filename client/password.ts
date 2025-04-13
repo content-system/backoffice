@@ -71,9 +71,12 @@ function changePassword(e: Event) {
         })
       } else {
         if (response.status === 401) {
-          response.text().then((msg) => {
-            showErrorMessage(eleMessage, msg)
-          })
+          response
+            .text()
+            .then((msg) => {
+              showErrorMessage(eleMessage, msg)
+            })
+            .catch((err) => handleError(err, resource.error_response_body))
         } else if (response.status === 409) {
           showErrorMessage(eleMessage, resource.password_duplicate)
         } else if (response.status === 403) {
@@ -91,11 +94,7 @@ function changePassword(e: Event) {
         }
       }
     })
-    .catch((err) => {
-      hideLoading()
-      console.log("Error: " + err)
-      alertError(resource.error_submitting_form, err)
-    })
+    .catch((err) => handleError(err, resource.error_network))
 }
 function forgotPassword(e: Event) {
   e.preventDefault()
@@ -124,9 +123,7 @@ function forgotPassword(e: Event) {
   })
     .then((response) => {
       if (response.ok) {
-        response.json().then((result) => {
-          showInfoMessage(eleMessage, resource.success_forgot_password)
-        })
+        showInfoMessage(eleMessage, resource.success_forgot_password)
       } else {
         if (response.status === 404) {
           showErrorMessage(eleMessage, resource.fail_forgot_password)
@@ -136,11 +133,7 @@ function forgotPassword(e: Event) {
         }
       }
     })
-    .catch((err) => {
-      hideLoading()
-      console.log("Error: " + err)
-      alertError(resource.error_submitting_form, err)
-    })
+    .catch((err) => handleError(err, resource.error_network))
 }
 function resetPassword(e: Event) {
   e.preventDefault()
@@ -197,9 +190,12 @@ function resetPassword(e: Event) {
         showInfoMessage(eleMessage, resource.success_reset_password)
       } else {
         if (response.status === 401) {
-          response.text().then((msg) => {
-            showErrorMessage(eleMessage, msg)
-          })
+          response
+            .text()
+            .then((msg) => {
+              showErrorMessage(eleMessage, msg)
+            })
+            .catch((err) => handleError(err, resource.error_response_body))
         } else if (response.status === 409) {
           showErrorMessage(eleMessage, resource.password_duplicate)
         } else if (response.status === 403) {
@@ -210,9 +206,5 @@ function resetPassword(e: Event) {
         }
       }
     })
-    .catch((err) => {
-      hideLoading()
-      console.log("Error: " + err)
-      alertError(resource.error_submitting_form, err)
-    })
+    .catch((err) => handleError(err, resource.error_network))
 }

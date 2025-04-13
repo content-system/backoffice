@@ -19,12 +19,32 @@
     <title>CMS Backoffice</title>
   </head>
   <body id="sysBody" class="full-header top-menu">
-    <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="sysToast" class="toast-message alert-success"></div>
     <div id="sysLoading" class="loader-wrapper" style="display: none">
       <div class="loader-sign">
         <div class="loader"></div>
         <!-- <div class="loader-text">Please wait</div> -->
+      </div>
+    </div>
+    <div id="sysAlert" class="alert-wrapper">
+      <div class="alert">
+        <div>
+          <div id="sysIcon" class="alert-icon"></div>
+          <h4
+            id="sysMessageHeader"
+            data-confirm="{{resource.header_confirm}}"
+            data-error="{{resource.header_error}}"
+            data-warning="{{resource.header_warning}}"
+            data-info="{{resource.header_info}}"
+            data-success="{{resource.header_success}}"
+            data-ok="{{resource.button_ok}}"
+          ></h4>
+          <p id="sysMessage"></p>
+        </div>
+        <footer>
+          <button type="button" id="sysNo" name="btnCancel" class="btn-cancel" onclick="noOnClick()" data-text="{{resource.button_no}}"></button>
+          <button type="submit" id="sysYes" name="btnAccept" class="btn-accept" onclick="yesOnClick()" data-text="{{resource.button_yes}}"></button>
+        </footer>
       </div>
     </div>
     <div id="root">
@@ -60,18 +80,9 @@
             </label>
             <label class="col s12 required {{errors.passcode.invalid}}" hidden>
               {{resource.passcode}}
-              <input
-                type="text"
-                id="passcode"
-                name="passcode"
-                value="{{user.passcode}}"
-                maxlength="100"
-                placeholder="{{resource.placeholder_passcode}}"
-              />
+              <input type="text" id="passcode" name="passcode" value="{{user.passcode}}" maxlength="100" placeholder="{{resource.placeholder_passcode}}" />
             </label>
-            <label class="col s12 checkbox-container">
-              <input type="checkbox" id="remember" name="remember" />{{resource.signin_remember_me}}
-            </label>
+            <label class="col s12 checkbox-container"> <input type="checkbox" id="remember" name="remember" />{{resource.signin_remember_me}} </label>
             <button type="submit" id="btnSignin" name="btnSignin">{{resource.button_signin}}</button>
             <a id="btnForgotPassword" href="/forgot-password">{{resource.button_forgot_password}}</a>
             <a id="btnSignup" href="/signup">{{resource.button_signup}}</a>
@@ -87,8 +98,9 @@
 
         error_400: "{{resource.error_400}}",
         error_409: "{{resource.error_409}}",
+        error_network: "{{resource.error_network}}",
+        error_response_body: "{{resource.error_response_body}}",
         error_submit_failed: "{{resource.error_submit_failed}}",
-        error_submitting_form: "{{resource.error_submitting_form}}",
 
         fail_authentication: "{{resource.fail_authentication}}",
         fail_expired_password: "{{resource.fail_expired_password}}",

@@ -115,67 +115,56 @@ function navigate(e, ignoreLang) {
     }
     const lang1 = lang.length > 0 && !ignoreLang ? "&" + lang : ""
     const newUrl = url + (url.indexOf("?") > 0 ? "&" : "?") + "partial=true" + lang1
+    showLoading()
     fetch(newUrl, { method: "GET", headers: getHeaders() })
       .then((response) => {
         if (response.ok) {
-          response.text().then((data) => {
-            var _a
-            const pageBody = document.getElementById("pageBody")
-            if (pageBody) {
-              pageBody.innerHTML = data
-              const span = link.querySelector("span")
-              const title = span ? span.innerText : link.innerText
-              window.history.pushState({ pageTitle: title }, "", url)
-              const parent = findParentNode(target, "LI")
-              if (parent) {
-                const nav = findParentNode(parent, "NAV")
-                if (nav) {
-                  let elI = nav.querySelector(".active")
-                  if (elI) {
-                    elI.classList.remove("active")
+          response
+            .text()
+            .then((data) => {
+              const pageBody = document.getElementById("pageBody")
+              if (pageBody) {
+                pageBody.innerHTML = data
+                const span = link.querySelector("span")
+                const title = span ? span.innerText : link.innerText
+                window.history.pushState({ pageTitle: title }, "", url)
+                afterLoaded(pageBody)
+                setTimeout(function () {
+                  var _a
+                  const parent = findParentNode(target, "LI")
+                  if (parent) {
+                    const nav = findParentNode(parent, "NAV")
+                    if (nav) {
+                      let elI = nav.querySelector(".active")
+                      if (elI) {
+                        elI.classList.remove("active")
+                      }
+                      elI = nav.querySelector(".active")
+                      if (elI) {
+                        elI.classList.remove("active")
+                      }
+                      elI = nav.querySelector(".active")
+                      if (elI) {
+                        elI.classList.remove("active")
+                      }
+                    }
+                    parent.classList.add("active")
+                    const pp = (_a = parent.parentElement) === null || _a === void 0 ? void 0 : _a.parentElement
+                    if (pp && pp.nodeName === "LI") {
+                      pp.classList.add("active")
+                    }
                   }
-                  elI = nav.querySelector(".active")
-                  if (elI) {
-                    elI.classList.remove("active")
-                  }
-                  elI = nav.querySelector(".active")
-                  if (elI) {
-                    elI.classList.remove("active")
-                  }
-                }
-                parent.classList.add("active")
-                const pp = (_a = parent.parentElement) === null || _a === void 0 ? void 0 : _a.parentElement
-                if (pp && pp.nodeName === "LI") {
-                  pp.classList.add("active")
-                }
+                }, 0)
               }
-              const forms = pageBody.querySelectorAll("form")
-              for (let i = 0; i < forms.length; i++) {
-                registerEvents(forms[i])
-              }
-              setTimeout(function () {
-                const msg = getHiddenMessage(forms, resources.hiddenMessage)
-                if (msg && msg.length > 0) {
-                  toast(msg)
-                }
-              }, 0)
-            }
-          })
+              hideLoading()
+            })
+            .catch((err) => handleError(err, resource.error_response_body))
         } else {
-          if (response.status === 403) {
-            alertError(resource.error_403, response.statusText)
-          } else if (response.status === 404) {
-            alertError(resource.error_404, response.statusText)
-          } else {
-            console.error("Error: ", response.statusText)
-            alertError(resource.error_submit_failed, response.statusText)
-          }
+          hideLoading()
+          handleGetError(response, resource)
         }
       })
-      .catch((err) => {
-        console.log("Error: " + err)
-        alertError(resource.error_submitting_form, err)
-      })
+      .catch((err) => handleError(err, resource.error_network))
   }
 }
 window.onload = function () {

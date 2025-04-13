@@ -6,6 +6,8 @@ interface Phones {
 }
 // tslint:disable-next-line:class-name
 class resources {
+  static login = "/login"
+  static redirect = "redirectUrl"
   static defaultLimit = 12
   static containerClass = "form-input"
   static hiddenMessage = "hidden-message"
@@ -88,6 +90,25 @@ function getLang(): string | undefined {
 function getCurrentURL() {
   return window.location.origin + window.location.pathname
 }
+function getRedirect(): string {
+  const loc = window.location.href
+  if (loc.length < 8) {
+    return ""
+  }
+  const i = loc.indexOf("/", 9)
+  if (i < 0) {
+    return ""
+  }
+  return loc.substring(i)
+}
+function buildLoginUrl() {
+  const r = getRedirect()
+  if (r.length === 0) {
+    return resources.login
+  } else {
+    return resources.login + "?" + resources.redirect + "=" + encodeURIComponent(r)
+  }
+}
 function getDecimalSeparator(ele: HTMLInputElement): string {
   let separator = ele.getAttribute("data-decimal-separator")
   if (!separator) {
@@ -98,41 +119,47 @@ function getDecimalSeparator(ele: HTMLInputElement): string {
   }
   return separator === "," ? "," : "."
 }
+function afterLoaded(pageBody: HTMLElement) {
+  if (pageBody) {
+    setTimeout(function () {
+      const forms = pageBody.querySelectorAll("form")
+      for (let i = 0; i < forms.length; i++) {
+        registerEvents(forms[i])
+      }
+      const msg = getHiddenMessage(forms, resources.hiddenMessage)
+      if (msg && msg.length > 0) {
+        toast(msg)
+      }
+    }, 0)
+  }
+}
 const histories: string[] = []
 const historyMax = 10
 function goBack() {
   let url = histories.pop()
   if (url) {
     const newUrl = url + (url.indexOf("?") >= 0 ? "&" : "?") + "partial=true"
+    showLoading()
     fetch(newUrl, { method: "GET", headers: getHeaders() })
       .then((response) => {
         if (response.ok) {
-          response.text().then((data) => {
-            const pageBody = document.getElementById("pageBody")
-            if (pageBody) {
-              pageBody.innerHTML = data
-              window.history.pushState({ pageTitle: "" }, "", url)
-              const forms = pageBody.querySelectorAll("form")
-              for (let i = 0; i < forms.length; i++) {
-                registerEvents(forms[i])
+          response
+            .text()
+            .then((data) => {
+              const pageBody = document.getElementById("pageBody")
+              if (pageBody) {
+                pageBody.innerHTML = data
+                window.history.pushState({ pageTitle: "" }, "", url)
+                afterLoaded(pageBody)
               }
-              setTimeout(function () {
-                const msg = getHiddenMessage(forms, resources.hiddenMessage)
-                if (msg && msg.length > 0) {
-                  toast(msg)
-                }
-              }, 0)
-            }
-          })
+            })
+            .catch((err) => handleError(err, resource.error_response_body))
         } else {
           console.error("Error: ", response.statusText)
           alertError(resource.error_submit_failed, response.statusText)
         }
       })
-      .catch((err) => {
-        console.log("Error: " + err)
-        alertError(resource.error_submitting_form, err)
-      })
+      .catch((err) => handleError(err, resource.error_network))
   }
 }
 const d = "data-value"
@@ -838,6 +865,29 @@ function getHttpHeaders(): any {
     }
   }
 }
+function handleGetError(response: Response, resource: StringMap) {
+  if (response.status === 401) {
+    window.location.href = buildLoginUrl()
+  } else if (response.status === 403) {
+    alertError(resource.error_403, response.statusText)
+  } else if (response.status === 404) {
+    alertError(resource.error_404, response.statusText)
+  } else if (response.status === 400) {
+    alertError(resource.error_400, response.statusText)
+  } else {
+    console.error("Error: ", response.statusText)
+    alertError(resource.error_submit_failed, response.statusText)
+  }
+}
+function getConfirmMessage(ele: HTMLButtonElement, resource: StringMap): string {
+  let confirmMsg = ele.getAttribute("data-message")
+  return confirmMsg ? confirmMsg : resource.msg_confirm_save
+}
+function handleError(err: any, msg: string) {
+  hideLoading()
+  console.log("Error: " + err)
+  alertError(msg, err)
+}
 function submitFormData(e: Event) {
   e.preventDefault()
   const target = e.target as HTMLButtonElement
@@ -847,12 +897,9 @@ function submitFormData(e: Event) {
     return
   }
   const resource = getResource()
-  let successText = target.getAttribute("data-success")
-  let confirmText = target.getAttribute("data-message")
-  if (!confirmText) {
-    confirmText = resource.msg_confirm_save
-  }
-  showConfirm(confirmText, () => {
+  let successMsg = target.getAttribute("data-success")
+  const confirmMsg = getConfirmMessage(target, resource)
+  showConfirm(confirmMsg, () => {
     showLoading()
     const url = getCurrentURL()
     const formData = new FormData(form)
@@ -863,32 +910,47 @@ function submitFormData(e: Event) {
     })
       .then((response) => {
         if (response.ok) {
-          response.text().then((data) => {
-            const pageBody = document.getElementById("pageBody")
-            if (pageBody) {
-              pageBody.innerHTML = data
-              const forms = pageBody.querySelectorAll("form")
-              for (let i = 0; i < forms.length; i++) {
-                registerEvents(forms[i])
+          response
+            .text()
+            .then((data) => {
+              const pageBody = document.getElementById("pageBody")
+              if (pageBody) {
+                pageBody.innerHTML = data
+                afterLoaded(pageBody)
               }
-            }
-            hideLoading()
-            if (successText) {
-              alertSuccess(successText)
-            }
-          })
+              hideLoading()
+              if (successMsg) {
+                alertSuccess(successMsg)
+              }
+            })
+            .catch((err) => handleError(err, resource.error_response_body))
         } else {
           hideLoading()
-          console.error("Error: ", response.statusText)
-          alertError(resource.error_submit_failed, response.statusText)
+          handlePostError(response, resource)
         }
       })
-      .catch((err) => {
-        hideLoading()
-        console.log("Error: " + err)
-        alertError(resource.error_submitting_form, err)
-      })
+      .catch((err) => handleError(err, resource.error_network))
   })
+}
+function handlePostError(response: Response, resource: StringMap) {
+  if (response.status === 401) {
+    window.location.href = buildLoginUrl()
+  } else if (response.status === 403) {
+    alertError(resource.error_403)
+  } else if (response.status === 409) {
+    alertError(resource.error_409)
+  } else if (response.status === 410) {
+    alertError(resource.error_410)
+  } else if (response.status === 400) {
+    alertError(resource.error_400, response.statusText)
+  } else {
+    console.error("Error: ", response.statusText)
+    alertError(resource.error_submit_failed, response.statusText)
+  }
+}
+function getSuccessMessage(ele: HTMLButtonElement, resource: StringMap): string {
+  let successMsg = ele.getAttribute("data-success")
+  return successMsg ? successMsg : resource.msg_save_success
 }
 function submitForm(e: Event) {
   e.preventDefault()
@@ -899,11 +961,9 @@ function submitForm(e: Event) {
     return
   }
   const resource = getResource()
-  let confirmText = target.getAttribute("data-message")
-  if (!confirmText) {
-    confirmText = resource.msg_confirm_save
-  }
-  showConfirm(confirmText, () => {
+  const successMsg = getSuccessMessage(target, resource)
+  const confirmMsg = getConfirmMessage(target, resource)
+  showConfirm(confirmMsg, () => {
     showLoading()
     const data = decodeFromForm(form)
     const url = getCurrentURL()
@@ -913,31 +973,46 @@ function submitForm(e: Event) {
       body: JSON.stringify(data), // Convert the form data to JSON format
     })
       .then((response) => {
+        hideLoading()
         if (response.ok) {
-          let successText = target.getAttribute("data-success")
-          if (!successText) {
-            successText = resource.msg_save_success
-          }
-          alertSuccess(successText)
+          alertSuccess(successMsg)
         } else {
-          if (response.status === 422) {
-            response.json().then((errors) => {
-              showFormError(form, errors)
-            })
-          } else if (response.status === 409) {
-            alertError(resource.error_409)
-          } else if (response.status === 400) {
-            alertError(resource.error_400, response.statusText)
-          } else {
-            alertError(resource.error_submit_failed, response.statusText)
-          }
+          handleJsonError(response, resource, form)
         }
-        hideLoading()
       })
-      .catch((err) => {
-        hideLoading()
-        console.log("Error: " + err)
-        alertError(resource.error_submitting_form, err)
-      })
+      .catch((err) => handleError(err, resource.error_network))
   })
+}
+function handleJsonError(response: Response, resource: StringMap, form: HTMLFormElement, showErrors?: (errs: ErrorMessage[]) => void, allErrors?: boolean) {
+  if (response.status === 401) {
+    window.location.href = buildLoginUrl()
+  } else if (response.status === 403) {
+    alertError(resource.error_403)
+  } else if (response.status === 409) {
+    alertError(resource.error_409)
+  } else if (response.status === 410) {
+    alertError(resource.error_410)
+  } else if (response.status === 422) {
+    response
+      .json()
+      .then((errors) => {
+        if (showErrors) {
+          if (allErrors) {
+            showErrors(errors)
+          } else {
+            const errs = showFormError(form, errors)
+            if (errs && errs.length > 0) {
+              showErrors(errs)
+            }
+          }
+        } else {
+          showFormError(form, errors)
+        }
+      })
+      .catch((err) => handleError(err, resource.error_response_body))
+  } else if (response.status === 400) {
+    alertError(resource.error_400, response.statusText)
+  } else {
+    alertError(resource.error_submit_failed, response.statusText)
+  }
 }

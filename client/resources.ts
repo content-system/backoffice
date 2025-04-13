@@ -53,9 +53,15 @@ const resource: StringMap = {
   error_after: "{0} cannot be after {1}.",
 
   error_400: "The server will not process the request due to the malformed request syntax.",
+  error_401: "You have not logged in or the session was expired. Please log in." /* error_unauthorized */,
+  error_403: "You do not have permission for this page or for this action." /* error_forbidden */,
+  error_404: "The page is not found." /* error_not_found  */,
   error_409: "Request could not be processed because of conflict in the current state of the resource.",
+  error_410: "The resource is no longer available at the server and no forwarding address is known.",
+
+  error_network: "The network is down. Cannot connect to server.",
+  error_response_body: "Error while processing the response body.",
   error_submit_failed: "Failed to submit data.",
-  error_submitting_form: "An error occurred while submitting the form.",
 }
 function getResource(): StringMap {
   return resource

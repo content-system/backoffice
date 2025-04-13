@@ -1298,6 +1298,8 @@ var r2 = / |\.|\$|€|£|¥|'|٬|،| /g
 // tslint:disable-next-line:class-name
 var resources = /** @class */ (function () {
   function resources() {}
+  resources.login = "/login"
+  resources.redirect = "redirectUrl"
   resources.defaultLimit = 12
   resources.containerClass = "form-input"
   resources.hiddenMessage = "hidden-message"
@@ -1368,6 +1370,25 @@ function getLang() {
 function getCurrentURL() {
   return window.location.origin + window.location.pathname
 }
+function getRedirect() {
+  var loc = window.location.href
+  if (loc.length < 8) {
+    return ""
+  }
+  var i = loc.indexOf("/", 9)
+  if (i < 0) {
+    return ""
+  }
+  return loc.substring(i)
+}
+function buildLoginUrl() {
+  var r = getRedirect()
+  if (r.length === 0) {
+    return resources.login
+  } else {
+    return resources.login + "?" + resources.redirect + "=" + encodeURIComponent(r)
+  }
+}
 function getDecimalSeparator(ele) {
   var separator = ele.getAttribute("data-decimal-separator")
   if (!separator) {
@@ -1378,40 +1399,50 @@ function getDecimalSeparator(ele) {
   }
   return separator === "," ? "," : "."
 }
+function afterLoaded(pageBody) {
+  if (pageBody) {
+    setTimeout(function () {
+      var forms = pageBody.querySelectorAll("form")
+      for (var i = 0; i < forms.length; i++) {
+        registerEvents(forms[i])
+      }
+      var msg = getHiddenMessage(forms, resources.hiddenMessage)
+      if (msg && msg.length > 0) {
+        toast(msg)
+      }
+    }, 0)
+  }
+}
 var histories = []
 var historyMax = 10
 function goBack() {
   var url = histories.pop()
   if (url) {
     var newUrl = url + (url.indexOf("?") >= 0 ? "&" : "?") + "partial=true"
+    showLoading()
     fetch(newUrl, { method: "GET", headers: getHeaders() })
       .then(function (response) {
         if (response.ok) {
-          response.text().then(function (data) {
-            var pageBody = document.getElementById("pageBody")
-            if (pageBody) {
-              pageBody.innerHTML = data
-              window.history.pushState({ pageTitle: "" }, "", url)
-              var forms_1 = pageBody.querySelectorAll("form")
-              for (var i = 0; i < forms_1.length; i++) {
-                registerEvents(forms_1[i])
+          response
+            .text()
+            .then(function (data) {
+              var pageBody = document.getElementById("pageBody")
+              if (pageBody) {
+                pageBody.innerHTML = data
+                window.history.pushState({ pageTitle: "" }, "", url)
+                afterLoaded(pageBody)
               }
-              setTimeout(function () {
-                var msg = getHiddenMessage(forms_1, resources.hiddenMessage)
-                if (msg && msg.length > 0) {
-                  toast(msg)
-                }
-              }, 0)
-            }
-          })
+            })
+            .catch(function (err) {
+              return handleError(err, resource.error_response_body)
+            })
         } else {
           console.error("Error: ", response.statusText)
           alertError(resource.error_submit_failed, response.statusText)
         }
       })
       .catch(function (err) {
-        console.log("Error: " + err)
-        alertError(resource.error_submitting_form, err)
+        return handleError(err, resource.error_network)
       })
   }
 }
@@ -2113,6 +2144,29 @@ function getHttpHeaders() {
     }
   }
 }
+function handleGetError(response, resource) {
+  if (response.status === 401) {
+    window.location.href = buildLoginUrl()
+  } else if (response.status === 403) {
+    alertError(resource.error_403, response.statusText)
+  } else if (response.status === 404) {
+    alertError(resource.error_404, response.statusText)
+  } else if (response.status === 400) {
+    alertError(resource.error_400, response.statusText)
+  } else {
+    console.error("Error: ", response.statusText)
+    alertError(resource.error_submit_failed, response.statusText)
+  }
+}
+function getConfirmMessage(ele, resource) {
+  var confirmMsg = ele.getAttribute("data-message")
+  return confirmMsg ? confirmMsg : resource.msg_confirm_save
+}
+function handleError(err, msg) {
+  hideLoading()
+  console.log("Error: " + err)
+  alertError(msg, err)
+}
 function submitFormData(e) {
   e.preventDefault()
   var target = e.target
@@ -2122,12 +2176,9 @@ function submitFormData(e) {
     return
   }
   var resource = getResource()
-  var successText = target.getAttribute("data-success")
-  var confirmText = target.getAttribute("data-message")
-  if (!confirmText) {
-    confirmText = resource.msg_confirm_save
-  }
-  showConfirm(confirmText, function () {
+  var successMsg = target.getAttribute("data-success")
+  var confirmMsg = getConfirmMessage(target, resource)
+  showConfirm(confirmMsg, function () {
     showLoading()
     var url = getCurrentURL()
     var formData = new FormData(form)
@@ -2138,32 +2189,51 @@ function submitFormData(e) {
     })
       .then(function (response) {
         if (response.ok) {
-          response.text().then(function (data) {
-            var pageBody = document.getElementById("pageBody")
-            if (pageBody) {
-              pageBody.innerHTML = data
-              var forms = pageBody.querySelectorAll("form")
-              for (var i = 0; i < forms.length; i++) {
-                registerEvents(forms[i])
+          response
+            .text()
+            .then(function (data) {
+              var pageBody = document.getElementById("pageBody")
+              if (pageBody) {
+                pageBody.innerHTML = data
+                afterLoaded(pageBody)
               }
-            }
-            hideLoading()
-            if (successText) {
-              alertSuccess(successText)
-            }
-          })
+              hideLoading()
+              if (successMsg) {
+                alertSuccess(successMsg)
+              }
+            })
+            .catch(function (err) {
+              return handleError(err, resource.error_response_body)
+            })
         } else {
           hideLoading()
-          console.error("Error: ", response.statusText)
-          alertError(resource.error_submit_failed, response.statusText)
+          handlePostError(response, resource)
         }
       })
       .catch(function (err) {
-        hideLoading()
-        console.log("Error: " + err)
-        alertError(resource.error_submitting_form, err)
+        return handleError(err, resource.error_network)
       })
   })
+}
+function handlePostError(response, resource) {
+  if (response.status === 401) {
+    window.location.href = buildLoginUrl()
+  } else if (response.status === 403) {
+    alertError(resource.error_403)
+  } else if (response.status === 409) {
+    alertError(resource.error_409)
+  } else if (response.status === 410) {
+    alertError(resource.error_410)
+  } else if (response.status === 400) {
+    alertError(resource.error_400, response.statusText)
+  } else {
+    console.error("Error: ", response.statusText)
+    alertError(resource.error_submit_failed, response.statusText)
+  }
+}
+function getSuccessMessage(ele, resource) {
+  var successMsg = ele.getAttribute("data-success")
+  return successMsg ? successMsg : resource.msg_save_success
 }
 function submitForm(e) {
   e.preventDefault()
@@ -2174,11 +2244,9 @@ function submitForm(e) {
     return
   }
   var resource = getResource()
-  var confirmText = target.getAttribute("data-message")
-  if (!confirmText) {
-    confirmText = resource.msg_confirm_save
-  }
-  showConfirm(confirmText, function () {
+  var successMsg = getSuccessMessage(target, resource)
+  var confirmMsg = getConfirmMessage(target, resource)
+  showConfirm(confirmMsg, function () {
     showLoading()
     var data = decodeFromForm(form)
     var url = getCurrentURL()
@@ -2188,33 +2256,52 @@ function submitForm(e) {
       body: JSON.stringify(data),
     })
       .then(function (response) {
-        if (response.ok) {
-          var successText = target.getAttribute("data-success")
-          if (!successText) {
-            successText = resource.msg_save_success
-          }
-          alertSuccess(successText)
-        } else {
-          if (response.status === 422) {
-            response.json().then(function (errors) {
-              showFormError(form, errors)
-            })
-          } else if (response.status === 409) {
-            alertError(resource.error_409)
-          } else if (response.status === 400) {
-            alertError(resource.error_400, response.statusText)
-          } else {
-            alertError(resource.error_submit_failed, response.statusText)
-          }
-        }
         hideLoading()
+        if (response.ok) {
+          alertSuccess(successMsg)
+        } else {
+          handleJsonError(response, resource, form)
+        }
       })
       .catch(function (err) {
-        hideLoading()
-        console.log("Error: " + err)
-        alertError(resource.error_submitting_form, err)
+        return handleError(err, resource.error_network)
       })
   })
+}
+function handleJsonError(response, resource, form, showErrors, allErrors) {
+  if (response.status === 401) {
+    window.location.href = buildLoginUrl()
+  } else if (response.status === 403) {
+    alertError(resource.error_403)
+  } else if (response.status === 409) {
+    alertError(resource.error_409)
+  } else if (response.status === 410) {
+    alertError(resource.error_410)
+  } else if (response.status === 422) {
+    response
+      .json()
+      .then(function (errors) {
+        if (showErrors) {
+          if (allErrors) {
+            showErrors(errors)
+          } else {
+            var errs = showFormError(form, errors)
+            if (errs && errs.length > 0) {
+              showErrors(errs)
+            }
+          }
+        } else {
+          showFormError(form, errors)
+        }
+      })
+      .catch(function (err) {
+        return handleError(err, resource.error_response_body)
+      })
+  } else if (response.status === 400) {
+    alertError(resource.error_400, response.statusText)
+  } else {
+    alertError(resource.error_submit_failed, response.statusText)
+  }
 }
 
 function clearText(e, name) {
@@ -2318,7 +2405,7 @@ function buildSearchUrl(ft, page, limit, fields) {
               url += getPrefix(url) + (key + "=" + objValue)
             }
           } else {
-            url += getPrefix(url) + (key + "=" + objValue)
+            url += getPrefix(url) + (key + "=" + encodeURIComponent(objValue))
           }
         } else if (typeof objValue === "object") {
           if (objValue instanceof Date) {
@@ -2330,7 +2417,7 @@ function buildSearchUrl(ft, page, limit, fields) {
                 for (var _a = 0, objValue_1 = objValue; _a < objValue_1.length; _a++) {
                   var subValue = objValue_1[_a]
                   if (typeof subValue === "string") {
-                    strs.push(subValue)
+                    strs.push(encodeURIComponent(subValue))
                   } else if (typeof subValue === "number") {
                     strs.push(subValue.toString())
                   }
@@ -2346,7 +2433,7 @@ function buildSearchUrl(ft, page, limit, fields) {
                   if (objValueLvl2 instanceof Date) {
                     url += getPrefix(url) + (key + "." + key2 + "=" + objValueLvl2.toISOString())
                   } else {
-                    url += getPrefix(url) + (key + "." + key2 + "=" + objValueLvl2)
+                    url += getPrefix(url) + (key + "." + key2 + "=" + encodeURIComponent(objValueLvl2))
                   }
                 }
               }
@@ -2411,37 +2498,34 @@ function changePage(e) {
     newUrl = newUrl + "?" + search
   }
   var resource = getResource()
+  showLoading()
   fetch(url, {
     method: "GET",
     headers: getHeaders(),
   })
     .then(function (response) {
       if (response.ok) {
-        response.text().then(function (data) {
-          var pageBody = document.getElementById("pageBody")
-          if (pageBody) {
-            pageBody.innerHTML = data
-            var forms_1 = pageBody.querySelectorAll("form")
-            for (var i = 0; i < forms_1.length; i++) {
-              registerEvents(forms_1[i])
+        response
+          .text()
+          .then(function (data) {
+            var pageBody = document.getElementById("pageBody")
+            if (pageBody) {
+              pageBody.innerHTML = data
+              afterLoaded(pageBody)
             }
-            setTimeout(function () {
-              var msg = getHiddenMessage(forms_1, resources.hiddenMessage)
-              if (msg && msg.length > 0) {
-                toast(msg)
-              }
-            }, 0)
-          }
-          window.history.pushState(undefined, "Title", newUrl)
-        })
+            window.history.pushState(undefined, "Title", newUrl)
+            hideLoading()
+          })
+          .catch(function (err) {
+            return handleError(err, resource.error_response_body)
+          })
       } else {
-        console.error("Error: ", response.statusText)
-        alertError(resource.error_submit_failed, response.statusText)
+        hideLoading()
+        handleGetError(response, resource)
       }
     })
     .catch(function (err) {
-      console.log("Error: " + err)
-      alertError(resource.error_submitting_form, err)
+      return handleError(err, resource.error_network)
     })
 }
 function search(e) {
@@ -2461,36 +2545,33 @@ function search(e) {
     }
   }
   var resource = getResource()
+  showLoading()
   fetch(url, {
     method: "GET",
     headers: getHeaders(),
   })
     .then(function (response) {
       if (response.ok) {
-        response.text().then(function (data) {
-          var pageBody = document.getElementById("pageBody")
-          if (pageBody) {
-            pageBody.innerHTML = data
-            var forms_2 = pageBody.querySelectorAll("form")
-            for (var i = 0; i < forms_2.length; i++) {
-              registerEvents(forms_2[i])
+        response
+          .text()
+          .then(function (data) {
+            var pageBody = document.getElementById("pageBody")
+            if (pageBody) {
+              pageBody.innerHTML = data
+              afterLoaded(pageBody)
             }
-            setTimeout(function () {
-              var msg = getHiddenMessage(forms_2, resources.hiddenMessage)
-              if (msg && msg.length > 0) {
-                toast(msg)
-              }
-            }, 0)
-          }
-          window.history.pushState(undefined, "Title", newUrl)
-        })
+            window.history.pushState(undefined, "Title", newUrl)
+            hideLoading()
+          })
+          .catch(function (err) {
+            return handleError(err, resource.error_response_body)
+          })
       } else {
-        console.error("Error: ", response.statusText)
-        alertError(resource.error_submit_failed, response.statusText)
+        hideLoading()
+        handleGetError(response, resource)
       }
     })
     .catch(function (err) {
-      console.log("Error: " + err)
-      alertError(resource.error_submitting_form, err)
+      return handleError(err, resource.error_network)
     })
 }
