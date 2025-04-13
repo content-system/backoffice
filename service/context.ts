@@ -52,7 +52,7 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: C
   const health = new HealthController([sqlChecker])
   const privilegeLoader = new PrivilegeLoader(cfg.sql.permission, db.query)
   const token = useToken<Payload>(auth.token.secret, verify, buildJwtError, cfg.cookie, "account")
-  const authorizer = new Authorizer<Payload>(token, privilegeLoader.privilege, buildJwtError, true)
+  const authorizer = new Authorizer<Payload>(token, privilegeLoader.privilege, buildJwtError, true, "id", "userId", "permissions")
 
   const privilegeRepository = new PrivilegeRepository(db.query, cfg.sql.privileges)
   const menu = new MenuBuilder(getResourceByLang, privilegeRepository.privileges, "menu", "id", "lang", "account")
@@ -67,11 +67,11 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: C
     auth.payload,
     auth.account,
     userRepository,
-    undefined,
+    privilegeRepository.privileges,
     auth.lockedMinutes,
     2,
   )
-  const login = new LoginController(authenticator)
+  const login = new LoginController(authenticator, logger.error)
 
   const role = useRoleController(logger.error, db, mapper)
   const user = useUserController(logger.error, db, mapper)

@@ -19,6 +19,7 @@ import {
   toString,
 } from "express-ext"
 import { Log } from "onecore"
+import { write } from "security-express"
 import { validate } from "xvalidators"
 import { buildError404, buildError500, getLang, getResource } from "../resources"
 import { User, UserFilter, userModel, UserService } from "./user"
@@ -85,11 +86,14 @@ export class UserController {
         if (!user) {
           res.render(getView(req, "error"), buildError404(resource, res))
         } else {
+          const permissions = res.locals.permissions as number
+          const readonly = !((write | permissions) == write)
           res.render(getView(req, "user"), {
             resource,
             user: escape(user),
             titles,
             positions,
+            readonly,
           })
         }
       })

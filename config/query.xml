@@ -10,13 +10,13 @@
       username like #{username} and
     </if>
     <if test="displayName != null">
-      displayName like #{displayName} and
+      display_name like #{displayName} and
     </if>
     <if test="status != null">
       status in (#{status}) and
     </if>
     <if test="q != null">
-      (username like #{q} or displayName like #{q} or email like #{q}) and
+      (username like #{q} or display_name like #{q} or email like #{q}) and
     </if>
     1 = 1
     <if test="sort != null">
@@ -25,17 +25,17 @@
   </select>
 
   <select id="role">
-    select roleId, roleName, status
+    select role_id, role_name, status
     from roles
     where
     <if test="roleName != null">
-      roleName like #{roleName} and
+      role_name like #{roleName} and
     </if>
     <if test="status != null">
       status in (#{status}) and
     </if>
     <if test="q != null">
-      (roleName like #{q} or roleId like #{q} or remark like #{q}) and
+      (role_name like #{q} or role_id like #{q} or remark like #{q}) and
     </if>
     1 = 1
   </select>

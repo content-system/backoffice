@@ -42,6 +42,10 @@ export function getDateFormat(lang?: string): string {
   }
   return "M/D/YYYY"
 }
+export function queryLang(req: Request): string {
+  let lang = query(req, "lang")
+  return lang && lang.length > 0 ? lang : "en"
+}
 export function getLang(req: Request, res: Response): string {
   let lang = res.locals.lang
   if (!lang) {

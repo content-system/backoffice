@@ -1,9 +1,9 @@
 import { Authenticator } from "authen-service"
 import { Request, Response } from "express"
 import { toMap } from "express-ext"
-import { Attributes, StringMap } from "onecore"
+import { Attributes, Log, StringMap } from "onecore"
 import { validate } from "xvalidators"
-import { getResource } from "../resources"
+import { getResource, queryLang } from "../resources"
 
 export const userModel: Attributes = {
   username: {
@@ -27,12 +27,13 @@ export const map: StringMap = {
   "9": "fail_disabled_account",
 }
 export class LoginController {
-  constructor(private authenticator: Authenticator<User, string>) {
+  constructor(private authenticator: Authenticator<User, string>, private log: Log) {
     this.render = this.render.bind(this)
     this.submit = this.submit.bind(this)
   }
   render(req: Request, res: Response) {
-    const resource = getResource(req)
+    const lang = queryLang(req)
+    const resource = getResource(lang)
     res.render("signin", {
       resource,
       user: {

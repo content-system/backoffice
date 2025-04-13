@@ -9,24 +9,32 @@
   <div>
     <form id="jobsForm" name="jobsForm" class="form" novalidate>
       <span class="hidden-message">{{message}}</span>
-      <section class="row search-group">
-        <label class="col s12 m6 search-input">
-          <select>
-            <option value="12">12</option>
-            <option value="24" selected="">24</option>
-            <option value="60">60</option>
-            <option value="100">100</option>
-            <option value="120">120</option>
-            <option value="180">180</option>
-            <option value="300">300</option>
-            <option value="600">600</option>
-          </select>
-          <input id="q" maxlength="255" placeholder="Keyword" type="text" value="" name="q" />
-          <button type="button" hidden="" class="btn-remove-text"></button>
-          <button type="button" class="btn-filter"></button>
-          <button type="submit" class="btn-search"></button>
+      <section class="row search-group">{% include "partials/search.html" %} {% include "partials/pagination.html" %}</section>
+      <section class="row search-group inline advance-search">
+        <label class="col s12 m6">
+          {{resource.published_at_from}}
+          <input
+            type="datetime-local"
+            id="publishedAt_min"
+            name="publishedAt_min"
+            data-field="publishedAt.min"
+            value="{{datetimeToString(filter.publishedAt.min)}}"
+            step=".010"
+          />
+        </label>
+        <label class="col s12 m6">
+          {{resource.published_at_to}}
+          <input
+            type="datetime-local"
+            id="publishedAt_max"
+            name="publishedAt_max"
+            data-field="publishedAt.max"
+            value="{{datetimeToString(filter.publishedAt.max)}}"
+            step=".010"
+          />
         </label>
       </section>
+      <input type="hidden" id="page" name="page" value="{{filter.page}}" />
     </form>
     <form class="list-result">
       <ul class="row list">
