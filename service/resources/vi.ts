@@ -172,6 +172,9 @@ export const vi = {
   error_500_title: "500 Internal Server Error",
   error_500_message: "Sorry, the server is wrong. Please try again later.",
 
+  error_grant_title: "Error",
+  error_grant_message: "You are not granted to a valid feature. So, you cannot use any feature.",
+
   error_version: "Data has been changed by someone. Please refresh screen and continue.",
   error_data_corrupt: "Data has been corrupt. You cannot proceed this business.",
   error_required_id: "You must input id.",

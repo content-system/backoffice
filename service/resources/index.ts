@@ -43,7 +43,7 @@ export function getDateFormat(lang?: string): string {
   return "M/D/YYYY"
 }
 export function queryLang(req: Request): string {
-  let lang = query(req, "lang")
+  const lang = query(req, "lang")
   return lang && lang.length > 0 ? lang : "en"
 }
 export function getLang(req: Request, res: Response): string {
@@ -101,5 +101,15 @@ export function buildError500(resource: StringMap, res: Response): any {
       description: resource.error_500_message,
     },
     menu: res.locals.menu,
+  }
+}
+export function buildError(res: Response, title: string, description: string, resource?: StringMap): any {
+  return {
+    message: {
+      title,
+      description,
+    },
+    menu: res.locals.menu,
+    resource,
   }
 }

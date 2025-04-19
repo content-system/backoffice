@@ -1432,6 +1432,7 @@ function goBack() {
                 window.history.pushState({ pageTitle: "" }, "", url)
                 afterLoaded(pageBody)
               }
+              hideLoading()
             })
             .catch(function (err) {
               return handleError(err, resource.error_response_body)
