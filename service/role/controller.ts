@@ -1,5 +1,7 @@
 import { Request, Response } from "express"
 import {
+  buildError404,
+  buildError500,
   buildMessage,
   buildPages,
   buildPageSearch,
@@ -19,8 +21,9 @@ import {
   toString,
 } from "express-ext"
 import { Log } from "onecore"
+import { write } from "security-express"
 import { validate } from "xvalidators"
-import { buildError404, buildError500, getLang, getResource } from "../resources"
+import { getLang, getResource } from "../resources"
 import { Role, RoleFilter, roleModel, RoleService } from "./role"
 
 const fields = ["roleId", "roleName", "remark", "status"]
@@ -76,7 +79,11 @@ export class RoleController {
     const editMode = id !== "new"
     if (!editMode) {
       const role = createRole()
-      res.render(getView(req, "role"), { resource, role: escape(role), editMode })
+      res.render(getView(req, "role"), {
+        resource,
+        role: escape(role),
+        editMode,
+      })
     } else {
       this.service
         .load(id)
@@ -84,7 +91,14 @@ export class RoleController {
           if (!role) {
             res.render(getView(req, "error"), buildError404(resource, res))
           } else {
-            res.render(getView(req, "role"), { resource, role: escape(role), editMode })
+            const permissions = res.locals.permissions as number
+            const readonly = write != (write | permissions)
+            res.render(getView(req, "role"), {
+              resource,
+              role: escape(role),
+              editMode,
+              readonly,
+            })
           }
         })
         .catch((err) => {
@@ -97,7 +111,6 @@ export class RoleController {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const role = req.body
-    console.log("role " + JSON.stringify(role))
     const errors = validate<Role>(role, roleModel, resource)
     if (errors.length > 0) {
       res.status(getStatusCode(errors)).json(role).end()
@@ -108,7 +121,11 @@ export class RoleController {
         this.service
           .create(role)
           .then((result) => {
-            res.status(200).json(role).end()
+            if (result === 0) {
+              res.status(410).end()
+            } else {
+              res.status(200).json(role).end()
+            }
           })
           .catch((err) => handleError(err, res, this.log))
       } else {

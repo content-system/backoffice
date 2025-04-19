@@ -1,10 +1,13 @@
 import { Request, Response } from "express"
 import {
+  buildError404,
+  buildError500,
   buildMessage,
   buildPages,
   buildPageSearch,
   buildSortSearch,
   cloneFilter,
+  escape,
   escapeArray,
   format,
   fromRequest,
@@ -20,9 +23,10 @@ import {
 } from "express-ext"
 import { Log, Manager, Search } from "onecore"
 import { DB, Repository, SearchBuilder } from "query-core"
+import { write } from "security-express"
 import { formatDateTime, getDateFormat } from "ui-formatter"
 import { validate } from "xvalidators"
-import { buildError404, buildError500, getLang, getResource } from "../resources"
+import { getLang, getResource } from "../resources"
 import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService } from "./article"
 export * from "./article"
 
@@ -87,29 +91,41 @@ export class ArticleController {
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
     const id = req.params["id"]
-    this.service
-      .load(id)
-      .then((article) => {
-        if (!article) {
-          res.render(getView(req, "error"), buildError404(resource, res))
-        } else {
-          article.publishedAt = formatDateTime(article.publishedAt, dateFormat)
-          res.render(getView(req, "article"), {
-            resource,
-            article,
-          })
-        }
+    const editMode = id !== "new"
+    if (!editMode) {
+      res.render(getView(req, "article"), {
+        resource,
+        article: {},
+        editMode,
       })
-      .catch((err) => {
-        this.log(toString(err))
-        res.render(getView(req, "error"), buildError500(resource, res))
-      })
+    } else {
+      this.service
+        .load(id)
+        .then((article) => {
+          if (!article) {
+            res.render(getView(req, "error"), buildError404(resource, res))
+          } else {
+            const permissions = res.locals.permissions as number
+            const readonly = write != (write | permissions)
+            article.publishedAt = formatDateTime(article.publishedAt, dateFormat)
+            res.render(getView(req, "article"), {
+              resource,
+              article: escape(article),
+              editMode,
+              readonly,
+            })
+          }
+        })
+        .catch((err) => {
+          this.log(toString(err))
+          res.render(getView(req, "error"), buildError500(resource, res))
+        })
+    }
   }
   submit(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const article = req.body
-    console.log("article " + JSON.stringify(article))
     const errors = validate<Article>(article, articleModel, resource)
     if (errors.length > 0) {
       res.status(getStatusCode(errors)).json(errors).end()
@@ -117,8 +133,11 @@ export class ArticleController {
       this.service
         .update(article)
         .then((result) => {
-          console.log("result " + result)
-          res.status(200).json(article).end()
+          if (result === 0) {
+            res.status(410).end()
+          } else {
+            res.status(200).json(article).end()
+          }
         })
         .catch((err) => handleError(err, res, this.log))
     }

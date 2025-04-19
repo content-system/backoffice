@@ -1,5 +1,7 @@
 import { Request, Response } from "express"
 import {
+  buildError404,
+  buildError500,
   buildMessage,
   buildPages,
   buildPageSearch,
@@ -22,7 +24,7 @@ import { Log, Manager, Search } from "onecore"
 import { DB, Repository, SearchBuilder } from "query-core"
 import { formatDateTime, getDateFormat } from "ui-formatter"
 import { validate } from "xvalidators"
-import { buildError404, buildError500, getLang, getResource } from "../resources"
+import { getLang, getResource } from "../resources"
 import { Job, JobFilter, jobModel, JobRepository, JobService } from "./job"
 export * from "./job"
 
@@ -107,7 +109,6 @@ export class JobController {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const job = req.body
-    console.log("job " + JSON.stringify(job))
     const errors = validate<Job>(job, jobModel, resource)
     if (errors.length > 0) {
       res.status(getStatusCode(errors)).json(errors).end()
@@ -115,8 +116,11 @@ export class JobController {
       this.jobService
         .update(job)
         .then((result) => {
-          console.log("result " + result)
-          res.status(200).json(job).end()
+          if (result === 0) {
+            res.status(410).end()
+          } else {
+            res.status(200).json(job).end()
+          }
         })
         .catch((err) => handleError(err, res, this.log))
     }

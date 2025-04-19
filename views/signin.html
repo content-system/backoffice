@@ -1,52 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta name="theme-color" content="#fff" />
+    <meta name="color-scheme" content="light" />
     <meta charset="utf-8" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="light" />
-    <meta name="theme-color" content="#fff" />
-    <meta name="description" content="Web site created using create-react-app" />
     <link rel="apple-touch-icon" href="/logo192.png" />
     <link rel="stylesheet" href="/fonts/material-icon/css/material-icons.css" />
     <link rel="stylesheet" href="/fonts/Roboto/font.css" />
-    <link rel="stylesheet" href="/css/style.css" />
-    <!--
-    manifest.json provides metadata used when your web app is installed on a
-    user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
+    {% include "partials/css.html" %}
     <link rel="manifest" href="/manifest.json" />
     <title>CMS Backoffice</title>
   </head>
   <body id="sysBody" class="full-header top-menu">
-    <div id="sysToast" class="toast-message alert-success"></div>
-    <div id="sysLoading" class="loader-wrapper" style="display: none">
-      <div class="loader-sign">
-        <div class="loader"></div>
-        <!-- <div class="loader-text">Please wait</div> -->
-      </div>
-    </div>
-    <div id="sysAlert" class="alert-wrapper">
-      <div class="alert">
-        <div>
-          <div id="sysIcon" class="alert-icon"></div>
-          <h4
-            id="sysMessageHeader"
-            data-confirm="{{resource.header_confirm}}"
-            data-error="{{resource.header_error}}"
-            data-warning="{{resource.header_warning}}"
-            data-info="{{resource.header_info}}"
-            data-success="{{resource.header_success}}"
-            data-ok="{{resource.button_ok}}"
-          ></h4>
-          <p id="sysMessage"></p>
-        </div>
-        <footer>
-          <button type="button" id="sysNo" name="btnCancel" class="btn-cancel" onclick="noOnClick()" data-text="{{resource.button_no}}"></button>
-          <button type="submit" id="sysYes" name="btnAccept" class="btn-accept" onclick="yesOnClick()" data-text="{{resource.button_yes}}"></button>
-        </footer>
-      </div>
-    </div>
+    {% include "partials/common.html" %}
     <div id="root">
       <div id="pageContainer" class="central-full">
         <form id="signinForm" name="signinForm" class="form" novalidate autocomplete="off" onsubmit="return validateForm(this)" method="post">

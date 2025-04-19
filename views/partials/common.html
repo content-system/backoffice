@@ -1,0 +1,28 @@
+<div id="sysToast" class="toast-message alert-success"></div>
+<div id="sysLoading" class="loader-wrapper" style="display: none">
+  <div class="loader-sign">
+    <div class="loader"></div>
+    <!-- <div class="loader-text">Please wait</div> -->
+  </div>
+</div>
+<div id="sysAlert" class="alert-wrapper">
+  <div class="alert">
+    <div>
+      <div id="sysIcon" class="alert-icon"></div>
+      <h4
+        id="sysMessageHeader"
+        data-confirm="{{resource.header_confirm}}"
+        data-error="{{resource.header_error}}"
+        data-warning="{{resource.header_warning}}"
+        data-info="{{resource.header_info}}"
+        data-success="{{resource.header_success}}"
+        data-ok="{{resource.button_ok}}"
+      ></h4>
+      <p id="sysMessage"></p>
+    </div>
+    <footer>
+      <button type="button" id="sysNo" name="btnCancel" class="btn-cancel" onclick="noOnClick()" data-text="{{resource.button_no}}"></button>
+      <button type="submit" id="sysYes" name="btnAccept" class="btn-accept" onclick="yesOnClick()" data-text="{{resource.button_yes}}"></button>
+    </footer>
+  </div>
+</div>

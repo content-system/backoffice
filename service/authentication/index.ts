@@ -1,9 +1,9 @@
 import { Authenticator, Privilege } from "authen-service"
 import { Request, Response } from "express"
-import { getView, query, toMap, toString } from "express-ext"
+import { buildError, buildError500, getView, query, queryLang, toMap, toString } from "express-ext"
 import { Attributes, Log, StringMap } from "onecore"
 import { validate } from "xvalidators"
-import { buildError, buildError500, getResource, getResourceByLang, queryLang } from "../resources"
+import { getResource, getResourceByLang } from "../resources"
 
 export const userModel: Attributes = {
   username: {
@@ -47,12 +47,9 @@ export class LoginController {
     const lang = queryLang(req)
     let resource = getResource(lang)
     const user: User = req.body
-    console.log("user " + JSON.stringify(user))
     const errors = validate<User>(user, userModel, resource, true)
     if (errors.length > 0) {
-      console.log("Login error")
       const errorMap = toMap(errors)
-      console.log("Errors: " + JSON.stringify(errorMap))
       res.render("signin", {
         resource,
         user,
@@ -64,10 +61,8 @@ export class LoginController {
         .authenticate(user)
         .then((result) => {
           if (result.status === 1) {
-            console.log("Login successfully")
             const account = result.user
             if (account) {
-              console.log("Token " + account.token)
               res.cookie("token", account.token, { httpOnly: true, secure: true, sameSite: "strict" })
               const redirectUrl = query(req, "redirectUrl")
               if (redirectUrl && redirectUrl.length > 0) {
@@ -86,7 +81,7 @@ export class LoginController {
                 }
               }
             }
-            res.render(getView(req, "error"), buildError(res, resource.error_grant_title, resource.error_grant_message, resource))
+            res.render(getView(req, "error"), buildError(res, resource.error_grant_title, resource.error_grant_message))
           } else {
             let key: string | undefined = map["" + result.status]
             const message = key ? resource[key] : resource.fail_authentication

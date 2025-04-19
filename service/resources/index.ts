@@ -1,5 +1,4 @@
 import { Request, Response } from "express"
-
 import { query } from "express-ext"
 import { en as adminEN } from "./admin/en"
 import { vi as adminVI } from "./admin/vi"
@@ -42,10 +41,6 @@ export function getDateFormat(lang?: string): string {
   }
   return "M/D/YYYY"
 }
-export function queryLang(req: Request): string {
-  const lang = query(req, "lang")
-  return lang && lang.length > 0 ? lang : "en"
-}
 export function getLang(req: Request, res: Response): string {
   let lang = res.locals.lang
   if (!lang) {
@@ -83,33 +78,4 @@ export function getResourceByLang(lang: string): StringMap {
     }
   }
   return resources["en"]
-}
-
-export function buildError404(resource: StringMap, res: Response): any {
-  return {
-    message: {
-      title: resource.error_404_title,
-      description: resource.error_404_message,
-    },
-    menu: res.locals.menu,
-  }
-}
-export function buildError500(resource: StringMap, res: Response): any {
-  return {
-    message: {
-      title: resource.error_500_title,
-      description: resource.error_500_message,
-    },
-    menu: res.locals.menu,
-  }
-}
-export function buildError(res: Response, title: string, description: string, resource?: StringMap): any {
-  return {
-    message: {
-      title,
-      description,
-    },
-    menu: res.locals.menu,
-    resource,
-  }
 }

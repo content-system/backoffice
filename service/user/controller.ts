@@ -1,5 +1,7 @@
 import { Request, Response } from "express"
 import {
+  buildError404,
+  buildError500,
   buildMessage,
   buildPages,
   buildPageSearch,
@@ -21,7 +23,7 @@ import {
 import { Log } from "onecore"
 import { write } from "security-express"
 import { validate } from "xvalidators"
-import { buildError404, buildError500, getLang, getResource } from "../resources"
+import { getLang, getResource } from "../resources"
 import { User, UserFilter, userModel, UserService } from "./user"
 
 const titles = [
@@ -87,7 +89,7 @@ export class UserController {
           res.render(getView(req, "error"), buildError404(resource, res))
         } else {
           const permissions = res.locals.permissions as number
-          const readonly = !((write | permissions) == write)
+          const readonly = write != (write | permissions)
           res.render(getView(req, "user"), {
             resource,
             user: escape(user),
@@ -99,14 +101,13 @@ export class UserController {
       })
       .catch((err) => {
         this.log(toString(err))
-        res.render(getView(req, "error-500"), { resource })
+        res.render(getView(req, "error"), buildError500(resource, res))
       })
   }
   submit(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const user = req.body
-    console.log("user " + JSON.stringify(user))
     const errors = validate<User>(user, userModel, resource)
     if (errors.length > 0) {
       res.status(getStatusCode(errors)).json(errors).end()
