@@ -122,9 +122,9 @@ export class RoleController {
           .create(role)
           .then((result) => {
             if (result === 0) {
-              res.status(410).end()
+              res.status(409).end()
             } else {
-              res.status(200).json(role).end()
+              res.status(201).json(role).end()
             }
           })
           .catch((err) => handleError(err, res, this.log))
@@ -132,7 +132,11 @@ export class RoleController {
         this.service
           .update(role)
           .then((result) => {
-            res.status(200).json(role).end()
+            if (result === 0) {
+              res.status(410).end()
+            } else {
+              res.status(200).json(role).end()
+            }
           })
           .catch((err) => handleError(err, res, this.log))
       }

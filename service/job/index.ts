@@ -113,16 +113,31 @@ export class JobController {
     if (errors.length > 0) {
       res.status(getStatusCode(errors)).json(errors).end()
     } else {
-      this.jobService
-        .update(job)
-        .then((result) => {
-          if (result === 0) {
-            res.status(410).end()
-          } else {
-            res.status(200).json(job).end()
-          }
-        })
-        .catch((err) => handleError(err, res, this.log))
+      const id = req.params["id"]
+      const editMode = id !== "new"
+      if (!editMode) {
+        this.jobService
+          .create(job)
+          .then((result) => {
+            if (result === 0) {
+              res.status(409).end()
+            } else {
+              res.status(201).json(job).end()
+            }
+          })
+          .catch((err) => handleError(err, res, this.log))
+      } else {
+        this.jobService
+          .update(job)
+          .then((result) => {
+            if (result === 0) {
+              res.status(410).end()
+            } else {
+              res.status(200).json(job).end()
+            }
+          })
+          .catch((err) => handleError(err, res, this.log))
+      }
     }
   }
 }

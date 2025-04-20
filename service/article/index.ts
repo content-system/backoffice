@@ -130,16 +130,31 @@ export class ArticleController {
     if (errors.length > 0) {
       res.status(getStatusCode(errors)).json(errors).end()
     } else {
-      this.service
-        .update(article)
-        .then((result) => {
-          if (result === 0) {
-            res.status(410).end()
-          } else {
-            res.status(200).json(article).end()
-          }
-        })
-        .catch((err) => handleError(err, res, this.log))
+      const id = req.params["id"]
+      const editMode = id !== "new"
+      if (!editMode) {
+        this.service
+          .create(article)
+          .then((result) => {
+            if (result === 0) {
+              res.status(410).end()
+            } else {
+              res.status(201).json(article).end()
+            }
+          })
+          .catch((err) => handleError(err, res, this.log))
+      } else {
+        this.service
+          .update(article)
+          .then((result) => {
+            if (result === 0) {
+              res.status(410).end()
+            } else {
+              res.status(200).json(article).end()
+            }
+          })
+          .catch((err) => handleError(err, res, this.log))
+      }
     }
   }
 }
