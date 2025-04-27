@@ -40,4 +40,10 @@ export function route(app: Application, ctx: Context, secure?: boolean): void {
   app.get("/jobs", readJob, ctx.menu.build, ctx.job.search)
   app.get("/jobs/:id", readJob, ctx.menu.build, ctx.job.view)
   app.post("/jobs/:id", writeJob, ctx.menu.build, json(), ctx.job.submit)
+
+  const readContact = ctx.authorize("contact", read)
+  const writeContact = ctx.authorize("contact", write)
+  app.get("/contacts", readContact, ctx.menu.build, ctx.contact.search)
+  app.get("/contacts/:id", readContact, ctx.menu.build, ctx.contact.view)
+  app.post("/contacts/:id", writeContact, ctx.menu.build, json(), ctx.contact.submit)
 }

@@ -15,7 +15,14 @@
           pattern="^(?=.*[a-z])[a-z0-9_]{1,100}$"
           maxlength="20"
           required
-      {% if editMode %} readonly {% endif %}
+          {%
+          if
+          editMode
+          %}
+          readonly
+          {%
+          endif
+          %}
           onblur="requiredOnBlur(event)"
           placeholder="{{resource.role_id}}"
           value="{{role.roleId}}"
@@ -47,5 +54,7 @@
       </div>
     </section>
   </div>
-  <footer><button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)">{{resource.save}}</button></footer>
+  <footer>
+    <button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)" {% if readonly %} disabled {% endif %}>{{resource.save}}</button>
+  </footer>
 </form>

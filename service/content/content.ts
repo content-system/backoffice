@@ -9,8 +9,12 @@ export interface Content {
   tags?: string[]
   status?: string
   version?: number
-}
 
+  createdAt?: Date
+  createdBy?: string
+  updatedAt?: Date
+  updatedBy?: string
+}
 export interface ContentFilter extends Filter {
   id?: string
   lang?: string
@@ -66,12 +70,19 @@ export const contentModel: Attributes = {
   },
   type: {},
   status: {},
+  version: {
+    type: "integer",
+    version: true,
+  },
+
   createdBy: {
     column: "created_by",
+    noupdate: true,
   },
   createdAt: {
     column: "created_at",
     type: "datetime",
+    noupdate: true,
   },
   updatedBy: {
     column: "updated_by",
@@ -79,9 +90,5 @@ export const contentModel: Attributes = {
   updatedAt: {
     column: "updated_at",
     type: "datetime",
-  },
-  version: {
-    type: "integer",
-    version: true,
   },
 }

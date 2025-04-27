@@ -21,7 +21,7 @@ import {
   resources,
   toString,
 } from "express-ext"
-import { Log, Manager, Search } from "onecore"
+import { Log, Search, UseCase } from "onecore"
 import { DB, Repository, SearchBuilder } from "query-core"
 import { write } from "security-express"
 import { formatDateTime, getDateFormat } from "ui-formatter"
@@ -35,7 +35,7 @@ export class SqlArticleRepository extends Repository<Article, string> implements
     super(db, "articles", articleModel)
   }
 }
-export class ArticleUseCase extends Manager<Article, string, ArticleFilter> implements ArticleService {
+export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> implements ArticleService {
   constructor(search: Search<Article, ArticleFilter>, repository: ArticleRepository) {
     super(search, repository)
   }

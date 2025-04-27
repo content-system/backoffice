@@ -1,17 +1,22 @@
 import { Attributes, Filter, Result, SearchResult } from "onecore"
 
-export interface RoleFilter extends Filter {
-  roleId?: string
-  roleName?: string
-  status?: string
-  remark?: string
-}
 export interface Role {
   roleId: string
   roleName: string
   status?: string
   remark?: string
   privileges?: string[]
+
+  createdAt?: Date
+  createdBy?: string
+  updatedAt?: Date
+  updatedBy?: string
+}
+export interface RoleFilter extends Filter {
+  roleId?: string
+  roleName?: string
+  status?: string
+  remark?: string
 }
 
 export interface RoleRepository {
@@ -55,12 +60,15 @@ export const roleModel: Attributes = {
     length: 255,
     q: true,
   },
+
   createdBy: {
     column: "created_by",
+    noupdate: true,
   },
   createdAt: {
     column: "created_at",
     type: "datetime",
+    noupdate: true,
   },
   updatedBy: {
     column: "updated_by",
@@ -69,6 +77,7 @@ export const roleModel: Attributes = {
     column: "updated_at",
     type: "datetime",
   },
+
   privileges: {
     type: "strings",
     ignored: true,

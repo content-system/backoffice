@@ -238,7 +238,7 @@ export const en = {
   rejected: "Rejected",
   detail: "Detail",
   description: "Description",
-  sequence: "No.",
+  number: "No.",
   total: "Total",
 
   start_date: "Start Date",

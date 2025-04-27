@@ -22,7 +22,7 @@
     <label class="col s6 m6 required">
       {{resource.thumbnail}}
       <input
-        type="text"
+        type="url"
         id="thumbnail"
         name="thumbnail"
         value="{{article.thumbnail}}"
@@ -65,5 +65,5 @@
       <textarea id="content" name="content" rows="80" maxlength="9000" placeholder="{{resource.content}}"/>{{article.content}}</textarea>
     </label>
   </div>
-  <footer class="view-footer"><button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)">{{resource.save}}</button></footer>
+  <footer class="view-footer"><button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)" {% if readonly %} disabled {% endif %}>{{resource.save}}</button></footer>
 </form>

@@ -1,0 +1,54 @@
+<div>
+  <header><h2>{{resource.contacts}}</h2></header>
+  <div>
+    <form id="contactsForm" name="contactsForm" class="form" novalidate>
+      <span class="hidden-message">{{message}}</span>
+      <section class="row search-group">{% include "partials/search.html" %} {% include "partials/pagination.html" %}</section>
+      <section class="row search-group inline advance-search">
+        <label class="col s12 m4">
+          {{resource.name}}
+          <input type="text" id="name" name="name" value="{{filter.name}}" />
+        </label>
+        <label class="col s12 m4">
+          {{resource.name}}
+          <input type="text" id="email" name="email" value="{{filter.email}}" />
+        </label>
+      </section>
+      <input type="hidden" id="page" name="page" value="{{filter.page}}" />
+    </form>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th data-field="contactId">{{resource.number}}</th>
+            <th data-field="name">
+              <a id="sortUsername" href="{{sort.name.url}}">{{resource.name}} {{sort.name.tag}}</a>
+            </th>
+            <th data-field="email" class="datetime">
+              <a id="sortEmail" href="{{sort.email.url}}">{{resource.email}} {{sort.email.tag}}</a>
+            </th>
+            <th data-field="phone">
+              <a id="sortPhone" href="{{sort.phone.url}}">{{resource.display_name}} {{sort.email.tag}}</a>
+            </th>
+            <th data-field="status">
+              <a id="sortStatus" href="{{sort.status.url}}">{{resource.status}} {{sort.status.tag}}</a>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in list %}
+          <tr>
+            <td>{{item.sequence}}</td>
+            <td>
+              <a href="/contacts/{{item.id}}" onclick="navigate(event)">{{item.name}}</a>
+            </td>
+            <td>{{item.email}}</td>
+            <td>{{item.phone}}</td>
+            <td>{{item.status}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

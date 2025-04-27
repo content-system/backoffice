@@ -1,5 +1,13 @@
 import { Attributes, Filter, SearchResult } from "onecore"
 
+export interface User {
+  userId: string
+  username: string
+  email?: string
+  phone?: string
+  dateOfBirth?: Date
+  roles?: string[]
+}
 export interface UserFilter extends Filter {
   id?: string
   username?: string
@@ -10,20 +18,13 @@ export interface UserFilter extends Filter {
   title?: string
   position?: string
 }
-export interface User {
-  userId: string
-  username: string
-  email?: string
-  phone?: string
-  dateOfBirth?: Date
-  roles?: string[]
-}
+
 export interface UserRepository {
-  search(filter: UserFilter, limit?: number, page?: number | string, fields?: string[], ctx?: any): Promise<SearchResult<User>>
+  search(filter: UserFilter, limit: number, page?: number | string, fields?: string[], ctx?: any): Promise<SearchResult<User>>
   getUsersOfRole(roleId: string): Promise<User[]>
 }
 export interface UserService {
-  search(filter: UserFilter, limit?: number, page?: number | string, fields?: string[], ctx?: any): Promise<SearchResult<User>>
+  search(filter: UserFilter, limit: number, page?: number | string, fields?: string[], ctx?: any): Promise<SearchResult<User>>
   getUsersOfRole(roleId: string): Promise<User[]>
 }
 

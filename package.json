@@ -25,6 +25,7 @@
     "jsonwebtoken-plus": "^0.0.7",
     "logger-core": "^0.3.1",
     "multer": "^1.4.5-lts.1",
+    "nanoid": "^3.3.4",
     "nunjucks": "^3.2.4",
     "onecore": "^0.1.6",
     "password-service": "^0.0.3",
@@ -37,7 +38,7 @@
     "types-validation": "^0.0.2",
     "ui-formatter": "^0.0.2",
     "xmldom": "^0.6.0",
-    "xvalidators": "^0.3.2"
+    "xvalidators": "^0.5.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
