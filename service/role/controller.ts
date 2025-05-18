@@ -1,7 +1,5 @@
 import { Request, Response } from "express"
 import {
-  buildError404,
-  buildError500,
   buildMessage,
   buildPages,
   buildPageSearch,
@@ -12,18 +10,17 @@ import {
   fromRequest,
   getSearch,
   getStatusCode,
-  getView,
   handleError,
   hasSearch,
   queryLimit,
   queryPage,
   resources,
-  toString,
 } from "express-ext"
 import { Log } from "onecore"
 import { write } from "security-express"
 import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
+import { render, renderError404, renderError500 } from "../template"
 import { Role, RoleFilter, roleModel, RoleService } from "./role"
 
 const fields = ["roleId", "roleName", "remark", "status"]
@@ -56,7 +53,7 @@ export class RoleController {
       .then((result) => {
         const list = escapeArray(result.list)
         const search = getSearch(req.url)
-        res.render(getView(req, "roles"), {
+        render(req, res, "roles", {
           resource,
           limits: resources.limits,
           filter,
@@ -67,10 +64,7 @@ export class RoleController {
           message: buildMessage(resource, list, limit, page, result.total),
         })
       })
-      .catch((err) => {
-        this.log(toString(err))
-        res.render(getView(req, "error"), buildError500(resource, res))
-      })
+      .catch((err) => renderError500(req, res, resource, err))
   }
   view(req: Request, res: Response) {
     const lang = getLang(req, res)
@@ -79,7 +73,7 @@ export class RoleController {
     const editMode = id !== "new"
     if (!editMode) {
       const role = createRole()
-      res.render(getView(req, "role"), {
+      render(req, res, "role", {
         resource,
         role: escape(role),
         editMode,
@@ -89,11 +83,11 @@ export class RoleController {
         .load(id)
         .then((role) => {
           if (!role) {
-            res.render(getView(req, "error"), buildError404(resource, res))
+            renderError404(req, res, resource)
           } else {
             const permissions = res.locals.permissions as number
             const readonly = write != (write | permissions)
-            res.render(getView(req, "role"), {
+            render(req, res, "role", {
               resource,
               role: escape(role),
               editMode,
@@ -101,10 +95,7 @@ export class RoleController {
             })
           }
         })
-        .catch((err) => {
-          this.log(toString(err))
-          res.render(getView(req, "error"), buildError500(resource, res))
-        })
+        .catch((err) => renderError500(req, res, resource, err))
     }
   }
   submit(req: Request, res: Response) {

@@ -2,7 +2,6 @@ import { Request, Response } from "express"
 import {
   addDays,
   addSeconds,
-  buildError500,
   buildMessage,
   buildPages,
   buildPageSearch,
@@ -12,17 +11,16 @@ import {
   format,
   fromRequest,
   getSearch,
-  getView,
   hasSearch,
   queryLimit,
   queryPage,
   resources,
-  toString,
 } from "express-ext"
 import { Log, Search } from "onecore"
 import { DB, SearchBuilder } from "query-core"
 import { formatFullDateTime, getDateFormat } from "ui-formatter"
 import { getLang, getResource } from "../resources"
+import { render, renderError500 } from "../template"
 import { AuditLog, AuditLogFilter, auditLogModel } from "./audit-log"
 
 export * from "./audit-log"
@@ -58,7 +56,7 @@ export class AuditLogController {
         }
         const list = escapeArray(result.list)
         const search = getSearch(req.url)
-        res.render(getView(req, "audit-logs"), {
+        render(req, res, "audit-logs", {
           resource,
           limits: resources.limits,
           filter,
@@ -69,10 +67,7 @@ export class AuditLogController {
           message: buildMessage(resource, list, limit, page, result.total),
         })
       })
-      .catch((err) => {
-        this.log(toString(err))
-        res.render(getView(req, "error"), buildError500(resource, res))
-      })
+      .catch((err) => renderError500(req, res, resource, err))
   }
 }
 

@@ -1,7 +1,5 @@
 import { Request, Response } from "express"
 import {
-  buildError404,
-  buildError500,
   buildMessage,
   buildPages,
   buildPageSearch,
@@ -14,12 +12,10 @@ import {
   getOffset,
   getSearch,
   getStatusCode,
-  getView,
   handleError,
   hasSearch,
   queryNumber,
   resources,
-  toString,
 } from "express-ext"
 import { nanoid } from "nanoid"
 import { Log, Search, UseCase } from "onecore"
@@ -27,6 +23,7 @@ import { DB, Repository, SearchBuilder } from "query-core"
 import { formatDateTime, getDateFormat } from "ui-formatter"
 import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
+import { render, renderError404, renderError500 } from "../template"
 import { Contact, ContactFilter, contactModel, ContactRepository, ContactService } from "./contact"
 export * from "./contact"
 
@@ -73,7 +70,7 @@ export class ContactController {
           i++
         }
         const search = getSearch(req.url)
-        res.render(getView(req, "contacts"), {
+        render(req, res, "contacts", {
           resource,
           limits: resources.limits,
           filter,
@@ -84,10 +81,7 @@ export class ContactController {
           message: buildMessage(resource, list, limit, page, result.total),
         })
       })
-      .catch((err) => {
-        this.log(toString(err))
-        res.render(getView(req, "error"), buildError500(resource, res))
-      })
+      .catch((err) => renderError500(req, res, resource, err))
   }
   view(req: Request, res: Response) {
     const lang = getLang(req, res)
@@ -97,18 +91,12 @@ export class ContactController {
       .load(id)
       .then((contact) => {
         if (!contact) {
-          res.render(getView(req, "error"), buildError404(resource, res))
+          renderError404(req, res, resource)
         } else {
-          res.render(getView(req, "contact"), {
-            resource,
-            contact: escape(contact),
-          })
+          render(req, res, "contact", { resource, contact: escape(contact) })
         }
       })
-      .catch((err) => {
-        this.log(toString(err))
-        res.render(getView(req, "error"), buildError500(resource, res))
-      })
+      .catch((err) => renderError500(req, res, resource, err))
   }
   submit(req: Request, res: Response) {
     const lang = getLang(req, res)

@@ -1,9 +1,10 @@
 import { Authenticator, Privilege } from "authen-service"
 import { Request, Response } from "express"
-import { buildError, buildError500, getView, query, queryLang, toMap, toString } from "express-ext"
+import { buildError, getView, query, queryLang, toMap } from "express-ext"
 import { Attributes, Log, StringMap } from "onecore"
 import { validate } from "xvalidators"
 import { getResource, getResourceByLang } from "../resources"
+import { renderError500 } from "../template"
 
 export const userModel: Attributes = {
   username: {
@@ -88,10 +89,7 @@ export class LoginController {
             res.render("signin", { resource, user, message })
           }
         })
-        .catch((err) => {
-          this.log(toString(err))
-          res.render(getView(req, "error"), buildError500(resource, res))
-        })
+        .catch((err) => renderError500(req, res, resource, err))
     }
   }
 }

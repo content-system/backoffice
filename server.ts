@@ -13,6 +13,7 @@ import { buildTemplates, trim } from "query-mappers"
 import { datetimeToString } from "ui-formatter"
 import { config, env } from "./config"
 import { route, useContext } from "./service"
+import { resources } from "./service/template"
 
 dotenv.config()
 const cfg = merge(config, process.env, env, process.env.ENV)
@@ -27,15 +28,20 @@ app.use(express.static(__dirname + "/public"))
 app.set("views", __dirname + "/views")
 // Setup view engine :
 // Setting Nunjucks as default view
-nunjucks.configure("views", {
+const nunjucksEnv = nunjucks.configure("views", {
   autoescape: false,
   express: app,
+  noCache: false,
 })
+resources.nunjucks = nunjucksEnv
+
 app.set("view engine", "html")
 app.locals.datetimeToString = datetimeToString
 app.locals.checked = checked
 
 const logger = createLogger(cfg.log)
+resources.log = logger.error
+
 const middleware = new MiddlewareLogger(logger.info, cfg.middleware)
 app.use(cookieParser())
 // app.use(allow(cfg.allow), json(), cookieParser(), middleware.log)

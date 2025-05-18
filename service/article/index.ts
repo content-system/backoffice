@@ -1,7 +1,5 @@
 import { Request, Response } from "express"
 import {
-  buildError404,
-  buildError500,
   buildMessage,
   buildPages,
   buildPageSearch,
@@ -13,13 +11,11 @@ import {
   fromRequest,
   getSearch,
   getStatusCode,
-  getView,
   handleError,
   hasSearch,
   queryLimit,
   queryPage,
   resources,
-  toString,
 } from "express-ext"
 import { Log, Search, UseCase } from "onecore"
 import { DB, Repository, SearchBuilder } from "query-core"
@@ -27,6 +23,7 @@ import { write } from "security-express"
 import { formatDateTime, getDateFormat } from "ui-formatter"
 import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
+import { render, renderError404, renderError500 } from "../template"
 import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService } from "./article"
 export * from "./article"
 
@@ -70,7 +67,7 @@ export class ArticleController {
           item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
         }
         const search = getSearch(req.url)
-        res.render(getView(req, "articles"), {
+        render(req, res, "articles", {
           resource,
           limits: resources.limits,
           filter,
@@ -81,10 +78,7 @@ export class ArticleController {
           message: buildMessage(resource, list, limit, page, result.total),
         })
       })
-      .catch((err) => {
-        this.log(toString(err))
-        res.render(getView(req, "error"), buildError500(resource, res))
-      })
+      .catch((err) => renderError500(req, res, resource, err))
   }
   view(req: Request, res: Response) {
     const lang = getLang(req, res)
@@ -93,7 +87,7 @@ export class ArticleController {
     const id = req.params["id"]
     const editMode = id !== "new"
     if (!editMode) {
-      res.render(getView(req, "article"), {
+      render(req, res, "article", {
         resource,
         article: {},
         editMode,
@@ -103,12 +97,12 @@ export class ArticleController {
         .load(id)
         .then((article) => {
           if (!article) {
-            res.render(getView(req, "error"), buildError404(resource, res))
+            renderError404(req, res, resource)
           } else {
             const permissions = res.locals.permissions as number
             const readonly = write != (write | permissions)
             article.publishedAt = formatDateTime(article.publishedAt, dateFormat)
-            res.render(getView(req, "article"), {
+            render(req, res, "article", {
               resource,
               article: escape(article),
               editMode,
@@ -116,10 +110,7 @@ export class ArticleController {
             })
           }
         })
-        .catch((err) => {
-          this.log(toString(err))
-          res.render(getView(req, "error"), buildError500(resource, res))
-        })
+        .catch((err) => renderError500(req, res, resource, err))
     }
   }
   submit(req: Request, res: Response) {

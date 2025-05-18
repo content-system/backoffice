@@ -1,6 +1,5 @@
 import { Request, Response } from "express"
 import {
-  buildError500,
   buildMessage,
   buildPages,
   buildPageSearch,
@@ -9,18 +8,17 @@ import {
   escapeArray,
   fromRequest,
   getSearch,
-  getView,
   handleError,
   hasSearch,
   queryLimit,
   queryPage,
   resources,
-  toString,
 } from "express-ext"
 import { Attribute, Log, Result, Search, SearchResult, StringMap } from "onecore"
 import { buildMap, buildToInsert, buildToUpdate, DB, metadata, SearchBuilder } from "query-core"
 import { formatDateTime } from "ui-formatter"
 import { getDateFormat, getLang, getResource } from "../resources"
+import { render, renderError500 } from "../template"
 import { Content, ContentFilter, contentModel, ContentRepository, ContentService } from "./content"
 export * from "./content"
 
@@ -109,7 +107,7 @@ export class ContentController {
           item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
         }
         const search = getSearch(req.url)
-        res.render(getView(req, "contents"), {
+        render(req, res, "contents", {
           resource,
           limits: resources.limits,
           filter,
@@ -120,10 +118,7 @@ export class ContentController {
           message: buildMessage(resource, list, limit, page, result.total),
         })
       })
-      .catch((err) => {
-        this.log(toString(err))
-        res.render(getView(req, "error"), buildError500(resource, res))
-      })
+      .catch((err) => renderError500(req, res, resource, err))
   }
   load(req: Request, res: Response) {
     const id = req.params["id"]
