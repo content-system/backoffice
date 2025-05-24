@@ -10,11 +10,11 @@ import {
   format,
   fromRequest,
   getSearch,
-  getStatusCode,
   handleError,
   hasSearch,
   queryNumber,
   resources,
+  respondError,
 } from "express-ext"
 import { Log, Manager, Search } from "onecore"
 import { DB, Repository, SearchBuilder } from "query-core"
@@ -99,7 +99,7 @@ export class JobController {
     const job = req.body
     const errors = validate<Job>(job, jobModel, resource)
     if (errors.length > 0) {
-      res.status(getStatusCode(errors)).json(errors).end()
+      respondError(res, errors)
     } else {
       const id = req.params["id"]
       const editMode = id !== "new"

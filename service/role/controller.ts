@@ -9,12 +9,12 @@ import {
   escapeArray,
   fromRequest,
   getSearch,
-  getStatusCode,
   handleError,
   hasSearch,
   queryLimit,
   queryPage,
   resources,
+  respondError,
 } from "express-ext"
 import { Log } from "onecore"
 import { write } from "security-express"
@@ -104,7 +104,7 @@ export class RoleController {
     const role = req.body
     const errors = validate<Role>(role, roleModel, resource)
     if (errors.length > 0) {
-      res.status(getStatusCode(errors)).json(role).end()
+      respondError(res, errors)
     } else {
       const id = req.params["id"]
       const editMode = id !== "new"

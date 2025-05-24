@@ -10,11 +10,11 @@ import {
   format,
   fromRequest,
   getSearch,
-  getStatusCode,
   handleError,
   hasSearch,
   queryNumber,
   resources,
+  respondError,
 } from "express-ext"
 import { Log, Search, UseCase } from "onecore"
 import { DB, Repository, SearchBuilder } from "query-core"
@@ -99,7 +99,7 @@ export class CategoryController {
     const category = req.body
     const errors = validate<Category>(category, categoryModel, resource)
     if (errors.length > 0) {
-      res.status(getStatusCode(errors)).json(errors).end()
+      respondError(res, errors)
     } else {
       const id = req.params["id"]
       const editMode = id !== "new"

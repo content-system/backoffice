@@ -10,12 +10,12 @@ import {
   format,
   fromRequest,
   getSearch,
-  getStatusCode,
   handleError,
   hasSearch,
   queryLimit,
   queryPage,
   resources,
+  respondError,
 } from "express-ext"
 import { Log, Search, UseCase } from "onecore"
 import { DB, Repository, SearchBuilder } from "query-core"
@@ -119,7 +119,7 @@ export class ArticleController {
     const article = req.body
     const errors = validate<Article>(article, articleModel, resource)
     if (errors.length > 0) {
-      res.status(getStatusCode(errors)).json(errors).end()
+      respondError(res, errors)
     } else {
       const id = req.params["id"]
       const editMode = id !== "new"

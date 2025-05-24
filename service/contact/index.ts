@@ -11,11 +11,11 @@ import {
   fromRequest,
   getOffset,
   getSearch,
-  getStatusCode,
   handleError,
   hasSearch,
   queryNumber,
   resources,
+  respondError,
 } from "express-ext"
 import { nanoid } from "nanoid"
 import { Log, Search, UseCase } from "onecore"
@@ -104,7 +104,7 @@ export class ContactController {
     const contact = req.body
     const errors = validate<Contact>(contact, contactModel, resource)
     if (errors.length > 0) {
-      res.status(getStatusCode(errors)).json(errors).end()
+      respondError(res, errors)
     } else {
       const id = req.params["id"]
       const editMode = id !== "new"
