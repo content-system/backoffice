@@ -11,6 +11,7 @@ import { PoolManager } from "pg-extension"
 import { log } from "query-core"
 import { buildTemplates, trim } from "query-mappers"
 import { datetimeToString } from "ui-formatter"
+import { buildJavascript } from "./build"
 import { config, env } from "./config"
 import { route, useContext } from "./service"
 import { resources } from "./service/template"
@@ -18,7 +19,7 @@ import { resources } from "./service/template"
 dotenv.config()
 const cfg = merge(config, process.env, env, process.env.ENV)
 
-// buildJavascript()
+buildJavascript()
 // buildCSS()
 
 const app = express()

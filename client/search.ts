@@ -159,23 +159,6 @@ function removeField(search: string, fieldName: string): string {
   const j = search.indexOf("&", i + fieldName.length)
   return j >= 0 ? search.substring(0, i) + search.substring(j + 1) : search.substring(0, i - 1)
 }
-function getField(search: string, fieldName: string): string {
-  let i = search.indexOf(fieldName + "=")
-  if (i < 0) {
-    return ""
-  }
-  if (i > 0) {
-    if (search.substring(i - 1, 1) != "&") {
-      i = search.indexOf("&" + fieldName + "=")
-      if (i < 0) {
-        return search
-      }
-      i = i + 1
-    }
-  }
-  const j = search.indexOf("&", i + fieldName.length)
-  return j >= 0 ? search.substring(i, j) : search.substring(i)
-}
 
 function changePage(e: Event) {
   e.preventDefault()

@@ -325,6 +325,24 @@ function getLabel(ele) {
   }
   return ""
 }
+function checkRequiredElements(form, names) {
+  const resource = getResource()
+  const eleMsg = form.querySelector(".message")
+  if (eleMsg) {
+    for (let i = 0; i < names.length; i++) {
+      const ele = getElement(form, names[i])
+      if (ele) {
+        if (ele.value === "") {
+          const label = getLabel(ele)
+          const msg = format(resource.error_required, label)
+          showErrorMessage(eleMsg, msg)
+          return false
+        }
+      }
+    }
+  }
+  return true
+}
 function checkRequired(ele, label, r) {
   const value = ele.value
   if (ele.required) {

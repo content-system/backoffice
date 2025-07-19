@@ -1,10 +1,9 @@
-interface StringMap {
-  [key: string]: string
-}
-interface ErrorMessage {
-  field: string
-  code: string
-  message?: string
+interface Locale {
+  decimalSeparator: string
+  groupSeparator: string
+  currencyCode: string
+  currencySymbol: string
+  currencyPattern: number
 }
 function addErrorMessage(ele: HTMLElement | null | undefined, msg?: string, directParent?: boolean): void {
   if (!ele) {
@@ -345,6 +344,25 @@ function getLabel(ele?: HTMLElement | null): string {
     }
   }
   return ""
+}
+
+function checkRequiredElements(form: HTMLFormElement, names: string[]): boolean {
+  const resource = getResource()
+  const eleMsg = form.querySelector(".message")
+  if (eleMsg) {
+    for (let i = 0; i < names.length; i++) {
+      const ele = getElement(form, names[i]) as HTMLInputElement
+      if (ele) {
+        if (ele.value === "") {
+          const label = getLabel(ele)
+          const msg = format(resource.error_required, label)
+          showErrorMessage(eleMsg, msg)
+          return false
+        }
+      }
+    }
+  }
+  return true
 }
 function checkRequired(ele: HTMLInputElement | HTMLSelectElement, label?: string, r?: StringMap): string | null {
   const value = ele.value
