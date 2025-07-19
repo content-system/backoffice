@@ -4,6 +4,10 @@ import { en as adminEN } from "./admin/en"
 import { vi as adminVI } from "./admin/vi"
 import { en as authenticationEN } from "./authentication/en"
 import { vi as authenticationVI } from "./authentication/vi"
+
+import { en as contentEN } from "./content/en"
+import { vi as contentVI } from "./content/vi"
+
 import { en as commonEN } from "./en"
 import { vi as commonVI } from "./vi"
 
@@ -23,11 +27,13 @@ const en: StringMap = {
   ...commonEN,
   ...authenticationEN,
   ...adminEN,
+  ...contentEN,
 }
 const vi: StringMap = {
   ...commonVI,
   ...authenticationVI,
   ...adminVI,
+  ...contentVI,
 }
 
 export const resources: Resources = {

@@ -1,0 +1,47 @@
+<form id="contentForm" name="contentForm" class="form" model-name="content">
+  <header>
+    <button type="button" id="btnBack" name="btnBack" class="btn-back"></button>
+    <h2 class="view-title">Content</h2>
+  </header>
+  <div class="row">
+    <label class="col s12 m6 required">
+      {{resource.id}}
+      <input type="text" id="id" name="id" readonly="" maxlength="80" required="" placeholder="Id" value="{{content.id}}" />
+    </label>
+    <label class="col s12 m6 required">
+      {{resource.lang}}
+      <input type="text" id="lang" name="lang" readonly="" maxlength="80" required="" placeholder="{{resource.lang}}" value="{{content.lang}}" />
+    </label>
+    <label class="col s12 m6">
+      {{resource.published_at}}
+      <input type="datetime-local" id="publishedAt" name="publishedAt" value="{{datetimeToString(content.publishedAt)}}" step=".010" />
+    </label>
+    <div class="col s12 m6 radio-section">
+      {{resource.status}}
+      <div class="radio-group">
+        <label><input type="radio" id="active" name="status" value="A" {% if user.status == "A" %} checked {% endif %}/>{{resource.active}}</label>
+        <label><input type="radio" id="inactive" name="status" value="I" {% if user.status == "I" %} checked {% endif %}/>{{resource.inactive}}</label>
+      </div>
+    </div>
+    <label class="col s12 required">
+      {{resource.title}}
+      <input
+        type="text"
+        id="title"
+        name="title"
+        value="{{content.title}}"
+        maxlength="255"
+        required
+        onblur="requiredOnBlur(event)"
+        placeholder="{{resource.article_name}}"
+      />
+    </label>
+    <label class="col s12 textarea-container required">
+      {{resource.body}}
+      <textarea id="name" name="name" rows="4" maxlength="1200" placeholder="{{resource.name}}"/>{{content.body}}</textarea>
+    </label>
+  </div>
+  <footer>
+    <button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)" {% if readonly %} disabled {% endif %}>{{resource.save}}</button>
+  </footer>
+</form>

@@ -1,0 +1,50 @@
+<form id="categoryForm" name="categoryForm" class="form" model-name="category">
+  <header>
+    <button type="button" id="btnBack" name="btnBack" class="btn-back" onclick="goBack()"></button>
+    <h2>{{resource.category}}</h2>
+  </header>
+  <div class="row">
+    <label class="col s12 m6 required">
+      {{resource.id}}
+      <input type="text" id="id" name="id" readonly maxlength="80" required placeholder="Id" value="{{category.id}}" />
+    </label>
+    <label class="col s12 m6 required">
+      {{resource.name}}
+      <input type="text" id="name" name="name" maxlength="255" required placeholder="Name" value="{{category.name}}" readonly />
+    </label>
+    <label class="col s12 m6 required">
+      {{resource.path}}
+      <input type="text" id="path" name="path" maxlength="255" required placeholder="Path" value="{{category.name}}" readonly />
+    </label>
+    <label class="col s12 m6 required">
+      {{resource.resource}}
+      <input type="text" id="resource" name="resource" maxlength="255" required placeholder="Resource" value="{{category.name}}" readonly />
+    </label>
+    <label class="col s12 m6 required">
+      {{resource.icon}}
+      <input type="text" id="icon" name="icon" maxlength="255" required placeholder="Icon" value="{{category.icon}}" readonly />
+    </label>
+    <label class="col s12 m6">
+      {{resource.type}}
+      <input type="text" id="type" name="type" maxlength="10" placeholder="Type" value="{{category.type}}" readonly />
+    </label>
+    <label class="col s12 m6">
+      {{resource.parent}}
+      <input type="text" id="parent" name="parent" maxlength="40" placeholder="Parent" value="{{category.parent}}" readonly />
+    </label>
+    <label class="col s12 m6 required">
+      {{resource.sequence}}
+      <input type="tel" id="sequence" name="sequence" class="right-align" maxlength="3" required placeholder="Sequence" value="{{category.sequence}}" />
+    </label>
+    <div class="col s12 m6 radio-section">
+      {{resource.status}}
+      <div class="radio-group">
+        <label><input type="radio" id="active" name="status" value="A" {% if category.status == "A" %} checked {% endif %}/>{{resource.active}}</label>
+        <label><input type="radio" id="inactive" name="status" value="I" {% if category.status == "I" %} checked {% endif %}/>{{resource.inactive}}</label>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)" {% if readonly %} disabled {% endif %}>{{resource.save}}</button>
+  </footer>
+</form>

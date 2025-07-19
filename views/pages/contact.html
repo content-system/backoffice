@@ -2,34 +2,11 @@
   <header>
     <button type="button" id="btnBack" name="btnBack" class="btn-back" onclick="goBack()"></button>
     <h2>{{resource.contact}}</h2>
-    <div class="btn-group">
-      <button class="btn-group btn-right"><i class="material-icons">group</i></button>
-      <button class="btn-group btn-right"><i class="material-icons">group</i></button>
-    </div>
   </header>
   <div class="row">
+    <input type="hidden" id="id" name="id" value="{{contact.id}}" />
     <label class="col s12 m6 required">
-      {{resource.contact_id}}
-      <input
-        type="text"
-        id="id"
-        name="id"
-        {%
-        if
-        editMode
-        %}
-        readonly
-        {%
-        endif
-        %}
-        maxlength="20"
-        required
-        placeholder="{{resource.id}}"
-        value="{{contact.id}}"
-      />
-    </label>
-    <label class="col s12 m6 required">
-      {{resource.name}}
+      {{resource.fullname}}
       <input
         type="text"
         id="name"
@@ -38,27 +15,62 @@
         maxlength="40"
         required
         onblur="requiredOnBlur(event)"
-        placeholder="{{resource.name}}"
+        placeholder="{{resource.fullname}}"
         value="{{contact.name}}"
       />
     </label>
-    <label class="col s12 m6 flying">
-      {{resource.phone}}
-      <input type="tel" id="phone" name="phone" class="form-control" maxlength="17" placeholder="{{resource.phone}}" value="{{contact.phone}}" />
+    <label class="col s12 m6">
+      {{resource.country}}
+      <input type="text" id="country" name="country" maxlength="100" required placeholder="{{resource.country}}" value="{{contact.country}}" />
     </label>
-    <label class="col s12 m6 flying">
+    <label class="col s12 m6">
+      {{resource.company}}
+      <input type="text" id="company" name="company" maxlength="100" placeholder="{{resource.company}}" value="{{contact.company}}" />
+    </label>
+    <label class="col s12 m6">
+      {{resource.job_title}}
+      <input type="text" id="jobTitle" name="jobTitle" maxlength="100" placeholder="{{resource.job_title}}" value="{{contact.jobTitle}}" />
+    </label>
+    <label class="col s12 m6 flying required">
       {{resource.email}}
       <input type="text" id="email" name="email" data-type="email" maxlength="100" placeholder="{{resource.email}}" value="{{contact.email}}" />
     </label>
-    <div class="col s12 m6 radio-section">
-      {{resource.status}}
-      <div class="radio-group">
-        <label><input type="radio" id="active" name="status" value="A" {% if contact.status == "A" %} checked {% endif %}/>{{resource.active}}</label>
-        <label><input type="radio" id="inactive" name="status" value="I" {% if contact.status == "I" %} checked {% endif %}/>{{resource.inactive}}</label>
-      </div>
-    </div>
+    <label class="col s12 m6 flying required">
+      {{resource.phone}}
+      <input type="tel" id="phone" name="phone" maxlength="17" required placeholder="{{resource.phone}}" value="{{contact.phone}}" />
+    </label>
+    <label class="col s12 m6 required">
+      {{resource.submitted_at}}
+      <input
+        type="datetime-local"
+        step=".010"
+        id="submittedAt"
+        name="submittedAt"
+        placeholder="{{resource.submitted_at}}"
+        value="{{datetimeToString(contact.submittedAt)}}"
+      />
+    </label>
+    <label class="col s12 m6">
+      {{resource.contacted_by}}
+      <input type="text" id="contactedBy" name="contactedBy" maxlength="100" placeholder="{{resource.contacted_by}}" value="{{contact.contactedBy}}" />
+    </label>
+    <label class="col s12 m6">
+      {{resource.contacted_at}}
+      <input
+        type="datetime-local"
+        step=".010"
+        id="contactedAt"
+        name="contactedAt"
+        placeholder="{{resource.contacted_at}}"
+        value="{{datetimeToString(contact.submittedAt)}}"
+      />
+    </label>
+    <label className="col s12 textarea-container required">
+      {{resource.message}}
+      <textarea id="message" name="message" rows="8" onBlur="requiredOnBlur" maxlength="400" placeholder="{{resource.message}}">{{contact.message}}</textarea>
+    </label>
   </div>
-  <footer class="view-footer">
+  <footer>
     <button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)" {% if readonly %} disabled {% endif %}>{{resource.save}}</button>
   </footer>
 </form>

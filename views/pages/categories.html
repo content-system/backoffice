@@ -1,0 +1,80 @@
+<div>
+  <header>
+    <h2>{{resource.categories}}</h2>
+    <div class="btn-group">
+      <button type="button" id="btnListView" name="btnListView" class="btn-list"></button><a id="btnNew" class="btn-new" href="/categories/new"></a>
+    </div>
+  </header>
+  <div>
+    <form id="categoriesForm" name="categoriesForm" class="form" novalidate>
+      <span class="hidden-message">{{message}}</span>
+      <section class="row search-group">{% include "partials/search.html" %} {% include "partials/pagination.html" %}</section>
+      <section class="row search-group inline">
+        <label class="col s12 m6">
+          {{resource.status}}
+          <section class="checkbox-group">
+            <label>
+              <input type="checkbox" id="active" name="status" value="A" {% if checked(filter.status, 'A') %} checked {% endif %} />{{resource.active}}
+            </label>
+            <label>
+              <input type="checkbox" id="inactive" name="status" value="I" {% if checked(filter.status, 'I') %} checked {% endif %}/>{{resource.inactive}}
+            </label>
+          </section>
+        </label>
+      </section>
+      <input type="hidden" id="page" name="page" value="{{filter.page}}" />
+    </form>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th data-field="id">
+              <a id="sortId" href="{{sort.id.url}}">{{resource.id}} {{sort.id.tag}}</a>
+            </th>
+            <th data-field="name">
+              <a id="sortName" href="{{sort.name.url}}">{{resource.name}} {{sort.name.tag}}</a>
+            </th>
+            <th data-field="path">
+              <a id="sortPath" href="{{sort.path.url}}">{{resource.path}} {{sort.path.tag}}</a>
+            </th>
+            <th data-field="icon">
+              <a id="sortIcon" href="{{sort.icon.url}}">{{resource.icon}} {{sort.icon.tag}}</a>
+            </th>
+            <th data-field="resource">
+              <a id="sortResource" href="{{sort.resource.url}}">{{resource.resource}} {{sort.resource.tag}}</a>
+            </th>
+            <th data-field="type">
+              <a id="sortType" href="{{sort.type.url}}">{{resource.type}} {{sort.type.tag}}</a>
+            </th>
+            <th data-field="parent">
+              <a id="sortParent" href="{{sort.parent.url}}">{{resource.parent}} {{sort.parent.tag}}</a>
+            </th>
+            <th data-field="sequence">
+              <a id="sortSequence" href="{{sort.sequence.url}}">{{resource.sequence}} {{sort.sequence.tag}}</a>
+            </th>
+            <th data-field="status">
+              <a id="sortStatus" href="{{sort.status.url}}">{{resource.status}} {{sort.status.tag}}</a>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in list %}
+          <tr>
+            <td>
+              <a href="/categories/{{item.id}}" onclick="navigate(event)">{{item.id}}</a>
+            </td>
+            <td>{{item.name}}</td>
+            <td>{{item.path}}</td>
+            <td>{{item.resource}}</td>
+            <td>{{item.icon}}</td>
+            <td>{{item.type}}</td>
+            <td>{{item.parent}}</td>
+            <td class="right-align">{{item.sequence}}</td>
+            <td>{{item.status}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

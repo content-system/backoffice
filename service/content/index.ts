@@ -5,7 +5,9 @@ import {
   buildPageSearch,
   buildSortSearch,
   cloneFilter,
+  escape,
   escapeArray,
+  format,
   fromRequest,
   getSearch,
   handleError,
@@ -13,12 +15,15 @@ import {
   queryLimit,
   queryPage,
   resources,
+  respondError,
 } from "express-ext"
 import { Attribute, Log, Result, Search, SearchResult, StringMap } from "onecore"
 import { buildMap, buildToInsert, buildToUpdate, DB, metadata, SearchBuilder } from "query-core"
+import { write } from "security-express"
 import { formatDateTime } from "ui-formatter"
+import { validate } from "xvalidators"
 import { getDateFormat, getLang, getResource } from "../resources"
-import { render, renderError500 } from "../template"
+import { render, renderError404, renderError500 } from "../template"
 import { Content, ContentFilter, contentModel, ContentRepository, ContentService } from "./content"
 export * from "./content"
 
@@ -79,20 +84,17 @@ export class ContentUseCase implements ContentService {
   }
 }
 
-const fields = ["title", "publishedAt", "description"]
+const fields = ["id", "lang", "title", "publishedAt", "status"]
 export class ContentController {
-  constructor(private log: Log, private service: ContentService) {
+  constructor(private service: ContentService, private log: Log) {
     this.search = this.search.bind(this)
-    this.load = this.load.bind(this)
+    this.view = this.view.bind(this)
   }
   search(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
-    let filter: ContentFilter = {
-      limit: resources.defaultLimit,
-      // title: "Java",
-    }
+    let filter: ContentFilter = { limit: resources.defaultLimit }
     if (hasSearch(req)) {
       filter = fromRequest<ContentFilter>(req)
       format(filter, ["publishedAt"])
@@ -120,9 +122,11 @@ export class ContentController {
       })
       .catch((err) => renderError500(req, res, resource, err))
   }
-  load(req: Request, res: Response) {
+  view(req: Request, res: Response) {
     const id = req.params["id"]
     const lang = req.params["lang"]
+    const language = getLang(req, res)
+    const resource = getResource(language)
     if (!id || !lang) {
       res.status(400).json({ error: "id and lang are required" }).end()
       return
@@ -131,18 +135,59 @@ export class ContentController {
       .load(id, lang)
       .then((content) => {
         if (!content) {
-          res.status(404).end()
+          renderError404(req, res, resource)
         } else {
-          res.status(200).json(content).end()
+          const permissions = res.locals.permissions as number
+          const readonly = write != (write | permissions)
+          render(req, res, "content", {
+            resource,
+            content: escape(content),
+            readonly,
+          })
         }
       })
       .catch((err) => handleError(err, res, this.log))
   }
+  submit(req: Request, res: Response) {
+    const language = getLang(req, res)
+    const resource = getResource(language)
+    const content = req.body
+    const errors = validate<Content>(content, contentModel, resource)
+    if (errors.length > 0) {
+      respondError(res, errors)
+    } else {
+      const id = req.params["id"]
+      const editMode = id !== "new"
+      if (!editMode) {
+        this.service
+          .create(content)
+          .then((result) => {
+            if (result === 0) {
+              res.status(409).end()
+            } else {
+              res.status(201).json(content).end()
+            }
+          })
+          .catch((err) => handleError(err, res, this.log))
+      } else {
+        this.service
+          .update(content)
+          .then((result) => {
+            if (result === 0) {
+              res.status(410).end()
+            } else {
+              res.status(200).json(content).end()
+            }
+          })
+          .catch((err) => handleError(err, res, this.log))
+      }
+    }
+  }
 }
 
-export function useContentController(log: Log, db: DB): ContentController {
+export function useContentController(db: DB, log: Log): ContentController {
   const builder = new SearchBuilder<Content, ContentFilter>(db.query, "contents", contentModel, db.driver)
   const repository = new SqlContentRepository(db)
   const service = new ContentUseCase(builder.search, repository)
-  return new ContentController(log, service)
+  return new ContentController(service, log)
 }

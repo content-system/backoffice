@@ -7,7 +7,6 @@ import {
   cloneFilter,
   escape,
   escapeArray,
-  format,
   fromRequest,
   getSearch,
   handleError,
@@ -18,7 +17,7 @@ import {
 } from "express-ext"
 import { Log, Search, UseCase } from "onecore"
 import { DB, Repository, SearchBuilder } from "query-core"
-import { getDateFormat } from "ui-formatter"
+import { write } from "security-express"
 import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
@@ -36,9 +35,9 @@ export class CategoryUseCase extends UseCase<Category, string, CategoryFilter> i
   }
 }
 
-const fields = ["title", "publishedAt", "description"]
+const fields = ["id", "name", "path", "icon", "type", "resource", "parent", "sequence", "status"]
 export class CategoryController {
-  constructor(private categoryService: CategoryService, private log: Log) {
+  constructor(private service: CategoryService, private log: Log) {
     this.search = this.search.bind(this)
     this.view = this.view.bind(this)
     this.submit = this.submit.bind(this)
@@ -46,23 +45,20 @@ export class CategoryController {
   search(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
-    const dateFormat = getDateFormat(lang)
     let filter: CategoryFilter = {
       limit: resources.defaultLimit,
-      // title: "Java",
     }
     if (hasSearch(req)) {
       filter = fromRequest<CategoryFilter>(req)
-      format(filter, ["publishedAt"])
     }
     const page = queryNumber(req, resources.page, 1)
     const limit = queryNumber(req, resources.limit, resources.defaultLimit)
-    this.categoryService
+    this.service
       .search(cloneFilter(filter, limit, page), limit, page)
       .then((result) => {
         const list = escapeArray(result.list)
         const search = getSearch(req.url)
-        render(req, res, "categorys", {
+        render(req, res, "categories", {
           resource,
           limits: resources.limits,
           filter,
@@ -79,15 +75,18 @@ export class CategoryController {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const id = req.params["id"]
-    this.categoryService
+    this.service
       .load(id)
       .then((category) => {
         if (!category) {
           renderError404(req, res, resource)
         } else {
+          const permissions = res.locals.permissions as number
+          const readonly = write != (write | permissions)
           render(req, res, "category", {
             resource,
-            category: escape(category),
+            user: escape(category),
+            readonly,
           })
         }
       })
@@ -104,7 +103,7 @@ export class CategoryController {
       const id = req.params["id"]
       const editMode = id !== "new"
       if (!editMode) {
-        this.categoryService
+        this.service
           .create(category)
           .then((result) => {
             if (result === 0) {
@@ -115,7 +114,7 @@ export class CategoryController {
           })
           .catch((err) => handleError(err, res, this.log))
       } else {
-        this.categoryService
+        this.service
           .update(category)
           .then((result) => {
             if (result === 0) {
@@ -131,7 +130,7 @@ export class CategoryController {
 }
 
 export function useCategoryController(db: DB, log: Log): CategoryController {
-  const builder = new SearchBuilder<Category, CategoryFilter>(db.query, "categorys", categoryModel, db.driver)
+  const builder = new SearchBuilder<Category, CategoryFilter>(db.query, "categories", categoryModel, db.driver)
   const repository = new SqlCategoryRepository(db)
   const service = new CategoryUseCase(builder.search, repository)
   return new CategoryController(service, log)

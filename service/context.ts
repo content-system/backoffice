@@ -12,7 +12,9 @@ import { createValidator } from "xvalidators"
 import { ArticleController, useArticleController } from "./article"
 import { AuditLogController, useAuditLogController } from "./audit-log"
 import { LoginController } from "./authentication"
+import { CategoryController, useCategoryController } from "./category"
 import { ContactController, useContactController } from "./contact"
+import { ContentController, useContentController } from "./content"
 import { JobController, useJobController } from "./job"
 import { getResourceByLang } from "./resources"
 import { RoleController, useRoleController } from "./role"
@@ -40,6 +42,8 @@ export interface Context {
   login: LoginController
   role: RoleController
   user: UserController
+  category: CategoryController
+  content: ContentController
   auditLog: AuditLogController
   article: ArticleController
   job: JobController
@@ -79,9 +83,11 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: C
   const user = useUserController(logger.error, db, mapper)
   const auditLog = useAuditLogController(db, logger.error)
 
+  const category = useCategoryController(db, logger.error)
+  const content = useContentController(db, logger.error)
   const article = useArticleController(db, logger.error)
   const job = useJobController(db, logger.error)
   const contact = useContactController(db, logger.error)
 
-  return { health, log, middleware, authorize: authorizer.authorize, menu, login, role, user, auditLog, article, job, contact }
+  return { health, log, middleware, authorize: authorizer.authorize, menu, login, role, user, auditLog, category, content, article, job, contact }
 }

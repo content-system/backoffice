@@ -29,6 +29,18 @@ export function route(app: Application, ctx: Context, secure?: boolean): void {
   const readAuditLog = ctx.authorize("audit_log", read)
   app.get("/audit-logs", readAuditLog, ctx.menu.build, ctx.auditLog.render)
 
+  const readCategory = ctx.authorize("category", read)
+  const writeCategory = ctx.authorize("category", write)
+  app.get("/categories", readCategory, ctx.menu.build, ctx.category.search)
+  app.get("/categories/:id", readCategory, ctx.menu.build, ctx.category.view)
+  app.post("/categories/:id", writeCategory, ctx.menu.build, json(), ctx.category.submit)
+
+  const readContent = ctx.authorize("content", read)
+  const writeContent = ctx.authorize("content", write)
+  app.get("/contents", readContent, ctx.menu.build, ctx.content.search)
+  app.get("/contents/:id/:lang", readContent, ctx.menu.build, ctx.content.view)
+  app.post("/contents/:id/:lang", writeContent, ctx.menu.build, json(), ctx.content.submit)
+
   const readArticle = ctx.authorize("article", read)
   const writeArticle = ctx.authorize("article", write)
   app.get("/articles", readArticle, ctx.menu.build, ctx.article.search)

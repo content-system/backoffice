@@ -40,7 +40,7 @@ export class ContactUseCase extends UseCase<Contact, string, ContactFilter> impl
 
 const fields = ["title", "publishedAt", "description"]
 export class ContactController {
-  constructor(private contactService: ContactService, private log: Log) {
+  constructor(private service: ContactService, private log: Log) {
     this.search = this.search.bind(this)
     this.view = this.view.bind(this)
     this.submit = this.submit.bind(this)
@@ -59,7 +59,7 @@ export class ContactController {
     const page = queryNumber(req, resources.page, 1)
     const limit = queryNumber(req, resources.limit, resources.defaultLimit)
     const offset = getOffset(limit, page)
-    this.contactService
+    this.service
       .search(cloneFilter(filter, limit, page), limit, page)
       .then((result) => {
         const list = escapeArray(result.list)
@@ -87,7 +87,7 @@ export class ContactController {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const id = req.params["id"]
-    this.contactService
+    this.service
       .load(id)
       .then((contact) => {
         if (!contact) {
@@ -111,7 +111,7 @@ export class ContactController {
       if (!editMode) {
         contact.id = nanoid(10)
         contact.submittedAt = new Date()
-        this.contactService
+        this.service
           .create(contact)
           .then((result) => {
             if (result === 0) {
@@ -122,7 +122,7 @@ export class ContactController {
           })
           .catch((err) => handleError(err, res, this.log))
       } else {
-        this.contactService
+        this.service
           .update(contact)
           .then((result) => {
             if (result === 0) {

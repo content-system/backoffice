@@ -38,7 +38,7 @@ export class JobUseCase extends Manager<Job, string, JobFilter> implements JobSe
 
 const fields = ["title", "publishedAt", "description"]
 export class JobController {
-  constructor(private jobService: JobService, private log: Log) {
+  constructor(private service: JobService, private log: Log) {
     this.search = this.search.bind(this)
     this.view = this.view.bind(this)
     this.submit = this.submit.bind(this)
@@ -57,7 +57,7 @@ export class JobController {
     }
     const page = queryNumber(req, resources.page, 1)
     const limit = queryNumber(req, resources.limit, resources.defaultLimit)
-    this.jobService
+    this.service
       .search(cloneFilter(filter, limit, page), limit, page)
       .then((result) => {
         const list = escapeArray(result.list)
@@ -82,7 +82,7 @@ export class JobController {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const id = req.params["id"]
-    this.jobService
+    this.service
       .load(id)
       .then((job) => {
         if (!job) {
@@ -104,7 +104,7 @@ export class JobController {
       const id = req.params["id"]
       const editMode = id !== "new"
       if (!editMode) {
-        this.jobService
+        this.service
           .create(job)
           .then((result) => {
             if (result === 0) {
@@ -115,7 +115,7 @@ export class JobController {
           })
           .catch((err) => handleError(err, res, this.log))
       } else {
-        this.jobService
+        this.service
           .update(job)
           .then((result) => {
             if (result === 0) {

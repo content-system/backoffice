@@ -1,0 +1,94 @@
+<div>
+  <header>
+    <h2>{{resource.contents}}</h2>
+    <div class="btn-group">
+      <button type="button" id="btnListView" name="btnListView" class="btn-list"></button><a id="btnNew" class="btn-new" href="/contents/new"></a>
+    </div>
+  </header>
+  <div>
+    <form id="contentsForm" name="contentsForm" class="form" novalidate>
+      <span class="hidden-message">{{message}}</span>
+      <section class="row search-group">{% include "partials/search.html" %} {% include "partials/pagination.html" %}</section>
+      <section class="row search-group inline advance-search">
+        <label class="col s12 m6">
+          {{resource.published_at_from}}
+          <input
+            type="datetime-local"
+            id="publishedAt_min"
+            name="publishedAt_min"
+            data-field="publishedAt.min"
+            value="{{datetimeToString(filter.publishedAt.min)}}"
+            step=".010"
+          />
+        </label>
+        <label class="col s12 m6">
+          {{resource.published_at_to}}
+          <input
+            type="datetime-local"
+            id="publishedAt_max"
+            name="publishedAt_max"
+            data-field="publishedAt.max"
+            value="{{datetimeToString(filter.publishedAt.max)}}"
+            step=".010"
+          />
+        </label>
+        <label class="col s12 m4">
+          {{resource.title}}
+          <input type="text" id="title" name="title" value="{{filter.title}}" />
+        </label>
+        <label class="col s12 m4">
+          {{resource.description}}
+          <input type="text" id="description" name="description" value="{{filter.description}}" />
+        </label>
+        <label class="col s12 m4">
+          {{resource.status}}
+          <section class="checkbox-group">
+            <label>
+              <input type="checkbox" id="active" name="status" value="A" {% if checked(filter.status, 'A') %} checked {% endif %} />{{resource.active}}
+            </label>
+            <label>
+              <input type="checkbox" id="inactive" name="status" value="I" {% if checked(filter.status, 'I') %} checked {% endif %}/>{{resource.inactive}}
+            </label>
+          </section>
+        </label>
+      </section>
+      <input type="hidden" id="page" name="page" value="{{filter.page}}" />
+    </form>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th data-field="id">
+              <a href="{{sort.id.url}}">{{resource.id}} {{sort.id.tag}}</a>
+            </th>
+            <th data-field="lang">
+              <a href="{{sort.lang.url}}">{{resource.lang}} {{sort.lang.tag}}</a>
+            </th>
+            <th data-field="title">
+              <a href="{{sort.title.url}}">{{resource.title}} {{sort.title.tag}}</a>
+            </th>
+            <th data-field="publishedAt" class="datetime">
+              <a href="{{sort.publishedAt.url}}">{{resource.published_at}} {{sort.publishedAt.tag}}</a>
+            </th>
+            <th data-field="status">
+              <a href="{{sort.status.url}}">{{resource.status}} {{sort.status.tag}}</a>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in list %}
+          <tr>
+            <td>
+              <a href="/contents/{{item.id}}/{{item.lang}}" onclick="navigate(event)">{{item.id}}</a>
+            </td>
+            <td>{{item.lang}}</td>
+            <td>{{item.title}}</td>
+            <td>{{item.publishedAt}}</td>
+            <td>{{item.status}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
