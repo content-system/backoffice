@@ -32,9 +32,8 @@
         <button type="submit" class="btn-search">{{resource.search}}</button>
       </section>
     </form>
-    <form class="list-result">
       <div class="table-responsive">
-        <table class="table">
+        <table>
           <thead>
             <tr>
               <th data-field="time"><button type="button" id="sortTime">{{resource.audit_log_time}}</button></th>
@@ -62,6 +61,5 @@
         </table>
       </div>
       {% include "partials/pagination.html" %}
-    </form>
   </div>
 </div>

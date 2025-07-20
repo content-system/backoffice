@@ -174,7 +174,7 @@
 }
 
 .sub-list.expanded {
-  max-height: 500px;
+  max-height: 600px;
   display: block;
 }
 
@@ -188,7 +188,6 @@
   padding-right: 9px;
   white-space: nowrap;
   font-size: 14px;
-  text-transform: uppercase;
   outline: none;
   box-sizing: border-box;
   color: inherit;
@@ -482,7 +481,7 @@ nav.collapsed-all .sidebar-off-menu > .collapse {
   }
 
   .top-menu .menu.sidebar > nav > ul > li:hover .sub-list {
-    max-height: 500px;
+    max-height: 600px;
   }
 
   /* Level 2 menu */
@@ -617,6 +616,9 @@ nav.collapsed-all .sidebar-off-menu > .collapse {
 
 .menu-on .menu-item {
   max-width: 250px !important;
+}
+.top-menu .menu-on .menu-item {
+  max-width: 270px !important;
 }
 .sidebar-parent .menu-item {
   max-width: 30px;

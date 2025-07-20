@@ -36,18 +36,16 @@
       </section>
       <input type="hidden" id="page" name="page" value="{{filter.page}}" />
     </form>
-    <form class="list-result">
-      <ul class="row list">
-        {% for item in list %}
-        <li class="col s12 m6 l4 xl3 list-item">
-          <a href="/jobs/{{item.id}}">{{item.title}}</a>
-          <p>
-            {{item.location}} {{item.quantity}}
-            <span>{{item.publishedAt}}</span>
-          </p>
-        </li>
-        {% endfor %}
-      </ul>
-    </form>
+    <ul class="row list">
+      {% for item in list %}
+      <li class="col s12 m6 l4 xl3 list-item">
+        <a href="/jobs/{{item.id}}">{{item.title}}</a>
+        <p>
+          {{item.location}} {{item.quantity}}
+          <span>{{item.publishedAt}}</span>
+        </p>
+      </li>
+      {% endfor %}
+    </ul>
   </div>
 </div>
