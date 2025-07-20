@@ -30,9 +30,6 @@
             <th data-field="phone">
               <a id="sortPhone" href="{{sort.phone.url}}">{{resource.display_name}} {{sort.email.tag}}</a>
             </th>
-            <th data-field="status">
-              <a id="sortStatus" href="{{sort.status.url}}">{{resource.status}} {{sort.status.tag}}</a>
-            </th>
           </tr>
         </thead>
         <tbody>
@@ -44,7 +41,6 @@
             </td>
             <td>{{item.email}}</td>
             <td>{{item.phone}}</td>
-            <td>{{item.status}}</td>
           </tr>
           {% endfor %}
         </tbody>
