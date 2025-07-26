@@ -1,5 +1,5 @@
 "use strict"
-const resource = {
+var resource = {
   msg_confirm_save: "Are you sure you want to save?",
   msg_save_success: "Data have been saved successfully.",
   error_undefined: "{0} is not allowed to exist.",
@@ -48,9 +48,9 @@ const resource = {
   error_after_tomorrow: "{0} cannot be after tomorrow.",
   error_after: "{0} cannot be after {1}.",
   error_400: "The server will not process the request due to the malformed request syntax.",
-  error_401: "You have not logged in or the session was expired. Please log in.",
-  error_403: "You do not have permission for this page or for this action.",
-  error_404: "The page is not found.",
+  error_401: "You have not logged in or the session was expired. Please log in." /* error_unauthorized */,
+  error_403: "You do not have permission for this page or for this action." /* error_forbidden */,
+  error_404: "The page is not found." /* error_not_found  */,
   error_409: "Request could not be processed because of conflict in the current state of the resource.",
   error_410: "The resource is no longer available at the server and no forwarding address is known.",
   error_network: "The network is down. Cannot connect to server.",

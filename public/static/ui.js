@@ -1,12 +1,12 @@
 "use strict"
-const sysNo = document.getElementById("sysNo")
+var sysNo = document.getElementById("sysNo")
 if (sysNo) {
   sysNo.addEventListener("click", function () {
-    const sysAlert = document.getElementById("sysAlert")
+    var sysAlert = document.getElementById("sysAlert")
     if (sysAlert) {
       sysAlert.style.display = "none"
     }
-    const input = sysYes["activeElement"]
+    var input = sysYes["activeElement"]
     if (input) {
       try {
         input.focus()
@@ -15,14 +15,14 @@ if (sysNo) {
     sysYes["activeElement"] = undefined
   })
 }
-const sysYes = document.getElementById("sysYes")
+var sysYes = document.getElementById("sysYes")
 if (sysYes) {
   sysYes.addEventListener("click", function () {
-    const sysAlert = document.getElementById("sysAlert")
+    var sysAlert = document.getElementById("sysAlert")
     if (sysAlert) {
       sysAlert.style.display = "none"
     }
-    const input = sysYes["activeElement"]
+    var input = sysYes["activeElement"]
     if (input) {
       try {
         input.focus()
@@ -32,14 +32,14 @@ if (sysYes) {
   })
 }
 var yesOnClick = function () {
-  const sysAlert = document.getElementById("sysAlert")
+  var sysAlert = document.getElementById("sysAlert")
   if (sysAlert) {
     sysAlert.style.display = "none"
   }
   if (window.fyesOnClick) {
     window.fyesOnClick()
   }
-  const input = sysYes["activeElement"]
+  var input = sysYes["activeElement"]
   if (input) {
     try {
       input.focus()
@@ -48,14 +48,14 @@ var yesOnClick = function () {
   sysYes["activeElement"] = undefined
 }
 var noOnClick = function () {
-  const sysAlert = document.getElementById("sysAlert")
+  var sysAlert = document.getElementById("sysAlert")
   if (sysAlert) {
     sysAlert.style.display = "none"
   }
   if (window.fnoOnClick) {
     window.fnoOnClick()
   }
-  const input = sysYes["activeElement"]
+  var input = sysYes["activeElement"]
   if (input) {
     try {
       input.focus()
@@ -67,7 +67,7 @@ function fadeIn(ele, display) {
   ele.style.opacity = "0"
   ele.style.display = display || "block"
   ;(function fade() {
-    let val = parseFloat(ele.style.opacity)
+    var val = parseFloat(ele.style.opacity)
     val += 0.1
     if (!(val > 1)) {
       ele.style.opacity = val.toString()
@@ -78,7 +78,7 @@ function fadeIn(ele, display) {
 function fadeOut(ele) {
   ele.style.opacity = "1"
   ;(function fade() {
-    let val = parseFloat(ele.style.opacity)
+    var val = parseFloat(ele.style.opacity)
     val = -0.1
     if (val < 0) {
       ele.style.display = "none"
@@ -87,15 +87,15 @@ function fadeOut(ele) {
     }
   })()
 }
-const sysToast = document.getElementById("sysToast")
+var sysToast = document.getElementById("sysToast")
 function toast(msg) {
   sysToast.innerHTML = msg
   fadeIn(sysToast)
-  setTimeout(() => {
+  setTimeout(function () {
     fadeOut(sysToast)
   }, 1340)
 }
-const sysLoading = document.getElementById("sysLoading")
+var sysLoading = document.getElementById("sysLoading")
 function showLoading(isFirstTime) {
   if (sysLoading) {
     sysLoading.style.display = "block"
@@ -115,7 +115,7 @@ function escapeHTML(text) {
   if (!text) {
     return ""
   }
-  const isIgnore = text.indexOf("<br />") >= 0
+  var isIgnore = text.indexOf("<br />") >= 0
   if (text.indexOf('"') >= 0) {
     text = text.replace(/"/g, "&quot;")
   }
@@ -128,18 +128,21 @@ function escapeHTML(text) {
   if (text.indexOf("<") >= 0) {
     text = text.replace(/</g, "&lt;")
   }
+  // Ignore escaping if </br> tag is present
   if (isIgnore) {
     text = text.replace(/&lt;br \/&gt;/g, "<br />")
   }
   return text
 }
 function showAlert(msg, header, type, iconType, btnLeftText, btnRightText, yesCallback, noCallback, detail) {
-  const sysAlert = document.getElementById("sysAlert")
-  const sysMessage = document.getElementById("sysMessage")
-  const sysMessageHeader = document.getElementById("sysMessageHeader")
-  const sysErrorDetail = document.getElementById("sysErrorDetail")
-  const sysErrorDetailText = document.getElementById("sysErrorDetailText")
-  const sysErrorDetailCaret = document.getElementById("sysErrorDetailCaret")
+  var sysAlert = document.getElementById("sysAlert")
+  var sysMessage = document.getElementById("sysMessage")
+  var sysMessageHeader = document.getElementById("sysMessageHeader")
+  var sysErrorDetail = document.getElementById("sysErrorDetail")
+  var sysErrorDetailText = document.getElementById("sysErrorDetailText")
+  var sysErrorDetailCaret = document.getElementById("sysErrorDetailCaret")
+  // const sysYes = document.getElementById("sysYes") as HTMLElement
+  // const sysNo = document.getElementById("sysNo") as HTMLElement
   if (type === "Alert") {
     btnRightText = btnRightText !== undefined ? btnRightText : sysYes.getAttribute("data-ok")
     if (!sysAlert.classList.contains("alert-only")) {
@@ -189,7 +192,7 @@ function showAlert(msg, header, type, iconType, btnLeftText, btnRightText, yesCa
       sysAlert.classList.add("danger-icon")
     }
   }
-  const activeElement = window.document.activeElement
+  var activeElement = window.document.activeElement
   sysYes.innerHTML = escapeHTML(btnRightText)
   sysNo.innerHTML = escapeHTML(btnLeftText)
   sysYes["activeElement"] = activeElement
@@ -198,28 +201,28 @@ function showAlert(msg, header, type, iconType, btnLeftText, btnRightText, yesCa
   window.fnoOnClick = noCallback
   sysYes.focus()
 }
-const sysMessageHeader = document.getElementById("sysMessageHeader")
+var sysMessageHeader = document.getElementById("sysMessageHeader")
 function showConfirm(msg, yesCallback, header, btnLeftText, btnRightText, noCallback) {
-  const h = header ? header : sysMessageHeader.getAttribute("data-confirm")
+  var h = header ? header : sysMessageHeader.getAttribute("data-confirm")
   showAlert(msg, h, "Confirm", "Confirm", btnLeftText, btnRightText, yesCallback, noCallback)
 }
 function alertError(msg, detail, callback, header) {
-  const h = header ? header : sysMessageHeader.getAttribute("data-error")
-  const buttonText = header ? header : sysMessageHeader.getAttribute("data-ok")
+  var h = header ? header : sysMessageHeader.getAttribute("data-error")
+  var buttonText = header ? header : sysMessageHeader.getAttribute("data-ok")
   showAlert(msg, h, "Alert", "Error", "", buttonText, callback, undefined, detail)
 }
 function alertWarning(msg, callback, header) {
-  const h = header ? header : sysMessageHeader.getAttribute("data-warning")
-  const buttonText = header ? header : sysMessageHeader.getAttribute("data-ok")
+  var h = header ? header : sysMessageHeader.getAttribute("data-warning")
+  var buttonText = header ? header : sysMessageHeader.getAttribute("data-ok")
   showAlert(msg, h, "Alert", "Warning", "", buttonText, callback, undefined)
 }
 function alertInfo(msg, callback, header) {
-  const h = header ? header : sysMessageHeader.getAttribute("data-info")
-  const buttonText = header ? header : sysMessageHeader.getAttribute("data-ok")
+  var h = header ? header : sysMessageHeader.getAttribute("data-info")
+  var buttonText = header ? header : sysMessageHeader.getAttribute("data-ok")
   showAlert(msg, h, "Alert", "Info", "", buttonText, callback, undefined)
 }
 function alertSuccess(msg, callback, header) {
-  const h = header ? header : sysMessageHeader.getAttribute("data-success")
-  const buttonText = header ? header : sysMessageHeader.getAttribute("data-ok")
+  var h = header ? header : sysMessageHeader.getAttribute("data-success")
+  var buttonText = header ? header : sysMessageHeader.getAttribute("data-ok")
   showAlert(msg, h, "Alert", "Success", "", buttonText, callback, undefined)
 }

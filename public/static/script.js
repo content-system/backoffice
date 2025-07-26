@@ -230,6 +230,7 @@ function alertSuccess(msg, callback, header) {
 var resources = /** @class */ (function () {
   function resources() {}
   resources.load = function (pageBody) {}
+  resources.autoCollapse = false
   resources.login = "/login"
   resources.redirect = "redirectUrl"
   resources.defaultLimit = 12
@@ -2398,6 +2399,28 @@ function toggleMenuItem(e) {
         elI.classList.add("up")
         elI.classList.remove("down")
       } else {
+        if (resources.autoCollapse) {
+          var nav = findParentNode(target, "NAV")
+          if (nav) {
+            var items = nav.querySelectorAll(".open")
+            var l = items.length
+            for (var i = 0; i < l; i++) {
+              var item = items[i]
+              if (item) {
+                item.classList.remove("open")
+                var nu10 = item.querySelector(".expanded")
+                if (nu10) {
+                  nu10.classList.remove("expanded")
+                }
+                var el2 = item.querySelector(".entity-icon")
+                if (el2) {
+                  el2.classList.add("up")
+                  el2.classList.remove("down")
+                }
+              }
+            }
+          }
+        }
         nul.classList.add("expanded")
         elI.classList.remove("up")
         elI.classList.add("down")
@@ -2407,19 +2430,6 @@ function toggleMenuItem(e) {
   var parent = findParentNode(target, "LI")
   if (parent) {
     parent.classList.toggle("open")
-  }
-}
-function getFirstPath(url) {
-  var s = url.substring(8)
-  var i = s.indexOf("/")
-  if (i < 0 || s.length - i <= 1) {
-    return "/"
-  }
-  var j = s.indexOf("/", i + 1)
-  if (j > 0) {
-    return s.substring(i, j)
-  } else {
-    return s.substring(i)
   }
 }
 function navigate(e, ignoreLang) {
@@ -2497,5 +2507,18 @@ function navigate(e, ignoreLang) {
       .catch(function (err) {
         return handleError(err, resource.error_network)
       })
+  }
+}
+function getFirstPath(url) {
+  var s = url.substring(8)
+  var i = s.indexOf("/")
+  if (i < 0 || s.length - i <= 1) {
+    return "/"
+  }
+  var j = s.indexOf("/", i + 1)
+  if (j > 0) {
+    return s.substring(i, j)
+  } else {
+    return s.substring(i)
   }
 }

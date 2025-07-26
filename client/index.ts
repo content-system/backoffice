@@ -11,6 +11,7 @@ interface ErrorMessage {
 }
 // tslint:disable-next-line:class-name
 class resources {
+  static autoCollapse = false
   static login = "/login"
   static redirect = "redirectUrl"
   static defaultLimit = 12

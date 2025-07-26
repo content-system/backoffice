@@ -73,6 +73,28 @@ function toggleMenuItem(e: Event) {
         elI.classList.add("up")
         elI.classList.remove("down")
       } else {
+        if (resources.autoCollapse) {
+          const nav = findParentNode(target, "NAV")
+          if (nav) {
+            const items = nav.querySelectorAll(".open")
+            const l = items.length
+            for (let i = 0; i < l; i++) {
+              const item = items[i] as HTMLElement
+              if (item) {
+                item.classList.remove("open")
+                const nu10 = item.querySelector(".expanded")
+                if (nu10) {
+                  nu10.classList.remove("expanded")
+                }
+                const el2 = item.querySelector(".entity-icon")
+                if (el2) {
+                  el2.classList.add("up")
+                  el2.classList.remove("down")
+                }
+              }
+            }
+          }
+        }
         nul.classList.add("expanded")
         elI.classList.remove("up")
         elI.classList.add("down")
@@ -82,19 +104,6 @@ function toggleMenuItem(e: Event) {
   const parent = findParentNode(target, "LI")
   if (parent) {
     parent.classList.toggle("open")
-  }
-}
-function getFirstPath(url: string): string {
-  const s = url.substring(8)
-  const i = s.indexOf("/")
-  if (i < 0 || s.length - i <= 1) {
-    return "/"
-  }
-  const j = s.indexOf("/", i + 1)
-  if (j > 0) {
-    return s.substring(i, j)
-  } else {
-    return s.substring(i)
   }
 }
 function navigate(e: Event, ignoreLang?: boolean) {
@@ -167,5 +176,18 @@ function navigate(e: Event, ignoreLang?: boolean) {
         }
       })
       .catch((err) => handleError(err, resource.error_network))
+  }
+}
+function getFirstPath(url: string): string {
+  const s = url.substring(8)
+  const i = s.indexOf("/")
+  if (i < 0 || s.length - i <= 1) {
+    return "/"
+  }
+  const j = s.indexOf("/", i + 1)
+  if (j > 0) {
+    return s.substring(i, j)
+  } else {
+    return s.substring(i)
   }
 }
