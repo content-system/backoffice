@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import { buildError500, checked, getView, toString } from "express-ext"
 import fs from "fs"
-import nunjucks from "nunjucks"
+import nunjucks, { Template } from "nunjucks"
 import { Log, StringMap } from "onecore"
 import path from "path"
 import { datetimeToString } from "ui-formatter"
@@ -19,15 +19,24 @@ export function getTemplateString(name: string, partial?: boolean): string {
     return '{% extends "layouts/default.html" %} {% block content %}{% include "pages/' + name + '.html" %}{% endblock %}'
   }
 }
+const cacheTemplate = new Map<string, Template>()
+const partialTemplate = new Map<string, Template>()
 export function render(req: Request, res: Response, name: string, obj?: any): void {
   const partial = req.query["partial"]
-  const template = getTemplateString(name, partial === "true")
+  const isPartial = partial === "true"
+  const cache = isPartial ? partialTemplate : cacheTemplate
+  let compiledTemplate = cache.get(name)
+  if (!compiledTemplate) {
+    const template = getTemplateString(name, isPartial)
+    compiledTemplate = nunjucks.compile(template, resources.nunjucks)
+    cache.set(name, compiledTemplate)
+  }
   if (obj) {
     obj.datetimeToString = datetimeToString
     obj.menu = res.locals.menu
     obj.checked = checked
   }
-  const html = resources.nunjucks.renderString(template, obj)
+  const html = compiledTemplate.render(obj)
   res.send(html)
 }
 
