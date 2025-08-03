@@ -9,6 +9,7 @@ import {
   escapeArray,
   format,
   fromRequest,
+  getOffset,
   getSearch,
   handleError,
   hasSearch,
@@ -59,13 +60,14 @@ export class ArticleController {
     }
     const page = queryPage(req, filter)
     const limit = queryLimit(req)
+    const offset = getOffset(limit, page)
     this.service
       .search(cloneFilter(filter, limit, page), limit, page)
       .then((result) => {
-        const list = escapeArray(result.list)
         for (const item of result.list) {
           item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
         }
+        const list = escapeArray(result.list, offset, "sequence")
         const search = getSearch(req.url)
         render(req, res, "articles", {
           resource,

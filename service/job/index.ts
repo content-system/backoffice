@@ -9,6 +9,7 @@ import {
   escapeArray,
   format,
   fromRequest,
+  getOffset,
   getSearch,
   handleError,
   hasSearch,
@@ -57,10 +58,11 @@ export class JobController {
     }
     const page = queryNumber(req, resources.page, 1)
     const limit = queryNumber(req, resources.limit, resources.defaultLimit)
+    const offset = getOffset(limit, page)
     this.service
       .search(cloneFilter(filter, limit, page), limit, page)
       .then((result) => {
-        const list = escapeArray(result.list)
+        const list = escapeArray(result.list, offset, "sequence")
         for (const item of list) {
           item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
         }

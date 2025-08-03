@@ -36,6 +36,7 @@
         <table>
           <thead>
             <tr>
+              <th>{{resource.number}}</th>
               <th data-field="time"><button type="button" id="sortTime">{{resource.audit_log_time}}</button></th>
               <th data-field="resource"><button type="button" id="sortResource">{{resource.resource}}</button></th>
               <th data-field="action"><button type="button" id="sortAction">{{resource.action}}</button></th>
@@ -48,6 +49,7 @@
           <tbody>
             {% for item in list %}
             <tr>
+              <td class="text-right">{{item.sequence}}</td>
               <td>{{item.time}}</td>
               <td>{{item.resource}}</td>
               <td>{{item.action}}</td>

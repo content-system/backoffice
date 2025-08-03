@@ -31,6 +31,7 @@
       <table>
         <thead>
           <tr>
+            <th>{{resource.number}}</th>
             <th data-field="userId">
               <a id="sortUserId" href="{{sort.userId.url}}">{{resource.user_id}} {{sort.userId.tag}}</a>
             </th>
@@ -51,6 +52,7 @@
         <tbody>
           {% for item in list %}
           <tr>
+            <td class="text-right">{{item.sequence}}</td>
             <td>{{item.userId}}</td>
             <td>
               <a href="/users/{{item.userId}}" onclick="navigate(event)">{{item.username}}</a>

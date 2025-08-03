@@ -10,6 +10,7 @@ import {
   escapeArray,
   format,
   fromRequest,
+  getOffset,
   getSearch,
   hasSearch,
   queryLimit,
@@ -49,12 +50,13 @@ export class AuditLogController {
     }
     const page = queryPage(req, filter)
     const limit = queryLimit(req)
+    const offset = getOffset(limit, page)
     this.search(cloneFilter(filter, limit, page), limit, page)
       .then((result) => {
         for (const item of result.list) {
           item.time = formatFullDateTime(item.time, dateFormat)
         }
-        const list = escapeArray(result.list)
+        const list = escapeArray(result.list, offset, "sequence")
         const search = getSearch(req.url)
         render(req, res, "audit-logs", {
           resource,

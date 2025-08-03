@@ -62,12 +62,9 @@ export class ContactController {
     this.service
       .search(cloneFilter(filter, limit, page), limit, page)
       .then((result) => {
-        const list = escapeArray(result.list)
-        let i = 1
+        const list = escapeArray(result.list, offset, "sequence")
         for (const item of list) {
-          ;(item as any).sequence = offset + i
           item.submittedAt = formatDateTime(item.submittedAt, dateFormat)
-          i++
         }
         const search = getSearch(req.url)
         render(req, res, "contacts", {

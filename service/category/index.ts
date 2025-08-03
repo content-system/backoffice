@@ -8,6 +8,7 @@ import {
   escape,
   escapeArray,
   fromRequest,
+  getOffset,
   getSearch,
   handleError,
   hasSearch,
@@ -53,10 +54,11 @@ export class CategoryController {
     }
     const page = queryNumber(req, resources.page, 1)
     const limit = queryNumber(req, resources.limit, resources.defaultLimit)
+    const offset = getOffset(limit, page)
     this.service
       .search(cloneFilter(filter, limit, page), limit, page)
       .then((result) => {
-        const list = escapeArray(result.list)
+        const list = escapeArray(result.list, offset, "no")
         const search = getSearch(req.url)
         render(req, res, "categories", {
           resource,
