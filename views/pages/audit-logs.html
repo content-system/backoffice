@@ -32,36 +32,36 @@
         <button type="submit" class="btn-search">{{resource.search}}</button>
       </section>
     </form>
-      <div class="table-responsive">
-        <table>
-          <thead>
-            <tr>
-              <th>{{resource.number}}</th>
-              <th data-field="time"><button type="button" id="sortTime">{{resource.audit_log_time}}</button></th>
-              <th data-field="resource"><button type="button" id="sortResource">{{resource.resource}}</button></th>
-              <th data-field="action"><button type="button" id="sortAction">{{resource.action}}</button></th>
-              <th data-field="status"><button type="button" id="sortStatus">{{resource.status}}</button></th>
-              <th data-field="userId">{{resource.audit_log_user}}</th>
-              <th data-field="ip"><button type="button" id="sortIp">{{resource.ip}}</button></th>
-              <th data-field="remark"><button type="button" id="sortRemark">{{resource.remark}}</button></th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for item in list %}
-            <tr>
-              <td class="text-right">{{item.sequence}}</td>
-              <td>{{item.time}}</td>
-              <td>{{item.resource}}</td>
-              <td>{{item.action}}</td>
-              <td>{{item.status}}</span></td>
-              <td>{{item.userId}}</td>
-              <td>{{item.ip}}</td>
-              <td>{{item.remark}}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-      {% include "partials/pagination.html" %}
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>{{resource.number}}</th>
+            <th data-field="time"><button type="button" id="sortTime">{{resource.audit_log_time}}</button></th>
+            <th data-field="resource"><button type="button" id="sortResource">{{resource.resource}}</button></th>
+            <th data-field="action"><button type="button" id="sortAction">{{resource.action}}</button></th>
+            <th data-field="status"><button type="button" id="sortStatus">{{resource.status}}</button></th>
+            <th data-field="userId">{{resource.audit_log_user}}</th>
+            <th data-field="ip"><button type="button" id="sortIp">{{resource.ip}}</button></th>
+            <th data-field="remark"><button type="button" id="sortRemark">{{resource.remark}}</button></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in list %}
+          <tr>
+            <td class="text-right">{{item.sequence}}</td>
+            <td>{{item.time}}</td>
+            <td>{{item.resource}}</td>
+            <td>{{item.action}}</td>
+            <td>{{item.status}}</span></td>
+            <td>{{item.userId}}</td>
+            <td>{{item.ip}}</td>
+            <td>{{item.remark}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% include "partials/pagination.html" %}
   </div>
 </div>

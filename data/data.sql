@@ -335,18 +335,18 @@ create table if not exists contacts (
 );
 
 insert into contacts (id,"name",country,company,job_title,email,phone,message,submitted_at) values
-  ('E7UBXeHrp','Duc Nguyen','Vietnam','TMA','Manager','duc.n@tma.com.vn','93 334-7686','I want to hire 8 developers','2024-10-20 18:59:47.820962+07'),
-  ('xRjjveHrM','Hieu Vo','Vietnam','TMA','Developer','hieu.v@tma.com.vn','123 456-78','I want to hire 6 developers','2024-10-20 19:01:04.940217+07'),
+  ('E7UBXeHrp','Duc Nguyen','Vietnam','TMA','Manager','duc.n@tma.com.vn','0987654321','I want to hire 8 developers','2024-10-20 18:59:47.820962+07'),
+  ('xRjjveHrM','Hieu Vo','Vietnam','TMA','Developer','hieu.v@tma.com.vn','0987654321','I want to hire 6 developers','2024-10-20 19:01:04.940217+07'),
   ('bPyY39I842','Minh Ha','Vietnam','OhStem','Product Owner','minh.h@ohstem.vn','0987654321','I need 4 developers',NULL),
   ('mkiJ5_vXKo','Triet Nguyen','Vietnam','KMS','Test Enginner','triet.n@kms.com.vn','0987654321','I need 6 testers',NULL),
   ('yoobcu9kvR','Trinh Minh Chieu','Vietnam','Shinhan','Manager','chieu.t@shinhan.com.vn','0987654321','I need 7 developers',NULL),
   ('V5Ua8be1Wg','Quy Nguyen','New Zealand','TMA','Project Manager','quy.n@tma.com.vn','0987654321','I need 10 developers',NULL),
   ('PxnNIy6LVf','Hiep Nguyen','Vietnam','KBTGVN','Software engineer','hiep.n@kbtgvn.tech','0987654321','I need 5 developers',NULL),
   ('6EnNY-kISB','Nguyen Viet Anh','Vietnam','KBTGVN','Android Developer','anh.n@kbtgvn.tech','0987654321','I need 5 developers',NULL),
-  ('l74fvAHrp','Phu Huynh','Vietnam','FPT','Developer','phu.h@tma.com.vn','876 543-21','I want to hire 5 developers','2024-10-20 19:02:12.209824+07'),
-  ('XTotvATrp','Tan Truong','Vietnam','FPT','Senior Developer','tan.t@fpt.com.vn','876 543-21','I want to hire 4 developers','2024-10-20 19:02:39.317878+07'),
-  ('SrmtXAH9p','Bao Nguyen','Vietnam','Cho Tot','Senior Developer','bao.n@chotot.com.vn','876 543-21','I want to hire 4 developers','2024-10-20 19:03:10.218696+07'),
-  ('hS1KKeH9M','Tin Hoang','Vietnam','TMA','Senior Developer','tin.h@tma.com.vn','876 543-21','I want to hire 4 developers','2024-10-20 19:29:21.103008+07'),
+  ('l74fvAHrp','Phu Huynh','Vietnam','FPT','Developer','phu.h@tma.com.vn','0987654321','I want to hire 5 developers','2024-10-20 19:02:12.209824+07'),
+  ('XTotvATrp','Tan Truong','Vietnam','FPT','Senior Developer','tan.t@fpt.com.vn','0987654321','I want to hire 4 developers','2024-10-20 19:02:39.317878+07'),
+  ('SrmtXAH9p','Bao Nguyen','Vietnam','Cho Tot','Senior Developer','bao.n@chotot.com.vn','0987654321','I want to hire 4 developers','2024-10-20 19:03:10.218696+07'),
+  ('hS1KKeH9M','Tin Hoang','Vietnam','TMA','Senior Developer','tin.h@tma.com.vn','0987654321','I want to hire 4 developers','2024-10-20 19:29:21.103008+07'),
   ('0T44GbLvtH','Nguyen Viet Anh','Vietnam','KBTGVN','Android Developer','anh.n@kbtgvn.tech','0987654321','I need 5 developers','2024-11-24 18:08:30.814+07'),
   ('OnaE1s9i95','Nguyen Huu Vinh','Vietnam','TMA','Developer','vinh.n@tma.com.vn','0987654321','I need 4 developers','2024-11-24 19:31:03.055+07'),
   ('hPcqMTlCA6','Tuan Nguyen','Vietnam','TMA','Developer','tuan.n@tma.com.vn','0987654321','I need 2 developers','2024-11-24 19:36:32.057+07');

@@ -38,7 +38,7 @@ export class ContactUseCase extends UseCase<Contact, string, ContactFilter> impl
   }
 }
 
-const fields = ["name", "email", "phone"]
+const fields = ["name", "email", "phone", "company", "country"]
 export class ContactController {
   constructor(private service: ContactService, private log: Log) {
     this.search = this.search.bind(this)

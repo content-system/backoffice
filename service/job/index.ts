@@ -37,7 +37,7 @@ export class JobUseCase extends Manager<Job, string, JobFilter> implements JobSe
   }
 }
 
-const fields = ["title", "publishedAt", "description"]
+const fields = ["id", "title", "publishedAt", "position", "quantity", "location"]
 export class JobController {
   constructor(private service: JobService, private log: Log) {
     this.search = this.search.bind(this)

@@ -9,6 +9,7 @@ import {
   escapeArray,
   format,
   fromRequest,
+  getOffset,
   getSearch,
   handleError,
   hasSearch,
@@ -84,7 +85,7 @@ export class ContentUseCase implements ContentService {
   }
 }
 
-const fields = ["id", "lang", "title", "publishedAt", "status"]
+const fields = ["id", "lang", "title", "publishedAt", "description", "status"]
 export class ContentController {
   constructor(private service: ContentService, private log: Log) {
     this.search = this.search.bind(this)
@@ -101,10 +102,11 @@ export class ContentController {
     }
     const page = queryPage(req, filter)
     const limit = queryLimit(req)
+    const offset = getOffset(limit, page)
     this.service
       .search(cloneFilter(filter, limit, page), limit, page)
       .then((result) => {
-        const list = escapeArray(result.list)
+        const list = escapeArray(result.list, offset, "sequence")
         for (const item of list) {
           item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
         }

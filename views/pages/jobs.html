@@ -36,16 +36,47 @@
       </section>
       <input type="hidden" id="page" name="page" value="{{filter.page}}" />
     </form>
-    <ul class="row list">
-      {% for item in list %}
-      <li class="col s12 m6 l4 xl3 list-item">
-        <a href="/jobs/{{item.id}}">{{item.title}}</a>
-        <p>
-          {{item.location}} {{item.quantity}}
-          <span>{{item.publishedAt}}</span>
-        </p>
-      </li>
-      {% endfor %}
-    </ul>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>{{resource.number}}</th>
+            <th data-field="id">
+              <a href="{{sort.id.url}}">{{resource.id}} {{sort.id.tag}}</a>
+            </th>
+            <th data-field="title">
+              <a href="{{sort.title.url}}">{{resource.title}} {{sort.title.tag}}</a>
+            </th>
+            <th data-field="publishedAt" class="datetime">
+              <a href="{{sort.publishedAt.url}}">{{resource.published_at}} {{sort.publishedAt.tag}}</a>
+            </th>
+            <th data-field="position">
+              <a href="{{sort.position.url}}">{{resource.position}} {{sort.position.tag}}</a>
+            </th>
+            <th data-field="quantity">
+              <a href="{{sort.quantity.url}}">{{resource.quantity}} {{sort.quantity.tag}}</a>
+            </th>
+            <th data-field="location">
+              <a href="{{sort.location.url}}">{{resource.location}} {{sort.location.tag}}</a>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in list %}
+          <tr>
+            <td class="text-right">{{item.sequence}}</td>
+            <td>
+              <a href="/jobs/{{item.id}}" onclick="navigate(event)">{{item.id}}</a>
+            </td>
+            <td>{{item.title}}</td>
+            <td>{{item.publishedAt}}</td>
+            <td>{{item.position}}</td>
+            <td class="text-right">{{item.quantity}}</td>
+            <td>{{item.location}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

@@ -39,7 +39,7 @@ export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> impl
   }
 }
 
-const fields = ["title", "publishedAt", "description"]
+const fields = ["id", "title", "publishedAt", "description"]
 export class ArticleController {
   constructor(private service: ArticleService, private log: Log) {
     this.search = this.search.bind(this)

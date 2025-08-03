@@ -28,7 +28,13 @@
               <a id="sortEmail" href="{{sort.email.url}}">{{resource.email}} {{sort.email.tag}}</a>
             </th>
             <th data-field="phone">
-              <a id="sortPhone" href="{{sort.phone.url}}">{{resource.display_name}} {{sort.email.tag}}</a>
+              <a id="sortPhone" href="{{sort.phone.url}}">{{resource.phone}} {{sort.phone.tag}}</a>
+            </th>
+            <th data-field="company">
+              <a id="sortCompany" href="{{sort.company.url}}">{{resource.company}} {{sort.company.tag}}</a>
+            </th>
+            <th data-field="country">
+              <a id="sortCountry" href="{{sort.country.url}}">{{resource.country}} {{sort.country.tag}}</a>
             </th>
           </tr>
         </thead>
@@ -41,6 +47,8 @@
             </td>
             <td>{{item.email}}</td>
             <td>{{item.phone}}</td>
+            <td>{{item.company}}</td>
+            <td>{{item.country}}</td>
           </tr>
           {% endfor %}
         </tbody>
