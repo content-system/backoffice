@@ -481,13 +481,63 @@ function afterLoaded(pageBody) {
     setTimeout(function () {
       var forms = pageBody.querySelectorAll("form")
       for (var i = 0; i < forms.length; i++) {
-        registerEvents(forms[i])
+        if (forms[i].getAttribute("aria-readonly") == "true") {
+          setReadOnly(forms[i])
+        } else {
+          registerEvents(forms[i])
+        }
       }
       var msg = getHiddenMessage(forms, resources.hiddenMessage)
       if (msg && msg.length > 0) {
         toast(msg)
       }
     }, 0)
+  }
+}
+function setReadOnly(form) {
+  var args = []
+  for (var _i = 1; _i < arguments.length; _i++) {
+    args[_i - 1] = arguments[_i]
+  }
+  if (!form) {
+    return
+  }
+  var len = form.length
+  for (var i = 0; i < len; i++) {
+    var ctrl = form[i]
+    var name_1 = ctrl.getAttribute("name")
+    var skip = false
+    if (name_1 != null && name_1.length > 0 && name_1 !== "btnBack") {
+      if (arguments.length > 1) {
+        for (var j = 1; j < arguments.length; j++) {
+          if (arguments[j] === name_1) {
+            skip = true
+            // continue; has bugs => why?
+          }
+        }
+      }
+      if (skip === false) {
+        var nodeName = ctrl.nodeName
+        var type = ctrl.getAttribute("type")
+        if (nodeName === "INPUT" && type !== null) {
+          nodeName = type.toUpperCase()
+        }
+        if (nodeName !== "BUTTON" && nodeName !== "RESET" && nodeName !== "SUBMIT" && nodeName !== "SELECT") {
+          switch (type) {
+            case "checkbox":
+              ctrl.disabled = true
+              break
+            case "radio":
+              ctrl.disabled = true
+              break
+            default:
+              ctrl.readOnly = true
+          }
+        } else {
+          ctrl.disabled = true
+        }
+      }
+    }
   }
 }
 function getHiddenMessage(nodes, name, i) {
