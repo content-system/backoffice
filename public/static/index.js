@@ -1,6 +1,5 @@
 "use strict"
-// tslint:disable-next-line:class-name
-var resources = /** @class */ (function () {
+var resources = (function () {
   function resources() {}
   resources.load = function (pageBody) {}
   resources.autoCollapse = false
@@ -17,7 +16,7 @@ var resources = /** @class */ (function () {
   resources.password = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
   resources.url = /[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
   resources.digit = /^\d+$/
-  resources.amount = /^[0-9]{0,15}(?:\.[0-9]{1,3})?$/ // const regExp = /\d+\.\d+/;
+  resources.amount = /^[0-9]{0,15}(?:\.[0-9]{1,3})?$/
   resources.digitAndDash = /^[0-9-]*$/
   resources.digitAndChar = /^\w*\d*$/
   resources.checkNumber = /^\d{0,8}$/
@@ -76,13 +75,13 @@ function getHeaders() {
   var lang = getLang()
   if (lang) {
     if (token && token.length > 0) {
-      return { "Content-Language": lang, Authorization: "Bearer " + token } // Include the JWT
+      return { "Content-Language": lang, Authorization: "Bearer " + token }
     } else {
       return { "Content-Language": lang }
     }
   } else {
     if (token && token.length > 0) {
-      return { Authorization: "Bearer " + token } // Include the JWT
+      return { Authorization: "Bearer " + token }
     } else {
       return {}
     }
@@ -254,13 +253,62 @@ function afterLoaded(pageBody) {
     setTimeout(function () {
       var forms = pageBody.querySelectorAll("form")
       for (var i = 0; i < forms.length; i++) {
-        registerEvents(forms[i])
+        if (forms[i].getAttribute("aria-readonly") == "true") {
+          setReadOnly(forms[i])
+        } else {
+          registerEvents(forms[i])
+        }
       }
       var msg = getHiddenMessage(forms, resources.hiddenMessage)
       if (msg && msg.length > 0) {
         toast(msg)
       }
     }, 0)
+  }
+}
+function setReadOnly(form) {
+  var args = []
+  for (var _i = 1; _i < arguments.length; _i++) {
+    args[_i - 1] = arguments[_i]
+  }
+  if (!form) {
+    return
+  }
+  var len = form.length
+  for (var i = 0; i < len; i++) {
+    var ctrl = form[i]
+    var name_1 = ctrl.getAttribute("name")
+    var skip = false
+    if (name_1 != null && name_1.length > 0 && name_1 !== "btnBack") {
+      if (arguments.length > 1) {
+        for (var j = 1; j < arguments.length; j++) {
+          if (arguments[j] === name_1) {
+            skip = true
+          }
+        }
+      }
+      if (skip === false) {
+        var nodeName = ctrl.nodeName
+        var type = ctrl.getAttribute("type")
+        if (nodeName === "INPUT" && type !== null) {
+          nodeName = type.toUpperCase()
+        }
+        if (nodeName !== "BUTTON" && nodeName !== "RESET" && nodeName !== "SUBMIT" && nodeName !== "SELECT") {
+          switch (type) {
+            case "checkbox":
+              ctrl.disabled = true
+              break
+            case "radio":
+              ctrl.disabled = true
+              break
+            default:
+              ctrl.readOnly = true
+          }
+        } else {
+          ctrl.disabled = true
+        }
+      }
+    }
   }
 }
 function getHiddenMessage(nodes, name, i) {
@@ -320,14 +368,7 @@ function registerEvents(form) {
         var parent_1 = ele.parentElement
         var required = ele.getAttribute("required")
         if (parent_1) {
-          if (
-            parent_1.nodeName === "LABEL" &&
-            // tslint:disable-next-line:triple-equals
-            required != null &&
-            required !== undefined &&
-            required != "false" &&
-            !parent_1.classList.contains("required")
-          ) {
+          if (parent_1.nodeName === "LABEL" && required != null && required !== undefined && required != "false" && !parent_1.classList.contains("required")) {
             parent_1.classList.add("required")
           } else if (parent_1.classList.contains("form-group") || parent_1.classList.contains("field")) {
             var firstChild = parent_1.firstChild

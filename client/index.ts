@@ -269,13 +269,59 @@ function afterLoaded(pageBody: HTMLElement) {
     setTimeout(function () {
       const forms = pageBody.querySelectorAll("form")
       for (let i = 0; i < forms.length; i++) {
-        registerEvents(forms[i])
+        if (forms[i].getAttribute("aria-readonly") == "true") {
+          setReadOnly(forms[i])
+        } else {
+          registerEvents(forms[i])
+        }
       }
       const msg = getHiddenMessage(forms, resources.hiddenMessage)
       if (msg && msg.length > 0) {
         toast(msg)
       }
     }, 0)
+  }
+}
+function setReadOnly(form?: HTMLFormElement | null, ...args: string[]): void {
+  if (!form) {
+    return
+  }
+  const len = form.length
+  for (let i = 0; i < len; i++) {
+    const ctrl = form[i] as HTMLInputElement
+    const name = ctrl.getAttribute("name")
+    let skip = false
+    if (name != null && name.length > 0 && name !== "btnBack") {
+      if (arguments.length > 1) {
+        for (let j = 1; j < arguments.length; j++) {
+          if (arguments[j] === name) {
+            skip = true
+            // continue; has bugs => why?
+          }
+        }
+      }
+      if (skip === false) {
+        let nodeName = ctrl.nodeName
+        const type = ctrl.getAttribute("type")
+        if (nodeName === "INPUT" && type !== null) {
+          nodeName = type.toUpperCase()
+        }
+        if (nodeName !== "BUTTON" && nodeName !== "RESET" && nodeName !== "SUBMIT" && nodeName !== "SELECT") {
+          switch (type) {
+            case "checkbox":
+              ctrl.disabled = true
+              break
+            case "radio":
+              ctrl.disabled = true
+              break
+            default:
+              ctrl.readOnly = true
+          }
+        } else {
+          ctrl.disabled = true
+        }
+      }
+    }
   }
 }
 function getHiddenMessage(nodes: NodeListOf<HTMLFormElement>, name?: string, i?: number): string | null {
