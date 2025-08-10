@@ -84,7 +84,7 @@ export class CategoryController {
           renderError404(req, res, resource)
         } else {
           const permissions = res.locals.permissions as number
-          const readonly = write != (write | permissions)
+          const readonly = write != (write & permissions)
           render(req, res, "category", {
             resource,
             user: escape(category),

@@ -20,7 +20,7 @@ import {
 import { nanoid } from "nanoid"
 import { Log, Search, UseCase } from "onecore"
 import { DB, Repository, SearchBuilder } from "query-core"
-import { formatDateTime, getDateFormat } from "ui-formatter"
+import { formatDateTime, formatPhone, getDateFormat } from "ui-formatter"
 import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
@@ -90,6 +90,7 @@ export class ContactController {
         if (!contact) {
           renderError404(req, res, resource)
         } else {
+          contact.phone = formatPhone(contact.phone)
           render(req, res, "contact", { resource, contact: escape(contact) })
         }
       })

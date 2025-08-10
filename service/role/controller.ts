@@ -88,7 +88,7 @@ export class RoleController {
             renderError404(req, res, resource)
           } else {
             const permissions = res.locals.permissions as number
-            const readonly = write != (write | permissions)
+            const readonly = write != (write & permissions)
             render(req, res, "role", {
               resource,
               role: escape(role),

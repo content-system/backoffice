@@ -85,7 +85,7 @@ export class UserController {
           renderError404(req, res, resource)
         } else {
           const permissions = res.locals.permissions as number
-          const readonly = write != (write | permissions)
+          const readonly = write != (write & permissions)
           render(req, res, "user", {
             resource,
             user: escape(user),

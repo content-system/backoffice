@@ -102,7 +102,7 @@ export class ArticleController {
             renderError404(req, res, resource)
           } else {
             const permissions = res.locals.permissions as number
-            const readonly = write != (write | permissions)
+            const readonly = write != (write & permissions)
             article.publishedAt = formatDateTime(article.publishedAt, dateFormat)
             render(req, res, "article", {
               resource,
