@@ -10,4 +10,6 @@ export const en = {
 
   contents: "Contents",
   lang: "Lang",
+
+  skills: "Skills"
 }

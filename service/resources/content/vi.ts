@@ -10,4 +10,6 @@ export const vi = {
 
   contents: "Contents",
   lang: "Lang",
+
+  skills: "Skills"
 }

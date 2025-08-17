@@ -10,19 +10,20 @@ function createChip(container, text) {
   container.appendChild(chip)
   return chip
 }
-function getChipsById(chipId) {
+function getChips(chipId) {
   const container = document.getElementById(chipId)
-  return container ? getChips(container) : []
-}
-function getChips(container) {
-  return Array.from(container.querySelectorAll(".chip")).map((chip) => {
-    var _a, _b
-    const firstChild = chip.firstChild
-    return (_b = (_a = firstChild === null || firstChild === void 0 ? void 0 : firstChild.textContent) === null || _a === void 0 ? void 0 : _a.trim()) !==
-      null && _b !== void 0
-      ? _b
-      : ""
-  })
+  if (container) {
+    return Array.from(container.querySelectorAll(".chip")).map((chip) => {
+      var _a, _b
+      const firstChild = chip.firstChild
+      return (_b = (_a = firstChild === null || firstChild === void 0 ? void 0 : firstChild.textContent) === null || _a === void 0 ? void 0 : _a.trim()) !==
+        null && _b !== void 0
+        ? _b
+        : ""
+    })
+  } else {
+    return []
+  }
 }
 function addChip(triggerElement, inputName, chipId) {
   const form = triggerElement.tagName === "FORM" ? triggerElement : triggerElement.form

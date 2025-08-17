@@ -109,7 +109,30 @@ class formatter {
   static fax = / |\-|\.|\(|\)/g
   static usPhone = /(\d{3})(\d{3})(\d{4})/
   static formatPhone(phone?: string | null): string {
-    return formatter.formatFax(phone)
+    if (!phone) {
+      return ""
+    }
+    // reformat phone number
+    // 555 123-4567 or (+1) 555 123-4567
+    let s = phone
+    const x = removePhoneFormat(phone)
+    if (x.length === 10) {
+      const USNumber = x.match(formatter.usPhone)
+      if (USNumber != null) {
+        s = `${USNumber[1]} ${USNumber[2]}-${USNumber[3]}`
+      }
+    } else if (x.length <= 3 && x.length > 0) {
+      s = x
+    } else if (x.length > 3 && x.length < 7) {
+      s = `${x.substring(0, 3)} ${x.substring(3, x.length)}`
+    } else if (x.length >= 7 && x.length < 10) {
+      s = `${x.substring(0, 3)} ${x.substring(3, 6)}-${x.substring(6, x.length)}`
+    } else if (x.length >= 11) {
+      const l = x.length
+      s = `${x.substring(0, l - 7)} ${x.substring(l - 7, l - 4)}-${x.substring(l - 4, l)}`
+      // formatedPhone = `(+${phoneNumber.charAt(0)}) ${phoneNumber.substring(0, 3)} ${phoneNumber.substring(3, 6)}-${phoneNumber.substring(6, phoneNumber.length - 1)}`;
+    }
+    return s
   }
   static formatFax(fax?: string | null): string {
     if (!fax) {
@@ -118,7 +141,7 @@ class formatter {
     // reformat phone number
     // 035-456745 or 02-1234567
     let s = fax
-    const x = removePhoneFormat(fax)
+    const x = removeFaxFormat(fax)
     const l = x.length
     if (l <= 6) {
       s = x
@@ -150,7 +173,7 @@ function removePhoneFormat(phone: string): string {
   return phone ? phone.replace(formatter.phone, "") : phone
 }
 function removeFaxFormat(fax: string): string {
-  return fax ? fax.replace(formatter.phone, "") : fax
+  return fax ? fax.replace(formatter.fax, "") : fax
 }
 // tslint:disable-next-line:class-name
 class tel {
@@ -414,12 +437,15 @@ function checkOnBlur(event: Event, key: string, check: (v: string | null | undef
       return
     }
     let value = ele.value
-    if (formatF) {
-      value = formatF(value)
-    }
     if (value.length > 0 && !check(value)) {
       const msg = format(resource[key], label, ele.maxLength)
       addErrorMessage(ele, msg)
+    }
+    if (formatF) {
+      const value2 = formatF(value)
+      if (value2 !== value) {
+        ele.value = value2
+      }
     }
   }, 40)
 }
@@ -442,7 +468,7 @@ function phoneOnFocus(event: Event): void {
   }
 }
 function phoneOnBlur(event: Event): void {
-  checkOnBlur(event, "error_phone", tel.isPhone, removePhoneFormat)
+  checkOnBlur(event, "error_phone", tel.isPhone, formatPhone)
 }
 function faxOnFocus(event: Event): void {
   const ele = event.currentTarget as HTMLInputElement
@@ -457,7 +483,7 @@ function faxOnFocus(event: Event): void {
   }
 }
 function faxOnBlur(event: Event): void {
-  checkOnBlur(event, "error_fax", tel.isFax, removeFaxFormat)
+  checkOnBlur(event, "error_fax", tel.isFax, formatFax)
 }
 function ipv4OnBlur(event: Event): void {
   checkOnBlur(event, "error_ipv4", isIPv4)
@@ -767,7 +793,7 @@ function formatCurrency(v: string, ele: HTMLInputElement): string {
     }
   }
 }
-function formatNumber(v: number, scale?: number, d?: string | null, g?: string): string {
+function formatNumber(v?: number | null, scale?: number, d?: string | null, g?: string): string {
   if (v == null) {
     return ""
   }
