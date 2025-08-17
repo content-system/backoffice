@@ -59,7 +59,7 @@
     <label class="col s12">
       <div class="chip-input-container">
         <input type="text" id="skillInput" name="skillInput" onkeydown="chipOnKeydown(event, 'chipList')" placeholder="Enter a chip value..." />
-        <button type="button" id="btnAddSkills" onclick="addChip(this, 'skillInput', 'chipList')">Add</button>
+        <button type="button" id="btnAddSkills" name="btnAddSkills" onclick="addChip(this, 'skillInput', 'chipList')">Add</button>
       </div>
       <div id="chipList" class="chip-list">{{generateChips(job.skills)}}</div>
     </label>

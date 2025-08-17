@@ -1,17 +1,17 @@
 "use strict"
-var r1 = / |,|\$|€|£|¥|'|٬|،| /g
-var r2 = / |\.|\$|€|£|¥|'|٬|،| /g
+const r1 = / |,|\$|€|£|¥|'|٬|،| /g
+const r2 = / |\.|\$|€|£|¥|'|٬|،| /g
 function parseDate(v, format) {
   if (!format || format.length === 0) {
     format = "MM/DD/YYYY"
   } else {
     format = format.toUpperCase()
   }
-  var dateItems = format.split(/\/|\.| |-/)
-  var valueItems = v.split(/\/|\.| |-/)
-  var imonth = dateItems.indexOf("M")
-  var iday = dateItems.indexOf("D")
-  var iyear = dateItems.indexOf("YYYY")
+  const dateItems = format.split(/\/|\.| |-/)
+  const valueItems = v.split(/\/|\.| |-/)
+  let imonth = dateItems.indexOf("M")
+  let iday = dateItems.indexOf("D")
+  let iyear = dateItems.indexOf("YYYY")
   if (imonth === -1) {
     imonth = dateItems.indexOf("MM")
   }
@@ -21,43 +21,40 @@ function parseDate(v, format) {
   if (iyear === -1) {
     iyear = dateItems.indexOf("YY")
   }
-  var month = parseInt(valueItems[imonth], 10) - 1
-  var year = parseInt(valueItems[iyear], 10)
+  const month = parseInt(valueItems[imonth], 10) - 1
+  let year = parseInt(valueItems[iyear], 10)
   if (year < 100) {
     year += 2000
   }
-  var day = parseInt(valueItems[iday], 10)
+  const day = parseInt(valueItems[iday], 10)
   return new Date(year, month, day)
 }
 function getDecimalSeparator(ele) {
-  var separator = ele.getAttribute("data-decimal-separator")
+  let separator = ele.getAttribute("data-decimal-separator")
   if (!separator) {
-    var form = ele.form
+    const form = ele.form
     if (form) {
       separator = form.getAttribute("data-decimal-separator")
     }
   }
   return separator === "," ? "," : "."
 }
-var d = "data-value"
+const d = "data-value"
 function selectOnChange(ele, attr) {
-  var at = attr && attr.length > 0 ? attr : d
+  const at = attr && attr.length > 0 ? attr : d
   if (ele.value === "") {
     ele.removeAttribute(at)
   } else {
     ele.setAttribute(at, ele.value)
   }
 }
-//detect Ctrl + [a, v, c, x]
 function detectCtrlKeyCombination(e) {
-  // list all CTRL + key combinations
   var forbiddenKeys = new Array("v", "a", "x", "c")
   var key
   var isCtrl
   var browser = navigator.appName
   if (browser == "Microsoft Internet Explorer") {
     key = e.keyCode
-    // IE
     if (e.ctrlKey) {
       isCtrl = true
     } else {
@@ -66,15 +63,13 @@ function detectCtrlKeyCombination(e) {
   } else {
     if (browser == "Netscape") {
       key = e.which
-      // firefox, Netscape
       if (e.ctrlKey) isCtrl = true
       else isCtrl = false
     } else return true
   }
-  // if ctrl is pressed check if other key is in forbidenKeys array
   if (isCtrl) {
     var chr = String.fromCharCode(key).toLowerCase()
-    for (var i = 0; i < forbiddenKeys.length; i++) {
+    for (let i = 0; i < forbiddenKeys.length; i++) {
       if (forbiddenKeys[i] == chr) {
         return true
       }
@@ -86,7 +81,7 @@ function digitOnKeyPress(e) {
   if (detectCtrlKeyCombination(e)) {
     return true
   }
-  var key = window.event ? e.keyCode : e.which
+  const key = window.event ? e.keyCode : e.which
   if (key == 13 || key == 8 || key == 9 || key == 11 || key == 127 || key == "\t") {
     return key
   }
@@ -98,7 +93,7 @@ function integerOnKeyPress(e) {
   if (detectCtrlKeyCombination(e)) {
     return true
   }
-  var key = window.event ? e.keyCode : e.which
+  const key = window.event ? e.keyCode : e.which
   if (key == 13 || key == 8 || key == 9 || key == 11 || key == 127 || key == "\t") {
     return key
   }
@@ -117,7 +112,7 @@ function numberOnKeyPress(e) {
   if (detectCtrlKeyCombination(e)) {
     return true
   }
-  var key = window.event ? e.keyCode : e.which
+  const key = window.event ? e.keyCode : e.which
   if (key == 13 || key == 8 || key == 9 || key == 11 || key == 127 || key == "\t") {
     return key
   }
@@ -142,7 +137,7 @@ function trimTime(d) {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate())
 }
 function addDays(d, n) {
-  var newDate = new Date(d)
+  const newDate = new Date(d)
   newDate.setDate(newDate.getDate() + n)
   return newDate
 }
@@ -150,18 +145,18 @@ function formatDate(d, dateFormat, full, upper) {
   if (!d) {
     return ""
   }
-  var format = dateFormat && dateFormat.length > 0 ? dateFormat : "M/D/YYYY"
+  let format = dateFormat && dateFormat.length > 0 ? dateFormat : "M/D/YYYY"
   if (upper) {
     format = format.toUpperCase()
   }
-  var arr = ["", "", ""]
-  var items = format.split(/\/|\.| |-/)
-  var iday = items.indexOf("D")
-  var im = items.indexOf("M")
-  var iyear = items.indexOf("YYYY")
-  var fm = full ? full : false
-  var fd = full ? full : false
-  var fy = true
+  let arr = ["", "", ""]
+  const items = format.split(/\/|\.| |-/)
+  let iday = items.indexOf("D")
+  let im = items.indexOf("M")
+  let iyear = items.indexOf("YYYY")
+  let fm = full ? full : false
+  let fd = full ? full : false
+  let fy = true
   if (iday === -1) {
     iday = items.indexOf("DD")
     fd = true
@@ -177,15 +172,15 @@ function formatDate(d, dateFormat, full, upper) {
   arr[iday] = getD(d.getDate(), fd)
   arr[im] = getD(d.getMonth() + 1, fm)
   arr[iyear] = getYear(d.getFullYear(), fy)
-  var s = detectSeparator(format)
-  var e = detectLastSeparator(format)
-  var l = items.length === 4 ? format[format.length - 1] : ""
+  const s = detectSeparator(format)
+  const e = detectLastSeparator(format)
+  const l = items.length === 4 ? format[format.length - 1] : ""
   return arr[0] + s + arr[1] + e + arr[2] + l
 }
 function detectSeparator(format) {
-  var len = format.length
-  for (var i = 0; i < len; i++) {
-    var c = format[i]
+  const len = format.length
+  for (let i = 0; i < len; i++) {
+    const c = format[i]
     if (!((c >= "A" && c <= "Z") || (c >= "a" && c <= "z"))) {
       return c
     }
@@ -193,9 +188,9 @@ function detectSeparator(format) {
   return "/"
 }
 function detectLastSeparator(format) {
-  var len = format.length - 3
-  for (var i = len; i > -0; i--) {
-    var c = format[i]
+  const len = format.length - 3
+  for (let i = len; i > -0; i--) {
+    const c = format[i]
     if (!((c >= "A" && c <= "Z") || (c >= "a" && c <= "z"))) {
       return c
     }
@@ -206,7 +201,7 @@ function getYear(y, full) {
   if (full || (y <= 99 && y >= -99)) {
     return y.toString()
   }
-  var s = y.toString()
+  const s = y.toString()
   return s.substring(s.length - 2)
 }
 function getD(n, fu) {
@@ -228,7 +223,7 @@ function formatLongDateTime(date, dateFormat, full, upper) {
   if (!date) {
     return ""
   }
-  var sd = formatDate(date, dateFormat, full, upper)
+  const sd = formatDate(date, dateFormat, full, upper)
   if (sd.length === 0) {
     return sd
   }
@@ -236,8 +231,8 @@ function formatLongDateTime(date, dateFormat, full, upper) {
 }
 function getValue(form, name) {
   if (form) {
-    for (var i = 0; i < form.length; i++) {
-      var ele = form[i]
+    for (let i = 0; i < form.length; i++) {
+      const ele = form[i]
       if (ele.name === name) {
         return ele.value
       }
@@ -247,9 +242,9 @@ function getValue(form, name) {
 }
 function getElement(form, name) {
   if (form) {
-    var l = form.length
-    for (var i = 0; i < l; i++) {
-      var e = form[i]
+    const l = form.length
+    for (let i = 0; i < l; i++) {
+      const e = form[i]
       if (e.getAttribute("name") === name) {
         return e
       }
@@ -258,12 +253,12 @@ function getElement(form, name) {
   return null
 }
 function valueOf(obj, key) {
-  var mapper = key.split(".").map(function (item) {
+  const mapper = key.split(".").map((item) => {
     return item.replace(/\[/g, ".[").replace(/\[|\]/g, "")
   })
-  var reSplit = mapper.join(".").split(".")
-  return reSplit.reduce(function (acc, current, index, source) {
-    var value = getDirectValue(acc, current)
+  const reSplit = mapper.join(".").split(".")
+  return reSplit.reduce((acc, current, index, source) => {
+    const value = getDirectValue(acc, current)
     if (!value) {
       source.splice(1)
     }
@@ -277,19 +272,19 @@ function getDirectValue(obj, key) {
   return null
 }
 function setValue(obj, key, value) {
-  var replaceKey = key.replace(/\[/g, ".[").replace(/\.\./g, ".")
+  let replaceKey = key.replace(/\[/g, ".[").replace(/\.\./g, ".")
   if (replaceKey.indexOf(".") === 0) {
     replaceKey = replaceKey.slice(1, replaceKey.length)
   }
-  var keys = replaceKey.split(".")
-  var firstKey = keys.shift()
+  const keys = replaceKey.split(".")
+  let firstKey = keys.shift()
   if (!firstKey) {
     return
   }
-  var isArrayKey = /\[([0-9]+)\]/.test(firstKey)
+  const isArrayKey = /\[([0-9]+)\]/.test(firstKey)
   if (keys.length > 0) {
-    var firstKeyValue = obj[firstKey] || {}
-    var returnValue = setValue(firstKeyValue, keys.join("."), value)
+    const firstKeyValue = obj[firstKey] || {}
+    const returnValue = setValue(firstKeyValue, keys.join("."), value)
     return setKey(obj, isArrayKey, firstKey, returnValue)
   }
   return setKey(obj, isArrayKey, firstKey, value)
@@ -307,70 +302,65 @@ function setKey(_object, _isArrayKey, _key, _nextValue) {
   return _object
 }
 function decodeFromForm(form, currencySymbol) {
-  var dateFormat = form.getAttribute("data-date-format")
-  var obj = {}
-  var len = form.length
-  var _loop_1 = function (i) {
-    var ele = form[i]
-    var name_1 = ele.getAttribute("name")
-    var id = ele.getAttribute("id")
-    var val = void 0
-    var isDate = false
-    var dataField = ele.getAttribute("data-field")
+  const dateFormat = form.getAttribute("data-date-format")
+  const obj = {}
+  const len = form.length
+  for (let i = 0; i < len; i++) {
+    const ele = form[i]
+    let name = ele.getAttribute("name")
+    const id = ele.getAttribute("id")
+    let val
+    let isDate = false
+    let dataField = ele.getAttribute("data-field")
     if (dataField && dataField.length > 0) {
-      name_1 = dataField
-    } else if ((!name_1 || name_1 === "") && ele.parentElement && ele.parentElement.classList.contains("DayPickerInput")) {
+      name = dataField
+    } else if ((!name || name === "") && ele.parentElement && ele.parentElement.classList.contains("DayPickerInput")) {
       if (ele.parentElement.parentElement) {
         dataField = ele.parentElement.parentElement.getAttribute("data-field")
         isDate = true
-        name_1 = dataField
+        name = dataField
       }
     }
     if (isDate === false && ele.getAttribute("data-type") === "date") {
       isDate = true
     }
-    if (name_1 != null && name_1 !== "") {
-      var nodeName = ele.nodeName
-      var type = ele.getAttribute("type")
+    if (name != null && name !== "") {
+      let nodeName = ele.nodeName
+      const type = ele.getAttribute("type")
       if (nodeName === "INPUT" && type !== null) {
         nodeName = type.toUpperCase()
       }
       if (nodeName !== "BUTTON" && nodeName !== "RESET" && nodeName !== "SUBMIT") {
         switch (type) {
           case "checkbox":
-            if (id && name_1 !== id) {
-              // obj[name] = !obj[name] ? [] : obj[name];
-              val = valueOf(obj, name_1) // val = obj[name];
+            if (id && name !== id) {
+              val = valueOf(obj, name)
               if (!val) {
                 val = []
               }
               if (ele.checked) {
                 val.push(ele.value)
-                // obj[name].push(ele.value);
               } else {
-                // tslint:disable-next-line: triple-equals
-                val = val.filter(function (item) {
-                  return item != ele.value
-                })
+                val = val.filter((item) => item != ele.value)
               }
             } else {
               val = ele.value.length > 0 ? ele.value : ele.checked
             }
-            setValue(obj, name_1, val)
-            return "continue"
+            setValue(obj, name, val)
+            continue
           case "radio":
             if (ele.checked) {
               val = ele.value.length > 0 ? ele.value : ele.checked
-              setValue(obj, name_1, val)
+              setValue(obj, name, val)
             }
-            return "continue"
+            continue
           case "date":
             val = ele.value.length === 10 ? ele.value : null
             break
           case "datetime-local":
             if (ele.value.length > 0) {
               try {
-                val = new Date(ele.value) // DateUtil.parse(ele.value, 'YYYY-MM-DD');
+                val = new Date(ele.value)
               } catch (err) {
                 val = null
               }
@@ -382,12 +372,12 @@ function decodeFromForm(form, currencySymbol) {
             val = ele.value
         }
         if (isDate && dateFormat && dateFormat.length > 0) {
-          var d_1 = parseDate(val, dateFormat)
-          val = d_1.toString() === "Invalid Date" ? null : d_1
+          const d = parseDate(val, dateFormat)
+          val = d.toString() === "Invalid Date" ? null : d
         }
-        var datatype = ele.getAttribute("data-type")
-        var v = ele.value
-        var symbol = void 0
+        const datatype = ele.getAttribute("data-type")
+        let v = ele.value
+        let symbol
         if (datatype === "currency" || datatype === "string-currency") {
           symbol = ele.getAttribute("data-currency-symbol")
           if (!symbol) {
@@ -398,16 +388,13 @@ function decodeFromForm(form, currencySymbol) {
           }
         }
         if (type === "number" || datatype === "currency" || datatype === "integer" || datatype === "number") {
-          var decimalSeparator = getDecimalSeparator(ele)
+          const decimalSeparator = getDecimalSeparator(ele)
           v = decimalSeparator === "," ? v.replace(r2, "") : (v = v.replace(r1, ""))
           val = isNaN(v) ? null : parseFloat(v)
         }
-        setValue(obj, name_1, val) // obj[name] = val;
+        setValue(obj, name, val)
       }
     }
-  }
-  for (var i = 0; i < len; i++) {
-    _loop_1(i)
   }
   return obj
 }
@@ -450,7 +437,7 @@ function showErrorMessage(ele, msg) {
   return false
 }
 function showErrorMessageOfForm(form, msg) {
-  var ele = form.querySelector(".message")
+  const ele = form.querySelector(".message")
   return showErrorMessage(ele, msg)
 }
 function showWarningMessage(ele, msg) {
@@ -464,7 +451,7 @@ function showWarningMessage(ele, msg) {
   return false
 }
 function showWarningMessageOfForm(form, msg) {
-  var ele = form.querySelector(".message")
+  const ele = form.querySelector(".message")
   return showWarningMessage(ele, msg)
 }
 function showInfoMessage(ele, msg) {
@@ -478,13 +465,13 @@ function showInfoMessage(ele, msg) {
   return false
 }
 function showInfoMessageOfForm(form, msg) {
-  var ele = form.querySelector(".message")
+  const ele = form.querySelector(".message")
   return showInfoMessage(ele, msg)
 }
 function setInputValue(form, name, value) {
   if (form) {
-    for (var i = 0; i < form.length; i++) {
-      var ele = form[i]
+    for (let i = 0; i < form.length; i++) {
+      const ele = form[i]
       if (ele.name === name) {
         ele.value = value
         return true
@@ -494,14 +481,14 @@ function setInputValue(form, name, value) {
   return false
 }
 function getHttpHeaders() {
-  var token = getToken()
-  var lang = getLang()
+  const token = getToken()
+  const lang = getLang()
   if (lang) {
     if (token && token.length > 0) {
       return {
         "Content-Type": "application/json;charset=utf-8",
         "Content-Language": lang,
-        Authorization: "Bearer " + token,
+        Authorization: `Bearer ${token}`,
       }
     } else {
       return {
@@ -513,7 +500,7 @@ function getHttpHeaders() {
     if (token && token.length > 0) {
       return {
         "Content-Type": "application/json;charset=utf-8",
-        Authorization: "Bearer " + token,
+        Authorization: `Bearer ${token}`,
       }
     } else {
       return {
@@ -523,35 +510,41 @@ function getHttpHeaders() {
   }
 }
 function getConfirmMessage(ele, resource) {
-  var confirmMsg = ele.getAttribute("data-message")
+  let confirmMsg = ele.getAttribute("data-message")
   return confirmMsg ? confirmMsg : resource.msg_confirm_save
+}
+function deleteFields(obj, fields) {
+  const l = fields.length
+  for (let i = 0; i < l; i++) {
+    delete obj[fields[i]]
+  }
 }
 function submitFormData(e) {
   e.preventDefault()
-  var target = e.target
-  var form = target.form
-  var valid = validateForm(form)
+  const target = e.target
+  const form = target.form
+  const valid = validateForm(form)
   if (!valid) {
     return
   }
-  var resource = getResource()
-  var successMsg = target.getAttribute("data-success")
-  var confirmMsg = getConfirmMessage(target, resource)
-  showConfirm(confirmMsg, function () {
+  const resource = getResource()
+  let successMsg = target.getAttribute("data-success")
+  const confirmMsg = getConfirmMessage(target, resource)
+  showConfirm(confirmMsg, () => {
     showLoading()
-    var url = getCurrentURL()
-    var formData = new FormData(form)
+    const url = getCurrentURL()
+    const formData = new FormData(form)
     fetch(url, {
       method: "POST",
       headers: getHttpHeaders(),
       body: formData,
     })
-      .then(function (response) {
+      .then((response) => {
         if (response.ok) {
           response
             .text()
-            .then(function (data) {
-              var pageBody = document.getElementById("pageBody")
+            .then((data) => {
+              const pageBody = document.getElementById("pageBody")
               if (pageBody) {
                 pageBody.innerHTML = data
                 afterLoaded(pageBody)
@@ -561,17 +554,13 @@ function submitFormData(e) {
                 alertSuccess(successMsg)
               }
             })
-            .catch(function (err) {
-              return handleError(err, resource.error_response_body)
-            })
+            .catch((err) => handleError(err, resource.error_response_body))
         } else {
           hideLoading()
           handlePostError(response, resource)
         }
       })
-      .catch(function (err) {
-        return handleError(err, resource.error_network)
-      })
+      .catch((err) => handleError(err, resource.error_network))
   })
 }
 function handlePostError(response, resource) {
@@ -591,30 +580,30 @@ function handlePostError(response, resource) {
   }
 }
 function getSuccessMessage(ele, resource) {
-  var successMsg = ele.getAttribute("data-success")
+  let successMsg = ele.getAttribute("data-success")
   return successMsg ? successMsg : resource.msg_save_success
 }
 function submitForm(e) {
   e.preventDefault()
-  var target = e.target
-  var form = target.form
-  var valid = validateForm(form)
+  const target = e.target
+  const form = target.form
+  const valid = validateForm(form)
   if (!valid) {
     return
   }
-  var resource = getResource()
-  var successMsg = getSuccessMessage(target, resource)
-  var confirmMsg = getConfirmMessage(target, resource)
-  showConfirm(confirmMsg, function () {
+  const resource = getResource()
+  const successMsg = getSuccessMessage(target, resource)
+  const confirmMsg = getConfirmMessage(target, resource)
+  showConfirm(confirmMsg, () => {
     showLoading()
-    var data = decodeFromForm(form)
-    var url = getCurrentURL()
+    const data = decodeFromForm(form)
+    const url = getCurrentURL()
     fetch(url, {
       method: "POST",
       headers: getHttpHeaders(),
       body: JSON.stringify(data),
     })
-      .then(function (response) {
+      .then((response) => {
         hideLoading()
         if (response.ok) {
           alertSuccess(successMsg)
@@ -622,9 +611,7 @@ function submitForm(e) {
           handleJsonError(response, resource, form)
         }
       })
-      .catch(function (err) {
-        return handleError(err, resource.error_network)
-      })
+      .catch((err) => handleError(err, resource.error_network))
   })
 }
 function handleJsonError(response, resource, form, showErrors, allErrors) {
@@ -639,12 +626,12 @@ function handleJsonError(response, resource, form, showErrors, allErrors) {
   } else if (response.status === 422) {
     response
       .json()
-      .then(function (errors) {
+      .then((errors) => {
         if (showErrors) {
           if (allErrors) {
             showErrors(errors)
           } else {
-            var errs = showFormError(form, errors)
+            const errs = showFormError(form, errors)
             if (errs && errs.length > 0) {
               showErrors(errs)
             }
@@ -653,9 +640,7 @@ function handleJsonError(response, resource, form, showErrors, allErrors) {
           showFormError(form, errors)
         }
       })
-      .catch(function (err) {
-        return handleError(err, resource.error_response_body)
-      })
+      .catch((err) => handleError(err, resource.error_response_body))
   } else if (response.status === 400) {
     alertError(resource.error_400, response.statusText)
   } else {

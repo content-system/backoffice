@@ -30,7 +30,7 @@ function saveJob(e: Event) {
   const resource = getResource()
   let job = decodeFromForm<Job>(form)
   job.skills = getChips("chipList")
-  delete (job as any).skillInput
+  deleteFields(job, ["skillInput"])
   showConfirm(resource.msg_confirm_save, () => {
     showLoading()
     fetch(getCurrentURL(), {

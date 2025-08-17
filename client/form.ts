@@ -532,6 +532,12 @@ function getConfirmMessage(ele: HTMLButtonElement, resource: StringMap): string 
   return confirmMsg ? confirmMsg : resource.msg_confirm_save
 }
 
+function deleteFields(obj: any, fields: string[]) {
+  const l = fields.length
+  for (let i = 0; i < l; i++) {
+    delete obj[fields[i]]
+  }
+}
 function submitFormData(e: Event) {
   e.preventDefault()
   const target = e.target as HTMLButtonElement
