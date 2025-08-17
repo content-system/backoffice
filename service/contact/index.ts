@@ -1,21 +1,21 @@
 import { Request, Response } from "express"
 import {
-  buildMessage,
-  buildPages,
-  buildPageSearch,
-  buildSortSearch,
-  cloneFilter,
-  escape,
-  escapeArray,
-  format,
-  fromRequest,
-  getOffset,
-  getSearch,
-  handleError,
-  hasSearch,
-  queryNumber,
-  resources,
-  respondError,
+    buildMessage,
+    buildPages,
+    buildPageSearch,
+    buildSortSearch,
+    cloneFilter,
+    escape,
+    escapeArray,
+    format,
+    fromRequest,
+    getOffset,
+    getSearch,
+    handleError,
+    hasSearch,
+    queryNumber,
+    resources,
+    respondError,
 } from "express-ext"
 import { nanoid } from "nanoid"
 import { Log, Search, UseCase } from "onecore"
@@ -84,7 +84,7 @@ export class ContactController {
   view(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
-    const id = req.params["id"]
+    const id = req.params.id
     this.service
       .load(id)
       .then((contact) => {
@@ -105,7 +105,7 @@ export class ContactController {
     if (errors.length > 0) {
       respondError(res, errors)
     } else {
-      const id = req.params["id"]
+      const id = req.params.id
       const editMode = id !== "new"
       if (!editMode) {
         contact.id = nanoid(10)

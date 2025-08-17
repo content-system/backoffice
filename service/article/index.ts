@@ -1,22 +1,22 @@
 import { Request, Response } from "express"
 import {
-  buildMessage,
-  buildPages,
-  buildPageSearch,
-  buildSortSearch,
-  cloneFilter,
-  escape,
-  escapeArray,
-  format,
-  fromRequest,
-  getOffset,
-  getSearch,
-  handleError,
-  hasSearch,
-  queryLimit,
-  queryPage,
-  resources,
-  respondError,
+    buildMessage,
+    buildPages,
+    buildPageSearch,
+    buildSortSearch,
+    cloneFilter,
+    escape,
+    escapeArray,
+    format,
+    fromRequest,
+    getOffset,
+    getSearch,
+    handleError,
+    hasSearch,
+    queryLimit,
+    queryPage,
+    resources,
+    respondError,
 } from "express-ext"
 import { Log, Search, UseCase } from "onecore"
 import { DB, Repository, SearchBuilder } from "query-core"
@@ -86,7 +86,7 @@ export class ArticleController {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
-    const id = req.params["id"]
+    const id = req.params.id
     const editMode = id !== "new"
     if (!editMode) {
       render(req, res, "article", {
@@ -123,7 +123,7 @@ export class ArticleController {
     if (errors.length > 0) {
       respondError(res, errors)
     } else {
-      const id = req.params["id"]
+      const id = req.params.id
       const editMode = id !== "new"
       if (!editMode) {
         this.service

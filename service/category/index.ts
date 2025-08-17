@@ -76,7 +76,7 @@ export class CategoryController {
   view(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
-    const id = req.params["id"]
+    const id = req.params.id
     this.service
       .load(id)
       .then((category) => {
@@ -87,7 +87,7 @@ export class CategoryController {
           const readonly = write != (write & permissions)
           render(req, res, "category", {
             resource,
-            user: escape(category),
+            category: escape(category),
             readonly,
           })
         }
@@ -102,7 +102,7 @@ export class CategoryController {
     if (errors.length > 0) {
       respondError(res, errors)
     } else {
-      const id = req.params["id"]
+      const id = req.params.id
       const editMode = id !== "new"
       if (!editMode) {
         this.service

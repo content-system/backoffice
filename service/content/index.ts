@@ -125,8 +125,8 @@ export class ContentController {
       .catch((err) => renderError500(req, res, resource, err))
   }
   view(req: Request, res: Response) {
-    const id = req.params["id"]
-    const lang = req.params["lang"]
+    const id = req.params.id
+    const lang = req.params.lang
     const language = getLang(req, res)
     const resource = getResource(language)
     if (!id || !lang) {
@@ -158,7 +158,7 @@ export class ContentController {
     if (errors.length > 0) {
       respondError(res, errors)
     } else {
-      const id = req.params["id"]
+      const id = req.params.id
       const editMode = id !== "new"
       if (!editMode) {
         this.service

@@ -81,7 +81,7 @@ export class JobController {
   view(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
-    const id = req.params["id"]
+    const id = req.params.id
     this.service
       .load(id)
       .then((job) => {
@@ -101,7 +101,7 @@ export class JobController {
     if (errors.length > 0) {
       respondError(res, errors)
     } else {
-      const id = req.params["id"]
+      const id = req.params.id
       const editMode = id !== "new"
       job.skills = ["GO", "Java", "Kafka", "Microservices", "Management"]
       if (!editMode) {
