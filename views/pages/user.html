@@ -8,7 +8,7 @@
     </div>
   </header>
   <div class="row">
-    <label class="col s12 m6 required">
+    <label class="col s12 m6">
       {{resource.user_id}}
       <input
         type="text"
@@ -22,7 +22,7 @@
         placeholder="{{resource.user_id}}"
       />
     </label>
-    <label class="col s12 m6 required">
+    <label class="col s12 m6">
       {{resource.username}}
       <input
         type="text"
@@ -37,7 +37,7 @@
         placeholder="{{resource.username}}"
       />
     </label>
-    <label class="col s12 m6 required">
+    <label class="col s12 m6">
       {{resource.display_name}}
       <input
         type="text"
@@ -100,6 +100,8 @@
       </div>
     </div>
   </div>
-  <footer class="view-footer"><button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)" {% if readonly %} disabled {% endif %}>{{resource.save}}</button></footer>
+  <footer class="view-footer">
+    <button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)" {% if readonly %} disabled {% endif %}>{{resource.save}}</button>
+  </footer>
 </form>
 

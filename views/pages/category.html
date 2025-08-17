@@ -34,7 +34,16 @@
     </label>
     <label class="col s12 m6">
       {{resource.sequence}}
-      <input type="tel" id="sequence" name="sequence" class="right-align" value="{{category.sequence}}" maxlength="3" required placeholder="{{resource.sequence}}" />
+      <input
+        type="tel"
+        id="sequence"
+        name="sequence"
+        class="right-align"
+        value="{{category.sequence}}"
+        maxlength="3"
+        required
+        onkeypress="return integerOnKeyPress(event)"
+        placeholder="{{resource.sequence}}" />
     </label>
     <div class="col s12 m6 radio-section">
       {{resource.status}}

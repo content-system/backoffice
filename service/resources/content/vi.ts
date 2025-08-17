@@ -6,6 +6,7 @@ export const vi = {
   type: "Type",
   parent: "Parent",
   sequence: "Sequence",
+  body: "Body",
 
   contents: "Contents",
   lang: "Lang",

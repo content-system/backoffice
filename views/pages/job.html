@@ -82,10 +82,10 @@
         data-type="integer"
         class="text-right"
         value="{{formatNumber(job.minSalary)}}"
+        maxlength="16"
         onkeypress="return integerOnKeyPress(event)"
         onfocus="numberOnFocus(event)"
         onblur="numberOnBlur(event)"
-        maxlength="16"
         placeholder="{{resource.min_salary}}"
       />
     </label>
@@ -105,7 +105,7 @@
         placeholder="{{resource.max_salary}}"
       />
     </label>
-    <label class="col s12 required">
+    <label class="col s12">
       {{resource.title}}
       <input
         type="text"
@@ -120,9 +120,11 @@
     </label>
     <label class="col s12 textarea-container required">
       {{resource.description}}
-      <textarea id="description" name="description" rows="40" maxlength="9600" placeholder="{{resource.description}}"/>{{job.description}}</textarea>
+      <textarea id="description" name="description" rows="40" maxlength="9600" placeholder="{{resource.description}}">{{job.description}}</textarea>
     </label>
   </div>
-  <footer><button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)" {% if readonly %} disabled {% endif %}>{{resource.save}}</button></footer>
+  <footer>
+    <button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)" {% if readonly %} disabled {% endif %}>{{resource.save}}</button>
+  </footer>
 </form>
 
