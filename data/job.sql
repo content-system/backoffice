@@ -251,7 +251,7 @@ insert into jobs (id,title,description,original_link,published_at,expired_at,pos
 <p>
   Join us in revolutionizing the payment industry, one transaction at a time. Be at the forefront of embracing both fiat and cryptocurrency to make a
   global impact.
-</p>','https://www.golangprojects.com/golang-go-job-gva-Remote-Lead-Software-Engineer-Singapore-Triple-a-remotework.html','2025-01-08 14:34:44.395+07',NULL,'Lead Software Engineer',1,'Remote',1,'{}',60000,150000,'Triple A'),
+</p>','https://www.golangprojects.com/golang-go-job-gva-Remote-Lead-Software-Engineer-Singapore-Triple-a-remotework.html','2025-01-08 14:34:44.395+07',NULL,'Lead Software Engineer',1,'Remote',1,'{GO,Microservices,Mangement}',60000,150000,'Triple A'),
 	 ('triple-a-product-manager','Product Manager - Singapore','<h3>About Triple-A</h3>
 <p>
   Triple-A is a global payment institution licensed in the United States, Europe, and Singapore, enabling businesses worldwide to pay and get paid in
@@ -624,4 +624,4 @@ insert into jobs (id,title,description,original_link,published_at,expired_at,pos
     Candidates outside the US: Compensation will be adjusted according to local market rates, with a typical range of $40,000 to $75,000 USD,
     depending on experience and region.
   </li>
-</ul>','https://www.flourishsoftware.com/careers/backend-engineer-go-remote','2025-01-08 15:34:44.395+07',NULL,'GO Backend Engineer',3,'Remote',1,'{}',75000,120000,'Flourish');
+</ul>','https://www.flourishsoftware.com/careers/backend-engineer-go-remote','2025-01-08 15:34:44.395+07',NULL,'GO Backend Engineer',3,'Remote',1,'{GO,Microservices}',75000,120000,'Flourish');

@@ -60,10 +60,17 @@
       {{resource.description}}
       <textarea id="description" name="description" rows="4" maxlength="1200" placeholder="{{resource.description}}"/>{{article.description}}</textarea>
     </label>
+    <label class="col s12">
+      <div class="chip-input-container">
+        <input type="text" id="txtTag" name="txtTag" onkeydown="chipOnKeydown(event, 'chipTags')" placeholder="Enter a chip value..." />
+        <button type="button" id="btnAddTag" name="btnAddTag" onclick="addChip(this, 'txtTag', 'chipTags')">Add</button>
+      </div>
+      <div id="chipTags" class="chip-list">{{generateChips(article.tags)}}</div>
+    </label>
     <label class="col s12 textarea-container required">
       {{resource.content}}
       <textarea id="content" name="content" rows="80" maxlength="9000" placeholder="{{resource.content}}"/>{{article.content}}</textarea>
     </label>
   </div>
-  <footer class="view-footer"><button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)" {% if readonly %} disabled {% endif %}>{{resource.save}}</button></footer>
+  <footer class="view-footer"><button type="submit" id="btnSave" name="btnSave" onclick="saveArticle(event)" {% if readonly %} disabled {% endif %}>{{resource.save}}</button></footer>
 </form>

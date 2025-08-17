@@ -46,10 +46,6 @@ export const articleModel: Attributes = {
     length: 40,
     required: true,
   },
-  author: {
-    length: 40,
-    required: true,
-  },
   title: {
     length: 255,
     required: true,
@@ -59,6 +55,9 @@ export const articleModel: Attributes = {
     length: 1000,
     required: true,
     q: true,
+  },
+  thumbnail: {
+    length: 400,
   },
   publishedAt: {
     column: "published_at",
@@ -72,6 +71,7 @@ export const articleModel: Attributes = {
     type: "strings",
   },
   type: {},
+  status: {},
 
   createdBy: {
     column: "created_by",
