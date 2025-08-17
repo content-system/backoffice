@@ -1,21 +1,21 @@
 import { Request, Response } from "express"
 import {
-    buildMessage,
-    buildPages,
-    buildPageSearch,
-    buildSortSearch,
-    cloneFilter,
-    escape,
-    escapeArray,
-    fromRequest,
-    getOffset,
-    getSearch,
-    handleError,
-    hasSearch,
-    queryLimit,
-    queryPage,
-    resources,
-    respondError,
+  buildMessage,
+  buildPages,
+  buildPageSearch,
+  buildSortSearch,
+  cloneFilter,
+  escape,
+  escapeArray,
+  fromRequest,
+  getOffset,
+  getSearch,
+  hasSearch,
+  queryLimit,
+  queryPage,
+  resources,
+  respondError,
+  save
 } from "express-ext"
 import { Log } from "onecore"
 import { write } from "security-express"
@@ -100,36 +100,12 @@ export class UserController {
   submit(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
-    const user = req.body
+    const user = req.body as User
     const errors = validate<User>(user, userModel, resource)
     if (errors.length > 0) {
       respondError(res, errors)
     } else {
-      const id = req.params.id
-      const editMode = id !== "new"
-      if (!editMode) {
-        this.service
-          .create(user)
-          .then((result) => {
-            if (result === 0) {
-              res.status(409).end()
-            } else {
-              res.status(201).json(user).end()
-            }
-          })
-          .catch((err) => handleError(err, res, this.log))
-      } else {
-        this.service
-          .update(user)
-          .then((result) => {
-            if (result === 0) {
-              res.status(410).end()
-            } else {
-              res.status(200).json(user).end()
-            }
-          })
-          .catch((err) => handleError(err, res, this.log))
-      }
+      save(req.params.id !== "new", res, user, this.service, this.log)
     }
   }
 }

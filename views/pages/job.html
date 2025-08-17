@@ -56,13 +56,6 @@
         placeholder="{{resource.location}}"
       />
     </label>
-    <label class="col s12">
-      <div class="chip-input-container">
-        <input type="text" id="skillInput" name="skillInput" onkeydown="chipOnKeydown(event, 'chipList')" placeholder="Enter a chip value..." />
-        <button type="button" id="btnAddSkills" name="btnAddSkills" onclick="addChip(this, 'skillInput', 'chipList')">Add</button>
-      </div>
-      <div id="chipList" class="chip-list">{{generateChips(job.skills)}}</div>
-    </label>
     <div class="col s12 m6 radio-section">
       {{resource.status}}
       <div class="radio-group">
@@ -70,6 +63,13 @@
         <label><input type="radio" id="inactive" name="status" value="I" {% if job.status == "I" %} checked {% endif %}/>{{resource.inactive}}</label>
       </div>
     </div>
+    <label class="col s12">
+      <div class="chip-input-container">
+        <input type="text" id="txtSkill" name="txtSkill" onkeydown="chipOnKeydown(event, 'chipSkills')" placeholder="Enter a chip value..." />
+        <button type="button" id="btnAddSkill" name="btnAddSkill" onclick="addChip(this, 'txtSkill', 'chipSkills')">Add</button>
+      </div>
+      <div id="chipSkills" class="chip-list">{{generateChips(job.skills)}}</div>
+    </label>
     <label class="col s12 m6">
       {{resource.min_salary}}
       <input

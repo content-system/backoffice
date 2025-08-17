@@ -1,5 +1,4 @@
 "use strict"
-Object.defineProperty(exports, "__esModule", { value: true })
 function saveJob(e) {
   e.preventDefault()
   const target = e.target
@@ -10,8 +9,8 @@ function saveJob(e) {
   }
   const resource = getResource()
   let job = decodeFromForm(form)
-  job.skills = getChips("chipList")
-  deleteFields(job, ["skillInput"])
+  job.skills = getChips("chipSkills")
+  deleteFields(job, ["txtSkill", "btnAddSkill"])
   showConfirm(resource.msg_confirm_save, () => {
     showLoading()
     fetch(getCurrentURL(), {

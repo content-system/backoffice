@@ -1,4 +1,4 @@
-export interface Job {
+interface Job {
   id: string
   title: string
   description: string
@@ -29,8 +29,8 @@ function saveJob(e: Event) {
   }
   const resource = getResource()
   let job = decodeFromForm<Job>(form)
-  job.skills = getChips("chipList")
-  deleteFields(job, ["skillInput"])
+  job.skills = getChips("chipSkills")
+  deleteFields(job, ["txtSkill", "btnAddSkill"])
   showConfirm(resource.msg_confirm_save, () => {
     showLoading()
     fetch(getCurrentURL(), {

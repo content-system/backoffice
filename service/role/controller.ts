@@ -1,21 +1,21 @@
 import { Request, Response } from "express"
 import {
-    buildMessage,
-    buildPages,
-    buildPageSearch,
-    buildSortSearch,
-    cloneFilter,
-    escape,
-    escapeArray,
-    fromRequest,
-    getOffset,
-    getSearch,
-    handleError,
-    hasSearch,
-    queryLimit,
-    queryPage,
-    resources,
-    respondError,
+  buildMessage,
+  buildPages,
+  buildPageSearch,
+  buildSortSearch,
+  cloneFilter,
+  escape,
+  escapeArray,
+  fromRequest,
+  getOffset,
+  getSearch,
+  hasSearch,
+  queryLimit,
+  queryPage,
+  resources,
+  respondError,
+  save
 } from "express-ext"
 import { Log } from "onecore"
 import { write } from "security-express"
@@ -103,36 +103,12 @@ export class RoleController {
   submit(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
-    const role = req.body
+    const role = req.body as Role
     const errors = validate<Role>(role, roleModel, resource)
     if (errors.length > 0) {
       respondError(res, errors)
     } else {
-      const id = req.params.id
-      const editMode = id !== "new"
-      if (!editMode) {
-        this.service
-          .create(role)
-          .then((result) => {
-            if (result === 0) {
-              res.status(409).end()
-            } else {
-              res.status(201).json(role).end()
-            }
-          })
-          .catch((err) => handleError(err, res, this.log))
-      } else {
-        this.service
-          .update(role)
-          .then((result) => {
-            if (result === 0) {
-              res.status(410).end()
-            } else {
-              res.status(200).json(role).end()
-            }
-          })
-          .catch((err) => handleError(err, res, this.log))
-      }
+      save(req.params.id !== "new", res, role, this.service, this.log)
     }
   }
 }
