@@ -1,16 +1,16 @@
 <form id="contentForm" name="contentForm" class="form" aria-readonly="{{readonly}}">
   <header>
     <button type="button" id="btnBack" name="btnBack" class="btn-back"></button>
-    <h2 class="view-title">Content</h2>
+    <h2 class="view-title">{{resource.content}}</h2>
   </header>
   <div class="row">
-    <label class="col s12 m6 required">
+    <label class="col s12 m6">
       {{resource.id}}
-      <input type="text" id="id" name="id" readonly="" maxlength="80" required="" placeholder="Id" value="{{content.id}}" />
+      <input type="text" id="id" name="id" value="{{content.id}}" maxlength="80" required readonly placeholder="{{resource.id}}" />
     </label>
-    <label class="col s12 m6 required">
+    <label class="col s12 m6">
       {{resource.lang}}
-      <input type="text" id="lang" name="lang" readonly="" maxlength="80" required="" placeholder="{{resource.lang}}" value="{{content.lang}}" />
+      <input type="text" id="lang" name="lang" value="{{content.lang}}" maxlength="80" required readonly placeholder="{{resource.lang}}" />
     </label>
     <label class="col s12 m6">
       {{resource.published_at}}
@@ -23,7 +23,7 @@
         <label><input type="radio" id="inactive" name="status" value="I" {% if user.status == "I" %} checked {% endif %}/>{{resource.inactive}}</label>
       </div>
     </div>
-    <label class="col s12 required">
+    <label class="col s12">
       {{resource.title}}
       <input
         type="text"

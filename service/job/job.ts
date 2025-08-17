@@ -29,7 +29,7 @@ export interface JobFilter extends Filter {
   benefit?: string
   publishedAt?: TimeRange
   expiredAt?: TimeRange
-  skill?: string[]
+  skills?: string[]
   location?: string
   quantity?: number
   applicantCount?: number

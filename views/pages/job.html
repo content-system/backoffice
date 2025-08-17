@@ -5,7 +5,7 @@
     <button class="btn-group btn-right"><i class="material-icons">group</i></button>
   </header>
   <div class="row">
-    <label class="col s6 m6 required">
+    <label class="col s6 m6">
       {{resource.id}}
       <input
         type="text"
@@ -23,7 +23,7 @@
       {{resource.published_at}}
       <input type="datetime-local" id="publishedAt" name="publishedAt" value="{{datetimeToString(job.publishedAt)}}" step=".010" />
     </label>
-    <label class="col s12 m6 required">
+    <label class="col s12 m6">
       {{resource.title}}
       <input
         type="text"
@@ -36,15 +36,16 @@
         placeholder="{{resource.title}}"
       />
     </label>
-    <label class="col s12 m6 required">
+    <label class="col s12 m6">
       {{resource.quantity}}
       <input
         type="text"
         class="text-right"
         id="quantity"
         name="quantity"
+        data-type="integer"
         value="{{job.quantity}}"
-        maxlength="255"
+        maxlength="3"
         required
         onkeypress="return integerOnKeyPress(event)"
         onfocus="numberOnFocus(event)"
@@ -52,7 +53,7 @@
         placeholder="{{resource.quantity}}"
       />
     </label>
-    <label class="col s12 m6 required">
+    <label class="col s12 m6">
       {{resource.location}}
       <input
         type="text"
@@ -76,9 +77,10 @@
       {{resource.min_salary}}
       <input
         type="tel"
-        class="text-right"
         id="minSalary"
         name="minSalary"
+        data-type="integer"
+        class="text-right"
         value="{{formatNumber(job.minSalary)}}"
         onkeypress="return integerOnKeyPress(event)"
         onfocus="numberOnFocus(event)"
@@ -91,9 +93,10 @@
       {{resource.max_salary}}
       <input
         type="tel"
-        class="text-right"
         id="maxSalary"
         name="maxSalary"
+        data-type="integer"
+        class="text-right"
         value="{{formatNumber(job.maxSalary)}}"
         maxlength="16"
         onkeypress="return integerOnKeyPress(event)"

@@ -96,13 +96,14 @@ export class JobController {
   submit(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
-    const job = req.body
+    const job = req.body as Job
     const errors = validate<Job>(job, jobModel, resource)
     if (errors.length > 0) {
       respondError(res, errors)
     } else {
       const id = req.params["id"]
       const editMode = id !== "new"
+      job.skills = ["GO", "Java", "Kafka", "Microservices", "Management"]
       if (!editMode) {
         this.service
           .create(job)

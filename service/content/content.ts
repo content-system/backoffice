@@ -58,7 +58,7 @@ export const contentModel: Attributes = {
     q: true,
   },
   body: {
-    length: 9000,
+    length: 9800,
     required: true,
   },
   publishedAt: {

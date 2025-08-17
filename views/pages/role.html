@@ -12,20 +12,15 @@
           type="text"
           id="roleId"
           name="roleId"
+          value="{{role.roleId}}"
           pattern="^(?=.*[a-z])[a-z0-9_]{1,100}$"
           maxlength="20"
           required
-          {%
-          if
-          editMode
-          %}
+        {% if editMode %}
           readonly
-          {%
-          endif
-          %}
+        {% endif %}
           onblur="requiredOnBlur(event)"
           placeholder="{{resource.role_id}}"
-          value="{{role.roleId}}"
         />
       </label>
       <label class="col s6 m6 required">
@@ -43,7 +38,7 @@
       </label>
       <label class="col s12 m6">
         {{resource.remark}}
-        <input type="text" id="remark" name="remark" maxlength="255" placeholder="{{resource.remark}}" value="{{role.remark}}" />
+        <input type="text" id="remark" name="remark" value="{{role.remark}}" maxlength="255" placeholder="{{resource.remark}}" />
       </label>
       <div class="col s12 m6 radio-section">
         {{resource.status}}

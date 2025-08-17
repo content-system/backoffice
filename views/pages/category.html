@@ -4,37 +4,37 @@
     <h2>{{resource.category}}</h2>
   </header>
   <div class="row">
-    <label class="col s12 m6 required">
+    <label class="col s12 m6">
       {{resource.id}}
-      <input type="text" id="id" name="id" readonly maxlength="80" required placeholder="Id" value="{{category.id}}" />
+      <input type="text" id="id" name="id" value="{{category.id}}" maxlength="80" required readonly placeholder="{{resource.id}}" />
     </label>
-    <label class="col s12 m6 required">
+    <label class="col s12 m6">
       {{resource.name}}
-      <input type="text" id="name" name="name" maxlength="255" required placeholder="Name" value="{{category.name}}" readonly />
+      <input type="text" id="name" name="name" value="{{category.name}}" maxlength="255" required readonly placeholder="{{resource.name}}" />
     </label>
-    <label class="col s12 m6 required">
+    <label class="col s12 m6">
       {{resource.path}}
-      <input type="text" id="path" name="path" maxlength="255" required placeholder="Path" value="{{category.name}}" readonly />
+      <input type="text" id="path" name="path" value="{{category.name}}" maxlength="255" required readonly placeholder="{{resource.path}}" />
     </label>
-    <label class="col s12 m6 required">
+    <label class="col s12 m6">
       {{resource.resource}}
-      <input type="text" id="resource" name="resource" maxlength="255" required placeholder="Resource" value="{{category.name}}" readonly />
+      <input type="text" id="resource" name="resource" value="{{category.name}}" maxlength="255" required readonly placeholder="{{resource.resource}}" />
     </label>
-    <label class="col s12 m6 required">
+    <label class="col s12 m6">
       {{resource.icon}}
-      <input type="text" id="icon" name="icon" maxlength="255" required placeholder="Icon" value="{{category.icon}}" readonly />
+      <input type="text" id="icon" name="icon" value="{{category.icon}}" maxlength="255" required readonly placeholder="{{resource.icon}}" />
     </label>
     <label class="col s12 m6">
       {{resource.type}}
-      <input type="text" id="type" name="type" maxlength="10" placeholder="Type" value="{{category.type}}" readonly />
+      <input type="text" id="type" name="type" value="{{category.type}}" maxlength="10" readonly placeholder="{{resource.type}}" />
     </label>
     <label class="col s12 m6">
       {{resource.parent}}
-      <input type="text" id="parent" name="parent" maxlength="40" placeholder="Parent" value="{{category.parent}}" readonly />
+      <input type="text" id="parent" name="parent" value="{{category.parent}}" maxlength="40" readonly placeholder="{{resource.parent}}" />
     </label>
-    <label class="col s12 m6 required">
+    <label class="col s12 m6">
       {{resource.sequence}}
-      <input type="tel" id="sequence" name="sequence" class="right-align" maxlength="3" required placeholder="Sequence" value="{{category.sequence}}" />
+      <input type="tel" id="sequence" name="sequence" class="right-align" value="{{category.sequence}}" maxlength="3" required placeholder="{{resource.sequence}}" />
     </label>
     <div class="col s12 m6 radio-section">
       {{resource.status}}

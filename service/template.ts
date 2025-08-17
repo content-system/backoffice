@@ -16,7 +16,7 @@ export function getTemplateString(name: string, partial?: boolean): string {
     const template = fs.readFileSync(templatePath, "utf8")
     return template
   } else {
-    return '{% extends "layouts/default.html" %} {% block content %}{% include "pages/' + name + '.html" %}{% endblock %}'
+    return '{% extends "layouts/default.html" %}{% block content %}{% include "pages/' + name + '.html" %}{% endblock %}'
   }
 }
 const cacheTemplate = new Map<string, Template>()

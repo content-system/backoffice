@@ -15,11 +15,11 @@
         id="userId"
         name="userId"
         class="form-control"
+        value="{{user.userId}}"
         readonly
         maxlength="20"
         required
         placeholder="{{resource.user_id}}"
-        value="{{user.userId}}"
       />
     </label>
     <label class="col s12 m6 required">
@@ -29,12 +29,12 @@
         id="username"
         name="username"
         class="form-control"
+        value="{{user.username}}"
         readonly=""
         maxlength="40"
         required
         onblur="requiredOnBlur(event)"
         placeholder="{{resource.username}}"
-        value="{{user.username}}"
       />
     </label>
     <label class="col s12 m6 required">
@@ -44,11 +44,11 @@
         id="displayName"
         name="displayName"
         class="form-control"
+        value="{{user.displayName}}"
         maxlength="40"
         required
         onblur="requiredOnBlur(event)"
         placeholder="{{resource.display_name}}"
-        value="{{user.displayName}}"
       />
     </label>
     <label class="col s12 m6 flying">
@@ -71,7 +71,15 @@
     </label>
     <label class="col s12 m6 flying">
       {{resource.phone}}
-      <input type="tel" id="phone" name="phone" class="form-control" maxlength="17" placeholder="{{resource.phone}}" value="{{user.phone}}" />
+      <input type="tel"
+        id="phone"
+        name="phone" 
+        class="form-control"
+        value="{{user.phone}}"
+        maxlength="17"
+        onfocus="phoneOnFocus(event)"
+        onblur="phoneOnBlur(event, formatPhone)"
+        placeholder="{{resource.phone}}"/>
     </label>
     <label class="col s12 m6 flying">
       {{resource.email}}
