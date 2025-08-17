@@ -19,7 +19,7 @@ import {
 } from "express-ext"
 import { Log, Manager, Search } from "onecore"
 import { DB, Repository, SearchBuilder } from "query-core"
-import { formatDateTime, getDateFormat } from "ui-formatter"
+import { getDateFormat } from "ui-formatter"
 import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
@@ -63,12 +63,10 @@ export class JobController {
       .search(cloneFilter(filter, limit, page), limit, page)
       .then((result) => {
         const list = escapeArray(result.list, offset, "sequence")
-        for (const item of list) {
-          item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
-        }
         const search = getSearch(req.url)
         render(req, res, "jobs", {
           resource,
+          dateFormat,
           limits: resources.limits,
           filter,
           list,

@@ -106,46 +106,10 @@ function removeErrors(form?: HTMLFormElement | null): void {
 class formatter {
   // private static _preg = / |\+|\-|\.|\(|\)/g;
   static phone = / |\-|\.|\(|\)/g
+  static fax = / |\-|\.|\(|\)/g
   static usPhone = /(\d{3})(\d{3})(\d{4})/
-  static removePhoneFormat(phone: string): string {
-    if (phone) {
-      return phone.replace(formatter.phone, "")
-    } else {
-      return phone
-    }
-  }
-  static removeFaxFormat(fax: string): string {
-    if (fax) {
-      return fax.replace(formatter.phone, "")
-    } else {
-      return fax
-    }
-  }
   static formatPhone(phone?: string | null): string {
-    if (!phone) {
-      return ""
-    }
-    // reformat phone number
-    // 555 123-4567 or (+1) 555 123-4567
-    let s = phone
-    const x = formatter.removePhoneFormat(phone)
-    if (x.length === 10) {
-      const USNumber = x.match(formatter.usPhone)
-      if (USNumber != null) {
-        s = `${USNumber[1]} ${USNumber[2]}-${USNumber[3]}`
-      }
-    } else if (x.length <= 3 && x.length > 0) {
-      s = x
-    } else if (x.length > 3 && x.length < 7) {
-      s = `${x.substring(0, 3)} ${x.substring(3, x.length)}`
-    } else if (x.length >= 7 && x.length < 10) {
-      s = `${x.substring(0, 3)} ${x.substring(3, 6)}-${x.substring(6, x.length)}`
-    } else if (x.length >= 11) {
-      const l = x.length
-      s = `${x.substring(0, l - 7)} ${x.substring(l - 7, l - 4)}-${x.substring(l - 4, l)}`
-      // formatedPhone = `(+${phoneNumber.charAt(0)}) ${phoneNumber.substring(0, 3)} ${phoneNumber.substring(3, 6)}-${phoneNumber.substring(6, phoneNumber.length - 1)}`;
-    }
-    return s
+    return formatter.formatFax(phone)
   }
   static formatFax(fax?: string | null): string {
     if (!fax) {
@@ -154,7 +118,7 @@ class formatter {
     // reformat phone number
     // 035-456745 or 02-1234567
     let s = fax
-    const x = formatter.removePhoneFormat(fax)
+    const x = removePhoneFormat(fax)
     const l = x.length
     if (l <= 6) {
       s = x
@@ -175,6 +139,18 @@ class formatter {
     }
     return s
   }
+}
+function formatPhone(phone?: string | null): string {
+  return formatter.formatPhone(phone)
+}
+function formatFax(fax?: string | null): string {
+  return formatter.formatFax(fax)
+}
+function removePhoneFormat(phone: string): string {
+  return phone ? phone.replace(formatter.phone, "") : phone
+}
+function removeFaxFormat(fax: string): string {
+  return fax ? fax.replace(formatter.phone, "") : fax
 }
 // tslint:disable-next-line:class-name
 class tel {
@@ -453,11 +429,35 @@ function emailOnBlur(event: Event): void {
 function urlOnBlur(event: Event): void {
   checkOnBlur(event, "error_url", isUrl)
 }
+function phoneOnFocus(event: Event): void {
+  const ele = event.currentTarget as HTMLInputElement
+  handleMaterialFocus(ele)
+  if (ele.readOnly || ele.disabled || ele.value.length === 0) {
+    return
+  } else {
+    const s = removePhoneFormat(ele.value)
+    if (s !== ele.value) {
+      ele.value = s
+    }
+  }
+}
 function phoneOnBlur(event: Event): void {
-  checkOnBlur(event, "error_phone", tel.isPhone, formatter.removePhoneFormat)
+  checkOnBlur(event, "error_phone", tel.isPhone, removePhoneFormat)
+}
+function faxOnFocus(event: Event): void {
+  const ele = event.currentTarget as HTMLInputElement
+  handleMaterialFocus(ele)
+  if (ele.readOnly || ele.disabled || ele.value.length === 0) {
+    return
+  } else {
+    const s = removeFaxFormat(ele.value)
+    if (s !== ele.value) {
+      ele.value = s
+    }
+  }
 }
 function faxOnBlur(event: Event): void {
-  checkOnBlur(event, "error_fax", tel.isFax, formatter.removeFaxFormat)
+  checkOnBlur(event, "error_fax", tel.isFax, removeFaxFormat)
 }
 function ipv4OnBlur(event: Event): void {
   checkOnBlur(event, "error_ipv4", isIPv4)
@@ -768,7 +768,7 @@ function formatCurrency(v: string, ele: HTMLInputElement): string {
   }
 }
 function formatNumber(v: number, scale?: number, d?: string | null, g?: string): string {
-  if (!v) {
+  if (v == null) {
     return ""
   }
   if (!d && !g) {
@@ -919,14 +919,14 @@ function validateElement(ele: HTMLInputElement, locale?: Locale | string | null,
       return msg
     }
   } else if (datatype === "phone") {
-    const phoneStr = formatter.removePhoneFormat(value)
+    const phoneStr = removePhoneFormat(value)
     if (!tel.isPhone(phoneStr)) {
       const msg = format(resource.error_phone, label)
       addErrorMessage(ele, msg)
       return msg
     }
   } else if (datatype === "fax") {
-    const phoneStr = formatter.removeFaxFormat(value)
+    const phoneStr = removeFaxFormat(value)
     if (!tel.isFax(phoneStr)) {
       const msg = format(resource.error_fax, label)
       addErrorMessage(ele, msg)

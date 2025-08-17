@@ -19,19 +19,6 @@
         value="{{job.id}}"
       />
     </label>
-    <label class="col s6 m6 required">
-      {{resource.title}}
-      <input
-        type="text"
-        id="title"
-        name="title"
-        value="{{job.title}}"
-        maxlength="255"
-        required
-        onblur="requiredOnBlur(event)"
-        placeholder="{{resource.job_name}}"
-      />
-    </label>
     <label class="col s12 m6">
       {{resource.published_at}}
       <input type="datetime-local" id="publishedAt" name="publishedAt" value="{{datetimeToString(job.publishedAt)}}" step=".010" />
@@ -53,12 +40,15 @@
       {{resource.quantity}}
       <input
         type="text"
+        class="text-right"
         id="quantity"
         name="quantity"
         value="{{job.quantity}}"
         maxlength="255"
         required
-        onblur="requiredOnBlur(event)"
+        onkeypress="return integerOnKeyPress(event)"
+        onfocus="numberOnFocus(event)"
+        onblur="numberOnBlur(event)"
         placeholder="{{resource.quantity}}"
       />
     </label>
@@ -82,6 +72,49 @@
         <label><input type="radio" id="inactive" name="status" value="I" {% if job.status == "I" %} checked {% endif %}/>{{resource.inactive}}</label>
       </div>
     </div>
+    <label class="col s12 m6">
+      {{resource.min_salary}}
+      <input
+        type="tel"
+        class="text-right"
+        id="minSalary"
+        name="minSalary"
+        value="{{formatNumber(job.minSalary)}}"
+        onkeypress="return integerOnKeyPress(event)"
+        onfocus="numberOnFocus(event)"
+        onblur="numberOnBlur(event)"
+        maxlength="16"
+        placeholder="{{resource.min_salary}}"
+      />
+    </label>
+    <label class="col s12 m6">
+      {{resource.max_salary}}
+      <input
+        type="tel"
+        class="text-right"
+        id="maxSalary"
+        name="maxSalary"
+        value="{{formatNumber(job.maxSalary)}}"
+        maxlength="16"
+        onkeypress="return integerOnKeyPress(event)"
+        onfocus="numberOnFocus(event)"
+        onblur="numberOnBlur(event)"
+        placeholder="{{resource.max_salary}}"
+      />
+    </label>
+    <label class="col s12 required">
+      {{resource.title}}
+      <input
+        type="text"
+        id="title"
+        name="title"
+        value="{{job.title}}"
+        maxlength="255"
+        required
+        onblur="requiredOnBlur(event)"
+        placeholder="{{resource.job_name}}"
+      />
+    </label>
     <label class="col s12 textarea-container required">
       {{resource.description}}
       <textarea id="description" name="description" rows="40" maxlength="9600" placeholder="{{resource.description}}"/>{{job.description}}</textarea>

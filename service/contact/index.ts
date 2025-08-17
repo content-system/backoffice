@@ -69,6 +69,7 @@ export class ContactController {
         const search = getSearch(req.url)
         render(req, res, "contacts", {
           resource,
+          dateFormat,
           limits: resources.limits,
           filter,
           list,

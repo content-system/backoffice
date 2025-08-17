@@ -11,7 +11,9 @@ export function route(app: Application, ctx: Context, secure?: boolean): void {
   app.patch("/log", ctx.log.config)
   app.patch("/middleware", ctx.middleware.config)
 
+  app.get("", ctx.login.render)
   app.get("/login", ctx.login.render)
+  app.post("", urlencoded(), ctx.login.submit)
   app.post("/login", urlencoded(), ctx.login.submit)
 
   const readRole = ctx.authorize("role", read)

@@ -41,12 +41,12 @@
         <tbody>
           {% for item in list %}
           <tr>
-            <td>{{item.sequence}}</td>
+            <td class="text-right">{{item.sequence}}</td>
             <td>
               <a href="/contacts/{{item.id}}" onclick="navigate(event)">{{item.name}}</a>
             </td>
             <td>{{item.email}}</td>
-            <td>{{item.phone}}</td>
+            <td>{{formatPhone(item.phone)}}</td>
             <td>{{item.company}}</td>
             <td>{{item.country}}</td>
           </tr>

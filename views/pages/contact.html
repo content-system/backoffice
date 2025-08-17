@@ -5,49 +5,59 @@
   </header>
   <div class="row">
     <input type="hidden" id="id" name="id" value="{{contact.id}}" />
-    <label class="col s12 m6 required">
+    <label class="col s12 m6">
       {{resource.fullname}}
       <input
         type="text"
         id="name"
         name="name"
+        value="{{contact.name}}"
         readonly
         maxlength="40"
         required
         onblur="requiredOnBlur(event)"
         placeholder="{{resource.fullname}}"
-        value="{{contact.name}}"
       />
     </label>
     <label class="col s12 m6">
       {{resource.country}}
-      <input type="text" id="country" name="country" maxlength="100" required placeholder="{{resource.country}}" value="{{contact.country}}" />
+      <input type="text" id="country" name="country" value="{{contact.country}}" maxlength="100" required placeholder="{{resource.country}}" />
     </label>
     <label class="col s12 m6">
       {{resource.company}}
-      <input type="text" id="company" name="company" maxlength="100" placeholder="{{resource.company}}" value="{{contact.company}}" />
+      <input type="text" id="company" name="company" value="{{contact.company}}" maxlength="100" placeholder="{{resource.company}}" />
     </label>
     <label class="col s12 m6">
       {{resource.job_title}}
-      <input type="text" id="jobTitle" name="jobTitle" maxlength="100" placeholder="{{resource.job_title}}" value="{{contact.jobTitle}}" />
+      <input type="text" id="jobTitle" name="jobTitle" value="{{contact.jobTitle}}" maxlength="100" placeholder="{{resource.job_title}}" />
     </label>
-    <label class="col s12 m6 flying required">
+    <label class="col s12 m6">
       {{resource.email}}
-      <input type="text" id="email" name="email" data-type="email" maxlength="100" placeholder="{{resource.email}}" value="{{contact.email}}" />
+      <input type="text" id="email" name="email" data-type="email" alue="{{contact.email}}" required maxlength="100" placeholder="{{resource.email}}" v />
     </label>
-    <label class="col s12 m6 flying required">
+    <label class="col s12 m6 flying">
       {{resource.phone}}
-      <input type="tel" id="phone" name="phone" maxlength="17" required placeholder="{{resource.phone}}" value="{{contact.phone}}" />
+      <input
+        type="tel"
+        id="phone"
+        name="phone"
+        value="{{contact.phone}}"
+        required
+        maxlength="17"
+        onfocus="phoneOnFocus(event)"
+        onblur="phoneOnBlur(event, formatPhone)"
+        placeholder="{{resource.phone}}"
+      />
     </label>
-    <label class="col s12 m6 required">
+    <label class="col s12 m6">
       {{resource.submitted_at}}
       <input
         type="datetime-local"
         step=".010"
         id="submittedAt"
         name="submittedAt"
-        placeholder="{{resource.submitted_at}}"
         value="{{datetimeToString(contact.submittedAt)}}"
+        placeholder="{{resource.submitted_at}}"
       />
     </label>
     <label class="col s12 m6">

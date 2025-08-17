@@ -2,7 +2,7 @@ import { merge } from "config-plus"
 import cookieParser from "cookie-parser"
 import dotenv from "dotenv"
 import express from "express"
-import { checked, loadTemplates, MiddlewareLogger } from "express-ext"
+import { loadTemplates, MiddlewareLogger } from "express-ext"
 import http from "http"
 import { createLogger } from "logger-core"
 import nunjucks from "nunjucks"
@@ -10,7 +10,6 @@ import { Pool } from "pg"
 import { PoolManager } from "pg-extension"
 import { log } from "query-core"
 import { buildTemplates, trim } from "query-mappers"
-import { datetimeToString } from "ui-formatter"
 import { config, env } from "./config"
 import { route, useContext } from "./service"
 import { resources } from "./service/template"
@@ -36,8 +35,7 @@ const nunjucksEnv = nunjucks.configure("views", {
 resources.nunjucks = nunjucksEnv
 
 app.set("view engine", "html")
-app.locals.datetimeToString = datetimeToString
-app.locals.checked = checked
+// app.locals.datetimeToString = datetimeToString
 
 const logger = createLogger(cfg.log)
 resources.log = logger.error
