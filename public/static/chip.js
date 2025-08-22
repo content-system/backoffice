@@ -1,5 +1,5 @@
 "use strict"
-function createChip(container, text) {
+function createChip(container, text, inputContainer) {
   const chip = document.createElement("div")
   chip.className = "chip"
   chip.textContent = text
@@ -7,7 +7,11 @@ function createChip(container, text) {
   close.className = "close"
   close.onclick = () => chip.remove()
   chip.appendChild(close)
-  container.appendChild(chip)
+  if (inputContainer) {
+    container.insertBefore(chip, inputContainer)
+  } else {
+    container.appendChild(chip)
+  }
   return chip
 }
 function getChips(chipId) {
@@ -26,7 +30,7 @@ function getChips(chipId) {
   }
 }
 function addChip(triggerElement, inputName, chipId) {
-  const form = triggerElement.tagName === "FORM" ? triggerElement : triggerElement.form
+  const form = triggerElement.form
   if (!form) return
   const input = getElement(form, inputName)
   if (!input) return
@@ -34,7 +38,7 @@ function addChip(triggerElement, inputName, chipId) {
   if (!value) return
   const chipList = document.getElementById(chipId)
   if (!chipList) return
-  createChip(chipList, value)
+  createChip(chipList, value, triggerElement.parentElement)
   input.value = ""
 }
 function chipOnKeydown(e, chipId) {
@@ -42,7 +46,7 @@ function chipOnKeydown(e, chipId) {
     e.preventDefault()
     const target = e.target
     if (!target.readOnly && !target.disabled) {
-      addChip(target.form, target.name, chipId)
+      addChip(target, target.name, chipId)
     }
   }
 }

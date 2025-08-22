@@ -726,11 +726,8 @@ function checkNumber(target: HTMLInputElement, locale?: Locale | string | null, 
   const resource = r ? r : getResource()
   if (value.length > 0) {
     if (isNaN(value as any)) {
-      const msg = format(resource.error_number, label)
-      addErrorMessage(target, msg)
-      return false
-    } else if (target.getAttribute("data-type") === "integer") {
-      const msg = format(resource.error_integer, label)
+      const t = target.getAttribute("data-type") === "integer" ? resource.error_integer : resource.error_number
+      const msg = format(t, label)
       addErrorMessage(target, msg)
       return false
     }

@@ -155,7 +155,7 @@ function removePhoneFormat(phone) {
   return phone ? phone.replace(formatter.phone, "") : phone
 }
 function removeFaxFormat(fax) {
-  return fax ? fax.replace(formatter.phone, "") : fax
+  return fax ? fax.replace(formatter.fax, "") : fax
 }
 class tel {
   static isPhone(str) {
@@ -702,11 +702,8 @@ function checkNumber(target, locale, r) {
   const resource = r ? r : getResource()
   if (value.length > 0) {
     if (isNaN(value)) {
-      const msg = format(resource.error_number, label)
-      addErrorMessage(target, msg)
-      return false
-    } else if (target.getAttribute("data-type") === "integer") {
-      const msg = format(resource.error_integer, label)
+      const t = target.getAttribute("data-type") === "integer" ? resource.error_integer : resource.error_number
+      const msg = format(t, label)
       addErrorMessage(target, msg)
       return false
     }

@@ -63,12 +63,14 @@
         <label><input type="radio" id="inactive" name="status" value="I" {% if job.status == "I" %} checked {% endif %}/>{{resource.inactive}}</label>
       </div>
     </div>
-    <label class="col s12">
-      <div class="chip-input-container">
+    <label class="col s12 textarea-container">
+      {{resource.skills}}
+      <div id="chipSkills" class="chip-list">{{generateChips(job.skills)}}
+        <div class="chip-input-container">
         <input type="text" id="txtSkill" name="txtSkill" onkeydown="chipOnKeydown(event, 'chipSkills')" placeholder="Enter a chip value..." />
         <button type="button" id="btnAddSkill" name="btnAddSkill" onclick="addChip(this, 'txtSkill', 'chipSkills')">Add</button>
       </div>
-      <div id="chipSkills" class="chip-list">{{generateChips(job.skills)}}</div>
+      </div>
     </label>
     <label class="col s12 m6">
       {{resource.min_salary}}

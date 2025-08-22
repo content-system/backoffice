@@ -1,4 +1,4 @@
-function createChip(container: HTMLElement, text: string): HTMLElement {
+function createChip(container: HTMLElement, text: string, inputContainer?: HTMLElement | null): HTMLElement {
   const chip = document.createElement("div")
   chip.className = "chip"
   chip.textContent = text
@@ -8,8 +8,11 @@ function createChip(container: HTMLElement, text: string): HTMLElement {
   close.onclick = () => chip.remove()
 
   chip.appendChild(close)
-  container.appendChild(chip)
-
+  if (inputContainer) {
+    container.insertBefore(chip, inputContainer)
+  } else {
+    container.appendChild(chip)
+  }
   return chip
 }
 
@@ -25,9 +28,8 @@ function getChips(chipId: string): string[] {
   }
 }
 
-function addChip(triggerElement: HTMLButtonElement | HTMLFormElement, inputName: string, chipId: string): void {
-  const form = triggerElement.tagName === "FORM" ? (triggerElement as HTMLFormElement) : (triggerElement as HTMLButtonElement).form
-
+function addChip(triggerElement: HTMLButtonElement | HTMLInputElement, inputName: string, chipId: string): void {
+  const form = triggerElement.form
   if (!form) return
 
   const input = getElement(form, inputName) as HTMLInputElement
@@ -39,7 +41,7 @@ function addChip(triggerElement: HTMLButtonElement | HTMLFormElement, inputName:
   const chipList = document.getElementById(chipId)
   if (!chipList) return
 
-  createChip(chipList, value)
+  createChip(chipList, value, triggerElement.parentElement)
   input.value = ""
 }
 
@@ -48,7 +50,7 @@ function chipOnKeydown(e: KeyboardEvent, chipId: string) {
     e.preventDefault()
     const target = e.target as HTMLInputElement
     if (!target.readOnly && !target.disabled) {
-      addChip(target.form as HTMLFormElement, target.name, chipId)
+      addChip(target, target.name, chipId)
     }
   }
 }
