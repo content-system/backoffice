@@ -4,9 +4,11 @@ import { User, UserFilter, userModel, UserRepository } from "./user"
 
 const userRoleModel: Attributes = {
   userId: {
+    column: "user_id",
     key: true,
   },
   roleId: {
+    column: "role_id",
     key: true,
   },
 }
@@ -16,7 +18,8 @@ interface UserRole {
 }
 
 export class SqlUserRepository implements UserRepository {
-  map?: StringMap
+  map: StringMap
+  roleMap: StringMap
   primaryKeys: Attribute[]
   attributes: Attributes
   constructor(private find: Search<User, UserFilter>, private db: DB) {
@@ -30,6 +33,7 @@ export class SqlUserRepository implements UserRepository {
     this.patch = this.patch.bind(this)
     this.delete = this.delete.bind(this)
     this.map = buildMap(userModel)
+    this.roleMap = buildMap(userRoleModel)
   }
 
   getUsersOfRole(roleId: string): Promise<User[]> {
@@ -61,7 +65,7 @@ export class SqlUserRepository implements UserRepository {
       }
       const user = users[0]
       const q = `select role_id from user_roles where user_id = ${this.db.param(1)}`
-      return this.db.query<UserRole>(q, [user.userId]).then((roles) => {
+      return this.db.query<UserRole>(q, [user.userId], this.roleMap).then((roles) => {
         if (roles && roles.length > 0) {
           user.roles = roles.map((i) => i.roleId)
         }

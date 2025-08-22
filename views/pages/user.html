@@ -5,6 +5,7 @@
     <div class="btn-group">
       <button class="btn-group btn-right"><i class="material-icons">group</i></button>
       <button class="btn-group btn-right"><i class="material-icons">group</i></button>
+      <a href="/users/{{user.userId}}/assign" onclick="navigate(event)"><i class="material-icons">group</i></a>
     </div>
   </header>
   <div class="row">
@@ -83,7 +84,7 @@
     </label>
     <label class="col s12 m6 flying">
       {{resource.email}}
-      <input type="text" id="email" name="email" data-type="email" maxlength="100" placeholder="{{resource.email}}" value="{{user.email}}" />
+      <input type="text" id="email" name="email" data-type="email" maxlength="100" value="{{user.email}}" placeholder="{{resource.email}}" />
     </label>
     <label class="col s12 m6">
       {{resource.gender}}

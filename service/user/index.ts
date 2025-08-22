@@ -1,6 +1,7 @@
 import { GenericUseCase, Log, SearchResult } from "onecore"
 import { DB, SearchBuilder } from "query-core"
 import { TemplateMap, useQuery } from "query-mappers"
+import { SqlRoleQuery } from "../shared/role"
 import { UserController } from "./controller"
 import { SqlUserRepository } from "./repository"
 import { User, UserFilter, userModel, UserRepository, UserService } from "./user"
@@ -25,5 +26,6 @@ export function useUserController(log: Log, db: DB, mapper?: TemplateMap): UserC
   const builder = new SearchBuilder<User, UserFilter>(db.query, "users", userModel, db.driver, query)
   const repo = new SqlUserRepository(builder.search, db)
   const service = new UserUseCase(repo)
-  return new UserController(service, log)
+  const roleQuery = new SqlRoleQuery(db);
+  return new UserController(service, roleQuery, log)
 }
