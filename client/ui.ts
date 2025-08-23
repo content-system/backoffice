@@ -89,8 +89,11 @@ function fadeOut(ele: HTMLElement): void {
   })()
 }
 
-const sysToast = document.getElementById("sysToast") as HTMLElement
+let sysToast: HTMLElement = document.getElementById("sysToast") as HTMLElement
 function toast(msg: string): void {
+  if (!sysToast) {
+    sysToast = document.getElementById("sysToast") as HTMLElement
+  }
   sysToast.innerHTML = msg
   fadeIn(sysToast)
   setTimeout(() => {

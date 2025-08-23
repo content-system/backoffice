@@ -28,7 +28,9 @@
     <button type="submit" id="btnSave" name="btnSave">{{resource.save}}</button>
   </footer>
   <script>
+    console.log("Enter user assign")
     resources.load = function (pageBody) {
+      console.log("Enter user assign load")
       const checkbox = document.getElementById("roleAssignmentForm_checkAll")
       checkbox.addEventListener("change", function () {
         checkAll(checkbox, "id")
