@@ -13,6 +13,12 @@ window.onload = function () {
         }
       }, 0)
     }
+    const pageBody = document.getElementById("pageBody")
+    if (pageBody) {
+      setTimeout(function () {
+        resources.load(pageBody)
+      }, 0)
+    }
     const sysNav = document.getElementById("sysNav") as HTMLElement
     if (sysNav) {
       const firstPath = getFirstPath(window.location.origin + window.location.pathname)
@@ -33,5 +39,5 @@ window.onload = function () {
         }
       }
     }
-  }, 50)
+  }, 0)
 }

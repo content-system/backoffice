@@ -13,16 +13,26 @@
     <section class="list-container">
       <ul class="row list">
         <li class="col check-item header">
-          <input id="checkAll" type="checkbox" name="checkAll" />
+          <input id="roleAssignmentForm_checkAll" type="checkbox" name="checkAll" />
           <p>Check All</p>
         </li>
-      {% for item in roles %}
+        {% for item in roles %}
         <li class="col check-item">
-          <input type="checkbox" name="id" value="{{item.value}}" {% if item.selected %} checked {% endif %}/>
+          <input type="checkbox" name="id" value="{{item.value}}" {% if item.selected %} checked {% endif %} />
           <p>{{item.text}}</p>
         </li>
-      {% endfor %}
+        {% endfor %}
     </section>
   </div>
-  <footer><button type="submit" id="btnSave" name="btnSave">{{resource.save}}</button></footer>
+  <footer>
+    <button type="submit" id="btnSave" name="btnSave">{{resource.save}}</button>
+  </footer>
+  <script>
+    resources.load = function (pageBody) {
+      const checkbox = document.getElementById("roleAssignmentForm_checkAll")
+      checkbox.addEventListener("change", function () {
+        checkAll(checkbox, "id")
+      })
+    }
+  </script>
 </form>

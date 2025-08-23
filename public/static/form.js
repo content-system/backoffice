@@ -480,6 +480,17 @@ function setInputValue(form, name, value) {
   }
   return false
 }
+function checkAll(target, name) {
+  const form = target.form
+  if (form) {
+    for (let i = 0; i < form.length; i++) {
+      const ele = form[i]
+      if (ele.name === name) {
+        ele.checked = target.checked
+      }
+    }
+  }
+}
 function getHttpHeaders() {
   const token = getToken()
   const lang = getLang()

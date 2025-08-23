@@ -498,6 +498,18 @@ function setInputValue(form: HTMLFormElement | null | undefined, name: string, v
   return false
 }
 
+function checkAll(target: HTMLInputElement, name: string) {
+  const form = target.form
+  if (form) {
+    for (let i = 0; i < form.length; i++) {
+      const ele = form[i] as HTMLInputElement
+      if (ele.name === name) {
+        ele.checked = target.checked
+      }
+    }
+  }
+}
+
 function getHttpHeaders(): any {
   const token = getToken()
   const lang = getLang()
