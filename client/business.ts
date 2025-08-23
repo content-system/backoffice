@@ -89,7 +89,7 @@ function saveArticle(e: Event) {
   })
 }
 
-function assignRoleToUser(e: Event) {
+function assignRolesToUser(e: Event) {
   e.preventDefault()
   const target = e.target as HTMLButtonElement
   const form = target.form as HTMLFormElement

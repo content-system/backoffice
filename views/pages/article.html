@@ -5,7 +5,7 @@
     <button class="btn-group btn-right"><i class="material-icons">group</i></button>
   </header>
   <div class="row">
-    <label class="col s6 m6 required">
+    <label class="col s6 m6">
       {{resource.id}}
       <input
         type="text"
@@ -19,7 +19,7 @@
         placeholder="{{resource.id}}"
       />
     </label>
-    <label class="col s6 m6 required">
+    <label class="col s6 m6">
       {{resource.thumbnail}}
       <input
         type="url"
@@ -74,5 +74,41 @@
       <textarea id="content" name="content" rows="80" maxlength="9000" placeholder="{{resource.content}}"/>{{article.content}}</textarea>
     </label>
   </div>
-  <footer class="view-footer"><button type="submit" id="btnSave" name="btnSave" onclick="saveArticle(event)" {% if readonly %} disabled {% endif %}>{{resource.save}}</button></footer>
+  <footer class="view-footer">
+    <button type="submit" id="btnSave" name="btnSave" onclick="saveArticle(event)" {% if readonly %} disabled {% endif %}>{{resource.save}}</button>
+  </footer>
+  <script>
+    function saveArticle(e) {
+      e.preventDefault()
+      var target = e.target
+      var form = target.form
+      var valid = validateForm(form)
+      if (!valid) {
+        return
+      }
+      var resource = getResource()
+      var job = decodeFromForm(form)
+      job.tags = getChips("articleForm_chipTags")
+      deleteFields(job, ["txtTag", "btnAddTag"])
+      showConfirm(resource.msg_confirm_save, function () {
+        showLoading()
+        fetch(getCurrentURL(), {
+          method: "POST",
+          headers: getHttpHeaders(),
+          body: JSON.stringify(job),
+        })
+          .then(function (response) {
+            hideLoading()
+            if (response.ok) {
+              alertSuccess(resource.msg_save_success)
+            } else {
+              handleJsonError(response, resource, form)
+            }
+          })
+          .catch(function (err) {
+            return handleError(err, resource.error_network)
+          })
+      })
+    }
+  </script>
 </form>

@@ -124,7 +124,6 @@ export class UserController {
               role.selected = user.roles.includes(role.value)
             }
           }
-          console.log("test " + JSON.stringify(roles))
           render(req, res, "user-assign", {
             resource,
             user: escape(user),

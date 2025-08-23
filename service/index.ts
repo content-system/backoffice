@@ -28,7 +28,7 @@ export function route(app: Application, ctx: Context, secure?: boolean): void {
   app.get("/users/:id", readUser, ctx.menu.build, ctx.user.view)
   app.post("/users/:id", writeUser, json(), ctx.user.submit)
   app.get("/users/:id/assign", readUser, ctx.menu.build, ctx.user.renderAssign)
-  app.patch("/users/:id/assign", writeUser, ctx.menu.build, ctx.user.assign)
+  app.patch("/users/:id/assign", writeUser, ctx.menu.build, json(), ctx.user.assign)
 
   const readAuditLog = ctx.authorize("audit_log", read)
   app.get("/audit-logs", readAuditLog, ctx.menu.build, ctx.auditLog.render)

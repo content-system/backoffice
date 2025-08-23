@@ -151,7 +151,6 @@ function insertRoleModules(stmts: Statement[], roleId: string, privileges: strin
     })
     const stmt = buildToInsertBatch(modules, "role_modules", roleModuleModel, param)
     if (stmt) {
-      console.log("sql " + stmt.query)
       stmts.push(stmt)
     }
   }

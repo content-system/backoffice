@@ -25,15 +25,44 @@
     </section>
   </div>
   <footer>
-    <button type="submit" id="btnSave" name="btnSave" onclick="assignRoleToUser(event)">{{resource.save}}</button>
+    <button type="submit" id="btnSave" name="btnSave" onclick="assignRolesToUser(event)">{{resource.save}}</button>
   </footer>
   <script>
     console.log("Enter user assign")
     resources.load = function (pageBody) {
       console.log("Enter user assign load")
       const checkbox = document.getElementById("roleAssignmentForm_checkAll")
-      checkbox.addEventListener("change", function () {
-        checkAll(checkbox, "id")
+      if (checkbox) {
+        checkbox.addEventListener("change", function () {
+          checkAll(checkbox, "id")
+        })
+      }
+    }
+    function assignRolesToUser(e) {
+      e.preventDefault()
+      var target = e.target
+      var form = target.form
+      var roles = getCheckboxValues(form, "id")
+      var resource = getResource()
+      var msg = roles.length === 0 ? "{{resource.msg_confirm_assign_roles_to_user}}" : "{{resource.msg_confirm_save}}"
+      showConfirm(msg, function () {
+        showLoading()
+        fetch(getCurrentURL(), {
+          method: "PATCH",
+          headers: getHttpHeaders(),
+          body: JSON.stringify(roles),
+        })
+          .then(function (response) {
+            hideLoading()
+            if (response.ok) {
+              alertSuccess(resource.msg_save_success)
+            } else {
+              handleJsonError(response, resource, form)
+            }
+          })
+          .catch(function (err) {
+            return handleError(err, resource.error_network)
+          })
       })
     }
   </script>
