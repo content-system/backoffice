@@ -509,6 +509,18 @@ function checkAll(target: HTMLInputElement, name: string) {
     }
   }
 }
+function getCheckboxValues(form: HTMLFormElement | null | undefined, name: string): string[] {
+  const v: string[] = []
+  if (form) {
+    for (let i = 0; i < form.length; i++) {
+      const ele = form[i] as HTMLInputElement
+      if (ele.name === name && ele.checked) {
+        v.push(ele.value)
+      }
+    }
+  }
+  return v
+}
 
 function getHttpHeaders(): any {
   const token = getToken()

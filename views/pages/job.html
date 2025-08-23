@@ -65,10 +65,10 @@
     </div>
     <label class="col s12 textarea-container">
       {{resource.skills}}
-      <div id="chipSkills" class="chip-list">{{generateChips(job.skills)}}
+      <div id="jobForm_chipSkills" class="chip-list">{{generateChips(job.skills)}}
         <div class="chip-input-container">
-        <input type="text" id="txtSkill" name="txtSkill" onkeydown="chipOnKeydown(event, 'chipSkills')" placeholder="Enter a chip value..." />
-        <button type="button" id="btnAddSkill" name="btnAddSkill" onclick="addChip(this, 'txtSkill', 'chipSkills')">Add</button>
+        <input type="text" id="txtSkill" name="txtSkill" onkeydown="chipOnKeydown(event, 'jobForm_chipSkills')" placeholder="Enter a skill..." />
+        <button type="button" id="btnAddSkill" name="btnAddSkill" onclick="addChip(this, 'txtSkill', 'jobForm_chipSkills')">Add</button>
       </div>
       </div>
     </label>

@@ -277,4 +277,5 @@ export const vi = {
   contacted_by: "Contacted By",
   contacted_at: "Contacted At",
   message: "Message",
+  msg_confirm_assign_roles_to_user: "You do not assign any role to this user. Are you sure you want to save?",
 }

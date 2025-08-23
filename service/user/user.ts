@@ -33,6 +33,7 @@ export interface UserRepository {
   update(user: User): Promise<number>
   patch(user: Partial<User>): Promise<number>
   delete(id: string): Promise<number>
+  assign(id: string, roles: string[]): Promise<number>
 }
 export interface UserService {
   getUsersOfRole(roleId: string): Promise<User[]>
@@ -42,6 +43,7 @@ export interface UserService {
   update(user: User): Promise<Result<User>>
   patch(user: Partial<User>): Promise<Result<User>>
   delete(id: string): Promise<number>
+  assign(id: string, roles: string[]): Promise<number>
 }
 
 export const userModel: Attributes = {

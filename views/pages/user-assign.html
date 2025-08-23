@@ -18,14 +18,14 @@
         </li>
         {% for item in roles %}
         <li class="col check-item">
-          <input type="checkbox" name="id" value="{{item.value}}" {% if item.selected %} checked {% endif %} />
+          <input type="checkbox" id="role_{{item.value}}" name="id" value="{{item.value}}" {% if item.selected %} checked {% endif %} />
           <p>{{item.text}}</p>
         </li>
         {% endfor %}
     </section>
   </div>
   <footer>
-    <button type="submit" id="btnSave" name="btnSave">{{resource.save}}</button>
+    <button type="submit" id="btnSave" name="btnSave" onclick="assignRoleToUser(event)">{{resource.save}}</button>
   </footer>
   <script>
     console.log("Enter user assign")

@@ -19,6 +19,9 @@ export class UserUseCase extends GenericUseCase<User, string> implements UserSer
   getUsersOfRole(roleId: string): Promise<User[]> {
     return this.repo.getUsersOfRole(roleId)
   }
+  assign(id: string, roles: string[]): Promise<number> {
+    return this.repo.assign(id, roles)
+  }
 }
 
 export function useUserController(log: Log, db: DB, mapper?: TemplateMap): UserController {

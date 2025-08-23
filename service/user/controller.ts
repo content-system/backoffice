@@ -10,6 +10,7 @@ import {
   fromRequest,
   getOffset,
   getSearch,
+  handleError,
   hasSearch,
   queryLimit,
   queryPage,
@@ -43,6 +44,7 @@ export class UserController {
     this.search = this.search.bind(this)
     this.view = this.view.bind(this)
     this.submit = this.submit.bind(this)
+    this.renderAssign = this.renderAssign.bind(this)
     this.assign = this.assign.bind(this)
   }
   search(req: Request, res: Response) {
@@ -106,7 +108,7 @@ export class UserController {
       save(req.params.id !== "new", res, user, this.service, this.log)
     }
   }
-  assign(req: Request, res: Response) {
+  renderAssign(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const id = req.params.id
@@ -134,5 +136,17 @@ export class UserController {
       }
     })
     .catch((err) => renderError500(req, res, resource, err))
+  }
+  assign(req: Request, res: Response) {
+    const lang = getLang(req, res)
+    const resource = getResource(lang)
+    const id = req.params.id
+    const roles = req.body as string[]
+    if (!id || id.length === 0) {
+      return res.status(400).end("id is required")
+    }
+    this.service.assign(id, roles).then(result => {
+      res.status(204).end()
+    }).catch((err) => handleError(err, res, this.log))
   }
 }

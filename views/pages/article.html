@@ -62,10 +62,10 @@
     </label>
     <label class="col s12 textarea-container">
       {{resource.tags}}
-      <div id="chipTags" class="chip-list">{{generateChips(article.tags)}}
+      <div id="articleForm_chipTags" class="chip-list">{{generateChips(article.tags)}}
         <div class="chip-input-container">
-        <input type="text" id="txtTag" name="txtTag" onkeydown="chipOnKeydown(event, 'chipTags')" placeholder="Enter a chip value..." />
-        <button type="button" id="btnAddTag" name="btnAddTag" onclick="addChip(this, 'txtTag', 'chipTags')">Add</button>
+        <input type="text" id="txtTag" name="txtTag" onkeydown="chipOnKeydown(event, 'articleForm_chipTags')" placeholder="Enter a tag value..." />
+        <button type="button" id="btnAddTag" name="btnAddTag" onclick="addChip(this, 'txtTag', 'articleForm_chipTags')">Add</button>
       </div>
       </div>
     </label>

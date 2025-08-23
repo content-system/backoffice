@@ -491,6 +491,18 @@ function checkAll(target, name) {
     }
   }
 }
+function getCheckboxValues(form, name) {
+  const v = []
+  if (form) {
+    for (let i = 0; i < form.length; i++) {
+      const ele = form[i]
+      if (ele.name === name && ele.checked) {
+        v.push(ele.value)
+      }
+    }
+  }
+  return v
+}
 function getHttpHeaders() {
   const token = getToken()
   const lang = getLang()

@@ -26,14 +26,15 @@ export class SqlUserRepository implements UserRepository {
     this.attributes = userModel
     const meta = metadata(userModel)
     this.primaryKeys = meta.keys
+    this.map = buildMap(userModel)
+    this.roleMap = buildMap(userRoleModel)
     this.search = this.search.bind(this)
     this.all = this.all.bind(this)
     this.create = this.create.bind(this)
     this.update = this.update.bind(this)
     this.patch = this.patch.bind(this)
     this.delete = this.delete.bind(this)
-    this.map = buildMap(userModel)
-    this.roleMap = buildMap(userRoleModel)
+    this.assign = this.assign.bind(this)
   }
 
   getUsersOfRole(roleId: string): Promise<User[]> {
@@ -92,7 +93,7 @@ export class SqlUserRepository implements UserRepository {
     const query = `delete from user_roles where user_id = ${this.db.param(1)}`
     stmts.push({ query, params: [user.userId] })
     insertUserRoles(stmts, user.userId, user.roles, this.db.param)
-    return this.db.exec(stmt.query, stmt.params)
+    return this.db.execBatch(stmts)
   }
   patch(user: User): Promise<number> {
     return this.update(user)
@@ -106,6 +107,15 @@ export class SqlUserRepository implements UserRepository {
       return Promise.resolve(-1)
     }
     stmts.push(stmt)
+    return this.db.execBatch(stmts)
+  }
+  assign(id: string, roles: string[]): Promise<number> {
+    const stmts: Statement[] = []
+    const query = `delete from user_roles where user_id = ${this.db.param(1)}`
+    stmts.push({ query, params: [id] })
+    if (roles && roles.length > 0) {
+      insertUserRoles(stmts, id, roles, this.db.param)
+    }
     return this.db.execBatch(stmts)
   }
 }
