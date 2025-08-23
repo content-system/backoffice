@@ -69,7 +69,7 @@ function assignRolesToUser(e) {
   var form = target.form
   var roles = getCheckboxValues(form, "id")
   var resource = getResource()
-  var msg = roles.length === 0 ? "{{resource.msg_confirm_assign_roles_to_user}}" : "{{resource.msg_confirm_save}}"
+  var msg = roles.length === 0 ? target.getAttribute("data-warning") : resource.msg_confirm_save
   showConfirm(msg, function () {
     showLoading()
     fetch(getCurrentURL(), {

@@ -95,13 +95,13 @@ function assignRolesToUser(e: Event) {
   const form = target.form as HTMLFormElement
   const roles = getCheckboxValues(form, "id")
   const resource = getResource()
-  const msg = roles.length === 0 ? "{{resource.msg_confirm_assign_roles_to_user}}" : "{{resource.msg_confirm_save}}"
+  const msg = roles.length === 0 ? (target.getAttribute("data-warning") as string) : resource.msg_confirm_save
   showConfirm(msg, () => {
     showLoading()
     fetch(getCurrentURL(), {
       method: "PATCH",
       headers: getHttpHeaders(),
-      body: JSON.stringify(roles), // Convert the form data to JSON format
+      body: JSON.stringify(roles),
     })
       .then((response) => {
         hideLoading()
