@@ -420,6 +420,20 @@ function decodeFromForm<T>(form: HTMLFormElement, currencySymbol?: string | null
   })
   return obj
 }
+function getChips(chipId: string): string[] {
+  const container = document.getElementById(chipId)
+  return getChipsByElement(container)
+}
+function getChipsByElement(container?: Element | null): string[] {
+  if (container) {
+    return Array.from(container.querySelectorAll<HTMLElement>(".chip")).map((chip) => {
+      const v = chip.getAttribute("data-value")
+      return v ? v.trim() : ""
+    })
+  } else {
+    return []
+  }
+}
 
 function removeMessage(ele?: Element | null): boolean {
   if (ele) {

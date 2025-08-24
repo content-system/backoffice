@@ -17,20 +17,6 @@ function createChip(container, value, text, inputContainer) {
   }
   return chip
 }
-function getChips(chipId) {
-  var container = document.getElementById(chipId)
-  return getChipsByElement(container)
-}
-function getChipsByElement(container) {
-  if (container) {
-    return Array.from(container.querySelectorAll(".chip")).map(function (chip) {
-      var v = chip.getAttribute("data-value")
-      return v ? v.trim() : ""
-    })
-  } else {
-    return []
-  }
-}
 function addChip(triggerElement, inputName, chipId) {
   var _a
   var input

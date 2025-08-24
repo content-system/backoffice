@@ -410,6 +410,20 @@ function decodeFromForm(form, currencySymbol) {
   })
   return obj
 }
+function getChips(chipId) {
+  var container = document.getElementById(chipId)
+  return getChipsByElement(container)
+}
+function getChipsByElement(container) {
+  if (container) {
+    return Array.from(container.querySelectorAll(".chip")).map(function (chip) {
+      var v = chip.getAttribute("data-value")
+      return v ? v.trim() : ""
+    })
+  } else {
+    return []
+  }
+}
 function removeMessage(ele) {
   if (ele) {
     removeClasses(ele, ["alert-error", "alert-warning", "alert-info"])

@@ -16,23 +16,6 @@ function createChip(container: HTMLElement, value: string, text: string, inputCo
   }
   return chip
 }
-
-function getChips(chipId: string): string[] {
-  const container = document.getElementById(chipId)
-  return getChipsByElement(container)
-}
-
-function getChipsByElement(container?: Element | null): string[] {
-  if (container) {
-    return Array.from(container.querySelectorAll<HTMLElement>(".chip")).map((chip) => {
-      const v = chip.getAttribute("data-value")
-      return v ? v.trim() : ""
-    })
-  } else {
-    return []
-  }
-}
-
 function addChip(triggerElement: HTMLButtonElement | HTMLInputElement, inputName?: string, chipId?: string): void {
   let input: HTMLInputElement
   if (triggerElement.nodeName === "INPUT") {
