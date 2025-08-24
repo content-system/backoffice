@@ -113,6 +113,7 @@ function loadScript(url: string, callback: (this: GlobalEventHandlers, ev: Event
   script.onload = callback
   document.body.appendChild(script)
 }
+const cacheScript = new Map<string, string>()
 function navigate(e: Event, ignoreLang?: boolean) {
   e.preventDefault()
   const target = e.target as HTMLElement
@@ -148,7 +149,8 @@ function navigate(e: Event, ignoreLang?: boolean) {
                 if (pageBody.children && pageBody.children.length > 0) {
                   const e = pageBody.children[0]
                   const scriptUrl = e.getAttribute("data-script")
-                  if (scriptUrl && scriptUrl.length > 0) {
+                  if (scriptUrl && scriptUrl.length > 0 && !cacheScript.get(scriptUrl)) {
+                    cacheScript.set(scriptUrl, "Y")
                     loadScript(scriptUrl, function () {
                       console.log("Script loaded and ready!")
                     })
