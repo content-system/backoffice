@@ -62,10 +62,10 @@
     </label>
     <label class="col s12 textarea-container">
       {{resource.tags}}
-      <div id="articleForm_chipTags" class="chip-list">{{generateChips(article.tags)}}
+      <div class="chip-list" data-name="tags">{{generateTags(article.tags)}}
         <div class="chip-input-container">
-        <input type="text" id="txtTag" name="txtTag" onkeydown="chipOnKeydown(event, 'articleForm_chipTags')" placeholder="Enter a tag value..." />
-        <button type="button" id="btnAddTag" name="btnAddTag" onclick="addChip(this, 'txtTag', 'articleForm_chipTags')">Add</button>
+        <input type="text" id="txtTag" name="txtTag" data-skip="true" onkeydown="chipOnKeydown(event)" placeholder="Enter a tag value..." />
+        <button type="button" id="btnAddTag" name="btnAddTag" onclick="addChip(this)">Add</button>
       </div>
       </div>
     </label>
@@ -75,6 +75,6 @@
     </label>
   </div>
   <footer class="view-footer">
-    <button type="submit" id="btnSave" name="btnSave" onclick="saveArticle(event)" {% if readonly %} disabled {% endif %}>{{resource.save}}</button>
+    <button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)" {% if readonly %} disabled {% endif %}>{{resource.save}}</button>
   </footer>
 </form>

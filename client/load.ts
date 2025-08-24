@@ -1,4 +1,13 @@
 window.onload = function () {
+  const pageBody = document.getElementById("pageBody")
+  if (pageBody) {
+    pageBody.querySelectorAll("script").forEach((oldScript) => {
+      const scriptId = oldScript.getAttribute("id")
+      if (scriptId && scriptId.length > 0) {
+        cacheScript.set(scriptId, "Y")
+      }
+    })
+  }
   setTimeout(function () {
     const page = document.getElementById("pageContainer")
     if (page) {
@@ -13,7 +22,6 @@ window.onload = function () {
         }
       }, 0)
     }
-    const pageBody = document.getElementById("pageBody")
     if (pageBody) {
       setTimeout(function () {
         resources.load(pageBody)

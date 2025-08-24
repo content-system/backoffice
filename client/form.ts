@@ -342,7 +342,7 @@ function decodeFromForm<T>(form: HTMLFormElement, currencySymbol?: string | null
       if (nodeName === "INPUT" && type !== null) {
         nodeName = type.toUpperCase()
       }
-      if (nodeName !== "BUTTON" && nodeName !== "RESET" && nodeName !== "SUBMIT") {
+      if (nodeName !== "BUTTON" && nodeName !== "RESET" && nodeName !== "SUBMIT" && ele.getAttribute("data-skip") !== "true") {
         switch (type) {
           case "checkbox":
             if (id && name !== id) {
@@ -411,6 +411,13 @@ function decodeFromForm<T>(form: HTMLFormElement, currencySymbol?: string | null
       }
     }
   }
+  form.querySelectorAll(".chip-list").forEach((divChip) => {
+    const name = divChip.getAttribute("data-name")
+    if (name && name.length > 0) {
+      const v = getChipsByElement(divChip)
+      setValue(obj, name, v)
+    }
+  })
   return obj
 }
 

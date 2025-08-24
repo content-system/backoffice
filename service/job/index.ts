@@ -53,7 +53,7 @@ export class JobController {
       // title: "Java",
     }
     if (hasSearch(req)) {
-      filter = fromRequest<JobFilter>(req)
+      filter = fromRequest<JobFilter>(req, ["skills"])
       format(filter, ["publishedAt"])
     }
     const page = queryNumber(req, resources.page, 1)

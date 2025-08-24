@@ -106,13 +106,6 @@ function toggleMenuItem(e) {
     parent.classList.toggle("open")
   }
 }
-function loadScript(url, callback) {
-  var script = document.createElement("script")
-  script.src = url
-  script.async = true
-  script.onload = callback
-  document.body.appendChild(script)
-}
 var cacheScript = new Map()
 function navigate(e, ignoreLang) {
   e.preventDefault()
@@ -145,17 +138,37 @@ function navigate(e, ignoreLang) {
                 var span = link.querySelector("span")
                 var title = span ? span.innerText : link.innerText
                 window.history.pushState({ pageTitle: title }, "", url_1)
-                afterLoaded(pageBody)
-                if (pageBody.children && pageBody.children.length > 0) {
-                  var e_1 = pageBody.children[0]
-                  var scriptUrl = e_1.getAttribute("data-script")
-                  if (scriptUrl && scriptUrl.length > 0 && !cacheScript.get(scriptUrl)) {
-                    cacheScript.set(scriptUrl, "Y")
-                    loadScript(scriptUrl, function () {
-                      console.log("Script loaded and ready!")
-                    })
+                pageBody.querySelectorAll("script").forEach(function (oldScript) {
+                  var isInitScript = oldScript.getAttribute("data-init-script")
+                  if (isInitScript === "true") {
+                    var newScript = document.createElement("script")
+                    if (oldScript.src) {
+                      newScript.src = oldScript.src
+                    } else {
+                      newScript.textContent = oldScript.textContent
+                    }
+                    document.body.appendChild(newScript)
+                    oldScript.remove()
+                  } else {
+                    var scriptId = oldScript.getAttribute("id")
+                    if (scriptId && scriptId.length > 0) {
+                      var loaded = cacheScript.get(scriptId)
+                      if (!loaded) {
+                        cacheScript.set(scriptId, "Y")
+                        var newScript = document.createElement("script")
+                        newScript.id = scriptId
+                        if (oldScript.src) {
+                          newScript.src = oldScript.src
+                        } else {
+                          newScript.textContent = oldScript.textContent
+                        }
+                        document.body.appendChild(newScript)
+                        oldScript.remove()
+                      }
+                    }
                   }
-                }
+                })
+                afterLoaded(pageBody)
                 setTimeout(function () {
                   resources.load(pageBody)
                 }, 0)

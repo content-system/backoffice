@@ -1,11 +1,14 @@
 "use strict"
-function createChip(container, text, inputContainer) {
-  const chip = document.createElement("div")
+function createChip(container, value, text, inputContainer) {
+  var chip = document.createElement("div")
   chip.className = "chip"
   chip.textContent = text
-  const close = document.createElement("span")
+  chip.setAttribute("data-value", value)
+  var close = document.createElement("span")
   close.className = "close"
-  close.onclick = () => chip.remove()
+  close.onclick = function () {
+    return chip.remove()
+  }
   chip.appendChild(close)
   if (inputContainer) {
     container.insertBefore(chip, inputContainer)
@@ -15,43 +18,57 @@ function createChip(container, text, inputContainer) {
   return chip
 }
 function getChips(chipId) {
-  const container = document.getElementById(chipId)
+  var container = document.getElementById(chipId)
+  return getChipsByElement(container)
+}
+function getChipsByElement(container) {
   if (container) {
-    return Array.from(container.querySelectorAll(".chip")).map((chip) => {
-      var _a, _b
-      const firstChild = chip.firstChild
-      return (_b = (_a = firstChild === null || firstChild === void 0 ? void 0 : firstChild.textContent) === null || _a === void 0 ? void 0 : _a.trim()) !==
-        null && _b !== void 0
-        ? _b
-        : ""
+    return Array.from(container.querySelectorAll(".chip")).map(function (chip) {
+      var v = chip.getAttribute("data-value")
+      return v ? v.trim() : ""
     })
   } else {
     return []
   }
 }
 function addChip(triggerElement, inputName, chipId) {
-  const form = triggerElement.form
-  if (!form) return
-  const input = getElement(form, inputName)
+  var _a
+  var input
+  if (triggerElement.nodeName === "INPUT") {
+    input = triggerElement
+  } else {
+    var form = triggerElement.form
+    if (!form) return
+    if (inputName) {
+      input = getElement(form, inputName)
+    } else {
+      input = (_a = triggerElement.parentElement) === null || _a === void 0 ? void 0 : _a.firstElementChild
+    }
+  }
   if (!input) return
-  const value = input.value.trim()
+  var value = input.value.trim()
   if (!value) return
-  const chipList = document.getElementById(chipId)
+  var chipList
+  if (chipId) {
+    chipList = document.getElementById(chipId)
+  } else {
+    chipList = findParent(triggerElement, "chip-list")
+  }
   if (!chipList) return
-  createChip(chipList, value, triggerElement.parentElement)
+  createChip(chipList, value, value, triggerElement.parentElement)
   input.value = ""
 }
 function chipOnKeydown(e, chipId) {
   if (e.key === "Enter") {
     e.preventDefault()
-    const target = e.target
+    var target = e.target
     if (!target.readOnly && !target.disabled) {
       addChip(target, target.name, chipId)
     }
   }
 }
 function removeChip(e) {
-  let target = e.target
+  var target = e.target
   if (target.tagName === "SPAN") {
     target = target.parentElement
   }

@@ -1,92 +1,104 @@
 <!DOCTYPE html>
 <html lang="{{lang}}">
-  <head>
-    <meta name="theme-color" content="#008577" />
-    <meta name="color-scheme" content="light" />
-    <meta charset="utf-8" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="apple-touch-icon" href="/logo192.png" />
-    <link rel="stylesheet" href="/fonts/material-icon/css/material-icons.css" />
-    <link rel="stylesheet" href="/fonts/Roboto/font.css" />
-    {% include "partials/css.html" %}
-    <!--
+<head>
+  <meta name="theme-color" content="#008577" />
+  <meta name="color-scheme" content="light" />
+  <meta charset="utf-8" />
+  <link rel="icon" href="/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="apple-touch-icon" href="/logo192.png" />
+  <link rel="stylesheet" href="/fonts/material-icon/css/material-icons.css" />
+  <link rel="stylesheet" href="/fonts/Roboto/font.css" />
+  {% include "partials/css.html" %}
+  <!--
     manifest.json provides metadata used when your web app is installed on a
     user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-    <link rel="manifest" href="/manifest.json" />
-    {% include "partials/resource.html" %}
-    <title>CMS Back Office</title>
-  </head>
-  <body id="sysBody" class="full-header top-menu">
-    {% include "partials/common.html" %}
-    <script src="/static/ui.js"></script>
-    <script src="/static/index.js"></script>
-    <script src="/static/validator.js"></script>
-    <script src="/static/form.js"></script>
-    <script src="/static/search.js"></script>
-    <script src="/static/chip.js"></script>
-    <script src="/static/layout.js"></script>
-    <div id="root">
-      <div class="sidebar-parent menu-on">
-        <div class="top-banner">
-          <div class="logo-banner-wrapper">
-            <img src="https://jacobspradlin.files.wordpress.com/2014/10/banner-people-connected.png" alt="Banner of The Company" />
-            <img src="https://jacobspradlin.files.wordpress.com/2014/10/banner-people-connected.png" class="banner-logo-title" alt="Logo of The Company" />
-          </div>
-        </div>
-        <div class="menu sidebar">{% include "partials/navigation.html" %}</div>
-        <div id="pageContainer" class="page-container">
-          {% include "partials/header.html" %}
-          <div id="pageBody" class="page-body">{% block content %}{% endblock %}</div>
+  <link rel="manifest" href="/manifest.json" />
+  {% include "partials/resource.html" %}
+  <title>CMS Back Office</title>
+</head>
+
+<body id="sysBody" class="full-header top-menu">
+  {% include "partials/common.html" %}
+  <script src="/static/ui.js"></script>
+  <script src="/static/index.js"></script>
+  <script src="/static/validator.js"></script>
+  <script src="/static/form.js"></script>
+  <script src="/static/search.js"></script>
+  <script src="/static/chip.js"></script>
+  <script src="/static/layout.js"></script>
+  <div id="root">
+    <div class="sidebar-parent menu-on">
+      <div class="top-banner">
+        <div class="logo-banner-wrapper">
+          <img src="https://jacobspradlin.files.wordpress.com/2014/10/banner-people-connected.png"
+            alt="Banner of The Company" />
+          <img src="https://jacobspradlin.files.wordpress.com/2014/10/banner-people-connected.png"
+            class="banner-logo-title" alt="Logo of The Company" />
         </div>
       </div>
+      <div class="menu sidebar">{% include "partials/navigation.html" %}</div>
+      <div id="pageContainer" class="page-container">
+        {% include "partials/header.html" %}
+        <div id="pageBody" class="page-body">{% block content %}{% endblock %}</div>
+      </div>
     </div>
-    <script>
-      window.onload = function () {
-        setTimeout(function () {
-          var _a
-          const page = document.getElementById("pageContainer")
-          if (page) {
-            const forms = page.querySelectorAll("form")
-            for (let i = 0; i < forms.length; i++) {
-              registerEvents(forms[i])
-            }
-            setTimeout(function () {
-              const msg = getHiddenMessage(forms, resources.hiddenMessage, 1)
-              if (msg && msg.length > 0) {
-                toast(msg)
-              }
-            }, 0)
+  </div>
+  <script>
+    window.onload = function () {
+      var pageBody = document.getElementById("pageBody")
+      if (pageBody) {
+        pageBody.querySelectorAll("script").forEach(function (oldScript) {
+          var scriptId = oldScript.getAttribute("id")
+          if (scriptId && scriptId.length > 0) {
+            cacheScript.set(scriptId, "Y")
           }
-          const pageBody = document.getElementById("pageBody")
-          if (pageBody) {
-            setTimeout(function () {
-              resources.load(pageBody)
-            }, 0)
-          }
-          const sysNav = document.getElementById("sysNav")
-          if (sysNav) {
-            const firstPath = getFirstPath(window.location.origin + window.location.pathname)
-            const activePath = window.location.origin + firstPath
-            const elA = sysNav.querySelectorAll("a")
-            const l = elA.length
-            for (let i = 0; i < l; i++) {
-              if (elA[i].href === activePath) {
-                const parent = elA[i].parentElement
-                if (parent) {
-                  parent.classList.add("active")
-                  const pp = (_a = parent.parentElement) === null || _a === void 0 ? void 0 : _a.parentElement
-                  if (pp && pp.nodeName === "LI") {
-                    pp.classList.add("active")
-                  }
-                }
-                return
-              }
-            }
-          }
-        }, 0)
+        })
       }
-    </script>
-  </body>
+      setTimeout(function () {
+        var _a
+        var page = document.getElementById("pageContainer")
+        if (page) {
+          var forms_1 = page.querySelectorAll("form")
+          for (var i = 0; i < forms_1.length; i++) {
+            registerEvents(forms_1[i])
+          }
+          setTimeout(function () {
+            var msg = getHiddenMessage(forms_1, resources.hiddenMessage, 1)
+            if (msg && msg.length > 0) {
+              toast(msg)
+            }
+          }, 0)
+        }
+        if (pageBody) {
+          setTimeout(function () {
+            resources.load(pageBody)
+          }, 0)
+        }
+        var sysNav = document.getElementById("sysNav")
+        if (sysNav) {
+          var firstPath = getFirstPath(window.location.origin + window.location.pathname)
+          var activePath = window.location.origin + firstPath
+          var elA = sysNav.querySelectorAll("a")
+          var l = elA.length
+          for (var i = 0; i < l; i++) {
+            if (elA[i].href === activePath) {
+              var parent_1 = elA[i].parentElement
+              if (parent_1) {
+                parent_1.classList.add("active")
+                var pp = (_a = parent_1.parentElement) === null || _a === void 0 ? void 0 : _a.parentElement
+                if (pp && pp.nodeName === "LI") {
+                  pp.classList.add("active")
+                }
+              }
+              return
+            }
+          }
+        }
+      }, 0)
+    }
+  </script>
+</body>
+
 </html>

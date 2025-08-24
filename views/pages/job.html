@@ -65,10 +65,10 @@
     </div>
     <label class="col s12 textarea-container">
       {{resource.skills}}
-      <div id="jobForm_chipSkills" class="chip-list">{{generateChips(job.skills)}}
+      <div class="chip-list" data-name="skills">{{generateTags(job.skills)}}
         <div class="chip-input-container">
-        <input type="text" id="txtSkill" name="txtSkill" onkeydown="chipOnKeydown(event, 'jobForm_chipSkills')" placeholder="Enter a skill..." />
-        <button type="button" id="btnAddSkill" name="btnAddSkill" onclick="addChip(this, 'txtSkill', 'jobForm_chipSkills')">Add</button>
+        <input type="text" id="txtSkill" name="txtSkill" data-skip="true" onkeydown="chipOnKeydown(event)" placeholder="Enter a skill..." />
+        <button type="button" id="btnAddSkill" name="btnAddSkill" onclick="addChip(this)">Add</button>
       </div>
       </div>
     </label>
@@ -123,6 +123,6 @@
     </label>
   </div>
   <footer>
-    <button type="submit" id="btnSave" name="btnSave" onclick="saveJob(event)" {% if readonly %} disabled {% endif %}>{{resource.save}}</button>
+    <button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)" {% if readonly %} disabled {% endif %}>{{resource.save}}</button>
   </footer>
 </form>

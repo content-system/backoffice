@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { buildError500, checked, generateChips, getView, toString } from "express-ext"
+import { buildError500, checked, escapeHTML, getView, toString } from "express-ext"
 import fs from "fs"
 import nunjucks, { Template } from "nunjucks"
 import { Log, StringMap } from "onecore"
@@ -40,10 +40,26 @@ export function render(req: Request, res: Response, name: string, obj?: any): vo
     obj.formatDate = formatDate
     obj.formatPhone = formatPhone
     obj.formatNumber = formatNumber
+    obj.generateTags = generateTags
     obj.generateChips = generateChips
   }
   const html = compiledTemplate.render(obj)
   res.send(html)
+}
+
+export function generateChip(value: string, text: string, noClose?: boolean): string {
+  const s = noClose ? "" : `<span class="close" onclick="removeChip(event)"></span>`
+  return `<div class="chip" data-value="${escapeHTML(value)}">${escapeHTML(text)}${s}</div>`
+}
+export function generateTags(v?: string[] | null, noClose?: boolean): string {
+  return !v ? "" : `${v.map((s) => generateChip(s, s, noClose)).join("")}`
+}
+export interface Item {
+  value: string
+  text: string
+}
+export function generateChips(v?: Item[] | null, noClose?: boolean): string {
+  return !v ? "" : `${v.map((s) => generateChip(s.value, s.text, noClose)).join("")}`
 }
 
 export function renderError(req: Request, res: Response, obj?: any): void {

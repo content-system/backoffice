@@ -9,9 +9,19 @@
   <div>
     <form id="jobsForm" name="jobsForm" class="form" novalidate>
       <span class="hidden-message">{{message}}</span>
-      <section class="row search-group">{% include "partials/search.html" %} {% include "partials/pagination.html" %}</section>
-      <section class="row search-group inline advance-search">
-        <label class="col s12 m6">
+      <section class="row search-group">{% include "partials/search.html" %} {% include "partials/pagination.html" %}
+      </section>
+      <section class="row search-group advance-search">
+        <label class="col s12 m6 textarea-container">
+          {{resource.skills}}
+          <div class="chip-list" data-name="skills">{{generateTags(job.skills)}}
+            <div class="chip-input-container">
+              <input type="text" id="txtSkill" name="txtSkill" data-skip="true" onkeydown="chipOnKeydown(event)" placeholder="Enter a skill..." />
+              <button type="button" id="btnAddSkill" name="btnAddSkill" onclick="addChip(this)">Add</button>
+            </div>
+          </div>
+        </label>
+        <label class="col s12 m3">
           {{resource.published_at_from}}
           <input
             type="datetime-local"
@@ -22,7 +32,7 @@
             step=".010"
           />
         </label>
-        <label class="col s12 m6">
+        <label class="col s12 m3">
           {{resource.published_at_to}}
           <input
             type="datetime-local"

@@ -106,13 +106,6 @@ function toggleMenuItem(e: Event) {
     parent.classList.toggle("open")
   }
 }
-function loadScript(url: string, callback: (this: GlobalEventHandlers, ev: Event) => any) {
-  const script = document.createElement("script")
-  script.src = url
-  script.async = true
-  script.onload = callback
-  document.body.appendChild(script)
-}
 const cacheScript = new Map<string, string>()
 function navigate(e: Event, ignoreLang?: boolean) {
   e.preventDefault()
@@ -145,17 +138,41 @@ function navigate(e: Event, ignoreLang?: boolean) {
                 const span = link.querySelector("span")
                 const title = span ? span.innerText : link.innerText
                 window.history.pushState({ pageTitle: title }, "", url)
-                afterLoaded(pageBody)
-                if (pageBody.children && pageBody.children.length > 0) {
-                  const e = pageBody.children[0]
-                  const scriptUrl = e.getAttribute("data-script")
-                  if (scriptUrl && scriptUrl.length > 0 && !cacheScript.get(scriptUrl)) {
-                    cacheScript.set(scriptUrl, "Y")
-                    loadScript(scriptUrl, function () {
-                      console.log("Script loaded and ready!")
-                    })
+                pageBody.querySelectorAll("script").forEach((oldScript) => {
+                  const isInitScript = oldScript.getAttribute("data-init-script")
+                  if (isInitScript === "true") {
+                    const newScript = document.createElement("script")
+                    if (oldScript.src) {
+                      // external script
+                      newScript.src = oldScript.src
+                    } else {
+                      // inline script
+                      newScript.textContent = oldScript.textContent
+                    }
+                    document.body.appendChild(newScript)
+                    oldScript.remove()
+                  } else {
+                    const scriptId = oldScript.getAttribute("id")
+                    if (scriptId && scriptId.length > 0) {
+                      const loaded = cacheScript.get(scriptId)
+                      if (!loaded) {
+                        cacheScript.set(scriptId, "Y")
+                        const newScript = document.createElement("script")
+                        newScript.id = scriptId
+                        if (oldScript.src) {
+                          // external script
+                          newScript.src = oldScript.src
+                        } else {
+                          // inline script
+                          newScript.textContent = oldScript.textContent
+                        }
+                        document.body.appendChild(newScript)
+                        oldScript.remove()
+                      }
+                    }
                   }
-                }
+                })
+                afterLoaded(pageBody)
                 setTimeout(function () {
                   resources.load(pageBody)
                 }, 0)
