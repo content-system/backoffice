@@ -106,6 +106,13 @@ function toggleMenuItem(e: Event) {
     parent.classList.toggle("open")
   }
 }
+function loadScript(url: string, callback: (this: GlobalEventHandlers, ev: Event) => any) {
+  const script = document.createElement("script")
+  script.src = url
+  script.async = true
+  script.onload = callback
+  document.body.appendChild(script)
+}
 function navigate(e: Event, ignoreLang?: boolean) {
   e.preventDefault()
   const target = e.target as HTMLElement
@@ -138,6 +145,15 @@ function navigate(e: Event, ignoreLang?: boolean) {
                 const title = span ? span.innerText : link.innerText
                 window.history.pushState({ pageTitle: title }, "", url)
                 afterLoaded(pageBody)
+                if (pageBody.children && pageBody.children.length > 0) {
+                  const e = pageBody.children[0]
+                  const scriptUrl = e.getAttribute("data-script")
+                  if (scriptUrl && scriptUrl.length > 0) {
+                    loadScript(scriptUrl, function () {
+                      console.log("Script loaded and ready!")
+                    })
+                  }
+                }
                 setTimeout(function () {
                   resources.load(pageBody)
                 }, 0)

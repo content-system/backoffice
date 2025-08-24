@@ -106,6 +106,13 @@ function toggleMenuItem(e) {
     parent.classList.toggle("open")
   }
 }
+function loadScript(url, callback) {
+  var script = document.createElement("script")
+  script.src = url
+  script.async = true
+  script.onload = callback
+  document.body.appendChild(script)
+}
 function navigate(e, ignoreLang) {
   e.preventDefault()
   var target = e.target
@@ -138,6 +145,15 @@ function navigate(e, ignoreLang) {
                 var title = span ? span.innerText : link.innerText
                 window.history.pushState({ pageTitle: title }, "", url_1)
                 afterLoaded(pageBody)
+                if (pageBody.children && pageBody.children.length > 0) {
+                  var e_1 = pageBody.children[0]
+                  var scriptUrl = e_1.getAttribute("data-script")
+                  if (scriptUrl && scriptUrl.length > 0) {
+                    loadScript(scriptUrl, function () {
+                      console.log("Script loaded and ready!")
+                    })
+                  }
+                }
                 setTimeout(function () {
                   resources.load(pageBody)
                 }, 0)
