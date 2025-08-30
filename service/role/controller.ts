@@ -36,6 +36,7 @@ export class RoleController {
     this.search = this.search.bind(this)
     this.view = this.view.bind(this)
     this.submit = this.submit.bind(this)
+    this.renderAssign = this.renderAssign.bind(this)
   }
   search(req: Request, res: Response) {
     const lang = getLang(req, res)
@@ -104,5 +105,23 @@ export class RoleController {
     } else {
       save(req.params.id !== "new", res, role, this.service, this.log)
     }
+  }
+  renderAssign(req: Request, res: Response) {
+    const lang = getLang(req, res)
+    const resource = getResource(lang)
+    const id = req.params.id
+    this.service.load(id).then((role) => {
+      if (!role) {
+        renderError404(req, res, resource)
+      } else {
+        const permissions = res.locals.permissions as number
+        const readonly = write != (write & permissions)
+        render(req, res, "role-assign", {
+          resource,
+          role: escape(role),
+          readonly,
+        })
+      }
+    }).catch((err) => renderError500(req, res, resource, err))
   }
 }

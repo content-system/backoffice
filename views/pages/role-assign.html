@@ -1,86 +1,57 @@
 <div class="view-container">
-  <form id="roleAssignmentForm" name="roleAssignmentForm" class="form" novalidate>
-    <header>
-      <button type="button" id="btnBack" name="btnBack" class="btn-back"></button>
-      <h2>Admin</h2>
+  <form id="roleAssignmentForm" name="roleAssignmentForm" class="form" model-name="role">
+    <header class="view-header"><button type="button" id="btnBack" name="btnBack" class="btn-back"></button>
+      <h2>{{role.roleName}}</h2>
     </header>
-    <div>
-      <section class="row">
-        <label class="col s12 m6">Role Id<input type="text" id="roleId" name="roleId" maxlength="255" disabled value="admin" /></label>
-        <label class="col s12 m6">Role Name<input type="text" id="roleName" name="roleName" maxlength="255" placeholder="Role Name" disabled value="Admin"/></label>
+    <div class="form-body">
+      <section class="row section">
+        <label class="col s12 m6">
+          {{resource.role_id}}
+          <input type="text" id="roleId" name="roleId" value="{{role.roleId}}" maxlength="255" disabled>
+        </label>
+        <label class="col s12 m6">
+          {{resource.role_name}}
+          <input type="text" id="roleName" name="roleName" value="{{role.roleName}}" maxlength="255" disabled>
+        </label>
       </section>
-      <section class="row detail">
-        <h4>
-          User
+      <section class="row section">
+        <h4 class="header">
+          {{resource.users}}
           <div class="btn-group">
-            <button type="button" name="btnAdd">Add</button><button type="button" name="btnSelect">Deselect</button
-            ><button type="button" name="btnCheckAll">Check All</button><button type="button" name="btnUncheckAll">Uncheck All</button
-            ><button type="button" name="btnDelete">Delete</button>
+            <button type="button" name="btnAdd">{{resource.add}}</button>
+            <button type="button" name="btnSelect">{{resource.select}}</button>
           </div>
-        </h4>
-        <label class="col s12 search-input"
-          ><i class="btn-search"></i><input type="text" id="q" name="q" maxlength="40" placeholder="Search User" autocomplete="off" value="" /><button
-            type="button"
-            hidden=""
-            class="btn-remove-text"
-          ></button
-        ></label>
-        <ul class="row list-view">
-          <li class="col s12 m6 l4 xl3">
-            <section>
-              <input type="checkbox" name="selected" /><img
-                alt=""
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Liver-RM_%282%29_%28cropped%29.jpg/440px-Liver-RM_%282%29_%28cropped%29.jpg"
-                class="round-border"
-              />
-              <div>
-                <h3>Gareth Bale 2</h3>
-                <p>gareth.bale@gmail.com</p>
-              </div>
-            </section>
-          </li>
-          <li class="col s12 m6 l4 xl3">
-            <section>
-              <input type="checkbox" name="selected" /><img
-                alt=""
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/James_Rodriguez_2018.jpg/440px-James_Rodriguez_2018.jpg"
-                class="round-border"
-              />
-              <div>
-                <h3>James Rodríguez</h3>
-                <p>james.rodriguez@gmail.com</p>
-              </div>
-            </section>
-          </li>
-          <li class="col s12 m6 l4 xl3">
-            <section>
-              <input type="checkbox" name="selected" /><img
-                alt=""
-                src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Zinedine_Zidane_by_Tasnim_03.jpg"
-                class="round-border"
-              />
-              <div>
-                <h3>Zinedine Zidane</h3>
-                <p>zinedine.zidane@gmail.com</p>
-              </div>
-            </section>
-          </li>
-          <li class="col s12 m6 l4 xl3">
-            <section>
-              <input type="checkbox" name="selected" /><img
-                alt=""
-                src="https://upload.wikimedia.org/wikipedia/commons/c/c8/Real_Valladolid-Valencia_CF%2C_2019-05-18_%2890%29_%28cropped%29.jpg"
-                class="round-border"
-              />
-              <div>
-                <h3>Ronaldo</h3>
-                <p>ronaldo@gmail.com</p>
-              </div>
-            </section>
-          </li>
-        </ul>
+          </h4>
+          <label class="col s12 search-input">
+            <i class="btn-search"></i>
+            <input type="text" id="q" name="q" value="" maxlength="40" placeholder="Search User" autocomplete="off">
+          </label>
       </section>
+      <ul class="row list">
+        <li class="col s12 m6 l4 xl3 small img-item">
+          <img alt="" class="round-border" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Liver-RM_%282%29_%28cropped%29.jpg/440px-Liver-RM_%282%29_%28cropped%29.jpg">
+          <h4>Gareth Bale</h4>
+          <p>gareth.bale@gmail.com</p>
+        </li>
+        <li class="col s12 m6 l4 xl3 small img-item">
+          <img alt="" class="round-border" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/James_Rodriguez_2018.jpg/440px-James_Rodriguez_2018.jpg">
+          <h4>James Rodríguez</h4>
+          <p>james.rodriguez@gmail.com</p>
+        </li>
+        <li class="col s12 m6 l4 xl3 small img-item">
+          <img alt="" class="round-border" src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Zinedine_Zidane_by_Tasnim_03.jpg">
+          <h4>Zinedine Zidane</h4>
+          <p>zinedine.zidane@gmail.com</p>
+        </li>
+        <li class="col s12 m6 l4 xl3 small img-item">
+          <img alt="" class="round-border" src="https://upload.wikimedia.org/wikipedia/commons/c/c8/Real_Valladolid-Valencia_CF%2C_2019-05-18_%2890%29_%28cropped%29.jpg">
+          <h4>Ronaldo</h4>
+          <p>ronaldo@gmail.com</p>
+        </li>
+      </ul>
     </div>
-    <footer><button type="submit" id="btnSave" name="btnSave">Save</button></footer>
+    <footer class="view-footer">
+      <button type="submit" id="btnSave" name="btnSave">{{resource.save}}</button>
+    </footer>
   </form>
 </div>
