@@ -18,6 +18,7 @@ import { ContentController, useContentController } from "./content"
 import { JobController, useJobController } from "./job"
 import { getResourceByLang } from "./resources"
 import { RoleController, useRoleController } from "./role"
+import { useUserService } from "./shared/user"
 import { UserController, useUserController } from "./user"
 
 resources.createValidator = createValidator
@@ -79,7 +80,8 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: C
   )
   const login = new LoginController(authenticator, logger.error)
 
-  const role = useRoleController(logger.error, db, mapper)
+  const userService = useUserService(db, mapper)
+  const role = useRoleController(logger.error, db, userService, mapper)
   const user = useUserController(logger.error, db, mapper)
   const auditLog = useAuditLogController(db, logger.error)
 

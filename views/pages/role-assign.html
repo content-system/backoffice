@@ -28,26 +28,14 @@
           </label>
       </section>
       <ul class="row list">
+      {% for item in users %}
         <li class="col s12 m6 l4 xl3 small img-item">
-          <img alt="" class="round-border" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Liver-RM_%282%29_%28cropped%29.jpg/440px-Liver-RM_%282%29_%28cropped%29.jpg">
-          <h4>Gareth Bale</h4>
-          <p>gareth.bale@gmail.com</p>
+          <img alt="{{item.email}}" class="round-border" src="{{item.imageURL}}">
+          <input type="checkbox" id="userId_{{item.userId}}" name="userId" value="{{item.userId}}" hidden>
+          <h4>{{item.displayName}}</h4>
+          <p>{{item.email}}</p>
         </li>
-        <li class="col s12 m6 l4 xl3 small img-item">
-          <img alt="" class="round-border" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/James_Rodriguez_2018.jpg/440px-James_Rodriguez_2018.jpg">
-          <h4>James Rodríguez</h4>
-          <p>james.rodriguez@gmail.com</p>
-        </li>
-        <li class="col s12 m6 l4 xl3 small img-item">
-          <img alt="" class="round-border" src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Zinedine_Zidane_by_Tasnim_03.jpg">
-          <h4>Zinedine Zidane</h4>
-          <p>zinedine.zidane@gmail.com</p>
-        </li>
-        <li class="col s12 m6 l4 xl3 small img-item">
-          <img alt="" class="round-border" src="https://upload.wikimedia.org/wikipedia/commons/c/c8/Real_Valladolid-Valencia_CF%2C_2019-05-18_%2890%29_%28cropped%29.jpg">
-          <h4>Ronaldo</h4>
-          <p>ronaldo@gmail.com</p>
-        </li>
+      {% endfor %}
       </ul>
     </div>
     <footer class="view-footer">

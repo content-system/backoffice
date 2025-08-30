@@ -24,10 +24,10 @@ export class SqlUserService implements UserService {
     }
     const q = `
       select u.*
-      from userRoles ur
-        inner join users u on u.userId = ur.userId
-      where ur.roleId = ${this.db.param(1)}
-      order by userId`
+      from user_roles ur
+        inner join users u on u.user_id = ur.user_id
+      where ur.role_id = ${this.db.param(1)}
+      order by user_id`
     return this.db.query(q, [roleId], this.map)
   }
   search(s: UserFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<User>> {

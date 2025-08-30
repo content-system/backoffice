@@ -1,6 +1,7 @@
 import { GenericUseCase, Log, SearchResult } from "onecore"
 import { DB, SearchBuilder } from "query-core"
 import { TemplateMap, useQuery } from "query-mappers"
+import { UserService } from "../shared/user"
 import { RoleController } from "./controller"
 import { SqlRoleRepository } from "./repository"
 import { Role, RoleFilter, roleModel, RoleRepository, RoleService } from "./role"
@@ -20,10 +21,10 @@ export class RoleUseCase extends GenericUseCase<Role, string> implements RoleSer
   }
 }
 
-export function useRoleController(log: Log, db: DB, mapper?: TemplateMap): RoleController {
+export function useRoleController(log: Log, db: DB, userService: UserService, mapper?: TemplateMap): RoleController {
   const query = useQuery("role", mapper, roleModel, true)
   const builder = new SearchBuilder<Role, RoleFilter>(db.query, "roles", roleModel, db.driver, query)
   const repo = new SqlRoleRepository(builder.search, db)
   const service = new RoleUseCase(repo)
-  return new RoleController(service, log)
+  return new RoleController(service, userService, log)
 }

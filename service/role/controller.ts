@@ -21,6 +21,7 @@ import { Log } from "onecore"
 import { write } from "security-express"
 import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
+import { UserService } from "../shared/user"
 import { render, renderError404, renderError500 } from "../template"
 import { Role, RoleFilter, roleModel, RoleService } from "./role"
 
@@ -32,7 +33,7 @@ function createRole(): Role {
   return role
 }
 export class RoleController {
-  constructor(private service: RoleService, private log: Log) {
+  constructor(private service: RoleService, private userService: UserService, private log: Log) {
     this.search = this.search.bind(this)
     this.view = this.view.bind(this)
     this.submit = this.submit.bind(this)
@@ -116,10 +117,13 @@ export class RoleController {
       } else {
         const permissions = res.locals.permissions as number
         const readonly = write != (write & permissions)
-        render(req, res, "role-assign", {
-          resource,
-          role: escape(role),
-          readonly,
+        this.userService.getUsersOfRole(id).then(users => {
+          render(req, res, "role-assign", {
+            resource,
+            readonly,
+            role: escape(role),
+            users: escapeArray(users)
+          })
         })
       }
     }).catch((err) => renderError500(req, res, resource, err))
