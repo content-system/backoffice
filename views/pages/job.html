@@ -67,9 +67,9 @@
       {{resource.skills}}
       <div class="chip-list" data-name="skills">{{generateTags(job.skills)}}
         <div class="chip-input-container">
-        <input type="text" id="txtSkill" name="txtSkill" data-skip="true" onkeydown="chipOnKeydown(event)" placeholder="Enter a skill..." />
-        <button type="button" id="btnAddSkill" name="btnAddSkill" onclick="addChip(this)">Add</button>
-      </div>
+          <input type="text" id="txtSkill" name="txtSkill" data-skip="true" onkeydown="chipOnKeydown(event)" placeholder="Enter a skill..." />
+          <button type="button" id="btnAddSkill" name="btnAddSkill" class="btn-add" onclick="addChip(this)"></button>
+        </div>
       </div>
     </label>
     <label class="col s12 m6">

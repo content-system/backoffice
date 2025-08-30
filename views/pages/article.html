@@ -64,9 +64,9 @@
       {{resource.tags}}
       <div class="chip-list" data-name="tags">{{generateTags(article.tags)}}
         <div class="chip-input-container">
-        <input type="text" id="txtTag" name="txtTag" data-skip="true" onkeydown="chipOnKeydown(event)" placeholder="Enter a tag value..." />
-        <button type="button" id="btnAddTag" name="btnAddTag" onclick="addChip(this)">Add</button>
-      </div>
+          <input type="text" id="txtTag" name="txtTag" data-skip="true" onkeydown="chipOnKeydown(event)" placeholder="Enter a tag value..." />
+          <button type="button" id="btnAddTag" name="btnAddTag" class="btn-add" onclick="addChip(this)"></button>
+        </div>
       </div>
     </label>
     <label class="col s12 textarea-container required">

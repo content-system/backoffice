@@ -55,44 +55,38 @@ export class CategoryController {
     const page = queryNumber(req, resources.page, 1)
     const limit = queryNumber(req, resources.limit, resources.defaultLimit)
     const offset = getOffset(limit, page)
-    this.service
-      .search(cloneFilter(filter, limit, page), limit, page)
-      .then((result) => {
-        const list = escapeArray(result.list, offset, "no")
-        const search = getSearch(req.url)
-        render(req, res, "categories", {
-          resource,
-          limits: resources.limits,
-          filter,
-          list,
-          pages: buildPages(limit, result.total),
-          pageSearch: buildPageSearch(search),
-          sort: buildSortSearch(search, fields, filter.sort),
-          message: buildMessage(resource, list, limit, page, result.total),
-        })
+    this.service.search(cloneFilter(filter, limit, page), limit, page).then((result) => {
+      const list = escapeArray(result.list, offset, "no")
+      const search = getSearch(req.url)
+      render(req, res, "categories", {
+        resource,
+        limits: resources.limits,
+        filter,
+        list,
+        pages: buildPages(limit, result.total),
+        pageSearch: buildPageSearch(search),
+        sort: buildSortSearch(search, fields, filter.sort),
+        message: buildMessage(resource, list, limit, page, result.total),
       })
-      .catch((err) => renderError500(req, res, resource, err))
+    }).catch((err) => renderError500(req, res, resource, err))
   }
   view(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const id = req.params.id
-    this.service
-      .load(id)
-      .then((category) => {
-        if (!category) {
-          renderError404(req, res, resource)
-        } else {
-          const permissions = res.locals.permissions as number
-          const readonly = write != (write & permissions)
-          render(req, res, "category", {
-            resource,
-            category: escape(category),
-            readonly,
-          })
-        }
-      })
-      .catch((err) => renderError500(req, res, resource, err))
+    this.service.load(id).then((category) => {
+      if (!category) {
+        renderError404(req, res, resource)
+      } else {
+        const permissions = res.locals.permissions as number
+        const readonly = write != (write & permissions)
+        render(req, res, "category", {
+          resource,
+          category: escape(category),
+          readonly,
+        })
+      }
+    }).catch((err) => renderError500(req, res, resource, err))
   }
   submit(req: Request, res: Response) {
     const lang = getLang(req, res)
@@ -105,27 +99,21 @@ export class CategoryController {
       const id = req.params.id
       const editMode = id !== "new"
       if (!editMode) {
-        this.service
-          .create(category)
-          .then((result) => {
-            if (result === 0) {
-              res.status(409).end()
-            } else {
-              res.status(201).json(category).end()
-            }
-          })
-          .catch((err) => handleError(err, res, this.log))
+        this.service.create(category).then((result) => {
+          if (result === 0) {
+            res.status(409).end()
+          } else {
+            res.status(201).json(category).end()
+          }
+        }).catch((err) => handleError(err, res, this.log))
       } else {
-        this.service
-          .update(category)
-          .then((result) => {
-            if (result === 0) {
-              res.status(410).end()
-            } else {
-              res.status(200).json(category).end()
-            }
-          })
-          .catch((err) => handleError(err, res, this.log))
+        this.service.update(category).then((result) => {
+          if (result === 0) {
+            res.status(410).end()
+          } else {
+            res.status(200).json(category).end()
+          }
+        }).catch((err) => handleError(err, res, this.log))
       }
     }
   }

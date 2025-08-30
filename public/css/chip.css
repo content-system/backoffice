@@ -29,3 +29,13 @@
 .chip .close:hover {
   color: #f44336;
 }
+
+.chip-input-container .btn-add {
+  width: 34px;
+  height: 34px;
+}
+
+.chip-input-container .btn-add::before {
+  top: 5px;
+  left: 6px;
+}

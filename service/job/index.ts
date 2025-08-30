@@ -24,6 +24,7 @@ import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
 import { Job, JobFilter, jobModel, JobRepository, JobService } from "./job"
+import { buildQuery } from "./query"
 export * from "./job"
 
 export class SqlJobRepository extends Repository<Job, string> implements JobRepository {
@@ -48,10 +49,7 @@ export class JobController {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
-    let filter: JobFilter = {
-      limit: resources.defaultLimit,
-      // title: "Java",
-    }
+    let filter: JobFilter = { limit: resources.defaultLimit }
     if (hasSearch(req)) {
       filter = fromRequest<JobFilter>(req, ["skills"])
       format(filter, ["publishedAt"])
@@ -59,39 +57,33 @@ export class JobController {
     const page = queryNumber(req, resources.page, 1)
     const limit = queryNumber(req, resources.limit, resources.defaultLimit)
     const offset = getOffset(limit, page)
-    this.service
-      .search(cloneFilter(filter, limit, page), limit, page)
-      .then((result) => {
-        const list = escapeArray(result.list, offset, "sequence")
-        const search = getSearch(req.url)
-        render(req, res, "jobs", {
-          resource,
-          dateFormat,
-          limits: resources.limits,
-          filter,
-          list,
-          pages: buildPages(limit, result.total),
-          pageSearch: buildPageSearch(search),
-          sort: buildSortSearch(search, fields, filter.sort),
-          message: buildMessage(resource, list, limit, page, result.total),
-        })
+    this.service.search(cloneFilter(filter, limit, page), limit, page).then((result) => {
+      const list = escapeArray(result.list, offset, "sequence")
+      const search = getSearch(req.url)
+      render(req, res, "jobs", {
+        resource,
+        dateFormat,
+        limits: resources.limits,
+        filter,
+        list,
+        pages: buildPages(limit, result.total),
+        pageSearch: buildPageSearch(search),
+        sort: buildSortSearch(search, fields, filter.sort),
+        message: buildMessage(resource, list, limit, page, result.total),
       })
-      .catch((err) => renderError500(req, res, resource, err))
+    }).catch((err) => renderError500(req, res, resource, err))
   }
   view(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const id = req.params.id
-    this.service
-      .load(id)
-      .then((job) => {
-        if (!job) {
-          renderError404(req, res, resource)
-        } else {
-          render(req, res, "job", { resource, job: escape(job) })
-        }
-      })
-      .catch((err) => renderError500(req, res, resource, err))
+    this.service.load(id).then((job) => {
+      if (!job) {
+        renderError404(req, res, resource)
+      } else {
+        render(req, res, "job", { resource, job: escape(job) })
+      }
+    }).catch((err) => renderError500(req, res, resource, err))
   }
   submit(req: Request, res: Response) {
     const lang = getLang(req, res)
@@ -105,34 +97,28 @@ export class JobController {
       const editMode = id !== "new"
       // job.skills = ["GO", "Java", "Kafka", "Microservices", "Management"]
       if (!editMode) {
-        this.service
-          .create(job)
-          .then((result) => {
-            if (result === 0) {
-              res.status(409).end()
-            } else {
-              res.status(201).json(job).end()
-            }
-          })
-          .catch((err) => handleError(err, res, this.log))
+        this.service.create(job).then((result) => {
+          if (result === 0) {
+            res.status(409).end()
+          } else {
+            res.status(201).json(job).end()
+          }
+        }).catch((err) => handleError(err, res, this.log))
       } else {
-        this.service
-          .update(job)
-          .then((result) => {
-            if (result === 0) {
-              res.status(410).end()
-            } else {
-              res.status(200).json(job).end()
-            }
-          })
-          .catch((err) => handleError(err, res, this.log))
+        this.service.update(job).then((result) => {
+          if (result === 0) {
+            res.status(410).end()
+          } else {
+            res.status(200).json(job).end()
+          }
+        }).catch((err) => handleError(err, res, this.log))
       }
     }
   }
 }
 
 export function useJobController(db: DB, log: Log): JobController {
-  const builder = new SearchBuilder<Job, JobFilter>(db.query, "jobs", jobModel, db.driver)
+  const builder = new SearchBuilder<Job, JobFilter>(db.query, "jobs", jobModel, db.driver, buildQuery)
   const repository = new SqlJobRepository(db)
   const service = new JobUseCase(builder.search, repository)
   return new JobController(service, log)

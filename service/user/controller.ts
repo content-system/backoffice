@@ -73,8 +73,7 @@ export class UserController {
         sort: buildSortSearch(search, fields, filter.sort),
         message: buildMessage(resource, list, limit, page, result.total),
       })
-    })
-    .catch((err) => renderError500(req, res, resource, err))
+    }).catch((err) => renderError500(req, res, resource, err))
   }
   view(req: Request, res: Response) {
     const lang = getLang(req, res)
@@ -94,8 +93,7 @@ export class UserController {
           readonly,
         })
       }
-    })
-    .catch((err) => renderError500(req, res, resource, err))
+    }).catch((err) => renderError500(req, res, resource, err))
   }
   submit(req: Request, res: Response) {
     const lang = getLang(req, res)
@@ -130,11 +128,9 @@ export class UserController {
             roles: escapeArray(roles),
             readonly,
           })
-        })
-        .catch((err) => renderError500(req, res, resource, err))
+        }).catch((err) => renderError500(req, res, resource, err))
       }
-    })
-    .catch((err) => renderError500(req, res, resource, err))
+    }).catch((err) => renderError500(req, res, resource, err))
   }
   assign(req: Request, res: Response) {
     const lang = getLang(req, res)

@@ -50,23 +50,20 @@ export class RoleController {
     const page = queryPage(req, filter)
     const limit = queryLimit(req)
     const offset = getOffset(limit, page)
-    this.service
-      .search(cloneFilter(filter, limit, page), limit, page)
-      .then((result) => {
-        const list = escapeArray(result.list, offset, "sequence")
-        const search = getSearch(req.url)
-        render(req, res, "roles", {
-          resource,
-          limits: resources.limits,
-          filter,
-          list,
-          pages: buildPages(limit, result.total),
-          pageSearch: buildPageSearch(search),
-          sort: buildSortSearch(search, fields, filter.sort),
-          message: buildMessage(resource, list, limit, page, result.total),
-        })
+    this.service.search(cloneFilter(filter, limit, page), limit, page).then((result) => {
+      const list = escapeArray(result.list, offset, "sequence")
+      const search = getSearch(req.url)
+      render(req, res, "roles", {
+        resource,
+        limits: resources.limits,
+        filter,
+        list,
+        pages: buildPages(limit, result.total),
+        pageSearch: buildPageSearch(search),
+        sort: buildSortSearch(search, fields, filter.sort),
+        message: buildMessage(resource, list, limit, page, result.total),
       })
-      .catch((err) => renderError500(req, res, resource, err))
+    }).catch((err) => renderError500(req, res, resource, err))
   }
   view(req: Request, res: Response) {
     const lang = getLang(req, res)
@@ -81,23 +78,20 @@ export class RoleController {
         editMode,
       })
     } else {
-      this.service
-        .load(id)
-        .then((role) => {
-          if (!role) {
-            renderError404(req, res, resource)
-          } else {
-            const permissions = res.locals.permissions as number
-            const readonly = write != (write & permissions)
-            render(req, res, "role", {
-              resource,
-              role: escape(role),
-              editMode,
-              readonly,
-            })
-          }
-        })
-        .catch((err) => renderError500(req, res, resource, err))
+      this.service.load(id).then((role) => {
+        if (!role) {
+          renderError404(req, res, resource)
+        } else {
+          const permissions = res.locals.permissions as number
+          const readonly = write != (write & permissions)
+          render(req, res, "role", {
+            resource,
+            role: escape(role),
+            editMode,
+            readonly,
+          })
+        }
+      }).catch((err) => renderError500(req, res, resource, err))
     }
   }
   submit(req: Request, res: Response) {

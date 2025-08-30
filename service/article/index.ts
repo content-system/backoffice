@@ -26,6 +26,7 @@ import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
 import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService } from "./article"
+import { buildQuery } from "./query"
 export * from "./article"
 
 export class SqlArticleRepository extends Repository<Article, string> implements ArticleRepository {
@@ -61,26 +62,23 @@ export class ArticleController {
     const page = queryPage(req, filter)
     const limit = queryLimit(req)
     const offset = getOffset(limit, page)
-    this.service
-      .search(cloneFilter(filter, limit, page), limit, page)
-      .then((result) => {
-        for (const item of result.list) {
-          item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
-        }
-        const list = escapeArray(result.list, offset, "sequence")
-        const search = getSearch(req.url)
-        render(req, res, "articles", {
-          resource,
-          limits: resources.limits,
-          filter,
-          list,
-          pages: buildPages(limit, result.total),
-          pageSearch: buildPageSearch(search),
-          sort: buildSortSearch(search, fields, filter.sort),
-          message: buildMessage(resource, list, limit, page, result.total),
-        })
+    this.service.search(cloneFilter(filter, limit, page), limit, page).then((result) => {
+      for (const item of result.list) {
+        item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
+      }
+      const list = escapeArray(result.list, offset, "sequence")
+      const search = getSearch(req.url)
+      render(req, res, "articles", {
+        resource,
+        limits: resources.limits,
+        filter,
+        list,
+        pages: buildPages(limit, result.total),
+        pageSearch: buildPageSearch(search),
+        sort: buildSortSearch(search, fields, filter.sort),
+        message: buildMessage(resource, list, limit, page, result.total),
       })
-      .catch((err) => renderError500(req, res, resource, err))
+    }).catch((err) => renderError500(req, res, resource, err))
   }
   view(req: Request, res: Response) {
     const lang = getLang(req, res)
@@ -95,24 +93,21 @@ export class ArticleController {
         editMode,
       })
     } else {
-      this.service
-        .load(id)
-        .then((article) => {
-          if (!article) {
-            renderError404(req, res, resource)
-          } else {
-            const permissions = res.locals.permissions as number
-            const readonly = write != (write & permissions)
-            article.publishedAt = formatDateTime(article.publishedAt, dateFormat)
-            render(req, res, "article", {
-              resource,
-              article: escape(article),
-              editMode,
-              readonly,
-            })
-          }
-        })
-        .catch((err) => renderError500(req, res, resource, err))
+      this.service.load(id).then((article) => {
+        if (!article) {
+          renderError404(req, res, resource)
+        } else {
+          const permissions = res.locals.permissions as number
+          const readonly = write != (write & permissions)
+          article.publishedAt = formatDateTime(article.publishedAt, dateFormat)
+          render(req, res, "article", {
+            resource,
+            article: escape(article),
+            editMode,
+            readonly,
+          })
+        }
+      }).catch((err) => renderError500(req, res, resource, err))
     }
   }
   submit(req: Request, res: Response) {
@@ -126,34 +121,28 @@ export class ArticleController {
       const id = req.params.id
       const editMode = id !== "new"
       if (!editMode) {
-        this.service
-          .create(article)
-          .then((result) => {
-            if (result === 0) {
-              res.status(410).end()
-            } else {
-              res.status(201).json(article).end()
-            }
-          })
-          .catch((err) => handleError(err, res, this.log))
+        this.service.create(article).then((result) => {
+          if (result === 0) {
+            res.status(410).end()
+          } else {
+            res.status(201).json(article).end()
+          }
+        }).catch((err) => handleError(err, res, this.log))
       } else {
-        this.service
-          .update(article)
-          .then((result) => {
-            if (result === 0) {
-              res.status(410).end()
-            } else {
-              res.status(200).json(article).end()
-            }
-          })
-          .catch((err) => handleError(err, res, this.log))
+        this.service.update(article).then((result) => {
+          if (result === 0) {
+            res.status(410).end()
+          } else {
+            res.status(200).json(article).end()
+          }
+        }).catch((err) => handleError(err, res, this.log))
       }
     }
   }
 }
 
 export function useArticleController(db: DB, log: Log): ArticleController {
-  const builder = new SearchBuilder<Article, ArticleFilter>(db.query, "articles", articleModel, db.driver)
+  const builder = new SearchBuilder<Article, ArticleFilter>(db.query, "articles", articleModel, db.driver, buildQuery)
   const repository = new SqlArticleRepository(db)
   const service = new ArticleUseCase(builder.search, repository)
   return new ArticleController(service, log)

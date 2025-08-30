@@ -51,25 +51,24 @@ export class AuditLogController {
     const page = queryPage(req, filter)
     const limit = queryLimit(req)
     const offset = getOffset(limit, page)
-    this.search(cloneFilter(filter, limit, page), limit, page)
-      .then((result) => {
-        for (const item of result.list) {
-          item.time = formatFullDateTime(item.time, dateFormat)
-        }
-        const list = escapeArray(result.list, offset, "sequence")
-        const search = getSearch(req.url)
-        render(req, res, "audit-logs", {
-          resource,
-          limits: resources.limits,
-          filter,
-          list,
-          pages: buildPages(limit, result.total),
-          pageSearch: buildPageSearch(search),
-          sort: buildSortSearch(search, fields, filter.sort),
-          message: buildMessage(resource, list, limit, page, result.total),
-        })
+    this.search(cloneFilter(filter, limit, page), limit, page).then((result) => {
+      for (const item of result.list) {
+        item.time = formatFullDateTime(item.time, dateFormat)
+      }
+      const list = escapeArray(result.list, offset, "sequence")
+      const search = getSearch(req.url)
+      render(req, res, "audit-logs", {
+        resource,
+        limits: resources.limits,
+        filter,
+        list,
+        pages: buildPages(limit, result.total),
+        pageSearch: buildPageSearch(search),
+        sort: buildSortSearch(search, fields, filter.sort),
+        message: buildMessage(resource, list, limit, page, result.total),
       })
-      .catch((err) => renderError500(req, res, resource, err))
+    })
+    .catch((err) => renderError500(req, res, resource, err))
   }
 }
 
