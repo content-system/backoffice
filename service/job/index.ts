@@ -95,7 +95,6 @@ export class JobController {
     } else {
       const id = req.params.id
       const editMode = id !== "new"
-      // job.skills = ["GO", "Java", "Kafka", "Microservices", "Management"]
       if (!editMode) {
         this.service.create(job).then((result) => {
           if (result === 0) {

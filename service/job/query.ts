@@ -38,6 +38,5 @@ export function buildQuery(filter: JobFilter): Statement {
     query = query + ` where ` + where.join(` and `);
   }
 
-  console.log(query);
   return { query, params };
 }

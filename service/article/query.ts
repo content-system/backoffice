@@ -39,6 +39,5 @@ export function buildQuery(filter: ArticleFilter): Statement {
     query = query + ` where ` + where.join(` and `);
   }
 
-  console.log(query);
   return { query, params };
 }

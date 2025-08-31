@@ -51,10 +51,7 @@ export class ArticleController {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
-    let filter: ArticleFilter = {
-      limit: resources.defaultLimit,
-      q: "",
-    }
+    let filter: ArticleFilter = { limit: resources.defaultLimit }
     if (hasSearch(req)) {
       filter = fromRequest<ArticleFilter>(req, ["tags"])
       format(filter, ["publishedAt"])
