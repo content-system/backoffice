@@ -133,8 +133,6 @@ export class UserController {
     }).catch((err) => renderError500(req, res, resource, err))
   }
   assign(req: Request, res: Response) {
-    const lang = getLang(req, res)
-    const resource = getResource(lang)
     const id = req.params.id
     const roles = req.body as string[]
     if (!id || id.length === 0) {

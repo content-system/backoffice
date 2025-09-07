@@ -1,7 +1,7 @@
 <form id="roleAssignmentForm" name="roleAssignmentForm" class="form">
   <header>
     <button type="button" id="btnBack" name="btnBack" class="btn-back" onclick="goBack()"></button>
-    <h2>Administrator Role Assignment</h2>
+    <h2>Role Assignment</h2>
   </header>
   <div>
     <section class="row section">
@@ -25,7 +25,21 @@
     </section>
   </div>
   <footer>
-    <button type="button" id="btnSave" name="btnSave" onclick="assignRolesToUser(event)" data-warning="{{resource.msg_confirm_assign_roles_to_user}}">{{resource.save}}</button>
+    <button type="submit" id="btnSave" name="btnSave" onclick="assignRolesToUser(event)"
+        data-warning="{{resource.msg_confirm_assign_roles_to_user}}">
+      {{resource.save}}
+    </button>
   </footer>
   <script id="user" src="/static/user.js"></script>
+  <script data-init-script="true">
+    resources.load = function (pageBody) {
+      var checkbox = document.getElementById("roleAssignmentForm_checkAll")
+      if (checkbox) {
+        checkbox.addEventListener("click", function (e) {
+          var target = e.target
+          checkAllOnClick(target, "id")
+        })
+      }
+    }
+  </script>
 </form>

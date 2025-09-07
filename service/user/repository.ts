@@ -1,5 +1,5 @@
 import { Attribute, Attributes, Search, StringMap } from "onecore"
-import { buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, DB, metadata, SearchResult, select, Statement } from "query-core"
+import { buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, DB, metadata, SearchResult, Statement } from "query-core"
 import { User, UserFilter, userModel, UserRepository } from "./user"
 
 const userRoleModel: Attributes = {
@@ -56,11 +56,7 @@ export class SqlUserRepository implements UserRepository {
     return this.db.query("select * from users order by user_id asc", undefined, this.map)
   }
   load(id: string): Promise<User | null> {
-    const stmt = select(id, "users", this.primaryKeys, this.db.param)
-    if (!stmt) {
-      return Promise.resolve(null)
-    }
-    return this.db.query<User>(stmt.query, stmt.params, this.map).then((users) => {
+    return this.db.query<User>(`select * from users where user_id = ${this.db.param(1)}`, [id], this.map).then((users) => {
       if (!users || users.length === 0) {
         return null
       }

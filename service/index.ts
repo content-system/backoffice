@@ -22,6 +22,7 @@ export function route(app: Application, ctx: Context, secure?: boolean): void {
   app.get("/roles/:id", readRole, ctx.menu.build, ctx.role.view)
   app.post("/roles/:id", writeRole, json(), ctx.role.submit)
   app.get("/roles/:id/assign", readRole, ctx.menu.build, ctx.role.renderAssign)
+  app.patch("/roles/:id/assign", writeRole, ctx.menu.build, json(), ctx.role.assign)
 
   const readUser = ctx.authorize("user", read)
   const writeUser = ctx.authorize("user", write)

@@ -1,21 +1,16 @@
-function saveJob(e) {
+function assignUsersToRole(e) {
   e.preventDefault()
   var target = e.target
   var form = target.form
-  var valid = validateForm(form)
-  if (!valid) {
-    return
-  }
+  var users = getValues(form, "userId")
   var resource = getResource()
-  var job = decodeFromForm(form)
-  job.skills = getChips("jobForm_chipSkills")
-  deleteFields(job, ["txtSkill", "btnAddSkill"])
-  showConfirm(resource.msg_confirm_save, function () {
+  var msg = users.length === 0 ? target.getAttribute("data-warning") : resource.msg_confirm_save
+  showConfirm(msg, function () {
     showLoading()
     fetch(getCurrentURL(), {
-      method: "POST",
+      method: "PATCH",
       headers: getHttpHeaders(),
-      body: JSON.stringify(job),
+      body: JSON.stringify(users),
     })
       .then(function (response) {
         hideLoading()

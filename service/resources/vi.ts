@@ -37,6 +37,7 @@ export const vi = {
   deselect: "Deselect",
   check_all: "Check All",
   uncheck_all: "Uncheck All",
+  remove: "Remove",
   yes: "Yes",
   no: "No",
 
@@ -277,5 +278,7 @@ export const vi = {
   contacted_by: "Contacted By",
   contacted_at: "Contacted At",
   message: "Message",
+
   msg_confirm_assign_roles_to_user: "You do not assign any role to this user. Are you sure you want to save?",
+  msg_confirm_assign_users_to_role: "You do not assign any user to this role. Are you sure you want to save?",
 }

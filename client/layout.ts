@@ -138,6 +138,10 @@ function navigate(e: Event, ignoreLang?: boolean) {
                 const span = link.querySelector("span")
                 const title = span ? span.innerText : link.innerText
                 window.history.pushState({ pageTitle: title }, "", url)
+                const tmpScript = document.getElementById("tmpScript")
+                if (tmpScript) {
+                  tmpScript.remove()
+                }
                 pageBody.querySelectorAll("script").forEach((oldScript) => {
                   const isInitScript = oldScript.getAttribute("data-init-script")
                   if (isInitScript === "true") {
@@ -149,6 +153,7 @@ function navigate(e: Event, ignoreLang?: boolean) {
                       // inline script
                       newScript.textContent = oldScript.textContent
                     }
+                    newScript.id = "tmpScript"
                     document.body.appendChild(newScript)
                     oldScript.remove()
                   } else {

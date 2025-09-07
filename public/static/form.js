@@ -506,29 +506,6 @@ function setInputValue(form, name, value) {
   }
   return false
 }
-function checkAll(target, name) {
-  var form = target.form
-  if (form) {
-    for (var i = 0; i < form.length; i++) {
-      var ele = form[i]
-      if (ele.name === name) {
-        ele.checked = target.checked
-      }
-    }
-  }
-}
-function getCheckboxValues(form, name) {
-  var v = []
-  if (form) {
-    for (var i = 0; i < form.length; i++) {
-      var ele = form[i]
-      if (ele.name === name && ele.checked) {
-        v.push(ele.value)
-      }
-    }
-  }
-  return v
-}
 function getHttpHeaders() {
   var token = getToken()
   var lang = getLang()

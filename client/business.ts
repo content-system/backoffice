@@ -1,3 +1,65 @@
+resources.load = function (pageBody: HTMLElement) {
+  const checkbox = document.getElementById("roleAssignmentForm_checkAll")
+  if (checkbox) {
+    checkbox.addEventListener("click", (e) => {
+      const target = e.target as HTMLInputElement
+      checkAllOnClick(target, "id")
+    })
+  }
+}
+
+function assignRolesToUser(e: Event) {
+  e.preventDefault()
+  const target = e.target as HTMLButtonElement
+  const form = target.form as HTMLFormElement
+  const roles = getCheckedValues(form, "id")
+  const resource = getResource()
+  const msg = roles.length === 0 ? (target.getAttribute("data-warning") as string) : resource.msg_confirm_save
+  showConfirm(msg, () => {
+    showLoading()
+    fetch(getCurrentURL(), {
+      method: "PATCH",
+      headers: getHttpHeaders(),
+      body: JSON.stringify(roles),
+    })
+      .then((response) => {
+        hideLoading()
+        if (response.ok) {
+          alertSuccess(resource.msg_save_success)
+        } else {
+          handleJsonError(response, resource, form)
+        }
+      })
+      .catch((err) => handleError(err, resource.error_network))
+  })
+}
+
+function assignUsersToRole(e: Event) {
+  e.preventDefault()
+  const target = e.target as HTMLButtonElement
+  const form = target.form as HTMLFormElement
+  const users = getValues(form, "userId")
+  const resource = getResource()
+  const msg = users.length === 0 ? (target.getAttribute("data-warning") as string) : resource.msg_confirm_save
+  showConfirm(msg, () => {
+    showLoading()
+    fetch(getCurrentURL(), {
+      method: "PATCH",
+      headers: getHttpHeaders(),
+      body: JSON.stringify(users),
+    })
+      .then((response) => {
+        hideLoading()
+        if (response.ok) {
+          alertSuccess(resource.msg_save_success)
+        } else {
+          handleJsonError(response, resource, form)
+        }
+      })
+      .catch((err) => handleError(err, resource.error_network))
+  })
+}
+
 interface Job {
   id: string
   title: string
@@ -76,32 +138,6 @@ function saveArticle(e: Event) {
       method: "POST",
       headers: getHttpHeaders(),
       body: JSON.stringify(job), // Convert the form data to JSON format
-    })
-      .then((response) => {
-        hideLoading()
-        if (response.ok) {
-          alertSuccess(resource.msg_save_success)
-        } else {
-          handleJsonError(response, resource, form)
-        }
-      })
-      .catch((err) => handleError(err, resource.error_network))
-  })
-}
-
-function assignRolesToUser(e: Event) {
-  e.preventDefault()
-  const target = e.target as HTMLButtonElement
-  const form = target.form as HTMLFormElement
-  const roles = getCheckboxValues(form, "id")
-  const resource = getResource()
-  const msg = roles.length === 0 ? (target.getAttribute("data-warning") as string) : resource.msg_confirm_save
-  showConfirm(msg, () => {
-    showLoading()
-    fetch(getCurrentURL(), {
-      method: "PATCH",
-      headers: getHttpHeaders(),
-      body: JSON.stringify(roles),
     })
       .then((response) => {
         hideLoading()

@@ -1,5 +1,5 @@
 import { Attribute, Attributes, Search } from "onecore"
-import { buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, DB, metadata, SearchResult, select, Statement, StringMap } from "query-core"
+import { buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, DB, metadata, SearchResult, Statement, StringMap } from "query-core"
 import { Role, RoleFilter, roleModel, RoleRepository } from "./role"
 
 const userRoleModel: Attributes = {
@@ -51,6 +51,7 @@ export class SqlRoleRepository implements RoleRepository {
     this.update = this.update.bind(this)
     this.patch = this.patch.bind(this)
     this.delete = this.delete.bind(this)
+    this.assign = this.assign.bind(this)
     this.map = buildMap(roleModel)
     this.roleModuleMap = buildMap(roleModuleModel)
   }
@@ -64,11 +65,7 @@ export class SqlRoleRepository implements RoleRepository {
     return this.db.query("select * from roles order by role_id asc", undefined, this.map)
   }
   load(id: string): Promise<Role | null> {
-    const stmt = select(id, "roles", this.primaryKeys, this.db.param)
-    if (!stmt) {
-      return Promise.resolve(null)
-    }
-    return this.db.query<Role>(stmt.query, stmt.params, this.map).then((roles) => {
+    return this.db.query<Role>(`select * from roles where role_id = ${this.db.param(1)}`, [id], this.map).then((roles) => {
       if (!roles || roles.length === 0) {
         return null
       }
@@ -122,19 +119,22 @@ export class SqlRoleRepository implements RoleRepository {
     return this.db.execBatch(stmts)
   }
   assign(roleId: string, users: string[]): Promise<number> {
-    const userRoles: UserRole[] = users.map<UserRole>((u) => {
-      return { roleId, userId: u }
-    })
     const stmts: Statement[] = []
     const q1 = `delete from user_roles where role_id = ${this.db.param(1)}`
     stmts.push({ query: q1, params: [roleId] })
-    const s = buildToInsertBatch<UserRole>(userRoles, "user_roles", userRoleModel, this.db.param)
-    if (s) {
-      stmts.push(s)
+    if (users && users.length > 0) {
+      const userRoles: UserRole[] = users.map<UserRole>((u) => {
+        return { roleId, userId: u }
+      })
+      const stmt2 = buildToInsertBatch<UserRole>(userRoles, "user_roles", userRoleModel, this.db.param)
+      if (stmt2) {
+        stmts.push(stmt2)
+      }
     }
     return this.db.execBatch(stmts)
   }
 }
+
 function insertRoleModules(stmts: Statement[], roleId: string, privileges: string[] | undefined, param: (i: number) => string): Statement[] {
   if (privileges && privileges.length > 0) {
     let permissions = 0

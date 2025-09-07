@@ -1,6 +1,7 @@
 <div class="view-container">
-  <form id="roleAssignmentForm" name="roleAssignmentForm" class="form" model-name="role">
-    <header class="view-header"><button type="button" id="btnBack" name="btnBack" class="btn-back"></button>
+  <form id="roleAssignmentForm" name="roleAssignmentForm" class="form">
+    <header class="view-header">
+      <button type="button" id="btnBack" name="btnBack" class="btn-back" onclick="goBack()"></button>
       <h2>{{role.roleName}}</h2>
     </header>
     <div class="form-body">
@@ -18,8 +19,11 @@
         <h4 class="header">
           {{resource.users}}
           <div class="btn-group">
-            <button type="button" name="btnAdd">{{resource.add}}</button>
-            <button type="button" name="btnSelect">{{resource.select}}</button>
+            <button type="button" id="btnAdd" name="btnAdd">{{resource.add}}</button>
+            <button type="button" id="btnSelect" name="btnSelect" onclick="selectOnClick(this, 'userId', ['btnCheckAll', 'btnUncheckAll', 'btnRemove'])">{{resource.select}}</button>
+            <button type="button" id="btnCheckAll" name="btnCheckAll" hidden onclick="checkAll(this, 'userId', true)">{{resource.check_all}}</button>
+            <button type="button" id="btnUncheckAll" name="btnUncheckAll" hidden onclick="uncheckAll(this, 'userId')">{{resource.uncheck_all}}</button>
+            <button type="button" id="btnRemove" name="btnRemove" hidden onclick="removeOnClick(event, 'userId', 'img-item')">{{resource.remove}}</button>
           </div>
           </h4>
           <label class="col s12 search-input">
@@ -31,15 +35,19 @@
       {% for item in users %}
         <li class="col s12 m6 l4 xl3 small img-item">
           <img alt="{{item.email}}" class="round-border" src="{{item.imageURL}}">
-          <input type="checkbox" id="userId_{{item.userId}}" name="userId" value="{{item.userId}}" hidden>
           <h4>{{item.displayName}}</h4>
+          <input type="checkbox" id="userId_{{item.userId}}" name="userId" value="{{item.userId}}" hidden>
           <p>{{item.email}}</p>
         </li>
       {% endfor %}
       </ul>
     </div>
     <footer class="view-footer">
-      <button type="submit" id="btnSave" name="btnSave">{{resource.save}}</button>
+      <button type="submit" id="btnSave" name="btnSave" onclick="assignUsersToRole(event)"
+          data-warning="{{resource.msg_confirm_assign_users_to_role}}">
+        {{resource.save}}
+      </button>
     </footer>
   </form>
+  <script id="role" src="/static/role.js"></script>
 </div>
