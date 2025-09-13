@@ -35,10 +35,10 @@ function checkAllOnClick(target, name) {
   }
 }
 function checkAll(target, name, v) {
-  var form = target.form
-  if (v === undefined) {
+  if (v === void 0) {
     v = false
   }
+  var form = target.form
   if (form) {
     for (var i = 0; i < form.length; i++) {
       var ele = form[i]
@@ -62,9 +62,9 @@ function toggleHiddenElements(form, names) {
   }
 }
 function toggleHiddenOnClick(btn, name) {
-  toggleHiddenInputs(btn.form, name)
+  toggleHiddenInput(btn.form, name)
 }
-function toggleHiddenInputs(form, name) {
+function toggleHiddenInput(form, name) {
   if (form) {
     for (var i = 0; i < form.length; i++) {
       var ele = form[i]
@@ -74,14 +74,13 @@ function toggleHiddenInputs(form, name) {
     }
   }
 }
-function toggleAttribute(e, attr) {
-  var isAttr = e.getAttribute(attr)
-  if (isAttr == null || isAttr === "") {
-    e.removeAttribute(attr)
-    return true
-  } else {
-    e.setAttribute(attr, "")
+function toggleAttribute(el, attr) {
+  if (el.hasAttribute(attr)) {
+    el.removeAttribute(attr)
     return false
+  } else {
+    el.setAttribute(attr, "")
+    return true
   }
 }
 function toggleHidden(e) {
@@ -110,6 +109,8 @@ function removeOnClick(e, name, parentClass) {
   }
 }
 function selectOnClick(btn, name, names) {
-  toggleHiddenInputs(btn.form, name)
+  var _a
+  var select = (_a = btn.form) === null || _a === void 0 ? void 0 : _a.getAttribute("select")
+  toggleHiddenInput(btn.form, name)
   toggleHiddenElements(btn.form, names)
 }

@@ -55,12 +55,14 @@ function changePassword(e: Event) {
     user.step = 2
   }
   const url = getCurrentURL()
+  showLoading()
   fetch(url, {
     method: "POST",
     headers: getHttpHeaders(),
     body: JSON.stringify(user),
   })
     .then((response) => {
+      hideLoading()
       if (response.ok) {
         response.json().then((result) => {
           if (result) {
@@ -116,12 +118,14 @@ function forgotPassword(e: Event) {
   }
   const url = getCurrentURL()
   const user = { contact }
+  showLoading()
   fetch(url, {
     method: "POST",
     headers: getHttpHeaders(),
     body: JSON.stringify(user),
   })
     .then((response) => {
+      hideLoading()
       if (response.ok) {
         showInfoMessage(eleMessage, resource.success_forgot_password)
       } else {
@@ -180,12 +184,14 @@ function resetPassword(e: Event) {
   }
   const url = getCurrentURL()
   const user = { username, passcode, password }
+  showLoading()
   fetch(url, {
     method: "POST",
     headers: getHttpHeaders(),
     body: JSON.stringify(user),
   })
     .then((response) => {
+      hideLoading()
       if (response.ok) {
         showInfoMessage(eleMessage, resource.success_reset_password)
       } else {

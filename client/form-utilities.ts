@@ -34,12 +34,8 @@ function checkAllOnClick(target: HTMLInputElement, name: string) {
     }
   }
 }
-
-function checkAll(target: HTMLButtonElement | HTMLInputElement, name: string, v?: boolean) {
+function checkAll(target: HTMLButtonElement | HTMLInputElement, name: string, v: boolean = false) {
   const form = target.form
-  if (v === undefined) {
-    v = false
-  }
   if (form) {
     for (let i = 0; i < form.length; i++) {
       const ele = form[i] as HTMLInputElement
@@ -65,10 +61,10 @@ function toggleHiddenElements(form: HTMLFormElement | null | undefined, names: s
 }
 
 function toggleHiddenOnClick(btn: HTMLButtonElement, name: string) {
-  toggleHiddenInputs(btn.form, name)
+  toggleHiddenInput(btn.form, name)
 }
 
-function toggleHiddenInputs(form: HTMLFormElement | null | undefined, name: string) {
+function toggleHiddenInput(form: HTMLFormElement | null | undefined, name: string) {
   if (form) {
     for (let i = 0; i < form.length; i++) {
       const ele = form[i] as HTMLInputElement
@@ -79,14 +75,13 @@ function toggleHiddenInputs(form: HTMLFormElement | null | undefined, name: stri
   }
 }
 
-function toggleAttribute(e: HTMLElement, attr: string): boolean {
-  const isAttr = e.getAttribute(attr)
-  if (isAttr == null || isAttr === "") {
-    e.removeAttribute(attr)
-    return true
-  } else {
-    e.setAttribute(attr, "")
+function toggleAttribute(el: HTMLElement, attr: string): boolean {
+  if (el.hasAttribute(attr)) {
+    el.removeAttribute(attr)
     return false
+  } else {
+    el.setAttribute(attr, "")
+    return true
   }
 }
 
@@ -120,6 +115,6 @@ function removeOnClick(e: Event, name: string, parentClass: string) {
 
 function selectOnClick(btn: HTMLButtonElement, name: string, names: string[]) {
   const select = btn.form?.getAttribute("select")
-  toggleHiddenInputs(btn.form, name)
+  toggleHiddenInput(btn.form, name)
   toggleHiddenElements(btn.form, names)
 }

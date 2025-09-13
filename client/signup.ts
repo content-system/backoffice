@@ -55,6 +55,7 @@ function signup(e: Event) {
     body: JSON.stringify(user),
   })
     .then((response) => {
+      hideLoading()
       if (response.ok) {
         showInfoMessage(eleMessage, resource.success_sign_up)
       } else {
