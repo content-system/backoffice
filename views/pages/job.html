@@ -121,8 +121,69 @@
       {{resource.description}}
       <textarea id="description" name="description" rows="40" maxlength="9600" placeholder="{{resource.description}}">{{job.description}}</textarea>
     </label>
+    <label class="col s12 textarea-container">
+      <div class="editor-container">
+        <!-- Toolbar -->
+        <div id="toolbar" style="display: none;" class="toolbar">
+          <span class="ql-formats">
+            <select class="ql-header">
+              <option value="1"></option>
+              <option value="2"></option>
+              <option value="3"></option>
+              <option value="4"></option>
+              <option value="5"></option>
+              <option selected></option>
+            </select>
+            <button class="ql-bold"></button>
+            <button class="ql-italic"></button>
+            <button class="ql-underline"></button>
+            <button class="ql-strike"></button>
+          </span>
+          <span class="ql-formats">
+            <select class="ql-color"></select>
+            <select class="ql-background"></select>
+          </span>
+          <span class="ql-formats">
+            <button class="ql-list" value="ordered"></button>
+            <button class="ql-list" value="bullet"></button>
+            <button class="ql-indent" value="-1"></button>
+            <button class="ql-indent" value="+1"></button>
+          </span>
+          <span class="ql-formats">
+            <select class="ql-align"></select>
+            <button class="ql-link"></button>
+            <button class="ql-image"></button>
+            <button class="ql-code-block"></button>
+          </span>
+          <span class="ql-formats">
+            <button class="ql-clean"></button>
+          </span>
+        </div>
+        <!-- Editor -->
+        <div id="editor" style="display: none;" class="editor" aria-label="Rich text editor"></div>
+        <div class="controls">
+          <button type="button" id="btnToggleView" onclick="toggleView('description', 'editor', 'toolbar')">Toggle View</button>
+        </div>
+      </div>
+    </label>
   </div>
   <footer>
     <button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)" {% if readonly %} disabled {% endif %}>{{resource.save}}</button>
   </footer>
+  <script id="quillEditor" src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+  <script id="job" src="/static/job.js"></script>
+  <script data-init-script="true">
+    resources.load = function (pageBody) {
+      const quill = new Quill("#editor", {
+        modules: {
+          toolbar: "#toolbar",
+        },
+        theme: "snow",
+      })
+      const form = document.getElementById("jobForm")
+      if (form) {
+        form.quill = quill
+      }
+    }
+  </script>
 </form>

@@ -1,0 +1,41 @@
+.editor-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.toolbar {
+  border: 1px solid #ccc;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+}
+
+.editor {
+  height: 320px;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  padding: 12px;
+  background: #fff;
+}
+
+.controls {
+  margin: 12px 0;
+  display: flex;
+  gap: 8px;
+}
+
+.controls button {
+  padding: 6px 10px;
+}
+
+/* small responsive tweak */
+@media (max-width: 600px) {
+  .editor {
+    height: 240px;
+  }
+}
+
+/* override */
+.ql-editor {
+  padding: 4px;
+}

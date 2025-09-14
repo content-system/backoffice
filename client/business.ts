@@ -1,3 +1,31 @@
+function toggleView(viewId: string, editorId: string, toolbarId: string) {
+  const contentView = document.querySelector("#" + viewId) as HTMLTextAreaElement
+  const editor = document.querySelector("#" + editorId) as HTMLElement
+  const toolbar = document.querySelector("#" + toolbarId) as HTMLElement
+
+  if (contentView && editor && toolbar) {
+    if (contentView.style.display !== "none") {
+        // HTML to Quill
+        if (contentView.form) {
+          // quill.root.innerHTML = htmlEditor.value
+          // quill.setContents(htmlEditor.value)
+          contentView.form.quill.clipboard.dangerouslyPasteHTML(contentView.value)
+        }
+        contentView.style.display = "none"
+        editor.style.display = "block"
+        toolbar.style.display = "block"
+      } else {
+        // Quill to HTML
+        if (contentView.form) {
+          contentView.value = contentView.form.quill.root.innerHTML
+        }
+        contentView.style.display = "block"
+        editor.style.display = "none"
+        toolbar.style.display = "none"
+      }
+  }
+}
+
 resources.load = function (pageBody: HTMLElement) {
   const checkbox = document.getElementById("roleAssignmentForm_checkAll")
   if (checkbox) {
