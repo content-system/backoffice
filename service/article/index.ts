@@ -65,8 +65,11 @@ export class ArticleController {
       }
       const list = escapeArray(result.list, offset, "sequence")
       const search = getSearch(req.url)
+      const permissions = res.locals.permissions as number
+      const readonly = write != (write & permissions)
       render(req, res, "articles", {
         resource,
+        readonly,
         limits: resources.limits,
         filter,
         list,
@@ -99,9 +102,9 @@ export class ArticleController {
           article.publishedAt = formatDateTime(article.publishedAt, dateFormat)
           render(req, res, "article", {
             resource,
-            article: escape(article),
-            editMode,
             readonly,
+            editMode,
+            article: escape(article),
           })
         }
       }).catch((err) => renderError500(req, res, resource, err))

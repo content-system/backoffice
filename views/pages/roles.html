@@ -3,7 +3,7 @@
     <h2>{{resource.roles}}</h2>
     <div class="btn-group">
       <button type="button" id="btnListView" name="btnListView" class="btn-list" data-view="listview"></button>
-      <a id="btnNew" class="btn-new" href="/roles/new"></a>
+      {% if readonly == false %}<a id="btnNew" class="btn-new" href="/roles/new"></a>{% endif %}
     </div>
   </header>
   <div>

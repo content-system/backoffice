@@ -19,6 +19,7 @@ import {
 } from "express-ext"
 import { Log, Manager, Search } from "onecore"
 import { DB, Repository, SearchBuilder } from "query-core"
+import { write } from "security-express"
 import { getDateFormat } from "ui-formatter"
 import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
@@ -60,8 +61,11 @@ export class JobController {
     this.service.search(cloneFilter(filter, limit, page), limit, page).then((result) => {
       const list = escapeArray(result.list, offset, "sequence")
       const search = getSearch(req.url)
+      const permissions = res.locals.permissions as number
+      const readonly = write != (write & permissions)
       render(req, res, "jobs", {
         resource,
+        readonly,
         dateFormat,
         limits: resources.limits,
         filter,
@@ -77,11 +81,18 @@ export class JobController {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const id = req.params.id
+    const editMode = id !== "new"
     this.service.load(id).then((job) => {
       if (!job) {
         renderError404(req, res, resource)
       } else {
-        render(req, res, "job", { resource, job: escape(job) })
+        const permissions = res.locals.permissions as number
+        const readonly = write != (write & permissions)
+        render(req, res, "job", {
+          resource,
+          readonly,
+          editMode,
+          job: escape(job) })
       }
     }).catch((err) => renderError500(req, res, resource, err))
   }

@@ -20,6 +20,7 @@ import {
 import { nanoid } from "nanoid"
 import { Log, Search, UseCase } from "onecore"
 import { DB, Repository, SearchBuilder } from "query-core"
+import { write } from "security-express"
 import { formatDateTime, formatPhone, getDateFormat } from "ui-formatter"
 import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
@@ -65,8 +66,11 @@ export class ContactController {
         item.submittedAt = formatDateTime(item.submittedAt, dateFormat)
       }
       const search = getSearch(req.url)
+      const permissions = res.locals.permissions as number
+      const readonly = write != (write & permissions)
       render(req, res, "contacts", {
         resource,
+        readonly,
         dateFormat,
         limits: resources.limits,
         filter,
@@ -87,7 +91,13 @@ export class ContactController {
         renderError404(req, res, resource)
       } else {
         contact.phone = formatPhone(contact.phone)
-        render(req, res, "contact", { resource, contact: escape(contact) })
+        const permissions = res.locals.permissions as number
+        const readonly = write != (write & permissions)
+        render(req, res, "contact", {
+          resource,
+          readonly,
+          contact: escape(contact)
+        })
       }
     }).catch((err) => renderError500(req, res, resource, err))
   }

@@ -3,7 +3,7 @@
     <h2>Careers</h2>
     <div class="btn-group">
       <button type="button" id="btnTable" name="btnTable" class="btn-table" data-view="table"></button>
-      <a id="btnNew" class="btn-new" href="new"></a>
+      {% if readonly == false %}<a id="btnNew" class="btn-new" href="/jobs/new"></a>{% endif %}
     </div>
   </header>
   <div>

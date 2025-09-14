@@ -25,8 +25,6 @@ export interface UserFilter extends Filter {
 }
 
 export interface UserRepository {
-  all(): Promise<User[]>
-  getUsersOfRole(roleId: string): Promise<User[]>
   search(filter: UserFilter, limit: number, page?: number | string, fields?: string[], ctx?: any): Promise<SearchResult<User>>
   load(id: string): Promise<User | null>
   create(user: User): Promise<number>
@@ -36,7 +34,6 @@ export interface UserRepository {
   assign(id: string, roles: string[]): Promise<number>
 }
 export interface UserService {
-  getUsersOfRole(roleId: string): Promise<User[]>
   search(filter: UserFilter, limit: number, page?: number | string, fields?: string[], ctx?: any): Promise<SearchResult<User>>
   load(id: string): Promise<User | null>
   create(user: User): Promise<Result<User>>

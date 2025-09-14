@@ -2,7 +2,8 @@
   <header>
     <h2>{{resource.categories}}</h2>
     <div class="btn-group">
-      <button type="button" id="btnListView" name="btnListView" class="btn-list"></button><a id="btnNew" class="btn-new" href="/categories/new"></a>
+      <button type="button" id="btnListView" name="btnListView" class="btn-list"></button>
+      {% if readonly == false %}<a id="btnNew" class="btn-new" href="/categories/new"></a>{% endif %}
     </div>
   </header>
   <div>

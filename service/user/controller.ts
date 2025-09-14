@@ -63,8 +63,11 @@ export class UserController {
     this.service.search(cloneFilter(filter, limit, page), limit, page).then((result) => {
       const list = escapeArray(result.list, offset, "sequence")
       const search = getSearch(req.url)
+      const permissions = res.locals.permissions as number
+      const readonly = write != (write & permissions)
       render(req, res, "users", {
         resource,
+        readonly,
         limits: resources.limits,
         filter,
         list,
@@ -87,10 +90,10 @@ export class UserController {
         const readonly = write != (write & permissions)
         render(req, res, "user", {
           resource,
-          user: escape(user),
+          readonly,
           titles,
           positions,
-          readonly,
+          user: escape(user),
         })
       }
     }).catch((err) => renderError500(req, res, resource, err))

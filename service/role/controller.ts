@@ -57,8 +57,11 @@ export class RoleController {
     this.service.search(cloneFilter(filter, limit, page), limit, page).then((result) => {
       const list = escapeArray(result.list, offset, "sequence")
       const search = getSearch(req.url)
+      const permissions = res.locals.permissions as number
+      const readonly = write != (write & permissions)
       render(req, res, "roles", {
         resource,
+        readonly,
         limits: resources.limits,
         filter,
         list,
@@ -90,9 +93,9 @@ export class RoleController {
           const readonly = write != (write & permissions)
           render(req, res, "role", {
             resource,
-            role: escape(role),
-            editMode,
             readonly,
+            editMode,
+            role: escape(role),
           })
         }
       }).catch((err) => renderError500(req, res, resource, err))

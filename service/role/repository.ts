@@ -45,7 +45,6 @@ export class SqlRoleRepository implements RoleRepository {
     this.primaryKeys = meta.keys
     this.metadata = this.metadata.bind(this)
     this.search = this.search.bind(this)
-    this.all = this.all.bind(this)
     this.load = this.load.bind(this)
     this.create = this.create.bind(this)
     this.update = this.update.bind(this)
@@ -60,9 +59,6 @@ export class SqlRoleRepository implements RoleRepository {
   }
   search(filter: RoleFilter, limit: number, page?: number | string, fields?: string[]): Promise<SearchResult<Role>> {
     return this.find(filter, limit, page, fields)
-  }
-  all(): Promise<Role[]> {
-    return this.db.query("select * from roles order by role_id asc", undefined, this.map)
   }
   load(id: string): Promise<Role | null> {
     return this.db.query<Role>(`select * from roles where role_id = ${this.db.param(1)}`, [id], this.map).then((roles) => {

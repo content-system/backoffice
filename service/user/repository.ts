@@ -29,31 +29,14 @@ export class SqlUserRepository implements UserRepository {
     this.map = buildMap(userModel)
     this.roleMap = buildMap(userRoleModel)
     this.search = this.search.bind(this)
-    this.all = this.all.bind(this)
     this.create = this.create.bind(this)
     this.update = this.update.bind(this)
     this.patch = this.patch.bind(this)
     this.delete = this.delete.bind(this)
     this.assign = this.assign.bind(this)
   }
-
-  getUsersOfRole(roleId: string): Promise<User[]> {
-    if (!roleId || roleId.length === 0) {
-      return Promise.resolve([])
-    }
-    const q = `
-      select u.*
-      from user_roles ur
-        inner join users u on u.user_id = ur.user_id
-      where ur.role_id = ${this.db.param(1)}
-      order by user_id`
-    return this.db.query(q, [roleId], this.map)
-  }
   search(filter: UserFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<User>> {
     return this.find(filter, limit, page, fields)
-  }
-  all(): Promise<User[]> {
-    return this.db.query("select * from users order by user_id asc", undefined, this.map)
   }
   load(id: string): Promise<User | null> {
     return this.db.query<User>(`select * from users where user_id = ${this.db.param(1)}`, [id], this.map).then((users) => {

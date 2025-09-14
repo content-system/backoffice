@@ -58,8 +58,11 @@ export class CategoryController {
     this.service.search(cloneFilter(filter, limit, page), limit, page).then((result) => {
       const list = escapeArray(result.list, offset, "no")
       const search = getSearch(req.url)
+      const permissions = res.locals.permissions as number
+      const readonly = write != (write & permissions)
       render(req, res, "categories", {
         resource,
+        readonly,
         limits: resources.limits,
         filter,
         list,
@@ -74,6 +77,7 @@ export class CategoryController {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const id = req.params.id
+    const editMode = id !== "new"
     this.service.load(id).then((category) => {
       if (!category) {
         renderError404(req, res, resource)
@@ -82,8 +86,9 @@ export class CategoryController {
         const readonly = write != (write & permissions)
         render(req, res, "category", {
           resource,
-          category: escape(category),
           readonly,
+          editMode,
+          category: escape(category),
         })
       }
     }).catch((err) => renderError500(req, res, resource, err))
