@@ -1,8 +1,8 @@
 "use strict"
 var resources = (function () {
   function resources() {}
-  resources.load = function (pageBody) {}
   resources.autoCollapse = false
+  resources.refreshLoad = true
   resources.login = "/login"
   resources.redirect = "redirectUrl"
   resources.defaultLimit = 12

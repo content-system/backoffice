@@ -7,119 +7,70 @@
   <div class="row">
     <label class="col s6 m6">
       {{resource.id}}
-      <input type="text" id="id" name="id" value="{{job.id}}" maxlength="60" required readonly onblur="requiredOnBlur(event)" placeholder="{{resource.id}}" />
+      <input type="text" id="id" name="id" value="{{job.id}}" maxlength="60" required readonly
+        onblur="requiredOnBlur(event)" placeholder="{{resource.id}}" />
     </label>
     <label class="col s12 m6">
       {{resource.published_at}}
-      <input type="datetime-local" id="publishedAt" name="publishedAt" value="{{datetimeToString(job.publishedAt)}}" step=".010" />
+      <input type="datetime-local" id="publishedAt" name="publishedAt" value="{{datetimeToString(job.publishedAt)}}"
+        step=".010" />
     </label>
     <label class="col s12 m6">
       {{resource.title}}
-      <input
-        type="text"
-        id="position"
-        name="position"
-        value="{{job.position}}"
-        maxlength="255"
-        required
-        onblur="requiredOnBlur(event)"
-        placeholder="{{resource.title}}"
-      />
+      <input type="text" id="position" name="position" value="{{job.position}}" maxlength="255" required
+        onblur="requiredOnBlur(event)" placeholder="{{resource.title}}" />
     </label>
     <label class="col s12 m6">
       {{resource.quantity}}
-      <input
-        type="text"
-        class="text-right"
-        id="quantity"
-        name="quantity"
-        data-type="integer"
-        value="{{job.quantity}}"
-        maxlength="3"
-        required
-        onkeypress="return integerOnKeyPress(event)"
-        onfocus="numberOnFocus(event)"
-        onblur="numberOnBlur(event)"
-        placeholder="{{resource.quantity}}"
-      />
+      <input type="text" class="text-right" id="quantity" name="quantity" data-type="integer" value="{{job.quantity}}"
+        maxlength="3" required onkeypress="return integerOnKeyPress(event)" onfocus="numberOnFocus(event)"
+        onblur="numberOnBlur(event)" placeholder="{{resource.quantity}}" />
     </label>
     <label class="col s12 m6">
       {{resource.location}}
-      <input
-        type="text"
-        id="location"
-        name="location"
-        value="{{job.location}}"
-        maxlength="255"
-        required
-        onblur="requiredOnBlur(event)"
-        placeholder="{{resource.location}}"
-      />
+      <input type="text" id="location" name="location" value="{{job.location}}" maxlength="255" required
+        onblur="requiredOnBlur(event)" placeholder="{{resource.location}}" />
     </label>
     <div class="col s12 m6 radio-section">
       {{resource.status}}
       <div class="radio-group">
-        <label><input type="radio" id="active" name="status" value="A" {% if job.status == "A" %} checked {% endif %}/>{{resource.active}}</label>
-        <label><input type="radio" id="inactive" name="status" value="I" {% if job.status == "I" %} checked {% endif %}/>{{resource.inactive}}</label>
+        <label><input type="radio" id="active" name="status" value="A" {% if job.status=="A" %} checked {% endif
+            %} />{{resource.active}}</label>
+        <label><input type="radio" id="inactive" name="status" value="I" {% if job.status=="I" %} checked {% endif
+            %} />{{resource.inactive}}</label>
       </div>
     </div>
     <label class="col s12 textarea-container">
       {{resource.skills}}
       <div class="chip-list" data-name="skills">{{generateTags(job.skills)}}
         <div class="chip-input-container">
-          <input type="text" id="txtSkill" name="txtSkill" data-skip="true" onkeydown="chipOnKeydown(event)" placeholder="Enter a skill..." />
+          <input type="text" id="txtSkill" name="txtSkill" data-skip="true" onkeydown="chipOnKeydown(event)"
+            placeholder="Enter a skill..." />
           <button type="button" id="btnAddSkill" name="btnAddSkill" class="btn-add" onclick="addChip(this)"></button>
         </div>
       </div>
     </label>
     <label class="col s12 m6">
       {{resource.min_salary}}
-      <input
-        type="tel"
-        id="minSalary"
-        name="minSalary"
-        data-type="integer"
-        class="text-right"
-        value="{{formatNumber(job.minSalary)}}"
-        maxlength="16"
-        onkeypress="return integerOnKeyPress(event)"
-        onfocus="numberOnFocus(event)"
-        onblur="numberOnBlur(event)"
-        placeholder="{{resource.min_salary}}"
-      />
+      <input type="tel" id="minSalary" name="minSalary" data-type="integer" class="text-right"
+        value="{{formatNumber(job.minSalary)}}" maxlength="16" onkeypress="return integerOnKeyPress(event)"
+        onfocus="numberOnFocus(event)" onblur="numberOnBlur(event)" placeholder="{{resource.min_salary}}" />
     </label>
     <label class="col s12 m6">
       {{resource.max_salary}}
-      <input
-        type="tel"
-        id="maxSalary"
-        name="maxSalary"
-        data-type="integer"
-        class="text-right"
-        value="{{formatNumber(job.maxSalary)}}"
-        maxlength="16"
-        onkeypress="return integerOnKeyPress(event)"
-        onfocus="numberOnFocus(event)"
-        onblur="numberOnBlur(event)"
-        placeholder="{{resource.max_salary}}"
-      />
+      <input type="tel" id="maxSalary" name="maxSalary" data-type="integer" class="text-right"
+        value="{{formatNumber(job.maxSalary)}}" maxlength="16" onkeypress="return integerOnKeyPress(event)"
+        onfocus="numberOnFocus(event)" onblur="numberOnBlur(event)" placeholder="{{resource.max_salary}}" />
     </label>
     <label class="col s12">
       {{resource.title}}
-      <input
-        type="text"
-        id="title"
-        name="title"
-        value="{{job.title}}"
-        maxlength="255"
-        required
-        onblur="requiredOnBlur(event)"
-        placeholder="{{resource.job_name}}"
-      />
+      <input type="text" id="title" name="title" value="{{job.title}}" maxlength="255" required
+        onblur="requiredOnBlur(event)" placeholder="{{resource.job_name}}" />
     </label>
     <label class="col s12 textarea-container required">
       {{resource.description}}
-      <textarea id="description" name="description" rows="40" maxlength="9600" placeholder="{{resource.description}}">{{job.description}}</textarea>
+      <textarea id="description" name="description" rows="40" maxlength="9600"
+        placeholder="{{resource.description}}">{{job.description}}</textarea>
     </label>
     <label class="col s12 textarea-container">
       <div class="editor-container">
@@ -140,17 +91,12 @@
             <button class="ql-strike"></button>
           </span>
           <span class="ql-formats">
-            <select class="ql-color"></select>
-            <select class="ql-background"></select>
-          </span>
-          <span class="ql-formats">
             <button class="ql-list" value="ordered"></button>
             <button class="ql-list" value="bullet"></button>
             <button class="ql-indent" value="-1"></button>
             <button class="ql-indent" value="+1"></button>
           </span>
           <span class="ql-formats">
-            <select class="ql-align"></select>
             <button class="ql-link"></button>
             <button class="ql-image"></button>
             <button class="ql-code-block"></button>
@@ -162,13 +108,15 @@
         <!-- Editor -->
         <div id="editor" style="display: none;" class="editor" aria-label="Rich text editor"></div>
         <div class="controls">
-          <button type="button" id="btnToggleView" onclick="toggleView(this, 'description', 'editor', 'toolbar')">Toggle View</button>
+          <button type="button" id="btnToggleView" onclick="toggleView(this, 'description', 'editor', 'toolbar')">Toggle
+            View</button>
         </div>
       </div>
     </label>
   </div>
   <footer>
-    <button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)" {% if readonly %} disabled {% endif %}>{{resource.save}}</button>
+    <button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)" {% if readonly %} disabled {% endif
+      %}>{{resource.save}}</button>
   </footer>
   <script id="job" src="/static/job.js"></script>
   <script data-init-script="true">
@@ -179,6 +127,25 @@
         },
         theme: "snow",
       })
+      const toolbar = quill.getModule('toolbar')
+      toolbar.addHandler('link', function (value) {
+        if (value) {
+          const range = quill.getSelection();
+          if (range && range.length > 0) {
+            let url = prompt('Enter the URL:');
+            if (url) {
+              if (!/^https?:\/\//i.test(url)) {
+                url = 'https://' + url;
+              }
+              quill.format('link', url);
+            }
+          } else {
+            alert('Please select some text before adding a link.');
+          }
+        } else {
+          quill.format('link', false);
+        }
+      });
       const form = document.getElementById("jobForm")
       if (form) {
         form.quill = quill

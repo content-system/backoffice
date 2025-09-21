@@ -135,6 +135,9 @@ function navigate(e, ignoreLang) {
               var pageBody = document.getElementById("pageBody")
               if (pageBody) {
                 pageBody.innerHTML = data
+                if (resources.refreshLoad) {
+                  resources.load = undefined
+                }
                 var span = link.querySelector("span")
                 var title = span ? span.innerText : link.innerText
                 window.history.pushState({ pageTitle: title }, "", url_1)
@@ -175,7 +178,9 @@ function navigate(e, ignoreLang) {
                 })
                 afterLoaded(pageBody)
                 setTimeout(function () {
-                  resources.load(pageBody)
+                  if (resources.load) {
+                    resources.load(pageBody)
+                  }
                 }, 0)
                 setTimeout(function () {
                   var _a

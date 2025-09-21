@@ -4,6 +4,7 @@ function toggleView(target: HTMLButtonElement, viewId: string, editorId: string,
     const contentView = form.querySelector("#" + viewId) as HTMLTextAreaElement
     const editor = form.querySelector("#" + editorId) as HTMLElement
     const toolbar = form.querySelector("#" + toolbarId) as HTMLElement
+
     if (contentView && editor && toolbar) {
       if (contentView.style.display !== "none") {
         // HTML to Quill
@@ -18,13 +19,15 @@ function toggleView(target: HTMLButtonElement, viewId: string, editorId: string,
       } else {
         // Quill to HTML
         if (contentView.form) {
-          contentView.value = contentView.form.quill.root.innerHTML
+          let html = contentView.form.quill.root.innerHTML
+          html = html.replace(/ class=\"ql-indent-\\d+\"/g, "")
+          contentView.value = html
         }
         contentView.style.display = "block"
         editor.style.display = "none"
         toolbar.style.display = "none"
       }
-    } 
+    }
   }
 }
 

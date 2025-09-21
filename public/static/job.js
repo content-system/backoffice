@@ -14,7 +14,9 @@ function toggleView(target, viewId, editorId, toolbarId) {
         toolbar_1.style.display = "block"
       } else {
         if (contentView.form) {
-          contentView.value = contentView.form.quill.root.innerHTML
+          var html = contentView.form.quill.root.innerHTML
+          html = html.replace(/ class=\"ql-indent-\\d+\"/g, "")
+          contentView.value = html
         }
         contentView.style.display = "block"
         editor.style.display = "none"

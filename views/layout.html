@@ -75,7 +75,9 @@
         }
         if (pageBody) {
           setTimeout(function () {
-            resources.load(pageBody)
+            if (resources.load) {
+              resources.load(pageBody)
+            }
           }, 0)
         }
         var sysNav = document.getElementById("sysNav")
