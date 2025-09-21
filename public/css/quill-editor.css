@@ -16,6 +16,7 @@
   border-radius: 0 0 6px 6px;
   padding: 12px;
   background: #fff;
+  font-weight: 400;
 }
 
 .controls {
@@ -38,4 +39,35 @@
 /* override */
 .ql-editor {
   padding: 4px;
+}
+
+.ql-editor ul > li {
+  font-size: 16px;
+}
+
+.ql-snow .ql-editor h3,
+.ql-snow .ql-editor h4,
+.ql-snow .ql-editor h5,
+.ql-snow .ql-editor h6,
+.ql-snow .ql-editor p {
+  padding-left: 0;
+  padding-right: 0;
+  color: inherit;
+  background-color: inherit;
+  margin-bottom: 1rem;
+}
+
+.ql-snow .ql-editor h3 {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.ql-snow .ql-editor h4 {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.ql-snow .ql-editor h5 {
+  font-size: 14px;
+  font-weight: 500;
 }
