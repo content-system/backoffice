@@ -23,7 +23,7 @@ import { write } from "security-express"
 import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
 import { UserService } from "../shared/user"
-import { render, renderError404, renderError500 } from "../template"
+import { render, renderError403, renderError404, renderError500 } from "../template"
 import { Role, RoleFilter, roleModel, RoleService } from "./role"
 
 const fields = ["roleId", "roleName", "remark", "status"]
@@ -77,20 +77,24 @@ export class RoleController {
     const resource = getResource(lang)
     const id = req.params.id
     const editMode = id !== "new"
+    const permissions = res.locals.permissions as number
+    const readonly = write != (write & permissions)
     if (!editMode) {
-      const role = createRole()
-      render(req, res, "role", {
-        resource,
-        role: escape(role),
-        editMode,
-      })
+      if (readonly) {
+        renderError403(req, res, resource)
+      } else {
+        const role = createRole()
+        render(req, res, "role", {
+          resource,
+          editMode,
+          role: escape(role),
+        })
+      }
     } else {
       this.service.load(id).then((role) => {
         if (!role) {
           renderError404(req, res, resource)
         } else {
-          const permissions = res.locals.permissions as number
-          const readonly = write != (write & permissions)
           render(req, res, "role", {
             resource,
             readonly,

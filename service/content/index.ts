@@ -133,14 +133,14 @@ export class ContentController {
       res.status(400).json({ error: "id and lang are required" }).end()
       return
     }
+    const permissions = res.locals.permissions as number
+    const readonly = write != (write & permissions)
     this.service
       .load(id, lang)
       .then((content) => {
         if (!content) {
           renderError404(req, res, resource)
         } else {
-          const permissions = res.locals.permissions as number
-          const readonly = write != (write & permissions)
           render(req, res, "content", {
             resource,
             content: escape(content),

@@ -7,6 +7,7 @@ export interface User {
   phone?: string
   dateOfBirth?: Date
   roles?: string[]
+  status: string
 
   createdAt?: Date
   createdBy?: string

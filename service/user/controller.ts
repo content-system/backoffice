@@ -23,8 +23,14 @@ import { write } from "security-express"
 import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
 import { RoleQuery } from "../shared/role"
-import { render, renderError404, renderError500 } from "../template"
+import { render, renderError403, renderError404, renderError500 } from "../template"
 import { User, UserFilter, userModel, UserService } from "./user"
+
+function createUser(): User {
+  const role = {} as User
+  role.status = "A"
+  return role
+}
 
 const titles = [
   { value: "Mr", text: "Mr" },
@@ -82,21 +88,36 @@ export class UserController {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const id = req.params.id
-    this.service.load(id).then((user) => {
-      if (!user) {
-        renderError404(req, res, resource)
+    const editMode = id !== "new"
+    const permissions = res.locals.permissions as number
+    const readonly = write != (write & permissions)
+    if (!editMode) {
+      if (readonly) {
+        renderError403(req, res, resource)
       } else {
-        const permissions = res.locals.permissions as number
-        const readonly = write != (write & permissions)
+        const user = createUser()
         render(req, res, "user", {
           resource,
-          readonly,
-          titles,
-          positions,
+          editMode,
           user: escape(user),
         })
       }
-    }).catch((err) => renderError500(req, res, resource, err))
+    } else {
+      this.service.load(id).then((user) => {
+        if (!user) {
+          renderError404(req, res, resource)
+        } else {
+          render(req, res, "user", {
+            resource,
+            readonly,
+            editMode,
+            titles,
+            positions,
+            user: escape(user),
+          })
+        }
+      }).catch((err) => renderError500(req, res, resource, err))
+    }
   }
   submit(req: Request, res: Response) {
     const lang = getLang(req, res)

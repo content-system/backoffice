@@ -23,7 +23,7 @@ import { write } from "security-express"
 import { getDateFormat } from "ui-formatter"
 import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
-import { render, renderError404, renderError500 } from "../template"
+import { render, renderError403, renderError404, renderError500 } from "../template"
 import { Job, JobFilter, jobModel, JobRepository, JobService } from "./job"
 import { buildQuery } from "./query"
 export * from "./job"
@@ -82,19 +82,31 @@ export class JobController {
     const resource = getResource(lang)
     const id = req.params.id
     const editMode = id !== "new"
-    this.service.load(id).then((job) => {
-      if (!job) {
-        renderError404(req, res, resource)
+    const permissions = res.locals.permissions as number
+    const readonly = write != (write & permissions)
+    if (!editMode) {
+      if (readonly) {
+        renderError403(req, res, resource)
       } else {
-        const permissions = res.locals.permissions as number
-        const readonly = write != (write & permissions)
         render(req, res, "job", {
           resource,
-          readonly,
           editMode,
-          job: escape(job) })
+          job: {},
+        })
       }
-    }).catch((err) => renderError500(req, res, resource, err))
+    } else {
+      this.service.load(id).then((job) => {
+        if (!job) {
+          renderError404(req, res, resource)
+        } else {
+          render(req, res, "job", {
+            resource,
+            readonly,
+            editMode,
+            job: escape(job) })
+        }
+      }).catch((err) => renderError500(req, res, resource, err))
+    }
   }
   submit(req: Request, res: Response) {
     const lang = getLang(req, res)

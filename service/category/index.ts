@@ -21,7 +21,7 @@ import { DB, Repository, SearchBuilder } from "query-core"
 import { write } from "security-express"
 import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
-import { render, renderError404, renderError500 } from "../template"
+import { render, renderError403, renderError404, renderError500 } from "../template"
 import { Category, CategoryFilter, categoryModel, CategoryRepository, CategoryService } from "./category"
 export * from "./category"
 
@@ -36,6 +36,11 @@ export class CategoryUseCase extends UseCase<Category, string, CategoryFilter> i
   }
 }
 
+function createCategory(): Category {
+  const category = {} as Category
+  category.status = "A"
+  return category
+}
 const fields = ["id", "name", "path", "icon", "type", "resource", "parent", "sequence", "status"]
 export class CategoryController {
   constructor(private service: CategoryService, private log: Log) {
@@ -78,12 +83,24 @@ export class CategoryController {
     const resource = getResource(lang)
     const id = req.params.id
     const editMode = id !== "new"
-    this.service.load(id).then((category) => {
+    const permissions = res.locals.permissions as number
+    const readonly = write != (write & permissions)
+    if (!editMode) {
+      if (readonly) {
+        renderError403(req, res, resource)
+      } else {
+        const category = createCategory()
+        render(req, res, "category", {
+          resource,
+          editMode,
+          category: escape(category),
+        })
+      }
+    } else {
+      this.service.load(id).then((category) => {
       if (!category) {
         renderError404(req, res, resource)
       } else {
-        const permissions = res.locals.permissions as number
-        const readonly = write != (write & permissions)
         render(req, res, "category", {
           resource,
           readonly,
@@ -92,6 +109,7 @@ export class CategoryController {
         })
       }
     }).catch((err) => renderError500(req, res, resource, err))
+    }
   }
   submit(req: Request, res: Response) {
     const lang = getLang(req, res)

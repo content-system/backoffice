@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { buildError500, checked, generateChips, generateTags, getView, toString } from "express-ext"
+import { buildError404, buildError500, checked, generateChips, generateTags, getView, toString } from "express-ext"
 import fs from "fs"
 import nunjucks, { Template } from "nunjucks"
 import { Log, StringMap } from "onecore"
@@ -50,12 +50,29 @@ export function render(req: Request, res: Response, name: string, obj?: any): vo
 export function renderError(req: Request, res: Response, obj?: any): void {
   res.render(getView(req, "error"), obj)
 }
+
+export function renderError403(req: Request, res: Response, resource: StringMap): void {
+  if (resources.log) {
+    resources.log("Have no permission to access this page " + req.url)
+  }
+  res.render(getView(req, "error"), buildError403(resource, res))
+}
 export function renderError404(req: Request, res: Response, resource: StringMap): void {
-  renderError404(req, res, resource)
+  res.render(getView(req, "error"), buildError404(resource, res))
 }
 export function renderError500(req: Request, res: Response, resource: StringMap, err: any): void {
   if (resources.log) {
     resources.log(toString(err))
   }
   res.render(getView(req, "error"), buildError500(resource, res))
+}
+
+export function buildError403(resource: StringMap, res: Response): any {
+  return {
+    message: {
+      title: resource.error_404_title,
+      description: resource.error_404_message,
+    },
+    menu: res.locals.menu,
+  }
 }

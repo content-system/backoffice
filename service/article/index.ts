@@ -24,7 +24,7 @@ import { write } from "security-express"
 import { formatDateTime, getDateFormat } from "ui-formatter"
 import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
-import { render, renderError404, renderError500 } from "../template"
+import { render, renderError403, renderError404, renderError500 } from "../template"
 import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService } from "./article"
 import { buildQuery } from "./query"
 export * from "./article"
@@ -86,19 +86,23 @@ export class ArticleController {
     const dateFormat = getDateFormat(lang)
     const id = req.params.id
     const editMode = id !== "new"
+    const permissions = res.locals.permissions as number
+    const readonly = write != (write & permissions)
     if (!editMode) {
-      render(req, res, "article", {
+      if (readonly) {
+        renderError403(req, res, resource)
+      } else {
+        render(req, res, "article", {
         resource,
-        article: {},
         editMode,
+        article: {},
       })
+      }
     } else {
       this.service.load(id).then((article) => {
         if (!article) {
           renderError404(req, res, resource)
         } else {
-          const permissions = res.locals.permissions as number
-          const readonly = write != (write & permissions)
           article.publishedAt = formatDateTime(article.publishedAt, dateFormat)
           render(req, res, "article", {
             resource,
