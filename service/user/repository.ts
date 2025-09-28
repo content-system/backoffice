@@ -1,5 +1,5 @@
 import { Attribute, Attributes, Search, StringMap } from "onecore"
-import { buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, DB, metadata, SearchResult, Statement } from "query-core"
+import { buildMap, buildToInsert, buildToInsertBatch, buildToUpdate, DB, metadata, SearchResult, Statement } from "query-core"
 import { User, UserFilter, userModel, UserRepository } from "./user"
 
 const userRoleModel: Attributes = {
@@ -44,8 +44,8 @@ export class SqlUserRepository implements UserRepository {
         return null
       }
       const user = users[0]
-      const q = `select role_id from user_roles where user_id = ${this.db.param(1)}`
-      return this.db.query<UserRole>(q, [user.userId], this.roleMap).then((roles) => {
+      const query = `select role_id from user_roles where user_id = ${this.db.param(1)}`
+      return this.db.query<UserRole>(query, [id], this.roleMap).then((roles) => {
         if (roles && roles.length > 0) {
           user.roles = roles.map((i) => i.roleId)
         }
@@ -61,7 +61,7 @@ export class SqlUserRepository implements UserRepository {
     }
     stmts.push(stmt)
     insertUserRoles(stmts, user.userId, user.roles, this.db.param)
-    return this.db.execBatch(stmts)
+    return this.db.execBatch(stmts, true)
   }
   update(user: User): Promise<number> {
     const stmts: Statement[] = []
@@ -69,23 +69,17 @@ export class SqlUserRepository implements UserRepository {
     if (!stmt) {
       return Promise.resolve(-1)
     }
-    const query = `delete from user_roles where user_id = ${this.db.param(1)}`
-    stmts.push({ query, params: [user.userId] })
+    stmts.push({ query: `delete from user_roles where user_id = ${this.db.param(1)}`, params: [user.userId] })
     insertUserRoles(stmts, user.userId, user.roles, this.db.param)
-    return this.db.execBatch(stmts)
+    return this.db.execBatch(stmts, true)
   }
   patch(user: User): Promise<number> {
     return this.update(user)
   }
   delete(id: string): Promise<number> {
     const stmts: Statement[] = []
-    const query = `delete from user_roles where user_id = ${this.db.param(1)}`
-    stmts.push({ query, params: [id] })
-    const stmt = buildToDelete(id, "users", this.primaryKeys, this.db.param)
-    if (!stmt) {
-      return Promise.resolve(-1)
-    }
-    stmts.push(stmt)
+    stmts.push({ query: `delete from user_roles where user_id = ${this.db.param(1)}`, params: [id] })
+    stmts.push({ query: `delete from users where user_id = ${this.db.param(1)}`, params: [id] })
     return this.db.execBatch(stmts)
   }
   assign(id: string, roles: string[]): Promise<number> {

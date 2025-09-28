@@ -1,5 +1,5 @@
 import { Attribute, Attributes, Search } from "onecore"
-import { buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, DB, metadata, SearchResult, Statement, StringMap } from "query-core"
+import { buildMap, buildToInsert, buildToInsertBatch, buildToUpdate, DB, metadata, SearchResult, Statement, StringMap } from "query-core"
 import { Role, RoleFilter, roleModel, RoleRepository } from "./role"
 
 const userRoleModel: Attributes = {
@@ -66,8 +66,8 @@ export class SqlRoleRepository implements RoleRepository {
         return null
       }
       const role = roles[0]
-      const q = `select module_id, permissions from role_modules where role_id = ${this.db.param(1)}`
-      return this.db.query<Module>(q, [role.roleId], this.roleModuleMap).then((modules) => {
+      const query = `select module_id, permissions from role_modules where role_id = ${this.db.param(1)}`
+      return this.db.query<Module>(query, [id], this.roleModuleMap).then((modules) => {
         if (modules && modules.length > 0) {
           role.privileges = modules.map((i) => (i.permissions ? i.moduleId + " " + i.permissions.toString(16) : i.moduleId)) as any
         }
@@ -99,32 +99,27 @@ export class SqlRoleRepository implements RoleRepository {
       stmts.push({ query, params: [role.roleId] })
       insertRoleModules(stmts, role.roleId, role.privileges, this.db.param)
     }
-    return this.db.execBatch(stmts)
+    return this.db.execBatch(stmts, firstSuccess)
   }
   patch(role: Role): Promise<number> {
     return this.update(role)
   }
   delete(id: string): Promise<number> {
     const stmts: Statement[] = []
-    const stmt = buildToDelete(id, "roles", this.primaryKeys, this.db.param)
-    if (stmt) {
-      stmts.push(stmt)
-    }
-    const query = `delete from role_modules where role_id = ${this.db.param(1)}`
-    stmts.push({ query, params: [id] })
+    stmts.push({ query: `delete from role_modules where role_id = ${this.db.param(1)}`, params: [id] })
+    stmts.push({ query: `delete from roles where role_id = ${this.db.param(1)}`, params: [id] })
     return this.db.execBatch(stmts)
   }
   assign(roleId: string, users: string[]): Promise<number> {
     const stmts: Statement[] = []
-    const q1 = `delete from user_roles where role_id = ${this.db.param(1)}`
-    stmts.push({ query: q1, params: [roleId] })
+    stmts.push({ query: `delete from user_roles where role_id = ${this.db.param(1)}`, params: [roleId] })
     if (users && users.length > 0) {
       const userRoles: UserRole[] = users.map<UserRole>((u) => {
         return { roleId, userId: u }
       })
-      const stmt2 = buildToInsertBatch<UserRole>(userRoles, "user_roles", userRoleModel, this.db.param)
-      if (stmt2) {
-        stmts.push(stmt2)
+      const stmt = buildToInsertBatch<UserRole>(userRoles, "user_roles", userRoleModel, this.db.param)
+      if (stmt) {
+        stmts.push(stmt)
       }
     }
     return this.db.execBatch(stmts)
