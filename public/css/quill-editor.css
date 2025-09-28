@@ -43,6 +43,7 @@
 
 .ql-editor ul > li {
   font-size: 16px;
+  margin-top: 4px;
 }
 
 .ql-snow .ql-editor h3,
@@ -55,6 +56,11 @@
   color: inherit;
   background-color: inherit;
   margin-bottom: 1rem;
+}
+
+.ql-snow .ql-editor h2 {
+  font-size: 20px;
+  font-weight: 500;
 }
 
 .ql-snow .ql-editor h3 {
@@ -70,4 +76,9 @@
 .ql-snow .ql-editor h5 {
   font-size: 14px;
   font-weight: 500;
+}
+
+.ql-editor ul,
+.ql-editor ol {
+  margin-bottom: 16px;
 }
