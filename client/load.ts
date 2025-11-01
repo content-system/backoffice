@@ -24,9 +24,7 @@ window.onload = function () {
     }
     if (pageBody) {
       setTimeout(function () {
-        if (resources.load) {
-          resources.load(pageBody)
-        }
+        resources.load(pageBody)
       }, 0)
     }
     const sysNav = document.getElementById("sysNav") as HTMLElement

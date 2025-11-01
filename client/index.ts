@@ -12,7 +12,6 @@ interface ErrorMessage {
 // tslint:disable-next-line:class-name
 class resources {
   static autoCollapse = false
-  static refreshLoad = true
   static login = "/login"
   static redirect = "redirectUrl"
   static defaultLimit = 12
@@ -20,7 +19,7 @@ class resources {
   static hiddenMessage = "hidden-message"
   static token = "token"
 
-  static load?: (pageBody: HTMLElement) => void
+  static load(pageBody: HTMLElement): void {}
 
   static num1 = / |,|\$|€|£|¥|'|٬|،| /g
   static num2 = / |\.|\$|€|£|¥|'|٬|،| /g
