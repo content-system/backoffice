@@ -8,13 +8,6 @@ function clearText(e, name) {
     q.value = ""
   }
 }
-function clearMessage(e) {
-  var ele = e.target
-  if (ele && ele.parentElement) {
-    removeClasses(ele.parentElement, ["alert-error", "alert-warning", "alert-info"])
-    ele.parentElement.innerText = ""
-  }
-}
 function qOnChange(e) {
   var text = e.target
   var form = text.form
@@ -83,7 +76,6 @@ function buildSearchUrl(ft, page, limit, fields) {
     delete ft.page
   }
   var keys = Object.keys(ft)
-  // const currentUrl = window.location.host + window.location.pathname
   var url = "?partial=true"
   for (var _i = 0, keys_2 = keys; _i < keys_2.length; _i++) {
     var key = keys_2[_i]

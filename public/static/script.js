@@ -88,6 +88,9 @@ function fadeOut(ele) {
 }
 var sysToast = document.getElementById("sysToast")
 function toast(msg) {
+  if (!sysToast) {
+    sysToast = document.getElementById("sysToast")
+  }
   sysToast.innerHTML = msg
   fadeIn(sysToast)
   setTimeout(function () {
@@ -127,7 +130,6 @@ function escapeHTML(text) {
   if (text.indexOf("<") >= 0) {
     text = text.replace(/</g, "&lt;")
   }
-  // Ignore escaping if </br> tag is present
   if (isIgnore) {
     text = text.replace(/&lt;br \/&gt;/g, "<br />")
   }
@@ -140,8 +142,6 @@ function showAlert(msg, header, type, iconType, btnLeftText, btnRightText, yesCa
   var sysErrorDetail = document.getElementById("sysErrorDetail")
   var sysErrorDetailText = document.getElementById("sysErrorDetailText")
   var sysErrorDetailCaret = document.getElementById("sysErrorDetailCaret")
-  // const sysYes = document.getElementById("sysYes") as HTMLElement
-  // const sysNo = document.getElementById("sysNo") as HTMLElement
   if (type === "Alert") {
     btnRightText = btnRightText !== undefined ? btnRightText : sysYes.getAttribute("data-ok")
     if (!sysAlert.classList.contains("alert-only")) {
@@ -226,8 +226,7 @@ function alertSuccess(msg, callback, header) {
   showAlert(msg, h, "Alert", "Success", "", buttonText, callback, undefined)
 }
 
-// tslint:disable-next-line:class-name
-var resources = /** @class */ (function () {
+var resources = (function () {
   function resources() {}
   resources.load = function (pageBody) {}
   resources.autoCollapse = false
@@ -244,7 +243,7 @@ var resources = /** @class */ (function () {
   resources.password = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
   resources.url = /[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
   resources.digit = /^\d+$/
-  resources.amount = /^[0-9]{0,15}(?:\.[0-9]{1,3})?$/ // const regExp = /\d+\.\d+/;
+  resources.amount = /^[0-9]{0,15}(?:\.[0-9]{1,3})?$/
   resources.digitAndDash = /^[0-9-]*$/
   resources.digitAndChar = /^\w*\d*$/
   resources.checkNumber = /^\d{0,8}$/
@@ -303,13 +302,13 @@ function getHeaders() {
   var lang = getLang()
   if (lang) {
     if (token && token.length > 0) {
-      return { "Content-Language": lang, Authorization: "Bearer " + token } // Include the JWT
+      return { "Content-Language": lang, Authorization: "Bearer " + token }
     } else {
       return { "Content-Language": lang }
     }
   } else {
     if (token && token.length > 0) {
-      return { Authorization: "Bearer " + token } // Include the JWT
+      return { Authorization: "Bearer " + token }
     } else {
       return {}
     }
@@ -512,7 +511,6 @@ function setReadOnly(form) {
         for (var j = 1; j < arguments.length; j++) {
           if (arguments[j] === name_1) {
             skip = true
-            // continue; has bugs => why?
           }
         }
       }
@@ -597,14 +595,7 @@ function registerEvents(form) {
         var parent_1 = ele.parentElement
         var required = ele.getAttribute("required")
         if (parent_1) {
-          if (
-            parent_1.nodeName === "LABEL" &&
-            // tslint:disable-next-line:triple-equals
-            required != null &&
-            required !== undefined &&
-            required != "false" &&
-            !parent_1.classList.contains("required")
-          ) {
+          if (parent_1.nodeName === "LABEL" && required != null && required !== undefined && required != "false" && !parent_1.classList.contains("required")) {
             parent_1.classList.add("required")
           } else if (parent_1.classList.contains("form-group") || parent_1.classList.contains("field")) {
             var firstChild = parent_1.firstChild
@@ -634,7 +625,6 @@ function addErrorMessage(ele, msg, directParent) {
     msg = "Error"
   }
   addClass(ele, "invalid")
-  // addClass(ele, "ng-touched")
   var parent = directParent ? ele.parentElement : getContainer(ele)
   if (parent === null) {
     return
@@ -719,31 +709,14 @@ function removeErrors(form) {
     }
   }
 }
-// tslint:disable-next-line:class-name
-var formatter = /** @class */ (function () {
+var formatter = (function () {
   function formatter() {}
-  formatter.removePhoneFormat = function (phone) {
-    if (phone) {
-      return phone.replace(formatter.phone, "")
-    } else {
-      return phone
-    }
-  }
-  formatter.removeFaxFormat = function (fax) {
-    if (fax) {
-      return fax.replace(formatter.phone, "")
-    } else {
-      return fax
-    }
-  }
   formatter.formatPhone = function (phone) {
     if (!phone) {
       return ""
     }
-    // reformat phone number
-    // 555 123-4567 or (+1) 555 123-4567
     var s = phone
-    var x = formatter.removePhoneFormat(phone)
+    var x = removePhoneFormat(phone)
     if (x.length === 10) {
       var USNumber = x.match(formatter.usPhone)
       if (USNumber != null) {
@@ -758,7 +731,6 @@ var formatter = /** @class */ (function () {
     } else if (x.length >= 11) {
       var l = x.length
       s = x.substring(0, l - 7) + " " + x.substring(l - 7, l - 4) + "-" + x.substring(l - 4, l)
-      // formatedPhone = `(+${phoneNumber.charAt(0)}) ${phoneNumber.substring(0, 3)} ${phoneNumber.substring(3, 6)}-${phoneNumber.substring(6, phoneNumber.length - 1)}`;
     }
     return s
   }
@@ -766,10 +738,8 @@ var formatter = /** @class */ (function () {
     if (!fax) {
       return ""
     }
-    // reformat phone number
-    // 035-456745 or 02-1234567
     var s = fax
-    var x = formatter.removePhoneFormat(fax)
+    var x = removeFaxFormat(fax)
     var l = x.length
     if (l <= 6) {
       s = x
@@ -790,13 +760,24 @@ var formatter = /** @class */ (function () {
     }
     return s
   }
-  // private static _preg = / |\+|\-|\.|\(|\)/g;
   formatter.phone = / |\-|\.|\(|\)/g
+  formatter.fax = / |\-|\.|\(|\)/g
   formatter.usPhone = /(\d{3})(\d{3})(\d{4})/
   return formatter
 })()
-// tslint:disable-next-line:class-name
-var tel = /** @class */ (function () {
+function formatPhone(phone) {
+  return formatter.formatPhone(phone)
+}
+function formatFax(fax) {
+  return formatter.formatFax(fax)
+}
+function removePhoneFormat(phone) {
+  return phone ? phone.replace(formatter.phone, "") : phone
+}
+function removeFaxFormat(fax) {
+  return fax ? fax.replace(formatter.fax, "") : fax
+}
+var tel = (function () {
   function tel() {}
   tel.isPhone = function (str) {
     if (!str || str.length === 0 || str === "+") {
@@ -1061,12 +1042,15 @@ function checkOnBlur(event, key, check, formatF) {
       return
     }
     var value = ele.value
-    if (formatF) {
-      value = formatF(value)
-    }
     if (value.length > 0 && !check(value)) {
       var msg = format(resource[key], label, ele.maxLength)
       addErrorMessage(ele, msg)
+    }
+    if (formatF) {
+      var value2 = formatF(value)
+      if (value2 !== value) {
+        ele.value = value2
+      }
     }
   }, 40)
 }
@@ -1076,11 +1060,35 @@ function emailOnBlur(event) {
 function urlOnBlur(event) {
   checkOnBlur(event, "error_url", isUrl)
 }
+function phoneOnFocus(event) {
+  var ele = event.currentTarget
+  handleMaterialFocus(ele)
+  if (ele.readOnly || ele.disabled || ele.value.length === 0) {
+    return
+  } else {
+    var s = removePhoneFormat(ele.value)
+    if (s !== ele.value) {
+      ele.value = s
+    }
+  }
+}
 function phoneOnBlur(event) {
-  checkOnBlur(event, "error_phone", tel.isPhone, formatter.removePhoneFormat)
+  checkOnBlur(event, "error_phone", tel.isPhone, formatPhone)
+}
+function faxOnFocus(event) {
+  var ele = event.currentTarget
+  handleMaterialFocus(ele)
+  if (ele.readOnly || ele.disabled || ele.value.length === 0) {
+    return
+  } else {
+    var s = removeFaxFormat(ele.value)
+    if (s !== ele.value) {
+      ele.value = s
+    }
+  }
 }
 function faxOnBlur(event) {
-  checkOnBlur(event, "error_fax", tel.isFax, formatter.removeFaxFormat)
+  checkOnBlur(event, "error_fax", tel.isFax, formatFax)
 }
 function ipv4OnBlur(event) {
   checkOnBlur(event, "error_ipv4", isIPv4)
@@ -1286,7 +1294,7 @@ function validateMinMax(ele, n, label, resource, locale) {
     if (form) {
       var minElement = getElement(form, minField)
       if (minElement) {
-        var smin2 = correctNumber(minElement.value, locale) // const smin2 = minElement.value.replace(this._nreg, '');
+        var smin2 = correctNumber(minElement.value, locale)
         if (smin2.length > 0 && !isNaN(smin2)) {
           var min2 = parseFloat(smin2)
           if (n < min2) {
@@ -1320,11 +1328,8 @@ function checkNumber(target, locale, r) {
   var resource = r ? r : getResource()
   if (value.length > 0) {
     if (isNaN(value)) {
-      var msg = format(resource.error_number, label)
-      addErrorMessage(target, msg)
-      return false
-    } else if (target.getAttribute("data-type") === "integer") {
-      var msg = format(resource.error_integer, label)
+      var t = target.getAttribute("data-type") === "integer" ? resource.error_integer : resource.error_number
+      var msg = format(t, label)
       addErrorMessage(target, msg)
       return false
     }
@@ -1388,7 +1393,7 @@ function formatCurrency(v, ele) {
   }
 }
 function formatNumber(v, scale, d, g) {
-  if (!v) {
+  if (v == null) {
     return ""
   }
   if (!d && !g) {
@@ -1531,14 +1536,14 @@ function validateElement(ele, locale, includeReadOnly) {
       return msg
     }
   } else if (datatype === "phone") {
-    var phoneStr = formatter.removePhoneFormat(value)
+    var phoneStr = removePhoneFormat(value)
     if (!tel.isPhone(phoneStr)) {
       var msg = format(resource.error_phone, label)
       addErrorMessage(ele, msg)
       return msg
     }
   } else if (datatype === "fax") {
-    var phoneStr = formatter.removeFaxFormat(value)
+    var phoneStr = removeFaxFormat(value)
     if (!tel.isFax(phoneStr)) {
       var msg = format(resource.error_fax, label)
       addErrorMessage(ele, msg)
@@ -1569,7 +1574,6 @@ function validateElement(ele, locale, includeReadOnly) {
       return msg
     }
   } else if (datatype === "routing-number") {
-    // business-tax-id
     if (!isDashDigit(value)) {
       var msg = format(resource.error_routing_number, label)
       addErrorMessage(ele, msg)
@@ -1760,16 +1764,13 @@ function selectOnChange(ele, attr) {
     ele.setAttribute(at, ele.value)
   }
 }
-//detect Ctrl + [a, v, c, x]
 function detectCtrlKeyCombination(e) {
-  // list all CTRL + key combinations
   var forbiddenKeys = new Array("v", "a", "x", "c")
   var key
   var isCtrl
   var browser = navigator.appName
   if (browser == "Microsoft Internet Explorer") {
     key = e.keyCode
-    // IE
     if (e.ctrlKey) {
       isCtrl = true
     } else {
@@ -1778,12 +1779,10 @@ function detectCtrlKeyCombination(e) {
   } else {
     if (browser == "Netscape") {
       key = e.which
-      // firefox, Netscape
       if (e.ctrlKey) isCtrl = true
       else isCtrl = false
     } else return true
   }
-  // if ctrl is pressed check if other key is in forbidenKeys array
   if (isCtrl) {
     var chr = String.fromCharCode(key).toLowerCase()
     for (var i = 0; i < forbiddenKeys.length; i++) {
@@ -2047,20 +2046,17 @@ function decodeFromForm(form, currencySymbol) {
       if (nodeName === "INPUT" && type !== null) {
         nodeName = type.toUpperCase()
       }
-      if (nodeName !== "BUTTON" && nodeName !== "RESET" && nodeName !== "SUBMIT") {
+      if (nodeName !== "BUTTON" && nodeName !== "RESET" && nodeName !== "SUBMIT" && ele.getAttribute("data-skip") !== "true") {
         switch (type) {
           case "checkbox":
             if (id && name_1 !== id) {
-              // obj[name] = !obj[name] ? [] : obj[name];
-              val = valueOf(obj, name_1) // val = obj[name];
+              val = valueOf(obj, name_1)
               if (!val) {
                 val = []
               }
               if (ele.checked) {
                 val.push(ele.value)
-                // obj[name].push(ele.value);
               } else {
-                // tslint:disable-next-line: triple-equals
                 val = val.filter(function (item) {
                   return item != ele.value
                 })
@@ -2082,7 +2078,7 @@ function decodeFromForm(form, currencySymbol) {
           case "datetime-local":
             if (ele.value.length > 0) {
               try {
-                val = new Date(ele.value) // DateUtil.parse(ele.value, 'YYYY-MM-DD');
+                val = new Date(ele.value)
               } catch (err) {
                 val = null
               }
@@ -2114,14 +2110,35 @@ function decodeFromForm(form, currencySymbol) {
           v = decimalSeparator === "," ? v.replace(r2, "") : (v = v.replace(r1, ""))
           val = isNaN(v) ? null : parseFloat(v)
         }
-        setValue(obj, name_1, val) // obj[name] = val;
+        setValue(obj, name_1, val)
       }
     }
   }
   for (var i = 0; i < len; i++) {
     _loop_1(i)
   }
+  form.querySelectorAll(".chip-list").forEach(function (divChip) {
+    var name = divChip.getAttribute("data-name")
+    if (name && name.length > 0) {
+      var v = getChipsByElement(divChip)
+      setValue(obj, name, v)
+    }
+  })
   return obj
+}
+function getChips(chipId) {
+  var container = document.getElementById(chipId)
+  return getChipsByElement(container)
+}
+function getChipsByElement(container) {
+  if (container) {
+    return Array.from(container.querySelectorAll(".chip")).map(function (chip) {
+      var v = chip.getAttribute("data-value")
+      return v ? v.trim() : ""
+    })
+  } else {
+    return []
+  }
 }
 function removeMessage(ele) {
   if (ele) {
@@ -2150,6 +2167,13 @@ function isHidden(ele) {
     return ele.hidden || ele.style.display === "none"
   }
   return true
+}
+function clearMessage(e) {
+  var ele = e.target
+  if (ele && ele.parentElement) {
+    removeClasses(ele.parentElement, ["alert-error", "alert-warning", "alert-info"])
+    ele.parentElement.innerText = ""
+  }
 }
 function showErrorMessage(ele, msg) {
   if (ele) {
@@ -2237,6 +2261,12 @@ function getHttpHeaders() {
 function getConfirmMessage(ele, resource) {
   var confirmMsg = ele.getAttribute("data-message")
   return confirmMsg ? confirmMsg : resource.msg_confirm_save
+}
+function deleteFields(obj, fields) {
+  var l = fields.length
+  for (var i = 0; i < l; i++) {
+    delete obj[fields[i]]
+  }
 }
 function submitFormData(e) {
   e.preventDefault()
@@ -2482,6 +2512,7 @@ function toggleMenuItem(e) {
     parent.classList.toggle("open")
   }
 }
+var cacheScript = new Map()
 function navigate(e, ignoreLang) {
   e.preventDefault()
   var target = e.target
@@ -2513,6 +2544,36 @@ function navigate(e, ignoreLang) {
                 var span = link.querySelector("span")
                 var title = span ? span.innerText : link.innerText
                 window.history.pushState({ pageTitle: title }, "", url_1)
+                pageBody.querySelectorAll("script").forEach(function (oldScript) {
+                  var isInitScript = oldScript.getAttribute("data-init-script")
+                  if (isInitScript === "true") {
+                    var newScript = document.createElement("script")
+                    if (oldScript.src) {
+                      newScript.src = oldScript.src
+                    } else {
+                      newScript.textContent = oldScript.textContent
+                    }
+                    document.body.appendChild(newScript)
+                    oldScript.remove()
+                  } else {
+                    var scriptId = oldScript.getAttribute("id")
+                    if (scriptId && scriptId.length > 0) {
+                      var loaded = cacheScript.get(scriptId)
+                      if (!loaded) {
+                        cacheScript.set(scriptId, "Y")
+                        var newScript = document.createElement("script")
+                        newScript.id = scriptId
+                        if (oldScript.src) {
+                          newScript.src = oldScript.src
+                        } else {
+                          newScript.textContent = oldScript.textContent
+                        }
+                        document.body.appendChild(newScript)
+                        oldScript.remove()
+                      }
+                    }
+                  }
+                })
                 afterLoaded(pageBody)
                 setTimeout(function () {
                   resources.load(pageBody)

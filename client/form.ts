@@ -464,6 +464,14 @@ function isHidden(ele: HTMLElement | null | undefined): boolean {
   }
   return true
 }
+
+function clearMessage(e: Event) {
+  const ele = e.target as HTMLInputElement
+  if (ele && ele.parentElement) {
+    removeClasses(ele.parentElement, ["alert-error", "alert-warning", "alert-info"])
+    ele.parentElement.innerText = ""
+  }
+}
 function showErrorMessage(ele: Element | null, msg: string): boolean {
   if (ele) {
     removeClasses(ele, ["alert-warning", "alert-info"])

@@ -7,13 +7,6 @@ function clearText(e: Event, name?: string) {
     q.value = ""
   }
 }
-function clearMessage(e: Event) {
-  const ele = e.target as HTMLInputElement
-  if (ele && ele.parentElement) {
-    removeClasses(ele.parentElement, ["alert-error", "alert-warning", "alert-info"])
-    ele.parentElement.innerText = ""
-  }
-}
 function qOnChange(e: Event) {
   const text = e.target as HTMLInputElement
   const form = text.form

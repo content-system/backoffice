@@ -452,6 +452,13 @@ function isHidden(ele) {
   }
   return true
 }
+function clearMessage(e) {
+  var ele = e.target
+  if (ele && ele.parentElement) {
+    removeClasses(ele.parentElement, ["alert-error", "alert-warning", "alert-info"])
+    ele.parentElement.innerText = ""
+  }
+}
 function showErrorMessage(ele, msg) {
   if (ele) {
     removeClasses(ele, ["alert-warning", "alert-info"])
