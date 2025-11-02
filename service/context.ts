@@ -2,7 +2,7 @@ import { MenuBuilder } from "admin-menu"
 import { Authenticator, initializeStatus, PrivilegeRepository, SqlAuthTemplateConfig, useUserRepository } from "authen-service"
 import { compare } from "bcrypt"
 import { HealthController, LogController, Logger, Middleware, MiddlewareController, resources } from "express-ext"
-import { buildJwtError, generateToken, Payload, verify } from "jsonwebtoken-plus"
+import { buildJwtError, Payload, verify } from "jsonwebtoken-plus"
 import { StringMap } from "onecore"
 import { createChecker, DB } from "query-core"
 import { TemplateMap } from "query-mappers"
@@ -69,16 +69,13 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: C
   const authenticator = new Authenticator(
     status,
     compare,
-    generateToken,
-    auth.token,
-    auth.payload,
     auth.account,
     userRepository,
     privilegeRepository.privileges,
     auth.lockedMinutes,
     2,
   )
-  const login = new LoginController(authenticator, logger.error)
+  const login = new LoginController(authenticator, cfg.auth.token.secret, cfg.auth.token.expires, logger.error)
 
   const userService = useUserService(db, mapper)
   const role = useRoleController(logger.error, db, userService, mapper)

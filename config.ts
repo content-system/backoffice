@@ -63,6 +63,7 @@ export const config = {
     },
     account: {
       displayName: "displayname",
+      dateFormat: "date_format"
     },
     userStatus: {
       activated: "A",
@@ -80,7 +81,7 @@ export const config = {
       lockedUntilTime: "locked_until_time",
     },
     query: `
-      select u.user_id, u.username, u.display_name, language, email, u.status, p.* from users u
+      select u.user_id, u.username, u.display_name, language, dateformat as date_format, email, u.status, p.* from users u
       inner join passwords p
         on u.user_id = p.user_id
       where username = $1 and u.status = 'A'`,

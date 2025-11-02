@@ -1,6 +1,7 @@
 import { Authenticator, Privilege } from "authen-service"
 import { Request, Response } from "express"
 import { buildError, getView, query, queryLang, toMap } from "express-ext"
+import * as jsonwebtoken from "jsonwebtoken"
 import { Attributes, Log, StringMap } from "onecore"
 import { validate } from "xvalidators"
 import { getResource, getResourceByLang } from "../resources"
@@ -28,7 +29,7 @@ export const map: StringMap = {
   "9": "fail_disabled_account",
 }
 export class LoginController {
-  constructor(private authenticator: Authenticator<User, string>, private log: Log) {
+  constructor(private authenticator: Authenticator<User, string>, private secret: string, private expiresIn: number, private log: Log) {
     this.render = this.render.bind(this)
     this.submit = this.submit.bind(this)
   }
@@ -64,7 +65,10 @@ export class LoginController {
           if (result.status === 1) {
             const account = result.user
             if (account) {
-              res.cookie("token", account.token, { httpOnly: true, secure: true, sameSite: "strict" })
+              const token = jsonwebtoken.sign({ id: account.id, user: user.username, lang: account.language, dateFormat: account.dateFormat }, this.secret, {
+                expiresIn: this.expiresIn,
+              })
+              res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "strict" })
               const redirectUrl = query(req, "redirectUrl")
               if (redirectUrl && redirectUrl.length > 0) {
                 res.redirect(redirectUrl)
