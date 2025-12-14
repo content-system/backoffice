@@ -1,10 +1,10 @@
 import { Request, Response } from "express"
-import { buildError404, buildError500, checked, generateChips, generateTags, getView, toString } from "express-ext"
+import { buildError404, buildError500, generateChips, generateTags, getView, toString } from "express-ext"
 import fs from "fs"
 import nunjucks, { Template } from "nunjucks"
 import { Log, StringMap } from "onecore"
 import path from "path"
-import { datetimeToString, formatDate, formatDateTime, formatLongDateTime, formatNumber, formatPhone } from "ui-formatter"
+import { datetimeToString, formatDate, formatDateTime, formatLongDateTime, formatNumber, formatPhone, isChecked } from "ui-formatter"
 
 export class resources {
   static nunjucks: nunjucks.Environment
@@ -33,7 +33,7 @@ export function render(req: Request, res: Response, name: string, obj?: any): vo
   }
   if (obj) {
     obj.menu = res.locals.menu
-    obj.checked = checked
+    obj.isChecked = isChecked
     obj.datetimeToString = datetimeToString
     obj.formatLongDateTime = formatLongDateTime
     obj.formatDateTime = formatDateTime

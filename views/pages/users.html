@@ -23,10 +23,10 @@
           {{resource.status}}
           <section class="checkbox-group">
             <label>
-              <input type="checkbox" id="active" name="status" value="A" {% if checked(filter.status, 'A') %} checked {% endif %} />{{resource.active}}
+              <input type="checkbox" id="active" name="status" value="A" {{isChecked('A', filter.status)}}/>{{resource.active}}
             </label>
             <label>
-              <input type="checkbox" id="inactive" name="status" value="I" {% if checked(filter.status, 'I') %} checked {% endif %}/>{{resource.inactive}}
+              <input type="checkbox" id="inactive" name="status" value="I" {{isChecked('I', filter.status)}}/>{{resource.inactive}}
             </label>
           </section>
         </label>

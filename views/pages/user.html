@@ -89,15 +89,15 @@
     <label class="col s12 m6">
       {{resource.gender}}
       <div class="radio-group">
-        <label><input type="radio" id="gender" name="gender" disabled value="M" {% if user.gender == "M" %} checked {% endif %} />{{resource.male}}</label>
-        <label><input type="radio" id="gender" name="gender" disabled value="F" {% if user.gender == "F" %} checked {% endif %} />{{resource.female}}</label>
+        <label><input type="radio" id="gender" name="gender" disabled value="M" {{isChecked('M', user.gender)}}/>{{resource.male}}</label>
+        <label><input type="radio" id="gender" name="gender" disabled value="F" {{isChecked('F', user.gender)}}/>{{resource.female}}</label>
       </div>
     </label>
     <div class="col s12 m6 radio-section">
       {{resource.status}}
       <div class="radio-group">
-        <label><input type="radio" id="active" name="status" value="A" {% if user.status == "A" %} checked {% endif %}/>{{resource.active}}</label>
-        <label><input type="radio" id="inactive" name="status" value="I" {% if user.status == "I" %} checked {% endif %}/>{{resource.inactive}}</label>
+        <label><input type="radio" id="active" name="status" value="A" {{isChecked('A', user.status)}}/>{{resource.active}}</label>
+        <label><input type="radio" id="inactive" name="status" value="I" {{isChecked('I', user.status)}}/>{{resource.inactive}}</label>
       </div>
     </div>
   </div>

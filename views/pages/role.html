@@ -43,8 +43,8 @@
       <div class="col s12 m6 radio-section">
         {{resource.status}}
         <div class="radio-group">
-          <label><input type="radio" id="active" name="status" value="A" {% if role.status == "A" %} checked {% endif %}/>{{resource.active}}</label>
-          <label><input type="radio" id="inactive" name="status" value="I" {% if role.status == "I" %} checked {% endif %}/>{{resource.inactive}}</label>
+          <label><input type="radio" id="active" name="status" value="A" {{isChecked('A', role.status)}}>{{resource.active}}</label>
+          <label><input type="radio" id="inactive" name="status" value="I" {{isChecked('I', role.status)}}/>{{resource.inactive}}</label>
         </div>
       </div>
     </section>
