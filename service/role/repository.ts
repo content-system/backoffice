@@ -1,5 +1,5 @@
-import { Attribute, Attributes } from "onecore"
-import { buildMap, buildToInsert, buildToInsertBatch, buildToUpdate, DB, metadata, SearchRepository, Statement, StringMap } from "query-core"
+import { Attributes } from "onecore"
+import { buildMap, buildToInsert, buildToInsertBatch, buildToUpdate, DB, SearchRepository, Statement, StringMap } from "query-core"
 import { Query } from "query-mappers"
 import { Role, RoleFilter, roleModel, RoleRepository } from "./role"
 
@@ -38,13 +38,10 @@ interface Module {
 export class SqlRoleRepository extends SearchRepository<Role, RoleFilter> implements RoleRepository {
   private roleModuleMap: StringMap
   map?: StringMap
-  primaryKeys: Attribute[]
   attributes: Attributes
   constructor(private db: DB, query?: Query) {
     super(db.query, "roles", roleModel, db.driver, query)
     this.attributes = roleModel
-    const meta = metadata(roleModel)
-    this.primaryKeys = meta.keys
     this.metadata = this.metadata.bind(this)
     this.search = this.search.bind(this)
     this.load = this.load.bind(this)

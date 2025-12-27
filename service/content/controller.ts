@@ -31,6 +31,7 @@ export class ContentController {
   constructor(private service: ContentService, private log: Log) {
     this.search = this.search.bind(this)
     this.view = this.view.bind(this)
+    this.submit = this.submit.bind(this)
   }
   search(req: Request, res: Response) {
     const lang = getLang(req, res)

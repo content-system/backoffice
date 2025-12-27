@@ -1,5 +1,5 @@
-import { Attribute, Attributes, StringMap } from "onecore"
-import { buildMap, buildToInsert, buildToInsertBatch, buildToUpdate, DB, metadata, SearchRepository, Statement } from "query-core"
+import { Attributes, StringMap } from "onecore"
+import { buildMap, buildToInsert, buildToInsertBatch, buildToUpdate, DB, SearchRepository, Statement } from "query-core"
 import { Query } from "query-mappers"
 import { User, UserFilter, userModel, UserRepository } from "./user"
 
@@ -21,13 +21,10 @@ interface UserRole {
 export class SqlUserRepository extends SearchRepository<User, UserFilter> implements UserRepository {
   map: StringMap
   roleMap: StringMap
-  primaryKeys: Attribute[]
   attributes: Attributes
   constructor(private db: DB, query?: Query) {
     super(db.query, "users", userModel, db.driver, query)
     this.attributes = userModel
-    const meta = metadata(userModel)
-    this.primaryKeys = meta.keys
     this.map = buildMap(userModel)
     this.roleMap = buildMap(userRoleModel)
     this.search = this.search.bind(this)
