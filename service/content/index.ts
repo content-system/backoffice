@@ -12,12 +12,12 @@ export class SqlContentRepository extends SqlSearchWriter<Content, ContentFilter
   }
   map?: StringMap
   load(id: string, lang: string): Promise<Content | null> {
-    return this.db.query<Content>("select * from contents where id = $1 and lang = $2", [id, lang], this.map).then((contents) => {
+    return this.db.query<Content>(`select * from contents where id = ${this.db.param(1)} and lang = ${this.db.param(2)}`, [id, lang], this.map).then((contents) => {
       return !contents || contents.length === 0 ? null : contents[0]
     })
   }
   delete(id: string, lang: string): Promise<number> {
-    return this.db.exec("delete from contents where id = $1 and lang = $2", [id, lang])
+    return this.db.exec(`delete from contents where id = ${this.db.param(1)} and lang = ${this.db.param(2)}`, [id, lang])
   }
 }
 
