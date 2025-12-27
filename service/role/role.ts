@@ -50,11 +50,11 @@ export const roleModel: Attributes = {
     required: true,
     length: 255,
     q: true,
-    match: "prefix",
+    operator: "like",
   },
   status: {
-    match: "equal",
     length: 1,
+    operator: "="
   },
   remark: {
     length: 255,

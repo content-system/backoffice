@@ -1,24 +1,23 @@
-import { Log, Search, UseCase } from "onecore"
-import { DB, Repository, SearchBuilder } from "query-core"
+import { Log, UseCase } from "onecore"
+import { DB, Repository } from "query-core"
 import { Contact, ContactFilter, contactModel, ContactRepository, ContactService } from "./contact"
 import { ContactController } from "./controller"
 
 export * from "./controller"
 
-export class SqlContactRepository extends Repository<Contact, string> implements ContactRepository {
+export class SqlContactRepository extends Repository<Contact, string, ContactFilter> implements ContactRepository {
   constructor(db: DB) {
     super(db, "contacts", contactModel)
   }
 }
 export class ContactUseCase extends UseCase<Contact, string, ContactFilter> implements ContactService {
-  constructor(search: Search<Contact, ContactFilter>, repository: ContactRepository) {
-    super(search, repository)
+  constructor(repository: ContactRepository) {
+    super(repository)
   }
 }
 
 export function useContactController(db: DB, log: Log): ContactController {
-  const builder = new SearchBuilder<Contact, ContactFilter>(db.query, "contacts", contactModel, db.driver)
   const repository = new SqlContactRepository(db)
-  const service = new ContactUseCase(builder.search, repository)
+  const service = new ContactUseCase(repository)
   return new ContactController(service, log)
 }

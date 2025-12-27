@@ -29,6 +29,7 @@ export interface CategoryFilter extends Filter {
 }
 
 export interface CategoryRepository {
+  search(filter: CategoryFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Category>>
   load(id: string): Promise<Category | null>
   create(category: Category): Promise<number>
   update(category: Category): Promise<number>

@@ -38,6 +38,7 @@ export interface JobFilter extends Filter {
 }
 
 export interface JobRepository {
+  search(filter: JobFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Job>>
   load(id: string): Promise<Job | null>
   create(job: Job): Promise<number>
   update(job: Job): Promise<number>

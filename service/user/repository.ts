@@ -1,5 +1,6 @@
-import { Attribute, Attributes, Search, StringMap } from "onecore"
-import { buildMap, buildToInsert, buildToInsertBatch, buildToUpdate, DB, metadata, SearchResult, Statement } from "query-core"
+import { Attribute, Attributes, StringMap } from "onecore"
+import { buildMap, buildToInsert, buildToInsertBatch, buildToUpdate, DB, metadata, SearchRepository, Statement } from "query-core"
+import { Query } from "query-mappers"
 import { User, UserFilter, userModel, UserRepository } from "./user"
 
 const userRoleModel: Attributes = {
@@ -17,12 +18,13 @@ interface UserRole {
   roleId: string
 }
 
-export class SqlUserRepository implements UserRepository {
+export class SqlUserRepository extends SearchRepository<User, UserFilter> implements UserRepository {
   map: StringMap
   roleMap: StringMap
   primaryKeys: Attribute[]
   attributes: Attributes
-  constructor(private find: Search<User, UserFilter>, private db: DB) {
+  constructor(private db: DB, query?: Query) {
+    super(db.query, "users", userModel, db.driver, query)
     this.attributes = userModel
     const meta = metadata(userModel)
     this.primaryKeys = meta.keys
@@ -34,9 +36,6 @@ export class SqlUserRepository implements UserRepository {
     this.patch = this.patch.bind(this)
     this.delete = this.delete.bind(this)
     this.assign = this.assign.bind(this)
-  }
-  search(filter: UserFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<User>> {
-    return this.find(filter, limit, page, fields)
   }
   load(id: string): Promise<User | null> {
     return this.db.query<User>(`select * from users where user_id = ${this.db.param(1)}`, [id], this.map).then((users) => {

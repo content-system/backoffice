@@ -48,14 +48,13 @@ export const userModel: Attributes = {
   userId: {
     column: "user_id",
     key: true,
-    match: "equal",
     length: 40,
+    operator: "="
   },
   username: {
     required: true,
     length: 255,
     q: true,
-    match: "prefix",
   },
   email: {
     format: "email",
@@ -69,8 +68,8 @@ export const userModel: Attributes = {
     q: true,
   },
   status: {
-    match: "equal",
     length: 1,
+    operator: "="
   },
   gender: {
     length: 1,

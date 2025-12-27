@@ -78,7 +78,7 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: C
   const login = new LoginController(authenticator, cfg.auth.token.secret, cfg.auth.token.expires, logger.error)
 
   const userService = useUserService(db, mapper)
-  const role = useRoleController(logger.error, db, userService, mapper)
+  const role = useRoleController(db, userService, logger.error, mapper)
   const user = useUserController(logger.error, db, mapper)
   const auditLog = useAuditLogController(db, logger.error)
 

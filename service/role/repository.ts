@@ -1,5 +1,6 @@
-import { Attribute, Attributes, Search } from "onecore"
-import { buildMap, buildToInsert, buildToInsertBatch, buildToUpdate, DB, metadata, SearchResult, Statement, StringMap } from "query-core"
+import { Attribute, Attributes } from "onecore"
+import { buildMap, buildToInsert, buildToInsertBatch, buildToUpdate, DB, metadata, SearchRepository, Statement, StringMap } from "query-core"
+import { Query } from "query-mappers"
 import { Role, RoleFilter, roleModel, RoleRepository } from "./role"
 
 const userRoleModel: Attributes = {
@@ -34,12 +35,13 @@ interface Module {
   roleId?: string
   permissions?: number
 }
-export class SqlRoleRepository implements RoleRepository {
+export class SqlRoleRepository extends SearchRepository<Role, RoleFilter> implements RoleRepository {
   private roleModuleMap: StringMap
   map?: StringMap
   primaryKeys: Attribute[]
   attributes: Attributes
-  constructor(protected find: Search<Role, RoleFilter>, private db: DB) {
+  constructor(private db: DB, query?: Query) {
+    super(db.query, "roles", roleModel, db.driver, query)
     this.attributes = roleModel
     const meta = metadata(roleModel)
     this.primaryKeys = meta.keys
@@ -56,9 +58,6 @@ export class SqlRoleRepository implements RoleRepository {
   }
   metadata(): Attributes {
     return roleModel
-  }
-  search(filter: RoleFilter, limit: number, page?: number | string, fields?: string[]): Promise<SearchResult<Role>> {
-    return this.find(filter, limit, page, fields)
   }
   load(id: string): Promise<Role | null> {
     return this.db.query<Role>(`select * from roles where role_id = ${this.db.param(1)}`, [id], this.map).then((roles) => {

@@ -26,6 +26,7 @@ export interface ContentFilter extends Filter {
 }
 
 export interface ContentRepository {
+  search(filter: ContentFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Content>>
   load(id: string, lang: string): Promise<Content | null>
   create(obj: Content): Promise<number>
   update(obj: Content): Promise<number>
