@@ -31,6 +31,14 @@
   color: #f44336;
 }
 
+.chip-input-container > span {
+  white-space: nowrap;
+  margin-top: 16px;
+  margin-left: 8px;
+}
+.chip-input-container > input[type="checkbox"] {
+  margin-top: 16px;
+}
 .chip-input-container .btn-add {
   width: 34px;
   height: 34px;
@@ -39,4 +47,63 @@
 .chip-input-container .btn-add::before {
   top: 5px;
   left: 6px;
+}
+
+.chip > img {
+  float: left;
+  margin: 0 8px 0 -12px;
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+}
+
+.chip .close {
+  cursor: pointer;
+  margin-left: 5px;
+  border: 0;
+  color: inherit;
+  background-color: transparent;
+}
+
+.chip .close::before {
+  content: "\2715";
+  font-size: 14px;
+  font-weight: 100;
+}
+
+.star {
+  position: relative;
+  right: 10px;
+}
+
+.star::before {
+  position: absolute;
+  top: -4px;
+  left: 15px;
+  content: "\2606";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 100;
+}
+.chip .star {
+  margin-right: 18px;
+}
+.chip .star::before {
+  top: -12px;
+}
+h4 > .star.float-right {
+  margin-left: 0;
+}
+h4 > .star::before {
+  font-size: 20px;
+}
+p.description > .star {
+  top: 0;
+  left: 0;
+}
+
+.text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
