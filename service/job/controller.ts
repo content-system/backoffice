@@ -17,7 +17,7 @@ import {
   resources,
   respondError,
 } from "express-ext"
-import { Log } from "onecore"
+import { isSuccessful, Log } from "onecore"
 import { write } from "security-express"
 import { getDateFormat } from "ui-formatter"
 import { validate } from "xvalidators"
@@ -44,24 +44,27 @@ export class JobController {
     const page = queryNumber(req, resources.page, 1)
     const limit = queryNumber(req, resources.limit, resources.defaultLimit)
     const offset = getOffset(limit, page)
-    this.service.search(cloneFilter(filter, limit, page), limit, page).then((result) => {
-      const list = escapeArray(result.list, offset, "sequence")
-      const search = getSearch(req.url)
-      const permissions = res.locals.permissions as number
-      const readonly = write != (write & permissions)
-      render(req, res, "jobs", {
-        resource,
-        readonly,
-        dateFormat,
-        limits: resources.limits,
-        filter,
-        list,
-        pages: buildPages(limit, result.total),
-        pageSearch: buildPageSearch(search),
-        sort: buildSortSearch(search, fields, filter.sort),
-        message: buildMessage(resource, list, limit, page, result.total),
+    this.service
+      .search(cloneFilter(filter, limit, page), limit, page)
+      .then((result) => {
+        const list = escapeArray(result.list, offset, "sequence")
+        const search = getSearch(req.url)
+        const permissions = res.locals.permissions as number
+        const readonly = write != (write & permissions)
+        render(req, res, "jobs", {
+          resource,
+          readonly,
+          dateFormat,
+          limits: resources.limits,
+          filter,
+          list,
+          pages: buildPages(limit, result.total),
+          pageSearch: buildPageSearch(search),
+          sort: buildSortSearch(search, fields, filter.sort),
+          message: buildMessage(resource, list, limit, page, result.total),
+        })
       })
-    }).catch((err) => renderError500(req, res, resource, err))
+      .catch((err) => renderError500(req, res, resource, err))
   }
   view(req: Request, res: Response) {
     const lang = getLang(req, res)
@@ -72,26 +75,28 @@ export class JobController {
     const readonly = write != (write & permissions)
     if (!editMode) {
       if (readonly) {
-        renderError403(req, res, resource)
-      } else {
-        render(req, res, "job", {
-          resource,
-          editMode,
-          job: {},
-        })
+        return renderError403(req, res, resource)
       }
+      render(req, res, "job", {
+        resource,
+        editMode,
+        job: {},
+      })
     } else {
-      this.service.load(id).then((job) => {
-        if (!job) {
-          renderError404(req, res, resource)
-        } else {
+      this.service
+        .load(id)
+        .then((job) => {
+          if (!job) {
+            return renderError404(req, res, resource)
+          }
           render(req, res, "job", {
             resource,
             readonly,
             editMode,
-            job: escape(job) })
-        }
-      }).catch((err) => renderError500(req, res, resource, err))
+            job: escape(job),
+          })
+        })
+        .catch((err) => renderError500(req, res, resource, err))
     }
   }
   submit(req: Request, res: Response) {
@@ -100,27 +105,26 @@ export class JobController {
     const job = req.body as Job
     const errors = validate<Job>(job, jobModel, resource)
     if (errors.length > 0) {
-      respondError(res, errors)
+      return respondError(res, errors)
+    }
+    const id = req.params.id
+    const editMode = id !== "new"
+    if (!editMode) {
+      this.service
+        .create(job)
+        .then((result) => {
+          const status = isSuccessful(result) ? 201 : 409
+          res.status(status).json(result).end()
+        })
+        .catch((err) => handleError(err, res, this.log))
     } else {
-      const id = req.params.id
-      const editMode = id !== "new"
-      if (!editMode) {
-        this.service.create(job).then((result) => {
-          if (result === 0) {
-            res.status(409).end()
-          } else {
-            res.status(201).json(job).end()
-          }
-        }).catch((err) => handleError(err, res, this.log))
-      } else {
-        this.service.update(job).then((result) => {
-          if (result === 0) {
-            res.status(410).end()
-          } else {
-            res.status(200).json(job).end()
-          }
-        }).catch((err) => handleError(err, res, this.log))
-      }
+      this.service
+        .update(job)
+        .then((result) => {
+          const status = isSuccessful(result) ? 200 : 410
+          res.status(status).json(result).end()
+        })
+        .catch((err) => handleError(err, res, this.log))
     }
   }
 }

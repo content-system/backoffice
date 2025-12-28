@@ -18,7 +18,7 @@ import {
   resources,
   respondError,
 } from "express-ext"
-import { Log } from "onecore"
+import { isSuccessful, Log } from "onecore"
 import { write } from "security-express"
 import { formatDateTime } from "ui-formatter"
 import { validate } from "xvalidators"
@@ -81,14 +81,13 @@ export class ContentController {
       .load(id, lang)
       .then((content) => {
         if (!content) {
-          renderError404(req, res, resource)
-        } else {
-          render(req, res, "content", {
-            resource,
-            content: escape(content),
-            readonly,
-          })
+          return renderError404(req, res, resource)
         }
+        render(req, res, "content", {
+          resource,
+          content: escape(content),
+          readonly,
+        })
       })
       .catch((err) => handleError(err, res, this.log))
   }
@@ -98,33 +97,26 @@ export class ContentController {
     const content = req.body
     const errors = validate<Content>(content, contentModel, resource)
     if (errors.length > 0) {
-      respondError(res, errors)
+      return respondError(res, errors)
+    }
+    const id = req.params.id
+    const editMode = id !== "new"
+    if (!editMode) {
+      this.service
+        .create(content)
+        .then((result) => {
+          const status = isSuccessful(result) ? 201 : 409
+          res.status(status).json(result).end()
+        })
+        .catch((err) => handleError(err, res, this.log))
     } else {
-      const id = req.params.id
-      const editMode = id !== "new"
-      if (!editMode) {
-        this.service
-          .create(content)
-          .then((result) => {
-            if (result === 0) {
-              res.status(409).end()
-            } else {
-              res.status(201).json(content).end()
-            }
-          })
-          .catch((err) => handleError(err, res, this.log))
-      } else {
-        this.service
-          .update(content)
-          .then((result) => {
-            if (result === 0) {
-              res.status(410).end()
-            } else {
-              res.status(200).json(content).end()
-            }
-          })
-          .catch((err) => handleError(err, res, this.log))
-      }
+      this.service
+        .update(content)
+        .then((result) => {
+          const status = isSuccessful(result) ? 200 : 410
+          res.status(status).json(result).end()
+        })
+        .catch((err) => handleError(err, res, this.log))
     }
   }
 }
