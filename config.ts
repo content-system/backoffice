@@ -3,7 +3,6 @@ export const config = {
   https: false,
   key: "./config/key.pem",
   cert: "./config/cert.pem",
-  secure: false,
   cookie: true,
   allow: {
     origin: ["http://localhost:3000", "http://localhost:3001"],
@@ -57,7 +56,7 @@ export const config = {
     maxPasswordFailed: 2,
     account: {
       displayName: "displayname",
-      dateFormat: "date_format"
+      dateFormat: "date_format",
     },
     userStatus: {
       activated: "A",

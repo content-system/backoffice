@@ -6,7 +6,7 @@ export * from "./context"
 
 // const parser = multer()
 
-export function route(app: Application, ctx: Context, secure?: boolean): void {
+export function route(app: Application, ctx: Context): void {
   app.get("/health", ctx.health.check)
   app.patch("/log", ctx.log.config)
   app.patch("/middleware", ctx.middleware.config)

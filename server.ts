@@ -49,7 +49,7 @@ const pool = new Pool(cfg.db)
 const db = log(new PoolManager(pool), cfg.log.db, logger, "sql")
 const ctx = useContext(db, logger, middleware, cfg, templates)
 
-route(app, ctx, cfg.secure)
+route(app, ctx)
 // start(app, cfg)
 http.createServer(app).listen(cfg.port, () => {
   console.log("Start server at port " + cfg.port)
