@@ -29,7 +29,7 @@
     "onecore": "^0.5.2",
     "password-service": "^0.0.4",
     "pg": "^8.14.1",
-    "pg-extension": "^0.2.3",
+    "pg-extension": "^0.2.6",
     "query-core": "^0.5.1",
     "query-mappers": "^0.1.0",
     "security-express": "^0.2.0",
