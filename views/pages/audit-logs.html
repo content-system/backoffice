@@ -38,13 +38,27 @@
         <thead>
           <tr>
             <th>{{resource.number}}</th>
-            <th data-field="time"><button type="button" id="sortTime">{{resource.audit_log_time}}</button></th>
-            <th data-field="resource"><button type="button" id="sortResource">{{resource.resource}}</button></th>
-            <th data-field="action"><button type="button" id="sortAction">{{resource.action}}</button></th>
-            <th data-field="status"><button type="button" id="sortStatus">{{resource.status}}</button></th>
-            <th data-field="userId">{{resource.audit_log_user}}</th>
-            <th data-field="ip"><button type="button" id="sortIp">{{resource.ip}}</button></th>
-            <th data-field="remark"><button type="button" id="sortRemark">{{resource.remark}}</button></th>
+            <th data-field="time">
+              <a href="{{sort.time.url}}" onclick="navigate(event)">{{resource.audit_log_time}} {{sort.time.tag}}</a>
+            </th>
+            <th data-field="resource">
+              <a href="{{sort.resource.url}}" onclick="navigate(event)">{{resource.resource}} {{sort.resource.tag}}</a>
+            </th>
+            <th data-field="action">
+              <a href="{{sort.action.url}}" onclick="navigate(event)">{{resource.action}} {{sort.action.tag}}</a>
+            </th>
+            <th data-field="status">
+              <a href="{{sort.status.url}}" onclick="navigate(event)">{{resource.status}} {{sort.status.tag}}</a>
+            </th>
+            <th data-field="userId">
+              <a href="{{sort.userId.url}}" onclick="navigate(event)">{{resource.audit_log_user}} {{sort.userId.tag}}</a>
+            </th>
+            <th data-field="ip">
+              <a href="{{sort.ip.url}}" onclick="navigate(event)">{{resource.ip}} {{sort.ip.tag}}</a>
+            </th>
+            <th data-field="remark">
+              <a href="{{sort.remark.url}}" onclick="navigate(event)">{{resource.remark}} {{sort.remark.tag}}</a>
+            </th>
           </tr>
         </thead>
         <tbody>

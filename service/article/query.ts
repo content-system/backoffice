@@ -1,5 +1,5 @@
-import { Statement } from "query-core";
-import { ArticleFilter } from "./article";
+import { buildSort, Statement } from "query-core";
+import { ArticleFilter, articleModel } from "./article";
 
 export function buildQuery(filter: ArticleFilter): Statement {
   let query = `select * from articles `;
@@ -38,6 +38,9 @@ export function buildQuery(filter: ArticleFilter): Statement {
   if (where.length > 0) {
     query = query + ` where ` + where.join(` and `);
   }
-
+  const orderBy = buildSort(filter.sort, articleModel)
+  if (orderBy.length > 0) {
+    query = query + ` order by ${orderBy}`
+  }
   return { query, params };
 }

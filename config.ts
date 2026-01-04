@@ -41,7 +41,7 @@ export const config = {
   db: {
     connectionString: "postgres://postgres:abcd1234@localhost/cms",
   },
-  template: false,
+  template: true,
   auth: {
     token: {
       secret: "secretbackoffice",

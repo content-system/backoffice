@@ -4,7 +4,6 @@ import {
   buildPages,
   buildPageSearch,
   buildSortSearch,
-  cloneFilter,
   escape,
   escapeArray,
   format,
@@ -16,7 +15,7 @@ import {
   queryLimit,
   queryPage,
   resources,
-  respondError,
+  respondError
 } from "express-ext"
 import { isSuccessful, Log } from "onecore"
 import { write } from "security-express"
@@ -42,17 +41,18 @@ export class ArticleController {
       filter = fromRequest<ArticleFilter>(req, ["tags"])
       format(filter, ["publishedAt"])
     }
+    const search = getSearch(req.url)
+    const sort = buildSortSearch(search, fields, filter.sort)
     const page = queryPage(req, filter)
     const limit = queryLimit(req)
     const offset = getOffset(limit, page)
     this.service
-      .search(cloneFilter(filter, limit, page), limit, page)
+      .search(filter, limit, page)
       .then((result) => {
         for (const item of result.list) {
           item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
         }
         const list = escapeArray(result.list, offset, "sequence")
-        const search = getSearch(req.url)
         const permissions = res.locals.permissions as number
         const readonly = write != (write & permissions)
         render(req, res, "articles", {
@@ -63,7 +63,7 @@ export class ArticleController {
           list,
           pages: buildPages(limit, result.total),
           pageSearch: buildPageSearch(search),
-          sort: buildSortSearch(search, fields, filter.sort),
+          sort,
           message: buildMessage(resource, list, limit, page, result.total),
         })
       })

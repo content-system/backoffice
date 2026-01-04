@@ -24,19 +24,19 @@
           <tr>
             <th data-field="contactId">{{resource.number}}</th>
             <th data-field="name">
-              <a id="sortUsername" href="{{sort.name.url}}">{{resource.name}} {{sort.name.tag}}</a>
+              <a id="sortUsername" href="{{sort.name.url}}" onclick="navigate(event)">{{resource.name}} {{sort.name.tag}}</a>
             </th>
             <th data-field="email" class="datetime">
-              <a id="sortEmail" href="{{sort.email.url}}">{{resource.email}} {{sort.email.tag}}</a>
+              <a id="sortEmail" href="{{sort.email.url}}" onclick="navigate(event)">{{resource.email}} {{sort.email.tag}}</a>
             </th>
             <th data-field="phone">
-              <a id="sortPhone" href="{{sort.phone.url}}">{{resource.phone}} {{sort.phone.tag}}</a>
+              <a id="sortPhone" href="{{sort.phone.url}}" onclick="navigate(event)">{{resource.phone}} {{sort.phone.tag}}</a>
             </th>
             <th data-field="company">
-              <a id="sortCompany" href="{{sort.company.url}}">{{resource.company}} {{sort.company.tag}}</a>
+              <a id="sortCompany" href="{{sort.company.url}}" onclick="navigate(event)">{{resource.company}} {{sort.company.tag}}</a>
             </th>
             <th data-field="country">
-              <a id="sortCountry" href="{{sort.country.url}}">{{resource.country}} {{sort.country.tag}}</a>
+              <a id="sortCountry" href="{{sort.country.url}}" onclick="navigate(event)">{{resource.country}} {{sort.country.tag}}</a>
             </th>
           </tr>
         </thead>

@@ -52,22 +52,22 @@
           <tr>
             <th>{{resource.number}}</th>
             <th data-field="id">
-              <a href="{{sort.id.url}}">{{resource.id}} {{sort.id.tag}}</a>
+              <a href="{{sort.id.url}}" onclick="navigate(event)">{{resource.id}} {{sort.id.tag}}</a>
             </th>
             <th data-field="title">
-              <a href="{{sort.title.url}}">{{resource.title}} {{sort.title.tag}}</a>
+              <a href="{{sort.title.url}}" onclick="navigate(event)">{{resource.title}} {{sort.title.tag}}</a>
             </th>
             <th data-field="publishedAt" class="datetime">
-              <a href="{{sort.publishedAt.url}}">{{resource.published_at}} {{sort.publishedAt.tag}}</a>
+              <a href="{{sort.publishedAt.url}}" onclick="navigate(event)">{{resource.published_at}} {{sort.publishedAt.tag}}</a>
             </th>
             <th data-field="position">
-              <a href="{{sort.position.url}}">{{resource.position}} {{sort.position.tag}}</a>
+              <a href="{{sort.position.url}}" onclick="navigate(event)">{{resource.position}} {{sort.position.tag}}</a>
             </th>
             <th data-field="quantity">
-              <a href="{{sort.quantity.url}}">{{resource.quantity}} {{sort.quantity.tag}}</a>
+              <a href="{{sort.quantity.url}}" onclick="navigate(event)">{{resource.quantity}} {{sort.quantity.tag}}</a>
             </th>
             <th data-field="location">
-              <a href="{{sort.location.url}}">{{resource.location}} {{sort.location.tag}}</a>
+              <a href="{{sort.location.url}}" onclick="navigate(event)">{{resource.location}} {{sort.location.tag}}</a>
             </th>
           </tr>
         </thead>

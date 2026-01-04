@@ -1,12 +1,13 @@
-import { Attribute, Attributes, Search, StringMap } from "onecore"
-import { buildMap, DB, metadata, SearchBuilder, SearchResult } from "query-core"
-import { TemplateMap, useQuery } from "query-mappers"
+import { Attribute, Attributes, StringMap } from "onecore"
+import { buildMap, DB, metadata, SearchBuilder } from "query-core"
+import { Query, TemplateMap, useQuery } from "query-mappers"
 import { User, UserFilter, userModel, UserService } from "./user"
 
 export * from "./user"
 
-export class SqlUserService implements UserService {
-  constructor(private find: Search<User, UserFilter>, private db: DB) {
+export class SqlUserService extends SearchBuilder<User, UserFilter> implements UserService {
+  constructor(protected db: DB, query?: Query) {
+    super(db.query, "users", userModel, db.driver, query)
     this.attributes = userModel
     const meta = metadata(userModel)
     this.primaryKeys = meta.keys
@@ -26,17 +27,13 @@ export class SqlUserService implements UserService {
       select u.*
       from user_roles ur
         inner join users u on u.user_id = ur.user_id
-      where ur.role_id = ${this.db.param(1)}
+      where ur.role_id = ${this.param(1)}
       order by user_id`
-    return this.db.query(q, [roleId], this.map)
-  }
-  search(s: UserFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<User>> {
-    return this.find(s, limit, page, fields)
+    return this.query(q, [roleId], this.map)
   }
 }
 
 export function useUserService(db: DB, mapper?: TemplateMap): UserService {
   const query = useQuery("user", mapper, userModel, true)
-  const builder = new SearchBuilder<User, UserFilter>(db.query, "users", userModel, db.driver, query)
-  return new SqlUserService(builder.search, db)
+  return new SqlUserService(db, query)
 }

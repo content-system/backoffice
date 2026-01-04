@@ -4,7 +4,6 @@ import {
   buildPages,
   buildPageSearch,
   buildSortSearch,
-  cloneFilter,
   escape,
   escapeArray,
   format,
@@ -13,9 +12,10 @@ import {
   getSearch,
   handleError,
   hasSearch,
-  queryNumber,
+  queryLimit,
+  queryPage,
   resources,
-  respondError,
+  respondError
 } from "express-ext"
 import { nanoid } from "nanoid"
 import { isSuccessful, Log } from "onecore"
@@ -44,17 +44,18 @@ export class ContactController {
       filter = fromRequest<ContactFilter>(req)
       format(filter, ["submittedAt"])
     }
-    const page = queryNumber(req, resources.page, 1)
-    const limit = queryNumber(req, resources.limit, resources.defaultLimit)
+    const search = getSearch(req.url)
+    const sort = buildSortSearch(search, fields, filter.sort)
+    const page = queryPage(req, filter)
+    const limit = queryLimit(req)
     const offset = getOffset(limit, page)
     this.service
-      .search(cloneFilter(filter, limit, page), limit, page)
+      .search(filter, limit, page)
       .then((result) => {
         const list = escapeArray(result.list, offset, "sequence")
         for (const item of list) {
           item.submittedAt = formatDateTime(item.submittedAt, dateFormat)
         }
-        const search = getSearch(req.url)
         const permissions = res.locals.permissions as number
         const readonly = write != (write & permissions)
         render(req, res, "contacts", {
@@ -66,7 +67,7 @@ export class ContactController {
           list,
           pages: buildPages(limit, result.total),
           pageSearch: buildPageSearch(search),
-          sort: buildSortSearch(search, fields, filter.sort),
+          sort,
           message: buildMessage(resource, list, limit, page, result.total),
         })
       })

@@ -31,16 +31,16 @@
           <tr>
             <th>{{resource.number}}</th>
             <th data-field="roleId">
-              <a id="sortRoleId" href="{{sort.roleId.url}}">{{resource.role_id}} {{sort.roleId.tag}}</a>
+              <a id="sortRoleId" href="{{sort.roleId.url}}" onclick="navigate(event)">{{resource.role_id}} {{sort.roleId.tag}}</a>
             </th>
             <th data-field="roleName">
-              <a id="sortRoleName" href="{{sort.roleName.url}}">{{resource.role_name}} {{sort.roleName.tag}}</a>
+              <a id="sortRoleName" href="{{sort.roleName.url}}" onclick="navigate(event)">{{resource.role_name}} {{sort.roleName.tag}}</a>
             </th>
             <th data-field="remark">
-              <a id="sortRemark" href="{{sort.remark.url}}">{{resource.remark}} {{sort.remark.tag}}</a>
+              <a id="sortRemark" href="{{sort.remark.url}}" onclick="navigate(event)">{{resource.remark}} {{sort.remark.tag}}</a>
             </th>
             <th data-field="status">
-              <a id="sortStatus" href="{{sort.status.url}}">{{resource.status}} {{sort.status.tag}}</a>
+              <a id="sortStatus" href="{{sort.status.url}}" onclick="navigate(event)">{{resource.status}} {{sort.status.tag}}</a>
             </th>
           </tr>
         </thead>

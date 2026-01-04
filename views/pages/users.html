@@ -39,19 +39,19 @@
           <tr>
             <th>{{resource.number}}</th>
             <th data-field="userId">
-              <a id="sortUserId" href="{{sort.userId.url}}">{{resource.user_id}} {{sort.userId.tag}}</a>
+              <a id="sortUserId" href="{{sort.userId.url}}" onclick="navigate(event)">{{resource.user_id}} {{sort.userId.tag}}</a>
             </th>
             <th data-field="username">
-              <a id="sortUsername" href="{{sort.username.url}}">{{resource.username}} {{sort.username.tag}}</a>
+              <a id="sortUsername" href="{{sort.username.url}}" onclick="navigate(event)">{{resource.username}} {{sort.username.tag}}</a>
             </th>
             <th data-field="email" class="datetime">
-              <a id="sortEmail" href="{{sort.email.url}}">{{resource.email}} {{sort.email.tag}}</a>
+              <a id="sortEmail" href="{{sort.email.url}}" onclick="navigate(event)">{{resource.email}} {{sort.email.tag}}</a>
             </th>
             <th data-field="displayName">
-              <a id="sortDisplayName" href="{{sort.displayName.url}}">{{resource.display_name}} {{sort.displayName.tag}}</a>
+              <a id="sortDisplayName" href="{{sort.displayName.url}}" onclick="navigate(event)">{{resource.display_name}} {{sort.displayName.tag}}</a>
             </th>
             <th data-field="status">
-              <a id="sortStatus" href="{{sort.status.url}}">{{resource.status}} {{sort.status.tag}}</a>
+              <a id="sortStatus" href="{{sort.status.url}}" onclick="navigate(event)">{{resource.status}} {{sort.status.tag}}</a>
             </th>
           </tr>
         </thead>

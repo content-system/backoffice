@@ -38,5 +38,8 @@
       (role_name like #{q} or role_id like #{q} or remark like #{q}) and
     </if>
     1 = 1
+    <if test="sort != null">
+      order by {sort}
+    </if>
   </select>
 </mapper>

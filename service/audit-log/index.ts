@@ -6,7 +6,6 @@ import {
   buildPages,
   buildPageSearch,
   buildSortSearch,
-  cloneFilter,
   escapeArray,
   format,
   fromRequest,
@@ -15,7 +14,7 @@ import {
   hasSearch,
   queryLimit,
   queryPage,
-  resources,
+  resources
 } from "express-ext"
 import { Log, Search } from "onecore"
 import { DB, SearchBuilder } from "query-core"
@@ -26,7 +25,7 @@ import { AuditLog, AuditLogFilter, auditLogModel } from "./audit-log"
 
 export * from "./audit-log"
 
-const fields = ["id", "timestamp", "resource", "action", "status", "userId", "ip", "remark"]
+const fields = ["id", "time", "resource", "action", "status", "userId", "ip", "remark"]
 
 export class AuditLogController {
   constructor(private search: Search<AuditLog, AuditLogFilter>, private log: Log) {
@@ -48,15 +47,17 @@ export class AuditLogController {
       filter = fromRequest<AuditLogFilter>(req, ["status"])
       format(filter, ["timestamp"])
     }
+    const search = getSearch(req.url)
+    const sort = buildSortSearch(search, fields, filter.sort)
     const page = queryPage(req, filter)
     const limit = queryLimit(req)
     const offset = getOffset(limit, page)
-    this.search(cloneFilter(filter, limit, page), limit, page).then((result) => {
+    this.search(filter, limit, page).then((result) => {
       for (const item of result.list) {
         item.time = formatFullDateTime(item.time, dateFormat)
       }
       const list = escapeArray(result.list, offset, "sequence")
-      const search = getSearch(req.url)
+      
       render(req, res, "audit-logs", {
         resource,
         limits: resources.limits,
@@ -64,7 +65,7 @@ export class AuditLogController {
         list,
         pages: buildPages(limit, result.total),
         pageSearch: buildPageSearch(search),
-        sort: buildSortSearch(search, fields, filter.sort),
+        sort,
         message: buildMessage(resource, list, limit, page, result.total),
       })
     })

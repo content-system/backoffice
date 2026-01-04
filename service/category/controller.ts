@@ -4,7 +4,6 @@ import {
   buildPages,
   buildPageSearch,
   buildSortSearch,
-  cloneFilter,
   escape,
   escapeArray,
   fromRequest,
@@ -12,9 +11,10 @@ import {
   getSearch,
   handleError,
   hasSearch,
-  queryNumber,
+  queryLimit,
+  queryPage,
   resources,
-  respondError,
+  respondError
 } from "express-ext"
 import { isSuccessful, Log } from "onecore"
 import { write } from "security-express"
@@ -44,14 +44,15 @@ export class CategoryController {
     if (hasSearch(req)) {
       filter = fromRequest<CategoryFilter>(req)
     }
-    const page = queryNumber(req, resources.page, 1)
-    const limit = queryNumber(req, resources.limit, resources.defaultLimit)
+    const search = getSearch(req.url)
+    const sort = buildSortSearch(search, fields, filter.sort)
+    const page = queryPage(req, filter)
+    const limit = queryLimit(req)
     const offset = getOffset(limit, page)
     this.service
-      .search(cloneFilter(filter, limit, page), limit, page)
+      .search(filter, limit, page)
       .then((result) => {
         const list = escapeArray(result.list, offset, "no")
-        const search = getSearch(req.url)
         const permissions = res.locals.permissions as number
         const readonly = write != (write & permissions)
         render(req, res, "categories", {
@@ -62,7 +63,7 @@ export class CategoryController {
           list,
           pages: buildPages(limit, result.total),
           pageSearch: buildPageSearch(search),
-          sort: buildSortSearch(search, fields, filter.sort),
+          sort,
           message: buildMessage(resource, list, limit, page, result.total),
         })
       })

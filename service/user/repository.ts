@@ -35,12 +35,12 @@ export class SqlUserRepository extends SearchRepository<User, UserFilter> implem
     this.assign = this.assign.bind(this)
   }
   load(id: string): Promise<User | null> {
-    return this.db.query<User>(`select * from users where user_id = ${this.db.param(1)}`, [id], this.map).then((users) => {
+    return this.db.query<User>(`select * from users where user_id = ${this.param(1)}`, [id], this.map).then((users) => {
       if (!users || users.length === 0) {
         return null
       }
       const user = users[0]
-      const query = `select role_id from user_roles where user_id = ${this.db.param(1)}`
+      const query = `select role_id from user_roles where user_id = ${this.param(1)}`
       return this.db.query<UserRole>(query, [id], this.roleMap).then((roles) => {
         if (roles && roles.length > 0) {
           user.roles = roles.map((i) => i.roleId)
@@ -51,22 +51,22 @@ export class SqlUserRepository extends SearchRepository<User, UserFilter> implem
   }
   create(user: User): Promise<number> {
     const stmts: Statement[] = []
-    const stmt = buildToInsert(user, "users", userModel, this.db.param)
+    const stmt = buildToInsert(user, "users", userModel, this.param)
     if (!stmt) {
       return Promise.resolve(-1)
     }
     stmts.push(stmt)
-    insertUserRoles(stmts, user.userId, user.roles, this.db.param)
+    insertUserRoles(stmts, user.userId, user.roles, this.param)
     return this.db.execBatch(stmts, true)
   }
   update(user: User): Promise<number> {
     const stmts: Statement[] = []
-    const stmt = buildToUpdate(user, "users", userModel, this.db.param)
+    const stmt = buildToUpdate(user, "users", userModel, this.param)
     if (!stmt) {
       return Promise.resolve(-1)
     }
-    stmts.push({ query: `delete from user_roles where user_id = ${this.db.param(1)}`, params: [user.userId] })
-    insertUserRoles(stmts, user.userId, user.roles, this.db.param)
+    stmts.push({ query: `delete from user_roles where user_id = ${this.param(1)}`, params: [user.userId] })
+    insertUserRoles(stmts, user.userId, user.roles, this.param)
     return this.db.execBatch(stmts, true)
   }
   patch(user: User): Promise<number> {
@@ -74,16 +74,16 @@ export class SqlUserRepository extends SearchRepository<User, UserFilter> implem
   }
   delete(id: string): Promise<number> {
     const stmts: Statement[] = []
-    stmts.push({ query: `delete from user_roles where user_id = ${this.db.param(1)}`, params: [id] })
-    stmts.push({ query: `delete from users where user_id = ${this.db.param(1)}`, params: [id] })
+    stmts.push({ query: `delete from user_roles where user_id = ${this.param(1)}`, params: [id] })
+    stmts.push({ query: `delete from users where user_id = ${this.param(1)}`, params: [id] })
     return this.db.execBatch(stmts)
   }
   assign(id: string, roles: string[]): Promise<number> {
     const stmts: Statement[] = []
-    const query = `delete from user_roles where user_id = ${this.db.param(1)}`
+    const query = `delete from user_roles where user_id = ${this.param(1)}`
     stmts.push({ query, params: [id] })
     if (roles && roles.length > 0) {
-      insertUserRoles(stmts, id, roles, this.db.param)
+      insertUserRoles(stmts, id, roles, this.param)
     }
     return this.db.execBatch(stmts)
   }
