@@ -56,11 +56,11 @@
         placeholder="{{resource.article_name}}"
       />
     </label>
-    <label class="col s12 textarea-container required">
+    <label class="col s12 auto-height required">
       {{resource.description}}
       <textarea id="description" name="description" rows="4" maxlength="1200" placeholder="{{resource.description}}"/>{{article.description}}</textarea>
     </label>
-    <label class="col s12 textarea-container">
+    <label class="col s12 auto-height">
       {{resource.tags}}
       <div class="chip-list" data-name="tags">{{generateTags(article.tags)}}
         <div class="chip-input-container">
@@ -69,7 +69,7 @@
         </div>
       </div>
     </label>
-    <label class="col s12 textarea-container required">
+    <label class="col s12 auto-height required">
       {{resource.content}}
       <textarea id="content" name="content" rows="80" maxlength="9000" placeholder="{{resource.content}}"/>{{article.content}}</textarea>
     </label>

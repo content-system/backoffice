@@ -75,7 +75,7 @@
         value="{{datetimeToString(contact.submittedAt)}}"
       />
     </label>
-    <label className="col s12 textarea-container required">
+    <label className="col s12 auto-height required">
       {{resource.message}}
       <textarea id="message" name="message" rows="8" onBlur="requiredOnBlur" maxlength="400" placeholder="{{resource.message}}">{{contact.message}}</textarea>
     </label>

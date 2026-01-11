@@ -40,7 +40,7 @@
             %} />{{resource.inactive}}</label>
       </div>
     </div>
-    <label class="col s12 textarea-container">
+    <label class="col s12 auto-height">
       {{resource.skills}}
       <div class="chip-list" data-name="skills">{{generateTags(job.skills)}}
         <div class="chip-input-container">
@@ -67,12 +67,12 @@
       <input type="text" id="title" name="title" value="{{job.title}}" maxlength="255" required
         onblur="requiredOnBlur(event)" placeholder="{{resource.job_name}}" />
     </label>
-    <label class="col s12 textarea-container required">
+    <label class="col s12 auto-height required">
       {{resource.description}}
       <textarea id="description" name="description" rows="40" maxlength="9600"
         placeholder="{{resource.description}}">{{job.description}}</textarea>
     </label>
-    <label class="col s12 textarea-container">
+    <label class="col s12 auto-height">
       <div class="editor-container">
         <!-- Toolbar -->
         <div id="toolbar" style="display: none;" class="toolbar">

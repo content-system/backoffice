@@ -12,7 +12,7 @@
       <section class="row search-group">{% include "partials/search.html" %} {% include "partials/pagination.html" %}
       </section>
       <section class="row search-group advance-search">
-        <label class="col s12 m6 textarea-container">
+        <label class="col s12 m6 auto-height">
           {{resource.skills}}
           <div class="chip-list" data-name="skills">{{generateTags(filter.skills)}}
             <div class="chip-input-container">

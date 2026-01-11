@@ -148,7 +148,8 @@ label.focused > span.span-error,
 .form-group.focused > span.span-error {
   display: flex;
 }
-.form .row > label.textarea-container {
+.form .row > label.auto-height,
+.auto-height {
   height: unset;
 }
 .form > div > .form-group,
