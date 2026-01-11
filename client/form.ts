@@ -313,7 +313,54 @@ function setKey(_object: any, _isArrayKey: boolean, _key: string, _nextValue: an
   return _object
 }
 
-function decodeFromForm<T>(form: HTMLFormElement, currencySymbol?: string | null): T {
+function decodeFromElement<T>(parent: HTMLElement | null | undefined, fields: string[], currencySymbol?: string | null): T {
+  const obj = {} as any
+  if (parent) {
+    for (const field of fields) {
+      const ele = parent.querySelector(`input[name="${escapeHTML(field)}"]`) as HTMLInputElement
+      if (ele) {
+        const type = ele.type
+        if (type === "checkbox") {
+          obj[field] = ele.checked
+        } else if (type === "date") {
+          if (ele.value.length === 10) {
+            obj[field] = ele.value
+          }
+        } else if (type === "datetime-local") {
+          if (ele.value.length > 0) {
+            try {
+              const val = new Date(ele.value) // DateUtil.parse(ele.value, 'YYYY-MM-DD');
+              obj[field] = val
+            } catch (err) {}
+          }
+        } else {
+          const datatype = ele.getAttribute("data-type")
+          let symbol: string | null | undefined
+          let v = ele.value.trim()
+          if (datatype === "currency" || datatype === "string-currency") {
+            symbol = ele.getAttribute("data-currency-symbol")
+            if (!symbol) {
+              symbol = currencySymbol
+            }
+            if (symbol && symbol.length > 0 && v.indexOf(symbol) >= 0) {
+              v = v.replace(symbol, "")
+            }
+          }
+          if (type === "number" || datatype === "currency" || datatype === "integer" || datatype === "number") {
+            const decimalSeparator = getDecimalSeparator(ele)
+            v = decimalSeparator === "," ? v.replace(r2, "") : (v = v.replace(r1, ""))
+            const val = isNaN(v as any) ? null : parseFloat(v)
+            obj[field] = val
+          } else {
+            obj[field] = v
+          }
+        }
+      }
+    }
+  }
+  return obj
+}
+function decode<T>(form: HTMLFormElement, currencySymbol?: string | null): T {
   const dateFormat = form.getAttribute("data-date-format")
   const obj = {} as T
   const len = form.length
@@ -359,7 +406,7 @@ function decodeFromForm<T>(form: HTMLFormElement, currencySymbol?: string | null
                 val = val.filter((item: string) => item != ele.value)
               }
             } else {
-              val = ele.value.length > 0 ? ele.value : ele.checked
+              val = ele.value !== "on" ? ele.value : ele.checked
             }
             setValue(obj, name, val)
             continue
@@ -414,8 +461,14 @@ function decodeFromForm<T>(form: HTMLFormElement, currencySymbol?: string | null
   form.querySelectorAll(".chip-list").forEach((divChip) => {
     const name = divChip.getAttribute("data-name")
     if (name && name.length > 0) {
-      const v = getChipsByElement(divChip)
-      setValue(obj, name, v)
+      const dv = divChip.getAttribute("data-value")
+      if (dv) {
+        const v = getChipObjects(divChip, dv, divChip.getAttribute("data-text"), divChip.getAttribute("data-star"))
+        setValue(obj, name, v)
+      } else {
+        const v = getChipsByElement(divChip)
+        setValue(obj, name, v)
+      }
     }
   })
   return obj
@@ -429,6 +482,30 @@ function getChipsByElement(container?: Element | null): string[] {
     return Array.from(container.querySelectorAll<HTMLElement>(".chip")).map((chip) => {
       const v = chip.getAttribute("data-value")
       return v ? v.trim() : ""
+    })
+  } else {
+    return []
+  }
+}
+function getChipObjects(container: Element | null | undefined, value: string, text?: string | null, star?: string | null): any[] {
+  if (container) {
+    return Array.from(container.querySelectorAll<HTMLElement>(".chip")).map((chip) => {
+      const obj: any = {}
+      const v = chip.getAttribute("data-value")
+      obj[value] = v ? v.trim() : ""
+
+      if (text) {
+        obj[text] = chip.firstChild?.textContent
+      }
+
+      if (star) {
+        const i = chip.querySelector("i.star.highlight")
+        if (i) {
+          obj[star] = true
+        }
+      }
+
+      return obj
     })
   } else {
     return []
@@ -645,7 +722,7 @@ function submitForm(e: Event) {
   const confirmMsg = getConfirmMessage(target, resource)
   showConfirm(confirmMsg, () => {
     showLoading()
-    const data = decodeFromForm(form)
+    const data = decode(form)
     const url = getCurrentURL()
     fetch(url, {
       method: "POST",

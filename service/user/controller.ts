@@ -11,8 +11,6 @@ import {
   getSearch,
   handleError,
   hasSearch,
-  queryLimit,
-  queryPage,
   resources,
   respondError,
   save
@@ -62,10 +60,7 @@ export class UserController {
     if (hasSearch(req)) {
       filter = fromRequest<UserFilter>(req, ["status"])
     }
-    const search = getSearch(req.url)
-    const sort = buildSortSearch(search, fields, filter.sort)
-    const page = queryPage(req, filter)
-    const limit = queryLimit(req)
+    const { page, limit, sort } = filter
     const offset = getOffset(limit, page)
     console.log(JSON.stringify(filter))
     this.service
@@ -73,6 +68,7 @@ export class UserController {
       .then((result) => {
         console.log("after search " + JSON.stringify(filter))
         const list = escapeArray(result.list, offset, "sequence")
+        const search = getSearch(req.url)
         const permissions = res.locals.permissions as number
         const readonly = write != (write & permissions)
         render(req, res, "users", {
@@ -83,7 +79,7 @@ export class UserController {
           list,
           pages: buildPages(limit, result.total),
           pageSearch: buildPageSearch(search),
-          sort,
+          sort: buildSortSearch(search, fields, sort),
           message: buildMessage(resource, list, limit, page, result.total),
         })
       })

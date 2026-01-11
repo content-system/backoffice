@@ -119,7 +119,7 @@ function saveJob(e: Event) {
     return
   }
   const resource = getResource()
-  let job = decodeFromForm<Job>(form)
+  let job = decode<Job>(form)
   job.skills = getChips("jobForm_chipSkills")
   deleteFields(job, ["txtSkill", "btnAddSkill"])
   showConfirm(resource.msg_confirm_save, () => {
@@ -162,7 +162,7 @@ function saveArticle(e: Event) {
     return
   }
   const resource = getResource()
-  let job = decodeFromForm<Article>(form)
+  let job = decode<Article>(form)
   job.tags = getChips("articleForm_chipTags")
   deleteFields(job, ["txtTag", "btnAddTag"])
   showConfirm(resource.msg_confirm_save, () => {

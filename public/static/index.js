@@ -1,11 +1,12 @@
 "use strict"
 var resources = (function () {
   function resources() {}
-  resources.load = function (pageBody) {}
   resources.autoCollapse = false
+  resources.refreshLoad = true
   resources.login = "/login"
   resources.redirect = "redirectUrl"
   resources.defaultLimit = 12
+  resources.max = 20
   resources.containerClass = "form-input"
   resources.hiddenMessage = "hidden-message"
   resources.token = "token"
@@ -31,6 +32,13 @@ var resources = (function () {
 })()
 function getCurrentURL() {
   return window.location.origin + window.location.pathname
+}
+function removeLast(url) {
+  var i = url.lastIndexOf("/")
+  if (i > 0) {
+    return url.substring(0, i)
+  }
+  return url
 }
 function getRedirect() {
   var loc = window.location.href
@@ -105,6 +113,12 @@ function handleError(err, msg) {
   hideLoading()
   console.log("Error: " + err)
   alertError(msg, err)
+}
+function removeParent(target) {
+  var parent = target.parentElement
+  if (parent) {
+    parent.remove()
+  }
 }
 var histories = []
 var historyMax = 10
@@ -388,4 +402,52 @@ function registerEvents(form) {
       }
     }
   }
+}
+var debounceTimer
+function textChange(event, url) {
+  var target = event.target
+  if (target) {
+    var keyword_1 = target.value.trim()
+    var datalist_1 = target.list
+    if (datalist_1) {
+      if (keyword_1.length < 2) {
+        datalist_1.innerHTML = ""
+        return
+      }
+      var pw = datalist_1.getAttribute("data-keyword")
+      if (!pw || !keyword_1.startsWith(pw)) {
+        clearTimeout(debounceTimer)
+        debounceTimer = setTimeout(function () {
+          fetchList(keyword_1, url, datalist_1)
+        }, 200)
+      }
+    }
+  }
+}
+var controller
+function fetchList(keyword, url, datalist) {
+  if (controller) {
+    controller.abort()
+  }
+  controller = new AbortController()
+  fetch(url + "?q=" + encodeURIComponent(keyword) + "&max=" + resources.max, { signal: controller.signal })
+    .then(function (response) {
+      if (!response.ok) {
+        throw new Error("API error")
+      }
+      return response.json()
+    })
+    .then(function (data) {
+      datalist.innerHTML = ""
+      data.forEach(function (item) {
+        var option = document.createElement("option")
+        option.value = item
+        datalist.appendChild(option)
+      })
+      datalist.setAttribute("data-keyword", keyword)
+    })
+    .catch(function (err) {
+      console.error("Failed to load data:", err)
+      datalist.innerHTML = ""
+    })
 }

@@ -1,9 +1,14 @@
-function createChip(container: HTMLElement, value: string, text: string, inputContainer?: HTMLElement | null): HTMLElement {
+function createChip(container: HTMLElement, value: string, text: string, inputContainer?: HTMLElement | null, star?: boolean): HTMLElement {
   const chip = document.createElement("div")
   chip.className = "chip"
   chip.textContent = text
   chip.setAttribute("data-value", value)
 
+  if (star) {
+    const i = document.createElement("i")
+    i.className = "star highlight"
+    chip.appendChild(i)
+  }
   const close = document.createElement("span")
   close.className = "close"
   close.onclick = () => chip.remove()
@@ -18,6 +23,7 @@ function createChip(container: HTMLElement, value: string, text: string, inputCo
 }
 function addChip(triggerElement: HTMLButtonElement | HTMLInputElement, inputName?: string, chipId?: string): void {
   let input: HTMLInputElement
+  const parent = triggerElement.parentElement
   if (triggerElement.nodeName === "INPUT") {
     input = triggerElement as HTMLInputElement
   } else {
@@ -26,8 +32,13 @@ function addChip(triggerElement: HTMLButtonElement | HTMLInputElement, inputName
     if (inputName) {
       input = getElement(form, inputName) as HTMLInputElement
     } else {
-      input = triggerElement.parentElement?.firstElementChild as HTMLInputElement
+      input = parent?.firstElementChild as HTMLInputElement
     }
+  }
+  let isCheck: boolean = false
+  if (parent) {
+    const checkbox = parent.querySelector('input[type="checkbox"]') as HTMLInputElement
+    isCheck = checkbox && checkbox.checked
   }
   if (!input) return
 
@@ -40,11 +51,27 @@ function addChip(triggerElement: HTMLButtonElement | HTMLInputElement, inputName
     chipList = findParent(triggerElement, "chip-list")
   }
   if (!chipList) return
-
-  createChip(chipList, value, value, triggerElement.parentElement)
+  if (checkDuplicateChip(chipList, value)) {
+    let msg = input.getAttribute("data-duplicate")
+    if (!msg) {
+      msg = "Duplicate value"
+    }
+    alertError(msg)
+    return
+  }
+  createChip(chipList, value, value, parent, isCheck)
   input.value = ""
 }
-
+function checkDuplicateChip(chipList: HTMLElement, value: string): boolean {
+  const chips = chipList.querySelectorAll(".chip")
+  for (let i = 0; i < chips.length; i++) {
+    const chip = chips[i] as HTMLDivElement
+    if (chip.getAttribute("data-value") === value) {
+      return true
+    }
+  }
+  return false
+}
 function chipOnKeydown(e: KeyboardEvent, chipId: string) {
   if (e.key === "Enter") {
     e.preventDefault()

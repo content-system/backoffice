@@ -1,9 +1,14 @@
 "use strict"
-function createChip(container, value, text, inputContainer) {
+function createChip(container, value, text, inputContainer, star) {
   var chip = document.createElement("div")
   chip.className = "chip"
   chip.textContent = text
   chip.setAttribute("data-value", value)
+  if (star) {
+    var i = document.createElement("i")
+    i.className = "star highlight"
+    chip.appendChild(i)
+  }
   var close = document.createElement("span")
   close.className = "close"
   close.onclick = function () {
@@ -18,8 +23,8 @@ function createChip(container, value, text, inputContainer) {
   return chip
 }
 function addChip(triggerElement, inputName, chipId) {
-  var _a
   var input
+  var parent = triggerElement.parentElement
   if (triggerElement.nodeName === "INPUT") {
     input = triggerElement
   } else {
@@ -28,8 +33,13 @@ function addChip(triggerElement, inputName, chipId) {
     if (inputName) {
       input = getElement(form, inputName)
     } else {
-      input = (_a = triggerElement.parentElement) === null || _a === void 0 ? void 0 : _a.firstElementChild
+      input = parent === null || parent === void 0 ? void 0 : parent.firstElementChild
     }
+  }
+  var isCheck = false
+  if (parent) {
+    var checkbox = parent.querySelector('input[type="checkbox"]')
+    isCheck = checkbox && checkbox.checked
   }
   if (!input) return
   var value = input.value.trim()
@@ -41,8 +51,26 @@ function addChip(triggerElement, inputName, chipId) {
     chipList = findParent(triggerElement, "chip-list")
   }
   if (!chipList) return
-  createChip(chipList, value, value, triggerElement.parentElement)
+  if (checkDuplicateChip(chipList, value)) {
+    var msg = input.getAttribute("data-duplicate")
+    if (!msg) {
+      msg = "Duplicate value"
+    }
+    alertError(msg)
+    return
+  }
+  createChip(chipList, value, value, parent, isCheck)
   input.value = ""
+}
+function checkDuplicateChip(chipList, value) {
+  var chips = chipList.querySelectorAll(".chip")
+  for (var i = 0; i < chips.length; i++) {
+    var chip = chips[i]
+    if (chip.getAttribute("data-value") === value) {
+      return true
+    }
+  }
+  return false
 }
 function chipOnKeydown(e, chipId) {
   if (e.key === "Enter") {

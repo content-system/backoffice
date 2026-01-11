@@ -204,7 +204,7 @@ function search(e: Event) {
   e.preventDefault()
   const target = e.target as HTMLInputElement
   const form = target.form as HTMLFormElement
-  const initFilter = decodeFromForm<Filter>(form)
+  const initFilter = decode<Filter>(form)
   const filter = trimNull(initFilter)
   filter.page = 1
   const search = buildSearchUrl(filter)

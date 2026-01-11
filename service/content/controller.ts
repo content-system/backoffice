@@ -12,8 +12,6 @@ import {
   getSearch,
   handleError,
   hasSearch,
-  queryLimit,
-  queryPage,
   resources,
   respondError
 } from "express-ext"
@@ -41,10 +39,7 @@ export class ContentController {
       filter = fromRequest<ContentFilter>(req)
       format(filter, ["publishedAt"])
     }
-    const search = getSearch(req.url)
-    const sort = buildSortSearch(search, fields, filter.sort)
-    const page = queryPage(req, filter)
-    const limit = queryLimit(req)
+    const { page, limit, sort } = filter
     const offset = getOffset(limit, page)
     this.service
       .search(filter, limit, page)
@@ -53,14 +48,19 @@ export class ContentController {
         for (const item of list) {
           item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
         }
+        const search = getSearch(req.url)
+        const permissions = res.locals.permissions as number
+        const readonly = write != (write & permissions)
         render(req, res, "contents", {
           resource,
+          readonly,
+          dateFormat,
           limits: resources.limits,
           filter,
           list,
           pages: buildPages(limit, result.total),
           pageSearch: buildPageSearch(search),
-          sort,
+          sort: buildSortSearch(search, fields, sort),
           message: buildMessage(resource, list, limit, page, result.total),
         })
       })

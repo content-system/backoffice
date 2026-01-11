@@ -12,14 +12,16 @@ interface ErrorMessage {
 // tslint:disable-next-line:class-name
 class resources {
   static autoCollapse = false
+  static refreshLoad = true
   static login = "/login"
   static redirect = "redirectUrl"
   static defaultLimit = 12
+  static max = 20
   static containerClass = "form-input"
   static hiddenMessage = "hidden-message"
   static token = "token"
 
-  static load(pageBody: HTMLElement): void {}
+  static load?: (pageBody: HTMLElement) => void
 
   static num1 = / |,|\$|€|£|¥|'|٬|،| /g
   static num2 = / |\.|\$|€|£|¥|'|٬|،| /g
@@ -45,6 +47,13 @@ class resources {
 
 function getCurrentURL() {
   return window.location.origin + window.location.pathname
+}
+function removeLast(url: string): string {
+  const i = url.lastIndexOf("/")
+  if (i > 0) {
+    return url.substring(0, i)
+  }
+  return url
 }
 function getRedirect(): string {
   const loc = window.location.href
@@ -121,6 +130,13 @@ function handleError(err: any, msg: string) {
   hideLoading()
   console.log("Error: " + err)
   alertError(msg, err)
+}
+
+function removeParent(target: HTMLElement) {
+  const parent = target.parentElement
+  if (parent) {
+    parent.remove()
+  }
 }
 
 const histories: string[] = []
@@ -408,4 +424,57 @@ function registerEvents(form: HTMLFormElement): void {
       }
     }
   }
+}
+let debounceTimer: NodeJS.Timeout
+
+function textChange(event: Event, url: string) {
+  const target = event.target as HTMLInputElement
+  if (target) {
+    const keyword = target.value.trim()
+
+    const datalist = target.list
+    if (datalist) {
+      // Clear if input is empty
+      if (keyword.length < 2) {
+        datalist.innerHTML = ""
+        return
+      }
+      const pw = datalist.getAttribute("data-keyword")
+      if (!pw || !keyword.startsWith(pw)) {
+        // Debounce API calls
+        clearTimeout(debounceTimer)
+        debounceTimer = setTimeout(() => {
+          fetchList(keyword, url, datalist)
+        }, 200)
+      }
+    }
+  }
+}
+
+let controller: AbortController
+function fetchList(keyword: string, url: string, datalist: HTMLDataListElement) {
+  if (controller) {
+    controller.abort()
+  }
+  controller = new AbortController()
+  fetch(`${url}?q=${encodeURIComponent(keyword)}&max=${resources.max}`, { signal: controller.signal })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("API error")
+      }
+      return response.json()
+    })
+    .then((data: string[]) => {
+      datalist.innerHTML = ""
+      data.forEach((item) => {
+        const option = document.createElement("option")
+        option.value = item
+        datalist.appendChild(option)
+      })
+      datalist.setAttribute("data-keyword", keyword)
+    })
+    .catch((err) => {
+      console.error("Failed to load data:", err)
+      datalist.innerHTML = ""
+    })
 }

@@ -301,7 +301,55 @@ function setKey(_object, _isArrayKey, _key, _nextValue) {
   }
   return _object
 }
-function decodeFromForm(form, currencySymbol) {
+function decodeFromElement(parent, fields, currencySymbol) {
+  var obj = {}
+  if (parent) {
+    for (var _i = 0, fields_1 = fields; _i < fields_1.length; _i++) {
+      var field = fields_1[_i]
+      var ele = parent.querySelector('input[name="' + escapeHTML(field) + '"]')
+      if (ele) {
+        var type = ele.type
+        if (type === "checkbox") {
+          obj[field] = ele.checked
+        } else if (type === "date") {
+          if (ele.value.length === 10) {
+            obj[field] = ele.value
+          }
+        } else if (type === "datetime-local") {
+          if (ele.value.length > 0) {
+            try {
+              var val = new Date(ele.value)
+              obj[field] = val
+            } catch (err) {}
+          }
+        } else {
+          var datatype = ele.getAttribute("data-type")
+          var symbol = void 0
+          var v = ele.value.trim()
+          if (datatype === "currency" || datatype === "string-currency") {
+            symbol = ele.getAttribute("data-currency-symbol")
+            if (!symbol) {
+              symbol = currencySymbol
+            }
+            if (symbol && symbol.length > 0 && v.indexOf(symbol) >= 0) {
+              v = v.replace(symbol, "")
+            }
+          }
+          if (type === "number" || datatype === "currency" || datatype === "integer" || datatype === "number") {
+            var decimalSeparator = getDecimalSeparator(ele)
+            v = decimalSeparator === "," ? v.replace(r2, "") : (v = v.replace(r1, ""))
+            var val = isNaN(v) ? null : parseFloat(v)
+            obj[field] = val
+          } else {
+            obj[field] = v
+          }
+        }
+      }
+    }
+  }
+  return obj
+}
+function decode(form, currencySymbol) {
   var dateFormat = form.getAttribute("data-date-format")
   var obj = {}
   var len = form.length
@@ -346,7 +394,7 @@ function decodeFromForm(form, currencySymbol) {
                 })
               }
             } else {
-              val = ele.value.length > 0 ? ele.value : ele.checked
+              val = ele.value !== "on" ? ele.value : ele.checked
             }
             setValue(obj, name_1, val)
             return "continue"
@@ -404,8 +452,14 @@ function decodeFromForm(form, currencySymbol) {
   form.querySelectorAll(".chip-list").forEach(function (divChip) {
     var name = divChip.getAttribute("data-name")
     if (name && name.length > 0) {
-      var v = getChipsByElement(divChip)
-      setValue(obj, name, v)
+      var dv = divChip.getAttribute("data-value")
+      if (dv) {
+        var v = getChipObjects(divChip, dv, divChip.getAttribute("data-text"), divChip.getAttribute("data-star"))
+        setValue(obj, name, v)
+      } else {
+        var v = getChipsByElement(divChip)
+        setValue(obj, name, v)
+      }
     }
   })
   return obj
@@ -419,6 +473,28 @@ function getChipsByElement(container) {
     return Array.from(container.querySelectorAll(".chip")).map(function (chip) {
       var v = chip.getAttribute("data-value")
       return v ? v.trim() : ""
+    })
+  } else {
+    return []
+  }
+}
+function getChipObjects(container, value, text, star) {
+  if (container) {
+    return Array.from(container.querySelectorAll(".chip")).map(function (chip) {
+      var _a
+      var obj = {}
+      var v = chip.getAttribute("data-value")
+      obj[value] = v ? v.trim() : ""
+      if (text) {
+        obj[text] = (_a = chip.firstChild) === null || _a === void 0 ? void 0 : _a.textContent
+      }
+      if (star) {
+        var i = chip.querySelector("i.star.highlight")
+        if (i) {
+          obj[star] = true
+        }
+      }
+      return obj
     })
   } else {
     return []
@@ -633,7 +709,7 @@ function submitForm(e) {
   var confirmMsg = getConfirmMessage(target, resource)
   showConfirm(confirmMsg, function () {
     showLoading()
-    var data = decodeFromForm(form)
+    var data = decode(form)
     var url = getCurrentURL()
     fetch(url, {
       method: "POST",

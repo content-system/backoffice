@@ -12,8 +12,6 @@ import {
   getSearch,
   handleError,
   hasSearch,
-  queryLimit,
-  queryPage,
   resources,
   respondError
 } from "express-ext"
@@ -44,10 +42,7 @@ export class ContactController {
       filter = fromRequest<ContactFilter>(req)
       format(filter, ["submittedAt"])
     }
-    const search = getSearch(req.url)
-    const sort = buildSortSearch(search, fields, filter.sort)
-    const page = queryPage(req, filter)
-    const limit = queryLimit(req)
+    const { page, limit, sort } = filter
     const offset = getOffset(limit, page)
     this.service
       .search(filter, limit, page)
@@ -56,6 +51,7 @@ export class ContactController {
         for (const item of list) {
           item.submittedAt = formatDateTime(item.submittedAt, dateFormat)
         }
+        const search = getSearch(req.url)
         const permissions = res.locals.permissions as number
         const readonly = write != (write & permissions)
         render(req, res, "contacts", {
@@ -67,7 +63,7 @@ export class ContactController {
           list,
           pages: buildPages(limit, result.total),
           pageSearch: buildPageSearch(search),
-          sort,
+          sort: buildSortSearch(search, fields, sort),
           message: buildMessage(resource, list, limit, page, result.total),
         })
       })

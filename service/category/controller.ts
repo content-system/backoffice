@@ -11,8 +11,6 @@ import {
   getSearch,
   handleError,
   hasSearch,
-  queryLimit,
-  queryPage,
   resources,
   respondError
 } from "express-ext"
@@ -44,15 +42,13 @@ export class CategoryController {
     if (hasSearch(req)) {
       filter = fromRequest<CategoryFilter>(req)
     }
-    const search = getSearch(req.url)
-    const sort = buildSortSearch(search, fields, filter.sort)
-    const page = queryPage(req, filter)
-    const limit = queryLimit(req)
+    const { page, limit, sort } = filter
     const offset = getOffset(limit, page)
     this.service
       .search(filter, limit, page)
       .then((result) => {
         const list = escapeArray(result.list, offset, "no")
+        const search = getSearch(req.url)
         const permissions = res.locals.permissions as number
         const readonly = write != (write & permissions)
         render(req, res, "categories", {
@@ -63,7 +59,7 @@ export class CategoryController {
           list,
           pages: buildPages(limit, result.total),
           pageSearch: buildPageSearch(search),
-          sort,
+          sort: buildSortSearch(search, fields, sort),
           message: buildMessage(resource, list, limit, page, result.total),
         })
       })

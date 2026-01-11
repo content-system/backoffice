@@ -119,29 +119,21 @@ function hideLoading() {
 }
 type Type = "Confirm" | "Alert"
 type IconType = "Error" | "Warning" | "Confirm" | "Success" | "Info" | "Alert"
-function escapeHTML(text?: string | null): string {
-  if (!text) {
+const mapE: StringMap = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;",
+  "`": "&#96;",
+}
+function escapeHTML(input?: string | null): string {
+  if (!input) {
     return ""
   }
-  const isIgnore = text.indexOf("<br />") >= 0
-
-  if (text.indexOf('"') >= 0) {
-    text = text.replace(/"/g, "&quot;")
-  }
-  if (text.indexOf("&") >= 0) {
-    text = text.replace(/&/g, "&amp;")
-  }
-  if (text.indexOf(">") >= 0) {
-    text = text.replace(/>/g, "&gt;")
-  }
-  if (text.indexOf("<") >= 0) {
-    text = text.replace(/</g, "&lt;")
-  }
-  // Ignore escaping if </br> tag is present
-  if (isIgnore) {
-    text = text.replace(/&lt;br \/&gt;/g, "<br />")
-  }
-  return text
+  return input.replace(/[&<>"'`]/g, function (char) {
+    return mapE[char]
+  })
 }
 function showAlert(
   msg: string,

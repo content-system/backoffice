@@ -12,8 +12,6 @@ import {
   getOffset,
   getSearch,
   hasSearch,
-  queryLimit,
-  queryPage,
   resources
 } from "express-ext"
 import { Log, Search } from "onecore"
@@ -47,17 +45,14 @@ export class AuditLogController {
       filter = fromRequest<AuditLogFilter>(req, ["status"])
       format(filter, ["timestamp"])
     }
-    const search = getSearch(req.url)
-    const sort = buildSortSearch(search, fields, filter.sort)
-    const page = queryPage(req, filter)
-    const limit = queryLimit(req)
+    const { page, limit, sort } = filter
     const offset = getOffset(limit, page)
     this.search(filter, limit, page).then((result) => {
       for (const item of result.list) {
         item.time = formatFullDateTime(item.time, dateFormat)
       }
       const list = escapeArray(result.list, offset, "sequence")
-      
+      const search = getSearch(req.url)  
       render(req, res, "audit-logs", {
         resource,
         limits: resources.limits,
@@ -65,7 +60,7 @@ export class AuditLogController {
         list,
         pages: buildPages(limit, result.total),
         pageSearch: buildPageSearch(search),
-        sort,
+        sort: buildSortSearch(search, fields, sort),
         message: buildMessage(resource, list, limit, page, result.total),
       })
     })

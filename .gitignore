@@ -3,7 +3,6 @@ node_modules
 dist
 es5
 es6
-package-lock.json
 debug.log
 .docker
 .cache

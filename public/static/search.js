@@ -202,7 +202,7 @@ function search(e) {
   e.preventDefault()
   var target = e.target
   var form = target.form
-  var initFilter = decodeFromForm(form)
+  var initFilter = decode(form)
   var filter = trimNull(initFilter)
   filter.page = 1
   var search = buildSearchUrl(filter)

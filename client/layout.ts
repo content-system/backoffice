@@ -120,9 +120,11 @@ function navigate(e: Event, ignoreLang?: boolean) {
     const search = window.location.search.length > 0 ? window.location.search.substring(1) : ""
     const lang = getField(search, "lang")
     let url = link.href
+    /*
     if (!ignoreLang && lang.length > 0) {
       url = url + (url.indexOf("?") > 0 ? "&" : "?") + lang
     }
+    */
     const lang1 = lang.length > 0 && !ignoreLang ? "&" + lang : ""
     const newUrl = url + (url.indexOf("?") > 0 ? "&" : "?") + "partial=true" + lang1
     showLoading()
@@ -135,9 +137,16 @@ function navigate(e: Event, ignoreLang?: boolean) {
               const pageBody = document.getElementById("pageBody")
               if (pageBody) {
                 pageBody.innerHTML = data
+                if (resources.refreshLoad) {
+                  resources.load = undefined
+                }
                 const span = link.querySelector("span")
                 const title = span ? span.innerText : link.innerText
                 window.history.pushState({ pageTitle: title }, "", url)
+                const tmpScript = document.getElementById("tmpScript")
+                if (tmpScript) {
+                  tmpScript.remove()
+                }
                 pageBody.querySelectorAll("script").forEach((oldScript) => {
                   const isInitScript = oldScript.getAttribute("data-init-script")
                   if (isInitScript === "true") {
@@ -149,6 +158,7 @@ function navigate(e: Event, ignoreLang?: boolean) {
                       // inline script
                       newScript.textContent = oldScript.textContent
                     }
+                    newScript.id = "tmpScript"
                     document.body.appendChild(newScript)
                     oldScript.remove()
                   } else {
@@ -174,7 +184,9 @@ function navigate(e: Event, ignoreLang?: boolean) {
                 })
                 afterLoaded(pageBody)
                 setTimeout(function () {
-                  resources.load(pageBody)
+                  if (resources.load) {
+                    resources.load(pageBody)
+                  }
                 }, 0)
                 setTimeout(function () {
                   const parent = findParentNode(target, "LI")
