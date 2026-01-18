@@ -1,6 +1,8 @@
+import { slugify } from "common/slug"
+import { nanoid } from "nanoid"
 import { Log, UseCase } from "onecore"
 import { DB, Repository } from "query-core"
-import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService } from "./article"
+import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService, Draft } from "./article"
 import { ArticleController } from "./controller"
 import { buildQuery } from "./query"
 
@@ -14,6 +16,37 @@ export class SqlArticleRepository extends Repository<Article, string, ArticleFil
 export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> implements ArticleService {
   constructor(repository: ArticleRepository) {
     super(repository)
+  }
+  create(article: Article, ctx?: any): Promise<number> {
+    article.id = nanoid(10)
+    article.slug = slugify(article.title, article.id)
+    return this.repository.create(article, ctx)
+  }
+  async update(article: Article, ctx?: any): Promise<number> {
+    const existingArticle = await this.repository.load(article.id)
+    if (!existingArticle) {
+      return 0
+    }
+    if (existingArticle.status === Draft) {
+      article.slug = slugify(article.title, article.id)
+    }
+    return this.repository.update(article, ctx)
+  }
+  async patch(article: Partial<Article>, ctx?: any): Promise<number> {
+    if (article.title && article.title.length > 0) {
+      const id = article.id as string
+      const existingArticle = await this.repository.load(id)
+      if (!existingArticle) {
+        return 0
+      }
+      if (existingArticle.status === Draft) {
+        article.slug = slugify(article.title, id)
+      }
+      return this.repository.patch(article, ctx)
+    } else {
+      delete article.slug
+      return this.repository.patch(article, ctx)
+    }
   }
 }
 

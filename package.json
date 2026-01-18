@@ -37,7 +37,7 @@
     "types-validation": "^0.0.2",
     "ui-formatter": "^0.0.8",
     "xmldom": "^0.6.0",
-    "xvalidators": "^0.5.15"
+    "xvalidators": "^0.5.16"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",

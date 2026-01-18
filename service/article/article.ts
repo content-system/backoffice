@@ -2,14 +2,15 @@ import { Attributes, Filter, Result, SearchResult, TimeRange } from "onecore"
 
 export interface Article {
   id: string
+  slug: string
   title: string
   description?: string
-  thumbnail?: string
-  publishedAt: Date
-  tags?: string[]
-  type?: string
   content: string
-  author?: string
+  publishedAt?: Date
+  tags?: string[]
+  thumbnail?: string
+  highThumbnail?: string
+  authorId?: string
   status?: string
 
   createdAt?: Date
@@ -19,10 +20,15 @@ export interface Article {
 }
 export interface ArticleFilter extends Filter {
   id?: string
+  slug?: string
   title?: string
   description?: string
-  publishedAt?: TimeRange
+  status?: string
+  publishedAt: TimeRange
   tags?: string[]
+  authorId?: string
+  userId?: string
+  isSaved?: boolean
 }
 
 export interface ArticleRepository {
@@ -42,6 +48,8 @@ export interface ArticleService {
   delete(id: string): Promise<number>
 }
 
+export const Draft = "D"
+
 export const articleModel: Attributes = {
   id: {
     key: true,
@@ -54,26 +62,36 @@ export const articleModel: Attributes = {
     q: true,
   },
   description: {
-    length: 1000,
+    length: 1200,
     required: true,
     q: true,
-  },
-  thumbnail: {
-    length: 400,
   },
   publishedAt: {
     column: "published_at",
     type: "datetime",
   },
   content: {
-    length: 5000,
+    length: 9500,
     required: true,
   },
   tags: {
     type: "strings",
   },
-  type: {},
-  status: {},
+  thumbnail: {
+    length: 400,
+  },
+  highThumbnail: {
+    column: "high_thumbnail",
+    length: 400,
+  },
+  authorId: {
+    column: "author_id",
+    length: 400,
+    noupdate: true,
+  },
+  status: {
+    length: 1,
+  },
 
   createdBy: {
     column: "created_by",

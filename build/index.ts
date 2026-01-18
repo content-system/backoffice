@@ -45,7 +45,7 @@ export function buildCSS() {
     "./public/css/page.css",
     "./public/css/main.css",
     "./public/css/form.css",
-    "./public/css/list-view.css",
+    "./public/css/card.css",
     "./public/css/solid-container.css",
     "./public/css/table.css",
     "./public/css/list-detail.css",
