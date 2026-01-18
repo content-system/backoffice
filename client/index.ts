@@ -90,26 +90,24 @@ function getLang(): string | undefined {
   }
   return undefined
 }
-function getToken(): string | null {
-  const token = localStorage.getItem(resources.token)
-  return token
+function getToken(): string | null | undefined {
+  if (resources.token && resources.token.length === 0) {
+    const token = localStorage.getItem(resources.token)
+    return token
+  }
+  return undefined
 }
 function getHeaders(): any {
-  const token = getToken()
+  const header: any = {}
   const lang = getLang()
   if (lang) {
-    if (token && token.length > 0) {
-      return { "Content-Language": lang, Authorization: `Bearer ${token}` } // Include the JWT
-    } else {
-      return { "Content-Language": lang }
-    }
-  } else {
-    if (token && token.length > 0) {
-      return { Authorization: `Bearer ${token}` } // Include the JWT
-    } else {
-      return {}
-    }
+    header["Content-Language"] = lang
   }
+  const token = getToken()
+  if (token && token.length > 0) {
+    header["Authorization"] = `Bearer ${token}`
+  }
+  return header
 }
 
 function handleGetError(response: Response, resource: StringMap) {

@@ -75,25 +75,23 @@ function getLang() {
   return undefined
 }
 function getToken() {
-  var token = localStorage.getItem(resources.token)
-  return token
+  if (resources.token && resources.token.length === 0) {
+    var token = localStorage.getItem(resources.token)
+    return token
+  }
+  return undefined
 }
 function getHeaders() {
-  var token = getToken()
+  var header = {}
   var lang = getLang()
   if (lang) {
-    if (token && token.length > 0) {
-      return { "Content-Language": lang, Authorization: "Bearer " + token }
-    } else {
-      return { "Content-Language": lang }
-    }
-  } else {
-    if (token && token.length > 0) {
-      return { Authorization: "Bearer " + token }
-    } else {
-      return {}
-    }
+    header["Content-Language"] = lang
   }
+  var token = getToken()
+  if (token && token.length > 0) {
+    header["Authorization"] = "Bearer " + token
+  }
+  return header
 }
 function handleGetError(response, resource) {
   if (response.status === 401) {

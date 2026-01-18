@@ -200,10 +200,10 @@ td > button {
   padding-right: 8px;
   margin: 0 0 16px 0;
 }
+/*
 .section:first-child {
   margin-top: 8px;
 }
-/*
 .section:last-child {
   margin-bottom: 0;
 }
