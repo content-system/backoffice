@@ -43,6 +43,9 @@ export class ArticleController {
       filter = fromRequest<ArticleFilter>(req, ["tags"])
       format(filter, ["publishedAt"])
     }
+    if (!filter.sort) {
+      filter.sort = "-publishedAt"
+    }
     const { page, limit, sort } = filter
     const offset = getOffset(limit, page)
     try {
@@ -107,11 +110,15 @@ export class ArticleController {
   async submit(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
-    const article = req.body
+    const article = req.body as Article
     const errors = validate<Article>(article, articleModel, resource)
     if (errors.length > 0) {
       return respondError(res, errors)
     }
+    const userId = res.locals.userId
+    console.log("user id " + userId)
+    article.updatedBy = userId
+    article.updatedAt = new Date()
     const id = req.params.id
     const editMode = id !== "new"
     try {
@@ -120,6 +127,8 @@ export class ArticleController {
         const status = isSuccessful(result) ? 201 : 409
         res.status(status).json(result).end()
       } else {
+        article.createdBy = userId
+        article.createdAt = new Date()
         const result = await this.service.update(article)
         const status = isSuccessful(result) ? 200 : 410
         res.status(status).json(result).end()

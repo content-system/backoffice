@@ -17,7 +17,7 @@ create table contents (
 insert into contents (id,lang,title,body,published_at,tags,status,version) values
 	 ('milestones','en','Milestones','<div>
   <header><h1>Milestones</h1></header>
-  <div>
+  <div class="main-body">
     <dl class="data-list row">
       <dt class="col s2 l1 right-align">1999</dt>
       <dd class="col s10 l11">FPT Software was founded in 1999 by 13 members of FPT Group, led by Nguyen Thanh Nam</dd>
@@ -49,7 +49,7 @@ insert into contents (id,lang,title,body,published_at,tags,status,version) value
 </div>',null,'{}',null,1),
 	 ('services','en','Services','<div>
   <header><h1>Services</h1></header>
-  <div>
+  <div class="main-body">
     <h4 class="h4">FPT specializes in creating software solutions for various industries - spanning different levels and requirements.</h4>
     <ul class="row list">
       <li class="col s6 l3 img-card">
@@ -95,7 +95,7 @@ insert into contents (id,lang,title,body,published_at,tags,status,version) value
 ',null,'{}',null,1),
 	 ('leadership','en','Leadership','<div>
   <header><h1>Leadership</h1></header>
-  <div>
+  <div class="main-body">
     <h2>Board Of Management</h2>
     <ul class="row list">
       <li class="col s6 m4 l3 img-card">
@@ -165,7 +165,7 @@ insert into contents (id,lang,title,body,published_at,tags,status,version) value
   <header>
     <h1>Companies</h1>
   </header>
-  <div>
+  <div class="main-body">
     <h2>Vertical Industry</h2>
     <ul class="row list">
       <li class="col s12 l6 img-card">
@@ -407,7 +407,7 @@ insert into contents (id,lang,title,body,published_at,tags,status,version) value
 ',null,'{}',null,1),
 	 ('leadership','vi','Leadership','<div>
   <header><h1>Khả năng lãnh đạo</h1></header>
-  <div>
+  <div class="main-body">
     <h2>Ban lãnh đạo</h2>
     <ul class="row list">
       <li class="col s6 m4 l3 img-card">
@@ -475,7 +475,7 @@ insert into contents (id,lang,title,body,published_at,tags,status,version) value
 ',null,'{}',null,1),
 	 ('services','vi','Services','<div>
   <header><h1>Dịch vụ</h1></header>
-  <div>
+  <div class="main-body">
     <h4 class="h4">
       FPT chuyên tạo ra các giải pháp phần mềm cho nhiều ngành công nghiệp khác nhau - trải dài ở nhiều cấp độ và yêu cầu khác nhau.
     </h4>
@@ -522,7 +522,7 @@ insert into contents (id,lang,title,body,published_at,tags,status,version) value
 </div>',null,'{}',null,1),
 	 ('milestones','vi','Milestones','<div>
   <header><h1>Các cột mốc quan trọng</h1></header>
-  <div>
+  <div class="main-body">
     <dl class="data-list row">
       <dt class="col s2 l1 right-align">1999</dt>
       <dd class="col s10 l11">FPT Software được thành lập năm 1999 bởi 13 thành viên của Tập đoàn FPT, đứng đầu là Nguyễn Thành Nam</dd>
@@ -558,7 +558,7 @@ insert into contents (id,lang,title,body,published_at,tags,status,version) value
   <header>
     <h1>Các công ty thành viên</h1>
   </header>
-  <div>
+  <div class="main-body">
     <h2>Theo ngành công nghiệp</h2>
     <ul class="row list">
       <li class="col s12 l6 img-card">

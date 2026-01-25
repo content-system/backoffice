@@ -6,7 +6,7 @@
       {% if readonly == false %}<a id="btnNew" class="btn-new" href="/users/new"></a>{% endif %}
     </div>
   </header>
-  <div>
+  <div class="search-body">
     <form id="usersForm" name="usersForm" class="form" novalidate>
       <span class="hidden-message">{{message}}</span>
       <section class="row search-group">{% include "partials/search.html" %} {% include "partials/pagination.html" %}</section>

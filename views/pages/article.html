@@ -13,7 +13,6 @@
         name="id"
         value="{{article.id}}"
         maxlength="60"
-        required
         readonly
         onblur="requiredOnBlur(event)"
         placeholder="{{resource.id}}"
@@ -36,13 +35,6 @@
       {{resource.published_at}}
       <input type="datetime-local" id="publishedAt" name="publishedAt" value="{{datetimeToString(article.publishedAt)}}" step=".010" />
     </label>
-    <div class="col s12 m6 radio-section">
-      {{resource.status}}
-      <div class="radio-group">
-        <label><input type="radio" id="active" name="status" value="A" {{isChecked('A', article.status)}}/>{{resource.active}}</label>
-        <label><input type="radio" id="inactive" name="status" value="I" {{isChecked('I', article.status)}}/>{{resource.inactive}}</label>
-      </div>
-    </div>
     <label class="col s12 required">
       {{resource.title}}
       <input

@@ -90,13 +90,13 @@ create table audit_logs (
 );
 
 create table histories (
+  history_id varchar(40) primary key,
   entity varchar(40) not null,
   id varchar(40) not null,
   action varchar(40) not null,
-  time timestamptz not null,
   author varchar(40) not null,
-  data jsonb not null,
-  primary key (entity, id)
+  time timestamptz not null,
+  data jsonb not null
 );
 
 insert into modules (module_id,module_name,status,path,resource_key,icon,sequence,actions,parent) values ('admin','Admin','A','/admin','admin','contacts',2,7,'');

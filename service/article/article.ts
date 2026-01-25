@@ -48,13 +48,16 @@ export interface ArticleService {
   delete(id: string): Promise<number>
 }
 
-export const Draft = "D"
+export class Status {
+  static readonly Draft = 'D'
+  static readonly Submitted = 'S'
+  static readonly Approved = 'A'
+}
 
 export const articleModel: Attributes = {
   id: {
     key: true,
     length: 40,
-    required: true,
   },
   slug: {
     length: 150,

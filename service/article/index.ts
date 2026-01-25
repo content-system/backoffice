@@ -2,7 +2,7 @@ import { nanoid } from "nanoid"
 import { Log, UseCase } from "onecore"
 import { DB, Repository } from "query-core"
 import { slugify } from "../common/slug"
-import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService, Draft } from "./article"
+import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService, Status } from "./article"
 import { ArticleController } from "./controller"
 import { buildQuery } from "./query"
 
@@ -20,6 +20,8 @@ export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> impl
   create(article: Article, ctx?: any): Promise<number> {
     article.id = nanoid(10)
     article.slug = slugify(article.title, article.id)
+    article.authorId = article.createdBy
+    article.status = Status.Draft
     return this.repository.create(article, ctx)
   }
   async update(article: Article, ctx?: any): Promise<number> {
@@ -27,7 +29,7 @@ export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> impl
     if (!existingArticle) {
       return 0
     }
-    if (existingArticle.status === Draft) {
+    if (existingArticle.status === Status.Draft) {
       article.slug = slugify(article.title, article.id)
     }
     return this.repository.update(article, ctx)
@@ -39,7 +41,7 @@ export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> impl
       if (!existingArticle) {
         return 0
       }
-      if (existingArticle.status === Draft) {
+      if (existingArticle.status === Status.Draft) {
         article.slug = slugify(article.title, id)
       }
       return this.repository.patch(article, ctx)

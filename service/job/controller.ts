@@ -39,6 +39,9 @@ export class JobController {
       filter = fromRequest<JobFilter>(req, ["skills"])
       format(filter, ["publishedAt"])
     }
+    if (!filter.sort) {
+      filter.sort = "-publishedAt"
+    }
     const { page, limit, sort } = filter
     const offset = getOffset(limit, page)
     try {
