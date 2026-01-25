@@ -3,12 +3,6 @@
   width: calc(100% - 32px);
 }
 
-.page-body {
-  -ms-flex: 1 1 auto;
-  flex: 1 1 auto;
-  /* width: 100%; */
-}
-
 .list-content,
 .page-body > div,
 .form {
@@ -19,7 +13,6 @@
 
 /* impact on responsive design */
 .view-container {
-  /* padding: 10px 5%; */
   padding: 0;
 }
 
@@ -33,21 +26,6 @@
   .page-container {
     flex-direction: column-reverse;
   }
-  /*
-  .page-header {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    height: 52px;
-    padding-top: 5px;
-    z-index: 10;
-  }
-
-  .page-body {
-    margin-bottom: 52px;
-  }
-*/
 }
 
 .page-header {
@@ -58,47 +36,11 @@
   border: 0;
   border-bottom: 1px solid;
 }
-
-.mobile .page-header {
-  border-bottom: 0;
-}
-
 @media screen and (max-width: 600px) {
   .page-header {
     border-top: 1px solid;
     border-bottom: 0;
   }
-}
-/*
-.view-container.no-footer > form > div,
-.view-container.no-footer > div,
-.view-container.no-footer .view-body {
-  max-height: calc(100vh);
-}
-
-.view-container.fixed-search > div > form:nth-child(2) > ul.list {
-  overflow-y: auto;
-  max-height: calc(100vh - 64px - 52px - 13px);
-}
-*/
-.page-body > .form,
-.page-body > .view-container > .form,
-.page-body > article,
-.page-body > article > div,
-.page-body > div > div {
-  max-height: calc(100vh - 52px); /* - page-header */
-  height: calc(100vh - 52px);
-}
-.page-body > article {
-  overflow-y: auto;
-}
-.page-body > .form > div,
-.form-body {
-  max-height: calc(100vh - 64px - 52px); /* - view-footer - page-header */
-}
-
-.page-header > .view-body {
-  max-height: calc(100vh - 64px - 52px);
 }
 
 .list-detail-container > .list-content > header,
@@ -106,6 +48,7 @@
 .page-body > article > header,
 .page-body > div > header,
 .page-body > .form > header,
+.view-container > header,
 .view-header {
   position: relative;
   width: 100%;
@@ -118,11 +61,13 @@
   background-image: inherit;
 }
 
-.modal-portal-content > div > div,
 .detail-content > form > div,
+.form.view-container > div,
+article.view-container > div,
 .page-body > .form > div,
 .page-body > article > div,
-.page-body > div > div,
+.search-body,
+.main-body,
 .form-body,
 .view-body {
   padding: 0;
@@ -137,28 +82,6 @@
   background-image: inherit;
 }
 
-.view-body {
-  max-height: calc(100vh - 64px);
-}
-
-/*
-.page-body .view-container > div.list-detail-container {
-  overflow-y: unset;
-  padding-bottom: 0;
-  max-height: calc(100vh - 64px - 52px + 20px);
-  height: calc(100vh - 64px - 52px + 20px);
-}
-.page-body .view-container > div.list-detail-container > div.list-content,
-.page-body .view-container > div.list-detail-container > div.detail-content {
-  overflow-y: auto;
-  max-height: calc(100vh - 64px - 52px + 20px);
-  height: calc(100vh - 64px - 52px + 20px);
-}
-*/
-.modal-portal-content > div > div {
-  max-height: unset;
-}
-
 .page-body > .form > div.background-content,
 .view-body.background-content {
   height: 100%;
@@ -167,27 +90,50 @@
   background-position: center;
   background-repeat: no-repeat;
 }
-/*
-.mobile .page-header {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  height: 52px;
-  padding-top: 5px;
-  z-index: 10;
+
+.page-body {
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  height: calc(100vh - 52px);
+  min-height: calc(100vh - 52px);
 }
 
-.mobile .page-body {
-  margin-bottom: 52px;
+.form.view-container,
+.page-body > .view-container > .form,
+.page-body > .form,
+.page-body > article,
+.page-body > article > div,
+.search-body,
+.main-body {
+  max-height: calc(100vh - 52px); /* - page-header */
+  height: calc(100vh - 52px);
 }
-*/
+.page-body > article {
+  overflow-y: auto;
+}
+.form.view-container > div,
+.page-body > .form > div,
+.form-body {
+  max-height: calc(100vh - 64px - 52px); /* - view-footer - page-header */
+}
+
+.page-header > .view-body {
+  max-height: calc(100vh - 64px - 52px);
+}
+.view-body {
+  max-height: calc(100vh - 64px);
+}
+
 .page-body > .full {
   max-height: calc(100vh - 52px);
   height: calc(100vh - 52px);
   overflow-x: auto;
 }
 @media screen and (min-width: 769px) {
+  .top-menu .page-body {
+    height: calc(100vh - 52px - 56px);
+    min-height: calc(100vh - 52px - 56px);
+  }
   .top-menu .page-body > .full {
     max-height: calc(100vh - 52px - 46px);
     height: calc(100vh - 52px - 46px);
@@ -208,14 +154,13 @@
   .top-menu .page-container > .page-body > .form,
   .top-menu .page-body > article,
   .top-menu .page-container > .page-body > article > div,
-  .top-menu .page-container > .page-body > div > div {
+  .top-menu .page-container .search-body,
+  .top-menu .page-container .main-body {
     max-height: calc(100vh - 46px - 52px);
   }
-  /* Set height for table container, prevent the parent scroll of whole page  */
-  /*
-  .top-menu .page-container > .page-body .view-container > .view-body > form:last-child{
-    max-height: calc(100vh - 400px);
-    height: calc(100vh - 500px);
-  }
-  */
+}
+.modal-portal-content .search-body,
+.modal-portal-content .main-body {
+  max-height: calc(100vh - 150px);
+  height: calc(100vh - 150px);
 }

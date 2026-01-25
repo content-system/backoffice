@@ -58,7 +58,7 @@ function removeFormatUrl(url: string): string {
 }
 interface Filter {
   page?: number
-  limit?: number
+  limit: number
   firstLimit?: number
   fields?: string[]
   sort?: string
@@ -68,13 +68,13 @@ function getPrefix(url: string): string {
 }
 function buildSearchUrl<F extends Filter>(ft: F, page?: string, limit?: string, fields?: string): string {
   if (!page || page.length === 0) {
-    page = "page"
+    page = resources.page
   }
   if (!limit || limit.length === 0) {
-    limit = "limit"
+    limit = resources.limit
   }
   if (!fields || fields.length === 0) {
-    fields = "fields"
+    fields = resources.fields
   }
   const pageIndex = ft.page
   if (pageIndex && !isNaN(pageIndex) && pageIndex <= 1) {
@@ -82,7 +82,7 @@ function buildSearchUrl<F extends Filter>(ft: F, page?: string, limit?: string, 
   }
   const keys = Object.keys(ft)
   // const currentUrl = window.location.host + window.location.pathname
-  let url = "?partial=true"
+  let url = `?${resources.partial}=true`
   for (const key of keys) {
     const objValue = (ft as any)[key]
     if (objValue) {
@@ -153,7 +153,7 @@ function removeField(search: string, fieldName: string): string {
   return j >= 0 ? search.substring(0, i) + search.substring(j + 1) : search.substring(0, i - 1)
 }
 
-function changePage(e: Event) {
+function changePage(e: Event, partId?: string) {
   e.preventDefault()
   const target = e.target as HTMLAnchorElement
 
@@ -161,13 +161,24 @@ function changePage(e: Event) {
   if (search.length > 0) {
     search = search.substring(1)
   }
-  search = removeField(search, "partial")
-  const p = getField(search, "page")
-  if (p === "page=1") {
-    search = removeField(search, "page")
+  search = removeField(search, resources.partial)
+  search = removeField(search, resources.subPartial)
+  const p = getField(search, resources.page)
+  if (p === `${resources.page}=1`) {
+    search = removeField(search, resources.page)
+  }
+  if (!partId) {
+    const form = findParentNode(target, "FORM")
+    if (form) {
+      partId = form.getAttribute("data-part") as string
+    }
   }
   let url = window.location.origin + window.location.pathname
-  url = url + (search.length === 0 ? "?partial=true" : "?" + search + "&partial=true")
+  let sub = ""
+  if (partId && partId.length > 0) {
+    sub = `&${resources.subPartial}=true`
+  }
+  url = url + (search.length === 0 ? `?${resources.partial}=true${sub}` : `?${search}&${resources.partial}=true${sub}`)
 
   let newUrl = window.location.origin + window.location.pathname
   if (search.length > 0) {
@@ -184,7 +195,8 @@ function changePage(e: Event) {
         response
           .text()
           .then((data) => {
-            const pageBody = document.getElementById("pageBody")
+            const pageId = partId && partId.length > 0 ? partId : resources.pageBody
+            const pageBody = document.getElementById(pageId)
             if (pageBody) {
               pageBody.innerHTML = data
               afterLoaded(pageBody)
@@ -200,18 +212,26 @@ function changePage(e: Event) {
     })
     .catch((err) => handleError(err, resource.error_network))
 }
-function search(e: Event) {
+function search(e: Event, partId?: string) {
   e.preventDefault()
   const target = e.target as HTMLInputElement
   const form = target.form as HTMLFormElement
+  if (!partId) {
+    partId = form.getAttribute("data-part") as string
+  }
   const initFilter = decode<Filter>(form)
   const filter = trimNull(initFilter)
   filter.page = 1
-  const search = buildSearchUrl(filter)
+  let search = buildSearchUrl(filter)
+  if (partId && partId.length > 0) {
+    search = search + `&${resources.subPartial}=true`
+  }
   const url = getCurrentURL() + search
   let newUrl = getCurrentURL()
   if (search.length > 0) {
-    const s = removeField(search.substring(1), "partial")
+    let s = search.substring(1)
+    s = removeField(s, resources.partial)
+    s = removeField(s, resources.subPartial)
     if (s.length > 0) {
       newUrl = newUrl + "?" + s
     }
@@ -227,7 +247,8 @@ function search(e: Event) {
         response
           .text()
           .then((data) => {
-            const pageBody = document.getElementById("pageBody")
+            const pageId = partId && partId.length > 0 ? partId : resources.pageBody
+            const pageBody = document.getElementById(pageId)
             if (pageBody) {
               pageBody.innerHTML = data
               afterLoaded(pageBody)

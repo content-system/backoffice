@@ -628,7 +628,7 @@ function deleteFields(obj, fields) {
     delete obj[fields[i]]
   }
 }
-function submitFormData(e) {
+function submitFormData(e, partId) {
   e.preventDefault()
   var target = e.target
   var form = target.form
@@ -653,7 +653,8 @@ function submitFormData(e) {
           response
             .text()
             .then(function (data) {
-              var pageBody = document.getElementById("pageBody")
+              var pageId = partId && partId.length > 0 ? partId : resources.pageBody
+              var pageBody = document.getElementById(pageId)
               if (pageBody) {
                 pageBody.innerHTML = data
                 afterLoaded(pageBody)

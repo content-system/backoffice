@@ -107,7 +107,7 @@ function toggleMenuItem(e) {
   }
 }
 var cacheScript = new Map()
-function navigate(e, ignoreLang) {
+function navigate(e, ignoreLang, partId) {
   e.preventDefault()
   var target = e.target
   var link = findParentNode(target, "A")
@@ -120,8 +120,14 @@ function navigate(e, ignoreLang) {
     var search_1 = window.location.search.length > 0 ? window.location.search.substring(1) : ""
     var lang = getField(search_1, "lang")
     var url_1 = link.href
+    var pageId_1 = resources.pageBody
+    var sub = ""
+    if (partId && partId.length > 0) {
+      pageId_1 = partId
+      sub = "&" + resources.subPartial + "=true"
+    }
     var lang1 = lang.length > 0 && !ignoreLang ? "&" + lang : ""
-    var newUrl = url_1 + (url_1.indexOf("?") > 0 ? "&" : "?") + "partial=true" + lang1
+    var newUrl = url_1 + (url_1.indexOf("?") > 0 ? "&" : "?") + (resources.partial + "=true" + sub) + lang1
     showLoading()
     fetch(newUrl, { method: "GET", headers: getHeaders() })
       .then(function (response) {
@@ -129,7 +135,7 @@ function navigate(e, ignoreLang) {
           response
             .text()
             .then(function (data) {
-              var pageBody = document.getElementById("pageBody")
+              var pageBody = document.getElementById(pageId_1)
               if (pageBody) {
                 pageBody.innerHTML = data
                 if (resources.refreshLoad) {

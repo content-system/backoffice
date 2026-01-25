@@ -645,7 +645,7 @@ function deleteFields(obj: any, fields: string[]) {
     delete obj[fields[i]]
   }
 }
-function submitFormData(e: Event) {
+function submitFormData(e: Event, partId?: string) {
   e.preventDefault()
   const target = e.target as HTMLButtonElement
   const form = target.form as HTMLFormElement
@@ -670,7 +670,8 @@ function submitFormData(e: Event) {
           response
             .text()
             .then((data) => {
-              const pageBody = document.getElementById("pageBody")
+              const pageId = partId && partId.length > 0 ? partId : resources.pageBody
+              const pageBody = document.getElementById(pageId)
               if (pageBody) {
                 pageBody.innerHTML = data
                 afterLoaded(pageBody)

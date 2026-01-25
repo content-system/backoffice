@@ -124,6 +124,7 @@ td > button {
   background-image: inherit;
 }
 
+.form.view-container > div.row,
 .page-body > .form > div.row,
 .view-body.row {
   margin-left: 0;
@@ -135,13 +136,6 @@ td > button {
 .modal-portal-content > div > header {
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
-}
-.mobile .list-detail-container > .list-content > header,
-.mobile .list-detail-container > .detail-content > form > header,
-.mobile .view-header {
-  justify-content: center;
-  border-bottom-left-radius: 7px;
-  border-bottom-right-radius: 7px;
 }
 
 @media screen and (max-width: 600px) {
@@ -159,6 +153,7 @@ td > button {
 }
 
 .detail-content > form > footer,
+.view-container.form > footer,
 .page-body > .form > footer,
 .view-footer {
   left: 0;
@@ -200,14 +195,6 @@ td > button {
   padding-right: 8px;
   margin: 0 0 16px 0;
 }
-/*
-.section:first-child {
-  margin-top: 8px;
-}
-.section:last-child {
-  margin-bottom: 0;
-}
-*/
 .page-body > .form > div.background-content > section:nth-child(2),
 .view-body > section:nth-child(2) {
   background-image: none;
@@ -251,35 +238,7 @@ td > button {
   width: 60px;
   height: 60px;
 }
-/*
-.page-body > .form > div > p,
-.view-body > p,
-.body-content {
-  margin-top: 24px;
-  margin-bottom: 0;
-  word-break: break-all;
-}
 
-.page-body > .form > div > h5,
-.view-body > h5,
-.body-header {
-  margin-top: 19px;
-  margin-bottom: 19px;
-  font-size: 18px;
-}
-
-header > h5,
-.view-subtitle {
-  font-size: 14px;
-  padding-top: 4px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  margin-bottom: 0;
-  padding-left: 16px;
-  padding-right: 16px;
-}
-*/
 h1,
 h2 {
   font-size: 20px;
@@ -308,15 +267,11 @@ h4 {
   font-size: 16px;
   font-weight: 500;
 }
-/*
-h4:not(:first-child):not(:nth-child(2)) {
-  margin-top: 10px;
-}
-*/
-.page-body > div > div > h2:first-child,
-.page-body > div > div > h3:first-child,
-.page-body > div > div > h4:first-child,
-.page-body > div > div > p:first-child {
+
+.search-body > h2:first-child,
+.search-body > h3:first-child,
+.search-body > h4:first-child,
+.search-body > p:first-child {
   margin-top: 8px;
 }
 header > h1,

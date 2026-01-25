@@ -18,8 +18,14 @@ class resources {
   static defaultLimit = 12
   static max = 20
   static containerClass = "form-input"
+  static pageBody = "pageBody"
   static hiddenMessage = "hidden-message"
   static token = "token"
+  static partial = "partial"
+  static subPartial = "sub"
+  static page = "page"
+  static limit = "limit"
+  static fields = "fields"
 
   static load?: (pageBody: HTMLElement) => void
 
@@ -139,7 +145,7 @@ function removeParent(target: HTMLElement) {
 
 const histories: string[] = []
 const historyMax = 10
-function goBack() {
+function goBack(partId?: string) {
   let url = histories.pop()
   if (url) {
     const newUrl = url + (url.indexOf("?") >= 0 ? "&" : "?") + "partial=true"
@@ -150,7 +156,8 @@ function goBack() {
           response
             .text()
             .then((data) => {
-              const pageBody = document.getElementById("pageBody")
+              const pageId = partId && partId.length > 0 ? partId : resources.pageBody
+              const pageBody = document.getElementById(pageId)
               if (pageBody) {
                 pageBody.innerHTML = data
                 window.history.pushState({ pageTitle: "" }, "", url)

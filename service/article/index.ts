@@ -1,7 +1,7 @@
-import { slugify } from "common/slug"
 import { nanoid } from "nanoid"
 import { Log, UseCase } from "onecore"
 import { DB, Repository } from "query-core"
+import { slugify } from "../common/slug"
 import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService, Draft } from "./article"
 import { ArticleController } from "./controller"
 import { buildQuery } from "./query"

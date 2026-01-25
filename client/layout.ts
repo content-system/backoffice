@@ -107,7 +107,7 @@ function toggleMenuItem(e: Event) {
   }
 }
 const cacheScript = new Map<string, string>()
-function navigate(e: Event, ignoreLang?: boolean) {
+function navigate(e: Event, ignoreLang?: boolean, partId?: string) {
   e.preventDefault()
   const target = e.target as HTMLElement
   const link = findParentNode(target, "A") as HTMLLinkElement
@@ -125,8 +125,14 @@ function navigate(e: Event, ignoreLang?: boolean) {
       url = url + (url.indexOf("?") > 0 ? "&" : "?") + lang
     }
     */
+    let pageId = resources.pageBody
+    let sub = ""
+    if (partId && partId.length > 0) {
+      pageId = partId
+      sub = `&${resources.subPartial}=true`
+    }
     const lang1 = lang.length > 0 && !ignoreLang ? "&" + lang : ""
-    const newUrl = url + (url.indexOf("?") > 0 ? "&" : "?") + "partial=true" + lang1
+    const newUrl = url + (url.indexOf("?") > 0 ? "&" : "?") + `${resources.partial}=true${sub}` + lang1
     showLoading()
     fetch(newUrl, { method: "GET", headers: getHeaders() })
       .then((response) => {
@@ -134,7 +140,7 @@ function navigate(e: Event, ignoreLang?: boolean) {
           response
             .text()
             .then((data) => {
-              const pageBody = document.getElementById("pageBody")
+              const pageBody = document.getElementById(pageId)
               if (pageBody) {
                 pageBody.innerHTML = data
                 if (resources.refreshLoad) {

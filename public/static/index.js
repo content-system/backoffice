@@ -8,8 +8,14 @@ var resources = (function () {
   resources.defaultLimit = 12
   resources.max = 20
   resources.containerClass = "form-input"
+  resources.pageBody = "pageBody"
   resources.hiddenMessage = "hidden-message"
   resources.token = "token"
+  resources.partial = "partial"
+  resources.subPartial = "sub"
+  resources.page = "page"
+  resources.limit = "limit"
+  resources.fields = "fields"
   resources.num1 = / |,|\$|€|£|¥|'|٬|،| /g
   resources.num2 = / |\.|\$|€|£|¥|'|٬|،| /g
   resources.email = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,4})$/i
@@ -120,7 +126,7 @@ function removeParent(target) {
 }
 var histories = []
 var historyMax = 10
-function goBack() {
+function goBack(partId) {
   var url = histories.pop()
   if (url) {
     var newUrl = url + (url.indexOf("?") >= 0 ? "&" : "?") + "partial=true"
@@ -131,7 +137,8 @@ function goBack() {
           response
             .text()
             .then(function (data) {
-              var pageBody = document.getElementById("pageBody")
+              var pageId = partId && partId.length > 0 ? partId : resources.pageBody
+              var pageBody = document.getElementById(pageId)
               if (pageBody) {
                 pageBody.innerHTML = data
                 window.history.pushState({ pageTitle: "" }, "", url)
