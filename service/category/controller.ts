@@ -33,7 +33,7 @@ export class CategoryController {
     this.view = this.view.bind(this)
     this.submit = this.submit.bind(this)
   }
-  search(req: Request, res: Response) {
+  async search(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     let filter: CategoryFilter = {
@@ -44,28 +44,28 @@ export class CategoryController {
     }
     const { page, limit, sort } = filter
     const offset = getOffset(limit, page)
-    this.service
-      .search(filter, limit, page)
-      .then((result) => {
-        const list = escapeArray(result.list, offset, "no")
-        const search = getSearch(req.url)
-        const permissions = res.locals.permissions as number
-        const readonly = write != (write & permissions)
-        render(req, res, "categories", {
-          resource,
-          readonly,
-          limits: resources.limits,
-          filter,
-          list,
-          pages: buildPages(limit, result.total),
-          pageSearch: buildPageSearch(search),
-          sort: buildSortSearch(search, fields, sort),
-          message: buildMessage(resource, list, limit, page, result.total),
-        })
+    try {
+      const result = await this.service.search(filter, limit, page)
+      const list = escapeArray(result.list, offset, "no")
+      const search = getSearch(req.url)
+      const permissions = res.locals.permissions as number
+      const readonly = write != (write & permissions)
+      render(req, res, "categories", {
+        resource,
+        readonly,
+        limits: resources.limits,
+        filter,
+        list,
+        pages: buildPages(limit, result.total),
+        pageSearch: buildPageSearch(search),
+        sort: buildSortSearch(search, fields, sort),
+        message: buildMessage(resource, list, limit, page, result.total),
       })
-      .catch((err) => renderError500(req, res, resource, err))
+    } catch (err) {
+      renderError500(req, res, resource, err)
+    }
   }
-  view(req: Request, res: Response) {
+  async view(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const id = req.params.id
@@ -83,23 +83,23 @@ export class CategoryController {
         category: escape(category),
       })
     } else {
-      this.service
-        .load(id)
-        .then((category) => {
-          if (!category) {
-            return renderError404(req, res, resource)
-          }
-          render(req, res, "category", {
-            resource,
-            readonly,
-            editMode,
-            category: escape(category),
-          })
+      try {
+        const category = await this.service.load(id)
+        if (!category) {
+          return renderError404(req, res, resource)
+        }
+        render(req, res, "category", {
+          resource,
+          readonly,
+          editMode,
+          category: escape(category),
         })
-        .catch((err) => renderError500(req, res, resource, err))
+      } catch (err) {
+        renderError500(req, res, resource, err)
+      }
     }
   }
-  submit(req: Request, res: Response) {
+  async submit(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const category = req.body
@@ -109,22 +109,18 @@ export class CategoryController {
     }
     const id = req.params.id
     const editMode = id !== "new"
-    if (!editMode) {
-      this.service
-        .create(category)
-        .then((result) => {
-          const status = isSuccessful(result) ? 201 : 409
-          res.status(status).json(result).end()
-        })
-        .catch((err) => handleError(err, res, this.log))
-    } else {
-      this.service
-        .update(category)
-        .then((result) => {
-          const status = isSuccessful(result) ? 200 : 410
-          res.status(status).json(result).end()
-        })
-        .catch((err) => handleError(err, res, this.log))
+    try {
+      if (!editMode) {
+        const result = await this.service.create(category)
+        const status = isSuccessful(result) ? 201 : 409
+        res.status(status).json(result).end()
+      } else {
+        const result = await this.service.update(category)
+        const status = isSuccessful(result) ? 200 : 410
+        res.status(status).json(result).end()
+      }
+    } catch (err) {
+      handleError(err, res, this.log)
     }
   }
 }

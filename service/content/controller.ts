@@ -30,7 +30,7 @@ export class ContentController {
     this.view = this.view.bind(this)
     this.submit = this.submit.bind(this)
   }
-  search(req: Request, res: Response) {
+  async search(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
@@ -41,32 +41,32 @@ export class ContentController {
     }
     const { page, limit, sort } = filter
     const offset = getOffset(limit, page)
-    this.service
-      .search(filter, limit, page)
-      .then((result) => {
-        const list = escapeArray(result.list, offset, "sequence")
-        for (const item of list) {
-          item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
-        }
-        const search = getSearch(req.url)
-        const permissions = res.locals.permissions as number
-        const readonly = write != (write & permissions)
-        render(req, res, "contents", {
-          resource,
-          readonly,
-          dateFormat,
-          limits: resources.limits,
-          filter,
-          list,
-          pages: buildPages(limit, result.total),
-          pageSearch: buildPageSearch(search),
-          sort: buildSortSearch(search, fields, sort),
-          message: buildMessage(resource, list, limit, page, result.total),
-        })
+    try {
+      const result = await this.service.search(filter, limit, page)
+      const list = escapeArray(result.list, offset, "sequence")
+      for (const item of list) {
+        item.publishedAt = formatDateTime(item.publishedAt, dateFormat)
+      }
+      const search = getSearch(req.url)
+      const permissions = res.locals.permissions as number
+      const readonly = write != (write & permissions)
+      render(req, res, "contents", {
+        resource,
+        readonly,
+        dateFormat,
+        limits: resources.limits,
+        filter,
+        list,
+        pages: buildPages(limit, result.total),
+        pageSearch: buildPageSearch(search),
+        sort: buildSortSearch(search, fields, sort),
+        message: buildMessage(resource, list, limit, page, result.total),
       })
-      .catch((err) => renderError500(req, res, resource, err))
+    } catch (err) {
+      renderError500(req, res, resource, err)
+    }
   }
-  view(req: Request, res: Response) {
+  async view(req: Request, res: Response) {
     const id = req.params.id
     const lang = req.params.lang
     const language = getLang(req, res)
@@ -77,21 +77,21 @@ export class ContentController {
     }
     const permissions = res.locals.permissions as number
     const readonly = write != (write & permissions)
-    this.service
-      .load(id, lang)
-      .then((content) => {
-        if (!content) {
-          return renderError404(req, res, resource)
-        }
-        render(req, res, "content", {
-          resource,
-          content: escape(content),
-          readonly,
-        })
+    try {
+      const content = await this.service.load(id, lang)
+      if (!content) {
+        return renderError404(req, res, resource)
+      }
+      render(req, res, "content", {
+        resource,
+        content: escape(content),
+        readonly,
       })
-      .catch((err) => handleError(err, res, this.log))
+    } catch (err) {
+      renderError500(req, res, resource, err)
+    }
   }
-  submit(req: Request, res: Response) {
+  async submit(req: Request, res: Response) {
     const language = getLang(req, res)
     const resource = getResource(language)
     const content = req.body
@@ -101,22 +101,18 @@ export class ContentController {
     }
     const id = req.params.id
     const editMode = id !== "new"
-    if (!editMode) {
-      this.service
-        .create(content)
-        .then((result) => {
-          const status = isSuccessful(result) ? 201 : 409
-          res.status(status).json(result).end()
-        })
-        .catch((err) => handleError(err, res, this.log))
-    } else {
-      this.service
-        .update(content)
-        .then((result) => {
-          const status = isSuccessful(result) ? 200 : 410
-          res.status(status).json(result).end()
-        })
-        .catch((err) => handleError(err, res, this.log))
+    try {
+      if (!editMode) {
+        const result = await this.service.create(content)
+        const status = isSuccessful(result) ? 201 : 409
+        res.status(status).json(result).end()
+      } else {
+        const result = await this.service.update(content)
+        const status = isSuccessful(result) ? 200 : 410
+        res.status(status).json(result).end()
+      }
+    } catch (err) {
+      handleError(err, res, this.log)
     }
   }
 }

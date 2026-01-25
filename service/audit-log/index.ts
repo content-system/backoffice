@@ -29,7 +29,7 @@ export class AuditLogController {
   constructor(private search: Search<AuditLog, AuditLogFilter>, private log: Log) {
     this.render = this.render.bind(this)
   }
-  render(req: Request, res: Response) {
+  async render(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
@@ -47,12 +47,13 @@ export class AuditLogController {
     }
     const { page, limit, sort } = filter
     const offset = getOffset(limit, page)
-    this.search(filter, limit, page).then((result) => {
+    try {
+      const result = await this.search(filter, limit, page)
       for (const item of result.list) {
         item.time = formatFullDateTime(item.time, dateFormat)
       }
       const list = escapeArray(result.list, offset, "sequence")
-      const search = getSearch(req.url)  
+      const search = getSearch(req.url)
       render(req, res, "audit-logs", {
         resource,
         limits: resources.limits,
@@ -63,8 +64,9 @@ export class AuditLogController {
         sort: buildSortSearch(search, fields, sort),
         message: buildMessage(resource, list, limit, page, result.total),
       })
-    })
-    .catch((err) => renderError500(req, res, resource, err))
+    } catch (err) {
+      renderError500(req, res, resource, err)
+    }
   }
 }
 

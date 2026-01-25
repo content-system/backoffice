@@ -38,7 +38,7 @@ export class RoleController {
     this.renderAssign = this.renderAssign.bind(this)
     this.assign = this.assign.bind(this)
   }
-  search(req: Request, res: Response) {
+  async search(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     let filter: RoleFilter = {
@@ -50,28 +50,28 @@ export class RoleController {
     }
     const { page, limit, sort } = filter
     const offset = getOffset(limit, page)
-    this.service
-      .search(filter, limit, page)
-      .then((result) => {
-        const list = escapeArray(result.list, offset, "sequence")
-        const search = getSearch(req.url)
-        const permissions = res.locals.permissions as number
-        const readonly = write != (write & permissions)
-        render(req, res, "roles", {
-          resource,
-          readonly,
-          limits: resources.limits,
-          filter,
-          list,
-          pages: buildPages(limit, result.total),
-          pageSearch: buildPageSearch(search),
-          sort: buildSortSearch(search, fields, sort),
-          message: buildMessage(resource, list, limit, page, result.total),
-        })
+    try {
+      const result = await this.service.search(filter, limit, page)
+      const list = escapeArray(result.list, offset, "sequence")
+      const search = getSearch(req.url)
+      const permissions = res.locals.permissions as number
+      const readonly = write != (write & permissions)
+      render(req, res, "roles", {
+        resource,
+        readonly,
+        limits: resources.limits,
+        filter,
+        list,
+        pages: buildPages(limit, result.total),
+        pageSearch: buildPageSearch(search),
+        sort: buildSortSearch(search, fields, sort),
+        message: buildMessage(resource, list, limit, page, result.total),
       })
-      .catch((err) => renderError500(req, res, resource, err))
+    } catch (err) {
+      renderError500(req, res, resource, err)
+    }
   }
-  view(req: Request, res: Response) {
+  async view(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const id = req.params.id
@@ -89,20 +89,20 @@ export class RoleController {
         role: escape(role),
       })
     } else {
-      this.service
-        .load(id)
-        .then((role) => {
-          if (!role) {
-            return renderError404(req, res, resource)
-          }
-          render(req, res, "role", {
-            resource,
-            readonly,
-            editMode,
-            role: escape(role),
-          })
+      try {
+        const role = await this.service.load(id)
+        if (!role) {
+          return renderError404(req, res, resource)
+        }
+        render(req, res, "role", {
+          resource,
+          readonly,
+          editMode,
+          role: escape(role),
         })
-        .catch((err) => renderError500(req, res, resource, err))
+      } catch (err) {
+        renderError500(req, res, resource, err)
+      }
     }
   }
   submit(req: Request, res: Response) {
@@ -115,37 +115,36 @@ export class RoleController {
     }
     save(req.params.id !== "new", res, role, this.service, this.log)
   }
-  renderAssign(req: Request, res: Response) {
+  async renderAssign(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const id = req.params.id
-    this.service
-      .load(id)
-      .then((role) => {
-        if (!role) {
-          return renderError404(req, res, resource)
-        }
-        const permissions = res.locals.permissions as number
-        const readonly = write != (write & permissions)
-        this.userService.getUsersOfRole(id).then((users) => {
-          render(req, res, "role-assign", {
-            resource,
-            readonly,
-            role: escape(role),
-            users: escapeArray(users),
-          })
-        })
+    try {
+      const role = await this.service.load(id)
+      if (!role) {
+        return renderError404(req, res, resource)
+      }
+      const permissions = res.locals.permissions as number
+      const readonly = write != (write & permissions)
+      const users = await this.userService.getUsersOfRole(id)
+      render(req, res, "role-assign", {
+        resource,
+        readonly,
+        role: escape(role),
+        users: escapeArray(users),
       })
-      .catch((err) => renderError500(req, res, resource, err))
+    } catch (err) {
+      renderError500(req, res, resource, err)
+    }
   }
-  assign(req: Request, res: Response) {
+  async assign(req: Request, res: Response) {
     const id = req.params.id
     const roles = req.body as string[]
-    this.service
-      .assign(id, roles)
-      .then((result) => {
-        res.status(204).end()
-      })
-      .catch((err) => handleError(err, res, this.log))
+    try {
+      await this.service.assign(id, roles)
+      res.status(204).end()
+    } catch (err) {
+      handleError(err, res, this.log)
+    }
   }
 }
