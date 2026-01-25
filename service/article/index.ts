@@ -2,6 +2,7 @@ import { nanoid } from "nanoid"
 import { Log, UseCase } from "onecore"
 import { DB, Repository } from "query-core"
 import { slugify } from "../common/slug"
+import { Action, HistoryAdapter, HistoryRepository } from "../shared/history"
 import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService, Status } from "./article"
 import { ArticleController } from "./controller"
 import { buildQuery } from "./query"
@@ -14,15 +15,17 @@ export class SqlArticleRepository extends Repository<Article, string, ArticleFil
   }
 }
 export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> implements ArticleService {
-  constructor(repository: ArticleRepository) {
+  constructor(repository: ArticleRepository, protected historyRepository: HistoryRepository<Article>) {
     super(repository)
   }
-  create(article: Article, ctx?: any): Promise<number> {
+  async create(article: Article, ctx?: any): Promise<number> {
     article.id = nanoid(10)
     article.slug = slugify(article.title, article.id)
     article.authorId = article.createdBy
     article.status = Status.Draft
-    return this.repository.create(article, ctx)
+    const res = await this.repository.create(article, ctx)
+    await this.historyRepository.create(article.id, article.updatedBy, Action.Create, article)
+    return res
   }
   async update(article: Article, ctx?: any): Promise<number> {
     const existingArticle = await this.repository.load(article.id)
@@ -32,7 +35,9 @@ export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> impl
     if (existingArticle.status === Status.Draft) {
       article.slug = slugify(article.title, article.id)
     }
-    return this.repository.update(article, ctx)
+    const res = this.repository.update(article, ctx)
+    await this.historyRepository.create(article.id, article.updatedBy, Action.Update, article)
+    return res
   }
   async patch(article: Partial<Article>, ctx?: any): Promise<number> {
     if (article.title && article.title.length > 0) {
@@ -54,6 +59,7 @@ export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> impl
 
 export function useArticleController(db: DB, log: Log): ArticleController {
   const repository = new SqlArticleRepository(db)
-  const service = new ArticleUseCase(repository)
+  const historyRepository = new HistoryAdapter<Article>(db, "article", "histories", "history_id", "entity", "id", "author", "time", "action", "data", ["id", "createdBy", "createdAt", "updatedBy", "updatedAt"])
+  const service = new ArticleUseCase(repository, historyRepository)
   return new ArticleController(service, log)
 }

@@ -123,12 +123,12 @@ export class ArticleController {
     const editMode = id !== "new"
     try {
       if (!editMode) {
+        article.createdBy = userId
+        article.createdAt = new Date()
         const result = await this.service.create(article)
         const status = isSuccessful(result) ? 201 : 409
         res.status(status).json(result).end()
       } else {
-        article.createdBy = userId
-        article.createdAt = new Date()
         const result = await this.service.update(article)
         const status = isSuccessful(result) ? 200 : 410
         res.status(status).json(result).end()

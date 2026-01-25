@@ -7,15 +7,15 @@ export class Status {
   static readonly approved = 'A'
 }
 export class Action {
-  static readonly create = 'create'
-  static readonly update = 'update'
-  static readonly approve = 'approve'
-  static readonly delete = 'delete'
+  static readonly Create = 'create'
+  static readonly Update = 'update'
+  static readonly Approve = 'approve'
+  static readonly Delete = 'delete'
 }
 export interface HistoryRepository<T> {
-  create(id: string, author: string, data: T, ctx?: any): Promise<number>
+  create(id: string, author: string, action: string, data: T, ctx?: any): Promise<number>
 }
-export class HistoryAdapter<T> {
+export class HistoryAdapter<T> implements HistoryRepository<T> {
   constructor(protected db: DB, protected type: string, protected table: string, protected historyId: string, protected entity: string, protected id: string, protected author: string, protected time: string, protected action: string, protected data: string, protected ignoreFields: string[]) {
 
   }

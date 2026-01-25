@@ -645,3 +645,5 @@ insert into articles (id,slug,title,description,content,published_at,tags,thumbn
   With sustainability at the heart of its operation, the Environmental Policy reflects FPT''s consistent strategy of aligning company growth with
   social responsibility, while also delivering a greater impact for its customers, accompanying them in their green transformation journey.
 </p>','2024-05-30 17:25:00+07','{"greenhouse gas",GHG,"Net Zero emissions"}','https://fptsoftware.com/-/media/project/fpt-software/fso/newsroom/news---press-release/fpt-issues-first-ever-environmental-policy.webp','https://fptsoftware.com/-/media/project/fpt-software/fso/newsroom/news---press-release/fpt-issues-first-ever-environmental-policy.webp','241Wmn_JTF','P','2024-05-30 17:25:05.967+07');
+
+update articles set author_id = '00005', created_by = '00005', update_by = '00005', status = 'P';

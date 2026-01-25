@@ -16,7 +16,7 @@ export interface Article {
   createdAt?: Date
   createdBy?: string
   updatedAt?: Date
-  updatedBy?: string
+  updatedBy: string
 }
 export interface ArticleFilter extends Filter {
   id?: string
