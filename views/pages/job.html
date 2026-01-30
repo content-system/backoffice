@@ -16,9 +16,14 @@
         step=".010" />
     </label>
     <label class="col s12 m6">
-      {{resource.title}}
+      {{resource.company}}
+      <input type="text" id="company" name="company" value="{{job.company}}" maxlength="255" required
+        onblur="requiredOnBlur(event)" placeholder="{{resource.company}}" />
+    </label>
+    <label class="col s12 m6">
+      {{resource.position}}
       <input type="text" id="position" name="position" value="{{job.position}}" maxlength="255" required
-        onblur="requiredOnBlur(event)" placeholder="{{resource.title}}" />
+        onblur="requiredOnBlur(event)" placeholder="{{resource.position}}" />
     </label>
     <label class="col s12 m6">
       {{resource.quantity}}
@@ -34,10 +39,8 @@
     <div class="col s12 m6 radio-section">
       {{resource.status}}
       <div class="radio-group">
-        <label><input type="radio" id="active" name="status" value="A" {% if job.status=="A" %} checked {% endif
-            %} />{{resource.active}}</label>
-        <label><input type="radio" id="inactive" name="status" value="I" {% if job.status=="I" %} checked {% endif
-            %} />{{resource.inactive}}</label>
+        <label><input type="radio" id="active" name="status" value="A" {{isChecked('A', job.status)}}/>{{resource.active}}</label>
+        <label><input type="radio" id="inactive" name="status" value="I" {{isChecked('I', job.status)}}/>{{resource.inactive}}</label>
       </div>
     </div>
     <label class="col s12 auto-height">

@@ -1,4 +1,4 @@
-import { Attributes, Filter, Result, SearchResult, TimeRange } from "onecore"
+import { Attributes, Filter, SearchResult, TimeRange } from "onecore"
 
 export interface Article {
   id: string
@@ -42,10 +42,9 @@ export interface ArticleRepository {
 export interface ArticleService {
   search(filter: ArticleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Article>>
   load(id: string): Promise<Article | null>
-  create(article: Article): Promise<Result<Article>>
-  update(article: Article): Promise<Result<Article>>
-  patch(article: Partial<Article>): Promise<Result<Article>>
-  delete(id: string): Promise<number>
+  create(article: Article): Promise<number>
+  update(article: Article): Promise<number>
+  patch(article: Partial<Article>): Promise<number>
 }
 
 export class Status {

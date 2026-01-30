@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid"
-import { Log, UseCase } from "onecore"
+import { Log, SearchResult } from "onecore"
 import { DB, Repository } from "query-core"
 import { slugify } from "../common/slug"
 import { Action, HistoryAdapter, HistoryRepository } from "../shared/history"
@@ -14,20 +14,26 @@ export class SqlArticleRepository extends Repository<Article, string, ArticleFil
     super(db, "articles", articleModel, buildQuery)
   }
 }
-export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> implements ArticleService {
-  constructor(repository: ArticleRepository, protected historyRepository: HistoryRepository<Article>) {
-    super(repository)
+export class ArticleUseCase implements ArticleService {
+  constructor(protected repository: ArticleRepository, protected historyRepository: HistoryRepository<Article>) {
+
   }
-  async create(article: Article, ctx?: any): Promise<number> {
+  search(filter: ArticleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Article>> {
+    return this.repository.search(filter, limit, page, fields)
+  }
+  load(id: string): Promise<Article | null> {
+    return this.repository.load(id)
+  }
+  async create(article: Article): Promise<number> {
     article.id = nanoid(10)
     article.slug = slugify(article.title, article.id)
     article.authorId = article.createdBy
     article.status = Status.Draft
-    const res = await this.repository.create(article, ctx)
+    const res = await this.repository.create(article)
     await this.historyRepository.create(article.id, article.updatedBy, Action.Create, article)
     return res
   }
-  async update(article: Article, ctx?: any): Promise<number> {
+  async update(article: Article): Promise<number> {
     const existingArticle = await this.repository.load(article.id)
     if (!existingArticle) {
       return 0
@@ -35,11 +41,11 @@ export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> impl
     if (existingArticle.status === Status.Draft) {
       article.slug = slugify(article.title, article.id)
     }
-    const res = this.repository.update(article, ctx)
+    const res = this.repository.update(article)
     await this.historyRepository.create(article.id, article.updatedBy, Action.Update, article)
     return res
   }
-  async patch(article: Partial<Article>, ctx?: any): Promise<number> {
+  async patch(article: Partial<Article>): Promise<number> {
     if (article.title && article.title.length > 0) {
       const id = article.id as string
       const existingArticle = await this.repository.load(id)
@@ -49,10 +55,10 @@ export class ArticleUseCase extends UseCase<Article, string, ArticleFilter> impl
       if (existingArticle.status === Status.Draft) {
         article.slug = slugify(article.title, id)
       }
-      return this.repository.patch(article, ctx)
+      return this.repository.patch(article)
     } else {
       delete article.slug
-      return this.repository.patch(article, ctx)
+      return this.repository.patch(article)
     }
   }
 }
