@@ -45,6 +45,15 @@ label.radio-group,
   color: #4d4d4d;
 }
 
+label.search-input select,
+label.search-input input {
+  color: #4d4d4d !important;
+}
+.row > label.search-input > *,
+.search-input > * {
+  border-color: #b3b3b3 !important;
+}
+
 .list-item > *:last-child,
 .img-item > *:last-child {
   border-bottom-color: #ebebeb;
@@ -213,6 +222,7 @@ input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([i
   border-color: #4d4d4d;
   background: #fff;
 }
+
 .switch-container > input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]):after,
 input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]).switch:after {
   border-color: 1px solid #808080;
@@ -228,20 +238,10 @@ input[type="radio"]:before {
   border-color: #4d4d4d;
   background-image: radial-gradient(circle, #4db6ac 40%, inherit 50%);
 }
-
 input[type="radio"]:checked:before {
   background-color: #4db6ac;
   background-image: radial-gradient(circle, #4db6ac 40%, #4db6ac 50%);
   border-color: #4db6ac;
-}
-
-label.search-input select,
-label.search-input input {
-  color: #4d4d4d !important;
-}
-.row > label.search-input > *,
-.search-input > * {
-  border-color: #b3b3b3 !important;
 }
 
 .row .form-group.valid label,

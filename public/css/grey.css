@@ -48,6 +48,15 @@
   color: #393f48;
 }
 
+.grey label.search-input select,
+.grey label.search-input input {
+  color: #393f48 !important;
+}
+.grey .row > label.search-input > *,
+.grey .search-input > * {
+  border-color: #d1d9e1 !important;
+}
+
 .grey .list-item > *:last-child,
 .grey .img-item > *:last-child {
   border-bottom-color: #e0e0e0;
@@ -214,6 +223,7 @@
   border-color: #393f48;
   background: #fff;
 }
+
 .grey .switch-container > input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]):after,
 .grey input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]).switch:after {
   border-color: #7f7f7f;
@@ -229,20 +239,10 @@
   border-color: #393f48;
   background-image: radial-gradient(circle, #657181 40%, inherit 50%);
 }
-
 .grey input[type="radio"]:checked:before {
   background-color: #657181;
   background-image: radial-gradient(circle, #657181 40%, #657181 50%);
   border-color: #657181;
-}
-
-.grey label.search-input select,
-.grey label.search-input input {
-  color: #393f48 !important;
-}
-.grey .row > label.search-input > *,
-.grey .search-input > * {
-  border-color: #d1d9e1 !important;
 }
 
 .grey .row .form-group.valid label,
