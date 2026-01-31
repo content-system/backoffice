@@ -144,34 +144,6 @@ label.required:before,
   background-color: #d74738;
 }
 
-/*
-.table > thead > tr,
-*/
-.btn-more,
-h1,
-h2,
-.row .form-group.focused label,
-.row > label.focused,
-.row > .col label.focused,
-label.focused,
-.view-body > label.focused,
-.card > footer > button,
-.btn-select,
-.btn-new,
-a.btn-new,
-.btn-table,
-.btn-list,
-.btn-search,
-.btn-lookup,
-.chip:focus,
-header > .btn-group,
-header > .btn-group > button,
-.page-header > form > div > section > button,
-.round-border.active {
-  color: #4db6ac;
-  text-decoration: none;
-}
-
 @media screen and (max-width: 600px) {
   .page-body > .form > header > h2,
   .page-body > div > header > h2,
@@ -229,19 +201,6 @@ footer > button#btnReject {
 footer > .btn-cancel::before {
   color: #fff;
   background-color: #fc671a;
-}
-
-footer > .btn-accept::after,
-footer > .btn-next::after,
-.section.search > .btn-search,
-.central-full button,
-.view-footer > button,
-footer > button {
-  color: #fff;
-  background-color: #4db6ac;
-}
-.btn-secondary {
-  color: #4db6ac;
 }
 
 .switch-container > input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]):before,
@@ -421,6 +380,44 @@ h3 {
 }
 .sidebar .menu-item {
   color: #fff;
+}
+
+.btn-more,
+h1,
+h2,
+.row .form-group.focused label,
+.row > label.focused,
+.row > .col label.focused,
+label.focused,
+.view-body > label.focused,
+.card > footer > button,
+.btn-select,
+.btn-new,
+a.btn-new,
+.btn-table,
+.btn-list,
+.btn-search,
+.btn-lookup,
+.chip:focus,
+header > .btn-group,
+header > .btn-group > button,
+.page-header > form > div > section > button,
+.round-border.active {
+  color: #4db6ac;
+  text-decoration: none;
+}
+
+footer > .btn-accept::after,
+footer > .btn-next::after,
+.section.search > .btn-search,
+.central-full button,
+.view-footer > button,
+footer > button {
+  color: #fff;
+  background-color: #4db6ac;
+}
+.btn-secondary {
+  color: #4db6ac;
 }
 
 .pagination > li > a,

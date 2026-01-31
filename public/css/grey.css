@@ -146,38 +146,6 @@
   background-color: #d74738;
 }
 
-/*
-.grey .table > thead > tr,
-.grey div.card {
-  background-color: #e0e0e0;
-}
-*/
-.grey .btn-more,
-.grey h1,
-.grey h2,
-.grey .row .form-group.focused label,
-.grey .row > label.focused,
-.grey .row > .col label.focused,
-.grey .view-container > form > div > label.focused,
-.grey .view-container > div > label.focused,
-.grey .view-body > label.focused,
-.grey .card > footer > button,
-.grey .btn-select,
-.grey .btn-new,
-.grey a.btn-new,
-.grey .btn-table,
-.grey .btn-list,
-.grey .btn-search,
-.grey .btn-lookup,
-.grey .chip:focus,
-.grey header > .btn-group,
-.grey header > .btn-group > button,
-.grey .page-header > form > div > section > button,
-.grey .round-border.active {
-  color: #657181;
-  text-decoration: none;
-}
-
 @media screen and (max-width: 600px) {
   .grey .page-body > .form > header > h2,
   .grey .page-body > div > header > h2,
@@ -234,19 +202,6 @@
 .grey footer > .btn-cancel::before {
   color: #fff;
   background-color: #fc671a;
-}
-
-.grey footer > .btn-accept::after,
-.grey footer > .btn-next::after,
-.grey .section.search > .btn-search,
-.grey .central-full button,
-.grey .view-footer > button,
-.grey footer > button {
-  color: #fff;
-  background-color: #657181;
-}
-.grey .btn-secondary {
-  color: #657181;
 }
 
 .grey .switch-container > input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]):before,
@@ -420,6 +375,45 @@
 }
 .grey .sidebar {
   border-right: 1px solid #d1d9e3;
+}
+
+.grey .btn-more,
+.grey h1,
+.grey h2,
+.grey .row .form-group.focused label,
+.grey .row > label.focused,
+.grey .row > .col label.focused,
+.grey .view-container > form > div > label.focused,
+.grey .view-container > div > label.focused,
+.grey .view-body > label.focused,
+.grey .card > footer > button,
+.grey .btn-select,
+.grey .btn-new,
+.grey a.btn-new,
+.grey .btn-table,
+.grey .btn-list,
+.grey .btn-search,
+.grey .btn-lookup,
+.grey .chip:focus,
+.grey header > .btn-group,
+.grey header > .btn-group > button,
+.grey .page-header > form > div > section > button,
+.grey .round-border.active {
+  color: #657181;
+  text-decoration: none;
+}
+
+.grey footer > .btn-accept::after,
+.grey footer > .btn-next::after,
+.grey .section.search > .btn-search,
+.grey .central-full button,
+.grey .view-footer > button,
+.grey footer > button {
+  color: #fff;
+  background-color: #657181;
+}
+.grey .btn-secondary {
+  color: #657181;
 }
 
 .grey .pagination > li > a,

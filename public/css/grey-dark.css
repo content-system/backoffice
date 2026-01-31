@@ -149,38 +149,6 @@
   background-color: #d74738;
 }
 
-/*
-.grey.dark .table > thead > tr,
-.grey.dark div.card {
-  background-color: #1f1f1f;
-}
-*/
-.grey.dark .btn-more,
-.grey.dark h1,
-.grey.dark h2,
-.grey.dark .row .form-group.focused label,
-.grey.dark .row > label.focused,
-.grey.dark .row > .col label.focused,
-.grey.dark .view-container > form > div > label.focused,
-.grey.dark .view-container > div > label.focused,
-.grey.dark .view-body > label.focused,
-.grey.dark .card > footer > button,
-.grey.dark .btn-select,
-.grey.dark .btn-new,
-.grey.dark a.btn-new,
-.grey.dark .btn-table,
-.grey.dark .btn-list,
-.grey.dark .btn-search,
-.grey.dark .btn-lookup,
-.grey.dark .chip:focus,
-.grey.dark header > .btn-group,
-.grey.dark header > .btn-group > button,
-.grey.dark .page-header > form > div > section > button,
-.grey.dark .round-border.active {
-  color: #657181;
-  text-decoration: none;
-}
-
 @media screen and (max-width: 600px) {
   .grey.dark .page-body > .form > header > h2,
   .grey.dark .page-body > div > header > h2,
@@ -238,20 +206,6 @@
 .grey.dark footer > .btn-cancel::before {
   color: #000;
   background-color: #fc671a;
-}
-
-.grey.dark footer > .btn-accept::after,
-.grey.dark footer > .btn-next::after,
-.grey.dark .section.search > .btn-search,
-.grey.dark .central-full button,
-.grey.dark .view-footer > button,
-.grey.dark footer > button {
-  color: #000;
-  background-color: #657181;
-}
-.grey.dark .btn-secondary {
-  background-color: inherit;
-  color: #657181;
 }
 
 .grey.dark .switch-container > input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]):before,
@@ -425,6 +379,46 @@
 }
 .grey.dark .sidebar {
   border-right: 1px solid #212325;
+}
+
+.grey.dark .btn-more,
+.grey.dark h1,
+.grey.dark h2,
+.grey.dark .row .form-group.focused label,
+.grey.dark .row > label.focused,
+.grey.dark .row > .col label.focused,
+.grey.dark .view-container > form > div > label.focused,
+.grey.dark .view-container > div > label.focused,
+.grey.dark .view-body > label.focused,
+.grey.dark .card > footer > button,
+.grey.dark .btn-select,
+.grey.dark .btn-new,
+.grey.dark a.btn-new,
+.grey.dark .btn-table,
+.grey.dark .btn-list,
+.grey.dark .btn-search,
+.grey.dark .btn-lookup,
+.grey.dark .chip:focus,
+.grey.dark header > .btn-group,
+.grey.dark header > .btn-group > button,
+.grey.dark .page-header > form > div > section > button,
+.grey.dark .round-border.active {
+  color: #657181;
+  text-decoration: none;
+}
+
+.grey.dark footer > .btn-accept::after,
+.grey.dark footer > .btn-next::after,
+.grey.dark .section.search > .btn-search,
+.grey.dark .central-full button,
+.grey.dark .view-footer > button,
+.grey.dark footer > button {
+  color: #000;
+  background-color: #657181;
+}
+.grey.dark .btn-secondary {
+  background-color: inherit;
+  color: #657181;
 }
 
 .grey.dark .pagination > li > a,

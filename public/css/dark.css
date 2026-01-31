@@ -159,38 +159,6 @@
   background-color: #d74738;
 }
 
-/*
-.dark form.list-result > .table-responsive > table > thead > tr,
-  background-color: #141414;
-}
-*/
-.dark .btn-more,
-.dark h1,
-.dark h2,
-.dark .row .form-group.focused label,
-.dark .row > label.focused,
-.dark .row > .col label.focused,
-.dark .view-container > form > div > label.focused,
-.dark .view-container > div > label.focused,
-.dark .view-body > label.focused,
-.dark .view-container > form > div > h2,
-.dark .card > footer > button,
-.dark .btn-select,
-.dark .btn-new,
-.dark a.btn-new,
-.dark .btn-table,
-.dark .btn-list,
-.dark .btn-search,
-.dark .btn-lookup,
-.dark .chip:focus,
-.dark header > .btn-group,
-.dark header > .btn-group > button,
-.dark .page-header > form > div > section > button,
-.dark .round-border.active {
-  color: #4db6ac;
-  text-decoration: none;
-}
-
 @media screen and (max-width: 600px) {
   .dark .page-body > .form > header > h2,
   .dark .page-body > div > header > h2,
@@ -249,19 +217,6 @@
 .dark footer > .btn-cancel::before {
   color: #000;
   background-color: #fc671a;
-}
-
-.dark footer > .btn-accept::after,
-.dark footer > .btn-next::after,
-.dark .section.search > .btn-search,
-.dark .central-full button,
-.dark .view-footer > button,
-.dark footer > button {
-  color: #000;
-  background-color: #4db6ac;
-}
-.dark .btn-secondary {
-  color: #4db6ac;
 }
 
 .dark .switch-container > input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]):before,
@@ -468,6 +423,46 @@
 }
 .dark .sidebar .menu-item {
   color: #fff;
+}
+
+.dark .btn-more,
+.dark h1,
+.dark h2,
+.dark .row .form-group.focused label,
+.dark .row > label.focused,
+.dark .row > .col label.focused,
+.dark .view-container > form > div > label.focused,
+.dark .view-container > div > label.focused,
+.dark .view-body > label.focused,
+.dark .view-container > form > div > h2,
+.dark .card > footer > button,
+.dark .btn-select,
+.dark .btn-new,
+.dark a.btn-new,
+.dark .btn-table,
+.dark .btn-list,
+.dark .btn-search,
+.dark .btn-lookup,
+.dark .chip:focus,
+.dark header > .btn-group,
+.dark header > .btn-group > button,
+.dark .page-header > form > div > section > button,
+.dark .round-border.active {
+  color: #4db6ac;
+  text-decoration: none;
+}
+
+.dark footer > .btn-accept::after,
+.dark footer > .btn-next::after,
+.dark .section.search > .btn-search,
+.dark .central-full button,
+.dark .view-footer > button,
+.dark footer > button {
+  color: #000;
+  background-color: #4db6ac;
+}
+.dark .btn-secondary {
+  color: #4db6ac;
 }
 
 .dark .pagination > li > a,
