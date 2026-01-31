@@ -128,34 +128,15 @@
   box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075);
 }
 
-.grey.dark .form-group .form-control.invalid,
-.grey.dark label > input:not([type="checkbox"]):not([type="radio"]).invalid,
-.grey.dark label.invalid > input:not([type="checkbox"]):not([type="radio"]):focus,
-.grey.dark label.invalid > select:focus {
-  border-color: #d74738;
-  box-shadow: 0 1px 0 0 #d74738;
+.grey.dark .switch-container > input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]):before,
+.grey.dark input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]).switch:before {
+  border-color: #778497;
+  color: #4c4c4c;
+  background: #000;
 }
-.grey.dark label.invalid > textarea {
-  border-color: #d74738;
-  outline-color: #d74738;
-}
-
-.grey.dark .btn-deselect,
-.grey.dark .row .form-group.invalid label,
-.grey.dark .row .form-group.invalid.focused label,
-.grey.dark label.invalid,
-.grey.dark label.invalid.focused,
-.grey.dark .btn-remove,
-.grey.dark label.required:before,
-.grey.dark .span-error,
-.grey.dark .alert-error,
-.grey.dark .danger-icon .alert-icon {
-  color: #d74738;
-}
-
-.grey.dark .span-error {
-  color: #000;
-  background-color: #d74738;
+.grey.dark input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]):before {
+  border-color: #778497;
+  background: #000;
 }
 
 @media screen and (max-width: 600px) {
@@ -217,15 +198,34 @@
   background-color: #fc671a;
 }
 
-.grey.dark .switch-container > input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]):before,
-.grey.dark input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]).switch:before {
-  border-color: #778497;
-  color: #4c4c4c;
-  background: #000;
+.grey.dark .form-group .form-control.invalid,
+.grey.dark label > input:not([type="checkbox"]):not([type="radio"]).invalid,
+.grey.dark label.invalid > input:not([type="checkbox"]):not([type="radio"]):focus,
+.grey.dark label.invalid > select:focus {
+  border-color: #d74738;
+  box-shadow: 0 1px 0 0 #d74738;
 }
-.grey.dark input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]):before {
-  border-color: #778497;
-  background: #000;
+.grey.dark label.invalid > textarea {
+  border-color: #d74738;
+  outline-color: #d74738;
+}
+
+.grey.dark .btn-deselect,
+.grey.dark .row .form-group.invalid label,
+.grey.dark .row .form-group.invalid.focused label,
+.grey.dark label.invalid,
+.grey.dark label.invalid.focused,
+.grey.dark .btn-remove,
+.grey.dark label.required:before,
+.grey.dark .span-error,
+.grey.dark .alert-error,
+.grey.dark .danger-icon .alert-icon {
+  color: #d74738;
+}
+
+.grey.dark .span-error {
+  color: #000;
+  background-color: #d74738;
 }
 
 .grey.dark .switch-container > input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]):after,

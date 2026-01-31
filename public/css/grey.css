@@ -125,34 +125,15 @@
   box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075);
 }
 
-.grey .form-group .form-control.invalid,
-.grey label > input:not([type="checkbox"]):not([type="radio"]).invalid,
-.grey label.invalid > input:not([type="checkbox"]):not([type="radio"]):focus,
-.grey label.invalid > select:focus {
-  border-color: #d74738;
-  box-shadow: 0 1px 0 0 #d74738;
+.grey .switch-container > input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]):before,
+.grey input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]).switch:before {
+  border-color: #393f48;
+  color: #b3b3b3;
+  background: #fff;
 }
-.grey label.invalid > textarea {
-  border-color: #d74738;
-  outline-color: #d74738;
-}
-
-.grey .btn-deselect,
-.grey .row .form-group.invalid label,
-.grey .row .form-group.invalid.focused label,
-.grey label.invalid,
-.grey label.invalid.focused,
-.grey .btn-remove,
-.grey label.required:before,
-.grey .span-error,
-.grey .alert-error,
-.grey .danger-icon .alert-icon {
-  color: #d74738;
-}
-
-.grey .span-error {
-  color: #fff;
-  background-color: #d74738;
+.grey input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]):before {
+  border-color: #393f48;
+  background: #fff;
 }
 
 @media screen and (max-width: 600px) {
@@ -213,15 +194,34 @@
   background-color: #fc671a;
 }
 
-.grey .switch-container > input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]):before,
-.grey input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]).switch:before {
-  border-color: #393f48;
-  color: #b3b3b3;
-  background: #fff;
+.grey .form-group .form-control.invalid,
+.grey label > input:not([type="checkbox"]):not([type="radio"]).invalid,
+.grey label.invalid > input:not([type="checkbox"]):not([type="radio"]):focus,
+.grey label.invalid > select:focus {
+  border-color: #d74738;
+  box-shadow: 0 1px 0 0 #d74738;
 }
-.grey input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]):before {
-  border-color: #393f48;
-  background: #fff;
+.grey label.invalid > textarea {
+  border-color: #d74738;
+  outline-color: #d74738;
+}
+
+.grey .btn-deselect,
+.grey .row .form-group.invalid label,
+.grey .row .form-group.invalid.focused label,
+.grey label.invalid,
+.grey label.invalid.focused,
+.grey .btn-remove,
+.grey label.required:before,
+.grey .span-error,
+.grey .alert-error,
+.grey .danger-icon .alert-icon {
+  color: #d74738;
+}
+
+.grey .span-error {
+  color: #fff;
+  background-color: #d74738;
 }
 
 .grey .switch-container > input[type="checkbox"]:not(.modal-trigger):not(.toggle):not(#alert-check):not([id*="lightbox-"]):after,
