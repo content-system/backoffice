@@ -34,27 +34,23 @@ export class SqlUserRepository extends SearchRepository<User, UserFilter> implem
     this.delete = this.delete.bind(this)
     this.assign = this.assign.bind(this)
   }
-  load(id: string): Promise<User | null> {
-    return this.db.query<User>(`select * from users where user_id = ${this.param(1)}`, [id], this.map).then((users) => {
-      if (!users || users.length === 0) {
-        return null
-      }
-      const user = users[0]
-      const query = `select role_id from user_roles where user_id = ${this.param(1)}`
-      return this.db.query<UserRole>(query, [id], this.roleMap).then((roles) => {
-        if (roles && roles.length > 0) {
-          user.roles = roles.map((i) => i.roleId)
-        }
-        return user
-      })
-    })
+  async load(id: string): Promise<User | null> {
+    let query = `select * from users where user_id = ${this.param(1)}`
+    let users = await this.db.query<User>(query, [id], this.map)
+    if (!users || users.length === 0) {
+      return null
+    }
+    const user = users[0]
+    query = `select role_id from user_roles where user_id = ${this.param(1)}`
+    const roles = await this.db.query<UserRole>(query, [id], this.roleMap)
+    if (roles && roles.length > 0) {
+      user.roles = roles.map((i) => i.roleId)
+    }
+    return user
   }
   create(user: User): Promise<number> {
     const stmts: Statement[] = []
     const stmt = buildToInsert(user, "users", userModel, this.param)
-    if (!stmt) {
-      return Promise.resolve(-1)
-    }
     stmts.push(stmt)
     insertUserRoles(stmts, user.userId, user.roles, this.param)
     return this.db.execBatch(stmts, true)
@@ -62,7 +58,7 @@ export class SqlUserRepository extends SearchRepository<User, UserFilter> implem
   update(user: User): Promise<number> {
     const stmts: Statement[] = []
     const stmt = buildToUpdate(user, "users", userModel, this.param)
-    if (!stmt) {
+    if (!stmt.query) {
       return Promise.resolve(-1)
     }
     stmts.push({ query: `delete from user_roles where user_id = ${this.param(1)}`, params: [user.userId] })
