@@ -67,6 +67,7 @@
     </label>
   </div>
   <footer class="view-footer">
-    <button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)" {% if readonly %} disabled {% endif %}>{{resource.save}}</button>
+    <button type="submit" id="btnSaveDraft" name="btnSaveDraft" class="btn-secondary" onclick="submitForm(event, true, true, 'status', 'D')">{{resource.save_draft}}</button>
+    <button type="submit" id="btnSubmit" name="btnSubmit" onclick="submitForm(event, false, false, 'status', 'S')">{{resource.submit}}</button>
   </footer>
 </form>

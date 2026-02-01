@@ -121,7 +121,6 @@
     <button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)" {% if readonly %} disabled {% endif
       %}>{{resource.save}}</button>
   </footer>
-  <script id="job" src="/static/job.js"></script>
   <script data-init-script="true">
     resources.load = function (pageBody) {
       const quill = new Quill("#editor", {

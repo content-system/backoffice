@@ -39,7 +39,7 @@ export const config = {
     users: "kaka,zinedine.zidane,gareth.bale",
   },
   db: {
-    connectionString: "postgres://postgres:abcd1234@localhost/cms2",
+    connectionString: "postgres://postgres:abcd1234@localhost/cms",
   },
   template: true,
   auth: {

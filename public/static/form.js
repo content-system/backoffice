@@ -697,20 +697,26 @@ function getSuccessMessage(ele, resource) {
   var successMsg = ele.getAttribute("data-success")
   return successMsg ? successMsg : resource.msg_save_success
 }
-function submitForm(e) {
+function submitForm(e, skipValidate, skipConfirm, f1, v1, f2, v2) {
   e.preventDefault()
   var target = e.target
   var form = target.form
-  var valid = validateForm(form)
-  if (!valid) {
-    return
+  if (skipValidate) {
+    var valid = validateForm(form)
+    if (!valid) {
+      return
+    }
   }
   var resource = getResource()
   var successMsg = getSuccessMessage(target, resource)
-  var confirmMsg = getConfirmMessage(target, resource)
-  showConfirm(confirmMsg, function () {
-    showLoading()
+  if (skipConfirm) {
     var data = decode(form)
+    if (f1 && f1.length > 0) {
+      data[f1] = v1
+    }
+    if (f2 && f2.length > 0) {
+      data[f2] = v2
+    }
     var url = getCurrentURL()
     fetch(url, {
       method: "POST",
@@ -728,7 +734,36 @@ function submitForm(e) {
       .catch(function (err) {
         return handleError(err, resource.error_network)
       })
-  })
+  } else {
+    var confirmMsg = getConfirmMessage(target, resource)
+    showConfirm(confirmMsg, function () {
+      showLoading()
+      var data = decode(form)
+      if (f1 && f1.length > 0) {
+        data[f1] = v1
+      }
+      if (f2 && f2.length > 0) {
+        data[f2] = v2
+      }
+      var url = getCurrentURL()
+      fetch(url, {
+        method: "POST",
+        headers: getHttpHeaders(),
+        body: JSON.stringify(data),
+      })
+        .then(function (response) {
+          hideLoading()
+          if (response.ok) {
+            alertSuccess(successMsg)
+          } else {
+            handleJsonError(response, resource, form)
+          }
+        })
+        .catch(function (err) {
+          return handleError(err, resource.error_network)
+        })
+    })
+  }
 }
 function handleJsonError(response, resource, form, showErrors, allErrors) {
   if (response.status === 401) {

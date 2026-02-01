@@ -7,6 +7,18 @@
     <h3 class="article-description">{{article.title}}</h3>
     <h4 class="article-description">{{article.description}}</h4>
     <h4 class="article-meta center-align-items">{{article.publishedAt}}</h4>
+  {% if article.createdBy %}
+    <div class="article-meta">{{resource.created_by}}: <strong>{{article.createdBy}}</strong></div>
+  {% endif %}
+  {% if article.createdAt %}
+    <div className="article-meta">{{resource.created_at}}: <strong>{{article.createdAt}}</strong></div>
+  {% endif %}
+  {% if article.submittedBy %}
+    <div className="article-meta">{{resource.submitted_by}}: <strong>{{article.submittedBy}}</strong></div>
+  {% endif %}
+  {% if article.submittedAt %}
+    <div className="article-meta">{{resource.submitted_at}}: <strong>{{article.submittedAt}}</strong></div>
+  {% endif %}
     <div class="article-content">{{article.content}}</div>
     {% if isNotEmpty(article.tags) %}
     <div class="chip-list">{{generateTags(article.tags, true)}}</div>
@@ -14,10 +26,10 @@
   </div>
   <footer>
   {% if canApprove %}
-    <button type="button" id="btnReject" name="btnReject">
+    <button type="button" id="btnReject" name="btnReject" onclick="reject(event)">
       {{resource.reject}}
     </button>
-    <button type="submit" id="btnApprove" name="btnApprove">
+    <button type="submit" id="btnApprove" name="btnApprove" onclick="approve(event)">
       {{resource.approve}}
     </button>
   {% endif %}

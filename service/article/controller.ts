@@ -105,9 +105,6 @@ export class ArticleController {
           }
         } else {
           article = await this.service.loadDraft(id)
-          if (!article) {
-            return renderError404(req, res, resource)
-          }
         }
         if (!article) {
           return renderError404(req, res, resource)
