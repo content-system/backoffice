@@ -23,12 +23,16 @@ import { getLang, getResource } from "../resources"
 import { render, renderError403, renderError404, renderError500 } from "../template"
 import { Article, ArticleFilter, articleModel, ArticleService } from "./article"
 
+const approve = 8
 const fields = ["id", "title", "publishedAt", "description"]
 export class ArticleController {
   constructor(private service: ArticleService, private log: Log) {
     this.search = this.search.bind(this)
     this.view = this.view.bind(this)
     this.submit = this.submit.bind(this)
+    this.renderApprove = this.renderApprove.bind(this)
+    this.approve = this.approve.bind(this)
+    this.reject = this.reject.bind(this)
   }
   async search(req: Request, res: Response) {
     const lang = getLang(req, res)
@@ -131,6 +135,60 @@ export class ArticleController {
         const result = await this.service.update(article)
         const status = isSuccessful(result) ? 200 : 410
         res.status(status).json(result).end()
+      }
+    } catch (err) {
+      handleError(err, res, this.log)
+    }
+  }
+  async renderApprove(req: Request, res: Response) {
+    const lang = getLang(req, res)
+    const resource = getResource(lang)
+    const dateFormat = getDateFormat(lang)
+    const id = req.params.id
+    try {
+      const article = await this.service.load(id)
+      if (!article) {
+        return renderError404(req, res, resource)
+      }
+      article.publishedAt = formatDateTime(article.publishedAt, dateFormat)
+      const permissions = res.locals.permissions as number
+      const canApprove = (approve === (approve & permissions))
+      render(req, res, "approve-article", {
+        resource,
+        canApprove,
+        article,
+      })
+    } catch (err) {
+      renderError500(req, res, resource, err)
+    }
+  }
+  async approve(req: Request, res: Response) {
+    const id = req.params.id as string
+    const userId = res.locals.userId
+    try {
+      const result = await this.service.approve(id, userId)
+      if (isSuccessful(result)) {
+        res.status(200).json(result).end()
+      } else if (result === 0) {
+        res.status(410).json(result).end()
+      } else {
+        res.status(409).json(result).end()
+      }
+    } catch (err) {
+      handleError(err, res, this.log)
+    }
+  }
+  async reject(req: Request, res: Response) {
+    const id = req.params.id as string
+    const userId = res.locals.userId
+    try {
+      const result = await this.service.reject(id, userId)
+      if (isSuccessful(result)) {
+        res.status(200).json(result).end()
+      } else if (result === 0) {
+        res.status(410).json(result).end()
+      } else {
+        res.status(409).json(result).end()
       }
     } catch (err) {
       handleError(err, res, this.log)

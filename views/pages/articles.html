@@ -63,6 +63,7 @@
             <th data-field="description">
               <a href="{{sort.description.url}}" onclick="navigate(event)">{{resource.description}} {{sort.description.tag}}</a>
             </th>
+            <th class="action">{{resource.action}}</th>
           </tr>
         </thead>
         <tbody>
@@ -75,6 +76,14 @@
             <td>{{item.title}}</td>
             <td>{{item.publishedAt}}</td>
             <td>{{item.description}}</td>
+            <td>
+              <div class="btn-group">
+                <button type="button" class="btn-copy"></button>
+                <button type="button" class="btn-edit"></button>
+                <a href="/articles/{{item.id}}/approve" class="btn-approve" onclick="navigate(event)"></a>
+                <button type="button" class="btn-history"></button>
+              </div>
+            </td>
           </tr>
           {% endfor %}
         </tbody>

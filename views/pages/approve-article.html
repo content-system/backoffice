@@ -1,0 +1,34 @@
+<form id="approveArticleForm" name="approveArticleForm" class="form">
+  <header>
+    <button type="button" id="btnBack" name="btnBack" class="btn-back" onclick="goBack()"></button>
+    <h2 class="view-title">{{resource.article}}</h2>
+  </header>
+  <div>
+    <dl class="data-list row">
+      <dt class="col s4 l3">{{resource.id}}</dt>
+      <dd class="col s8 l9">{{article.id}}</dd>
+      <dt class="col s4 l3">{{resource.published_at}}</dt>
+      <dd class="col s8 l9">{{article.publishedAt}}</dd>
+      <dt class="col s4 l3">{{resource.status}}</dt>
+      <dd class="col s8 l9">{{article.status}}</dd>
+      <dt class="col s4 l3">{{resource.title}}</dt>
+      <dd class="col s8 l9">{{article.title}}</dd>
+      <dt class="col s12 l3">{{resource.thumbnail}}</dt>
+      <dd class="col s12 l9">{{article.thumbnail}}</dd>
+      <dt class="col s12 l3">{{resource.description}}</dt>
+      <dd class="col s12 l9">{{article.description}}</dd>
+      <dt class="col s12 l3">{{resource.content}}</dt>
+      <dd class="col s12 l9">{{article.content}}</dd>
+    </dl>
+  </div>
+  <footer>
+  {% if canApprove %}
+    <button type="button" id="btnReject" name="btnReject">
+      {{resource.reject}}
+    </button>
+    <button type="submit" id="btnApprove" name="btnApprove">
+      {{resource.approve}}
+    </button>
+  {% endif %}
+  </footer>
+</form>

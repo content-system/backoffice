@@ -4,6 +4,7 @@ import { Context } from "./context"
 
 export * from "./context"
 
+export const approve = 8
 // const parser = multer()
 
 export function route(app: Application, ctx: Context): void {
@@ -49,9 +50,13 @@ export function route(app: Application, ctx: Context): void {
 
   const readArticle = ctx.authorize("article", read)
   const writeArticle = ctx.authorize("article", write)
+  const approveArticle = ctx.authorize("article", approve)
   app.get("/articles", readArticle, ctx.menu.build, ctx.article.search)
   app.get("/articles/:id", readArticle, ctx.menu.build, ctx.article.view)
   app.post("/articles/:id", writeArticle, ctx.menu.build, json(), ctx.article.submit)
+  app.get("/articles/:id/approve", readArticle, ctx.menu.build, ctx.article.renderApprove)
+  app.post("/articles/:id/approve", approveArticle, ctx.menu.build, ctx.article.approve)
+  app.patch("/articles/:id/approve", approveArticle, ctx.menu.build, ctx.article.reject)
 
   const readJob = ctx.authorize("job", read)
   const writeJob = ctx.authorize("job", write)
