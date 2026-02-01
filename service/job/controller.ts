@@ -107,10 +107,15 @@ export class JobController {
     if (errors.length > 0) {
       return respondError(res, errors)
     }
+    const userId = res.locals.userId
+    job.updatedBy = userId
+    job.updatedAt = new Date()
     const id = req.params.id
     const editMode = id !== "new"
     try {
       if (!editMode) {
+        job.createdBy = userId
+        job.createdAt = new Date()
         const result = await this.service.create(job)
         const status = isSuccessful(result) ? 201 : 409
         res.status(status).json(result).end()

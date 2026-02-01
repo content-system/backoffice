@@ -12,10 +12,9 @@ import {
   handleError,
   hasSearch,
   resources,
-  respondError,
-  save
+  respondError
 } from "express-ext"
-import { Log } from "onecore"
+import { isSuccessful, Log } from "onecore"
 import { write } from "security-express"
 import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
@@ -105,7 +104,7 @@ export class RoleController {
       }
     }
   }
-  submit(req: Request, res: Response) {
+  async submit(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const role = req.body as Role
@@ -113,7 +112,26 @@ export class RoleController {
     if (errors.length > 0) {
       return respondError(res, errors)
     }
-    save(req.params.id !== "new", res, role, this.service, this.log)
+    const userId = res.locals.userId
+    role.updatedBy = userId
+    role.updatedAt = new Date()
+    const id = req.params.id
+    const editMode = id !== "new"
+    try {
+      if (!editMode) {
+        role.createdBy = userId
+        role.createdAt = new Date()
+        const result = await this.service.create(role)
+        const status = isSuccessful(result) ? 201 : 409
+        res.status(status).json(result).end()
+      } else {
+        const result = await this.service.update(role)
+        const status = isSuccessful(result) ? 200 : 410
+        res.status(status).json(result).end()
+      }
+    } catch (err) {
+      handleError(err, res, this.log)
+    }
   }
   async renderAssign(req: Request, res: Response) {
     const lang = getLang(req, res)

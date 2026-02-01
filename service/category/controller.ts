@@ -107,10 +107,15 @@ export class CategoryController {
     if (errors.length > 0) {
       return respondError(res, errors)
     }
+    const userId = res.locals.userId
+    category.updatedBy = userId
+    category.updatedAt = new Date()
     const id = req.params.id
     const editMode = id !== "new"
     try {
       if (!editMode) {
+        category.createdBy = userId
+        category.createdAt = new Date()
         const result = await this.service.create(category)
         const status = isSuccessful(result) ? 201 : 409
         res.status(status).json(result).end()

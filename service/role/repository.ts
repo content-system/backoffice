@@ -85,7 +85,7 @@ export class SqlRoleRepository extends SearchRepository<Role, RoleFilter> implem
       firstSuccess = true
       stmts.push(stmt)
     }
-    if (role.privileges != undefined) {
+    if (role.privileges) {
       const query = `delete from role_modules where role_id = ${this.db.param(1)}`
       stmts.push({ query, params: [role.roleId] })
       insertRoleModules(stmts, role.roleId, role.privileges, this.db.param)

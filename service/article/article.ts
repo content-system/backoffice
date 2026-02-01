@@ -13,10 +13,10 @@ export interface Article {
   authorId?: string
   status?: string
 
+  createdBy: string
   createdAt?: Date
-  createdBy?: string
-  updatedAt?: Date
   updatedBy: string
+  updatedAt?: Date
 }
 export interface ArticleFilter extends Filter {
   id?: string

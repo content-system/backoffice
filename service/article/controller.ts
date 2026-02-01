@@ -116,7 +116,6 @@ export class ArticleController {
       return respondError(res, errors)
     }
     const userId = res.locals.userId
-    console.log("user id " + userId)
     article.updatedBy = userId
     article.updatedAt = new Date()
     const id = req.params.id

@@ -99,10 +99,15 @@ export class ContentController {
     if (errors.length > 0) {
       return respondError(res, errors)
     }
+    const userId = res.locals.userId
+    content.updatedBy = userId
+    content.updatedAt = new Date()
     const id = req.params.id
     const editMode = id !== "new"
     try {
       if (!editMode) {
+        content.createdBy = userId
+        content.createdAt = new Date()
         const result = await this.service.create(content)
         const status = isSuccessful(result) ? 201 : 409
         res.status(status).json(result).end()

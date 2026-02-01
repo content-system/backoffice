@@ -23,10 +23,10 @@ export interface Job {
   maxSalary?: number
   status: string
 
-  createdAt?: Date
   createdBy: string
-  updatedAt?: Date
+  createdAt?: Date
   updatedBy: string
+  updatedAt?: Date
 }
 export interface JobFilter extends Filter {
   id?: string
