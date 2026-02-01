@@ -20,6 +20,7 @@ import { write } from "security-express"
 import { formatDateTime, getDateFormat } from "ui-formatter"
 import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
+import { Status } from "../shared/status"
 import { render, renderError403, renderError404, renderError500 } from "../template"
 import { Article, ArticleFilter, articleModel, ArticleService } from "./article"
 
@@ -88,19 +89,19 @@ export class ArticleController {
       if (readonly) {
         return renderError403(req, res, resource)
       }
-      render(req, res, "article", {
+      render(req, res, "article-form", {
         resource,
         editMode,
         article: {},
       })
     } else {
       try {
-        const article = await this.service.load(id)
+        const article = await this.service.loadDraft(id)
         if (!article) {
           return renderError404(req, res, resource)
         }
         article.publishedAt = formatDateTime(article.publishedAt, dateFormat)
-        render(req, res, "article", {
+        render(req, res, "article-form", {
           resource,
           readonly,
           editMode,
@@ -115,9 +116,11 @@ export class ArticleController {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const article = req.body as Article
-    const errors = validate<Article>(article, articleModel, resource)
-    if (errors.length > 0) {
-      return respondError(res, errors)
+    if (article.status === Status.Submitted) {
+      const errors = validate<Article>(article, articleModel, resource)
+      if (errors.length > 0) {
+        return respondError(res, errors)
+      }
     }
     const userId = res.locals.userId
     article.updatedBy = userId
@@ -133,8 +136,13 @@ export class ArticleController {
         res.status(status).json(result).end()
       } else {
         const result = await this.service.update(article)
-        const status = isSuccessful(result) ? 200 : 410
-        res.status(status).json(result).end()
+        if (isSuccessful(result)) {
+          res.status(200).json(result).end()
+        } else if (result === 0) {
+          res.status(410).json(result).end()
+        } else {
+          res.status(400).json(result).end()
+        }
       }
     } catch (err) {
       handleError(err, res, this.log)

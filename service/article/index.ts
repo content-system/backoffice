@@ -40,8 +40,11 @@ export class ArticleUseCase implements ArticleService {
   search(filter: ArticleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Article>> {
     return this.draftRepository.search(filter, limit, page, fields)
   }
-  load(id: string): Promise<Article | null> {
+  loadDraft(id: string): Promise<Article | null> {
     return this.draftRepository.load(id)
+  }
+  load(id: string): Promise<Article | null> {
+    return this.repository.load(id)
   }
   async create(article: Article): Promise<number> {
     article.id = nanoid(10)

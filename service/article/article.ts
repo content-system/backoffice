@@ -51,6 +51,7 @@ export interface ArticleRepository {
 }
 export interface ArticleService {
   search(filter: ArticleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Article>>
+  loadDraft(id: string): Promise<Article | null>
   load(id: string): Promise<Article | null>
   create(article: Article): Promise<number>
   update(article: Article): Promise<number>
