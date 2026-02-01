@@ -4,7 +4,7 @@ import fs from "fs"
 import nunjucks, { Template } from "nunjucks"
 import { Log, StringMap } from "onecore"
 import path from "path"
-import { datetimeToString, formatDate, formatDateTime, formatLongDateTime, formatNumber, formatPhone, isChecked } from "ui-formatter"
+import { datetimeToString, formatDate, formatDateTime, formatLongDateTime, formatNumber, formatPhone, isChecked, isNotEmpty } from "ui-formatter"
 
 export class resources {
   static nunjucks: nunjucks.Environment
@@ -34,6 +34,7 @@ export function render(req: Request, res: Response, name: string, obj?: any): vo
   if (obj) {
     obj.menu = res.locals.menu
     obj.isChecked = isChecked
+    obj.isNotEmpty = isNotEmpty
     obj.datetimeToString = datetimeToString
     obj.formatLongDateTime = formatLongDateTime
     obj.formatDateTime = formatDateTime

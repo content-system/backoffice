@@ -96,16 +96,28 @@ export class ArticleController {
       })
     } else {
       try {
-        const article = await this.service.loadDraft(id)
+        let article: Article | null
+        let view = readonly ? "article" : "article-form"
+        if (readonly) {
+          article = await this.service.load(id)
+          if (!article) {
+            article = await this.service.loadDraft(id)
+          }
+        } else {
+          article = await this.service.loadDraft(id)
+          if (!article) {
+            return renderError404(req, res, resource)
+          }
+        }
         if (!article) {
           return renderError404(req, res, resource)
         }
         article.publishedAt = formatDateTime(article.publishedAt, dateFormat)
-        render(req, res, "article-form", {
+        render(req, res, view, {
           resource,
           readonly,
           editMode,
-          article: escape(article),
+          article: readonly ? article : escape(article),
         })
       } catch (err) {
         renderError500(req, res, resource, err)

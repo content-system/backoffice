@@ -1,0 +1,15 @@
+<article class="article">
+  <header>
+    <button type="button" id="btnBack" name="btnBack" class="btn-back" onclick="goBack()"></button>
+    <h2>{{article.title}}</h2>
+  </header>
+  <div class="article-body">
+    <h3 class="article-description">{{article.title}}</h3>
+    <h4 class="article-description">{{article.description}}</h4>
+    <h4 class="article-meta center-align-items">{{article.publishedAt}}</h4>
+    <div class="article-content">{{article.content}}</div>
+    {% if isNotEmpty(article.tags) %}
+    <div class="chip-list">{{generateTags(article.tags, true)}}</div>
+    {% endif %}
+  </div>
+</article>
