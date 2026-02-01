@@ -82,8 +82,8 @@ export class SqlRoleRepository extends SearchRepository<Role, RoleFilter> implem
     const stmt = buildToUpdate(role, "roles", roleModel, this.db.param)
     let firstSuccess = false
     if (stmt.query) {
-      firstSuccess = true
       stmts.push(stmt)
+      firstSuccess = true
     }
     if (role.privileges) {
       const query = `delete from role_modules where role_id = ${this.db.param(1)}`
@@ -119,16 +119,18 @@ export class SqlRoleRepository extends SearchRepository<Role, RoleFilter> implem
 
 function insertRoleModules(stmts: Statement[], roleId: string, privileges: string[] | undefined, param: (i: number) => string): Statement[] {
   if (privileges && privileges.length > 0) {
-    let permissions = 0
+    let permissions = 1
     const modules = privileges.map<Module>((i) => {
+      const ms: Module = { roleId, moduleId: i, permissions }
       if (i.indexOf(" ") > 0) {
-        const s = i.split(" ")
-        permissions = parseInt(s[1], 16)
+        const arr = i.split(" ")
+        permissions = parseInt(arr[1], 16)
         if (isNaN(permissions)) {
           permissions = 0
         }
+        ms.moduleId = arr[0]
+        ms.permissions = permissions
       }
-      const ms: Module = { roleId, moduleId: i, permissions }
       return ms
     })
     const stmt = buildToInsertBatch(modules, "role_modules", roleModuleModel, param)

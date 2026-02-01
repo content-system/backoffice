@@ -56,6 +56,9 @@ export class JobUseCase implements JobService {
       return this.repository.patch(job)
     }
   }
+  delete(id: string): Promise<number> {
+    return this.repository.delete(id)
+  }
 }
 
 export function useJobController(db: DB, log: Log): JobController {

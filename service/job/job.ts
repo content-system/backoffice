@@ -59,6 +59,7 @@ export interface JobService {
   create(job: Job): Promise<number>
   update(job: Job): Promise<number>
   patch(job: Partial<Job>): Promise<number>
+  delete(id: string): Promise<number>
 }
 
 export const jobModel: Attributes = {
