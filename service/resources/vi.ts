@@ -45,6 +45,7 @@ export const vi = {
   msg_confirm_back: "Data has been changed. Your changes will be lost if you do not save them. Are you sure you want to go back?",
   msg_confirm_submit: "Are you sure you want to submit?",
   msg_submit_success: "Data have been submitted successfully",
+  msg_confirm_approve: "Are you sure you want to approve?",
   msg_approve_success: "Data have been approved successfully",
   msg_approve_conflict: "Cannot approve. Maybe someone already approved or rejected.",
   msg_approver_conflict: "Approver cannot be submitter.",
