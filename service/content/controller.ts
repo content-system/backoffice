@@ -12,10 +12,10 @@ import {
   getSearch,
   handleError,
   hasSearch,
+  isSuccessful,
   resources,
   respondError
 } from "express-ext"
-import { isSuccessful, Log } from "onecore"
 import { write } from "security-express"
 import { formatDateTime } from "ui-formatter"
 import { validate } from "xvalidators"
@@ -25,7 +25,7 @@ import { Content, ContentFilter, contentModel, ContentService } from "./content"
 
 const fields = ["id", "lang", "title", "publishedAt", "description", "status"]
 export class ContentController {
-  constructor(private service: ContentService, private log: Log) {
+  constructor(private service: ContentService) {
     this.search = this.search.bind(this)
     this.view = this.view.bind(this)
     this.submit = this.submit.bind(this)
@@ -101,13 +101,11 @@ export class ContentController {
     }
     const userId = res.locals.userId
     content.updatedBy = userId
-    content.updatedAt = new Date()
     const id = req.params.id
     const editMode = id !== "new"
     try {
       if (!editMode) {
         content.createdBy = userId
-        content.createdAt = new Date()
         const result = await this.service.create(content)
         const status = isSuccessful(result) ? 201 : 409
         res.status(status).json(result).end()
@@ -117,7 +115,7 @@ export class ContentController {
         res.status(status).json(result).end()
       }
     } catch (err) {
-      handleError(err, res, this.log)
+      handleError(err, res)
     }
   }
 }

@@ -11,10 +11,10 @@ import {
   getSearch,
   handleError,
   hasSearch,
+  isSuccessful,
   resources,
   respondError
 } from "express-ext"
-import { isSuccessful, Log } from "onecore"
 import { write } from "security-express"
 import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
@@ -30,7 +30,7 @@ function createRole(): Role {
   return role
 }
 export class RoleController {
-  constructor(private service: RoleService, private userService: UserService, private log: Log) {
+  constructor(private service: RoleService, private userService: UserService) {
     this.search = this.search.bind(this)
     this.view = this.view.bind(this)
     this.submit = this.submit.bind(this)
@@ -114,13 +114,11 @@ export class RoleController {
     }
     const userId = res.locals.userId
     role.updatedBy = userId
-    role.updatedAt = new Date()
     const id = req.params.id
     const editMode = id !== "new"
     try {
       if (!editMode) {
         role.createdBy = userId
-        role.createdAt = new Date()
         const result = await this.service.create(role)
         const status = isSuccessful(result) ? 201 : 409
         res.status(status).json(result).end()
@@ -130,7 +128,7 @@ export class RoleController {
         res.status(status).json(result).end()
       }
     } catch (err) {
-      handleError(err, res, this.log)
+      handleError(err, res)
     }
   }
   async renderAssign(req: Request, res: Response) {
@@ -162,7 +160,7 @@ export class RoleController {
       await this.service.assign(id, roles)
       res.status(204).end()
     } catch (err) {
-      handleError(err, res, this.log)
+      handleError(err, res)
     }
   }
 }

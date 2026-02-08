@@ -12,10 +12,10 @@ import {
   getSearch,
   handleError,
   hasSearch,
+  isSuccessful,
   resources,
   respondError
 } from "express-ext"
-import { isSuccessful, Log } from "onecore"
 import { write } from "security-express"
 import { formatDateTime, getDateFormat } from "ui-formatter"
 import { validate } from "xvalidators"
@@ -27,7 +27,7 @@ import { Article, ArticleFilter, articleModel, ArticleService } from "./article"
 const approve = 8
 const fields = ["id", "title", "publishedAt", "description"]
 export class ArticleController {
-  constructor(private service: ArticleService, private log: Log) {
+  constructor(private service: ArticleService) {
     this.search = this.search.bind(this)
     this.view = this.view.bind(this)
     this.submit = this.submit.bind(this)
@@ -133,13 +133,11 @@ export class ArticleController {
     }
     const userId = res.locals.userId
     article.updatedBy = userId
-    article.updatedAt = new Date()
     const id = req.params.id
     const editMode = id !== "new"
     try {
       if (!editMode) {
         article.createdBy = userId
-        article.createdAt = new Date()
         const result = await this.service.create(article)
         const status = isSuccessful(result) ? 201 : 409
         res.status(status).json(result).end()
@@ -154,7 +152,7 @@ export class ArticleController {
         }
       }
     } catch (err) {
-      handleError(err, res, this.log)
+      handleError(err, res)
     }
   }
   async renderApprove(req: Request, res: Response) {
@@ -192,7 +190,7 @@ export class ArticleController {
         res.status(409).json(result).end()
       }
     } catch (err) {
-      handleError(err, res, this.log)
+      handleError(err, res)
     }
   }
   async reject(req: Request, res: Response) {
@@ -208,7 +206,7 @@ export class ArticleController {
         res.status(409).json(result).end()
       }
     } catch (err) {
-      handleError(err, res, this.log)
+      handleError(err, res)
     }
   }
 }

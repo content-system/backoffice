@@ -2,7 +2,7 @@ import { Authenticator, Privilege } from "authen-service"
 import { Request, Response } from "express"
 import { buildError, getView, query, queryLang, toMap } from "express-ext"
 import * as jsonwebtoken from "jsonwebtoken"
-import { Attributes, Log, StringMap } from "onecore"
+import { Attributes, StringMap } from "onecore"
 import { validate } from "xvalidators"
 import { getResource, getResourceByLang } from "../resources"
 import { renderError500 } from "../template"
@@ -29,7 +29,7 @@ export const map: StringMap = {
   "9": "fail_disabled_account",
 }
 export class LoginController {
-  constructor(private authenticator: Authenticator<User, string>, private secret: string, private expiresIn: number, private log: Log) {
+  constructor(private authenticator: Authenticator<User, string>, private secret: string, private expiresIn: number) {
     this.render = this.render.bind(this)
     this.submit = this.submit.bind(this)
   }

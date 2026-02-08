@@ -12,11 +12,10 @@ import {
   getSearch,
   handleError,
   hasSearch,
+  isSuccessful,
   resources,
   respondError
 } from "express-ext"
-import { nanoid } from "nanoid"
-import { isSuccessful, Log } from "onecore"
 import { write } from "security-express"
 import { formatDateTime, formatPhone, getDateFormat } from "ui-formatter"
 import { validate } from "xvalidators"
@@ -26,7 +25,7 @@ import { Contact, ContactFilter, contactModel, ContactService } from "./contact"
 
 const fields = ["name", "email", "phone", "company", "country"]
 export class ContactController {
-  constructor(private service: ContactService, private log: Log) {
+  constructor(private service: ContactService) {
     this.search = this.search.bind(this)
     this.view = this.view.bind(this)
     this.submit = this.submit.bind(this)
@@ -102,8 +101,6 @@ export class ContactController {
     const editMode = id !== "new"
     try {
       if (!editMode) {
-        contact.id = nanoid(10)
-        contact.submittedAt = new Date()
         const result = await this.service.create(contact)
         const status = isSuccessful(result) ? 201 : 409
         res.status(status).json(result).end()
@@ -113,7 +110,7 @@ export class ContactController {
         res.status(status).json(result).end()
       }
     } catch (err) {
-      handleError(err, res, this.log)
+      handleError(err, res)
     }
   }
 }

@@ -1,23 +1,12 @@
 import { nanoid } from "nanoid"
-import { DB, Statement } from "onecore"
-
-export interface Notification {
-  id?: string
-  sender: string
-  receiver: string
-  url?: string
-  message: string
-}
+import { DB, Notification, NotificationPort, Statement } from "onecore"
 
 export function createNotification(sender: string, receiver: string, message: string, url?: string): Notification {
   const notification: Notification = { sender, receiver, message, url }
   return notification
 }
-export interface NotificationPort {
-  push(notification: Notification): Promise<number>
-  pushNotifications(notifications: Notification[]): Promise<number>
-}
-export class NotificationAdapter {
+
+export class NotificationAdapter implements NotificationPort {
   protected unread: string
   protected time: string
   protected url: string
@@ -58,7 +47,7 @@ export class NotificationAdapter {
         ${this.db.param(7)}
       )
     `
-    return this.db.exec(sql, [noti.id, noti.sender, noti.receiver, noti.message, new Date(), noti.url, this.unread])
+    return this.db.execute(sql, [noti.id, noti.sender, noti.receiver, noti.message, new Date(), noti.url, this.unread])
   }
   pushNotifications(notifications: Notification[]): Promise<number> {
     const query = `
@@ -87,6 +76,6 @@ export class NotificationAdapter {
       const statement: Statement = { query, params: [noti.id, noti.sender, noti.receiver, noti.message, now, noti.url, this.unread] }
       statements.push(statement)
     }
-    return this.db.execBatch(statements)
+    return this.db.executeBatch(statements)
   }
 }

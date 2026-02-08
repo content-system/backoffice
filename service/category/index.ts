@@ -1,8 +1,7 @@
-import { Log, UseCase } from "onecore"
+import { UseCase } from "onecore"
 import { DB, Repository } from "query-core"
 import { Category, CategoryFilter, categoryModel, CategoryRepository, CategoryService } from "./category"
 import { CategoryController } from "./controller"
-
 export * from "./controller"
 
 export class SqlCategoryRepository extends Repository<Category, string, CategoryFilter> implements CategoryRepository {
@@ -16,8 +15,8 @@ export class CategoryUseCase extends UseCase<Category, string, CategoryFilter> i
   }
 }
 
-export function useCategoryController(db: DB, log: Log): CategoryController {
+export function useCategoryController(db: DB): CategoryController {
   const repository = new SqlCategoryRepository(db)
   const service = new CategoryUseCase(repository)
-  return new CategoryController(service, log)
+  return new CategoryController(service)
 }

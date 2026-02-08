@@ -2,13 +2,12 @@ import { merge } from "config-plus"
 import cookieParser from "cookie-parser"
 import dotenv from "dotenv"
 import express from "express"
-import { loadTemplates, MiddlewareLogger } from "express-ext"
+import { resources as expressResources, loadTemplates, MiddlewareLogger } from "express-ext"
 import http from "http"
 import { createLogger } from "logger-core"
 import nunjucks from "nunjucks"
 import { Pool } from "pg"
 import { PoolManager } from "pg-extension"
-import { log } from "query-core"
 import { buildTemplates, trim } from "query-mappers"
 import { config, env } from "./config"
 import { route, useContext } from "./service"
@@ -38,6 +37,7 @@ app.set("view engine", "html")
 // app.locals.datetimeToString = datetimeToString
 
 const logger = createLogger(cfg.log)
+expressResources.log = logger.error
 resources.log = logger.error
 
 const middleware = new MiddlewareLogger(logger.info, cfg.middleware)
@@ -46,7 +46,7 @@ app.use(cookieParser())
 
 const templates = loadTemplates(cfg.template, buildTemplates, trim, ["./config/query.xml"])
 const pool = new Pool(cfg.db)
-const db = log(new PoolManager(pool), cfg.log.db, logger, "sql")
+const db = new PoolManager(pool)
 const ctx = useContext(db, logger, middleware, cfg, templates)
 
 route(app, ctx)

@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid"
-import { Log, UseCase } from "onecore"
+import { UseCase } from "onecore"
 import { DB } from "query-core"
 import { TemplateMap, useQuery } from "query-mappers"
 import { SqlRoleQuery } from "../shared/role"
@@ -22,10 +22,10 @@ export class UserUseCase extends UseCase<User, string, UserFilter> implements Us
   }
 }
 
-export function useUserController(log: Log, db: DB, mapper?: TemplateMap): UserController {
+export function useUserController(db: DB, mapper?: TemplateMap): UserController {
   const query = useQuery("user", mapper, userModel, true)
   const repo = new SqlUserRepository(db, query)
   const service = new UserUseCase(repo)
   const roleQuery = new SqlRoleQuery(db);
-  return new UserController(service, roleQuery, log)
+  return new UserController(service, roleQuery)
 }

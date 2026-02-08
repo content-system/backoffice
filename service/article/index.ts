@@ -1,11 +1,11 @@
 import { nanoid } from "nanoid"
-import { Log, SearchResult } from "onecore"
+import { ApproversPort, HistoryRepository, Log, Notification, NotificationPort, SearchResult } from "onecore"
 import { buildToSave } from "pg-extension"
 import { DB, Repository, SqlViewRepository } from "query-core"
 import { slugify } from "../common/slug"
-import { ApproversAdapter, ApproversPort } from "../shared/approvers"
-import { Action, HistoryAdapter, HistoryRepository } from "../shared/history"
-import { createNotification, Notification, NotificationAdapter, NotificationPort } from "../shared/notification"
+import { ApproversAdapter } from "../shared/approvers"
+import { HistoryAdapter, ignoreFields } from "../shared/history"
+import { createNotification, NotificationAdapter } from "../shared/notification"
 import { canUpdate, Status } from "../shared/status"
 import { Article, ArticleFilter, articleModel, ArticleRepository, ArticleService, DraftArticleRepository } from "./article"
 import { ArticleController } from "./controller"
@@ -19,11 +19,11 @@ export class SqlDraftArticleRepository extends Repository<Article, string, Artic
 }
 export class SqlArticleRepository extends SqlViewRepository<Article, string> implements ArticleRepository {
   constructor(protected db: DB) {
-    super(db.query, "articles", articleModel, db.param)
+    super(db, "articles", articleModel)
   }
   save(article: Article): Promise<number> {
     const stmt = buildToSave(article, "articles", articleModel)
-    return this.db.exec(stmt.query, stmt.params)
+    return this.db.execute(stmt.query, stmt.params)
   }
 }
 
@@ -31,7 +31,7 @@ export class ArticleUseCase implements ArticleService {
   constructor(
     protected draftRepository: DraftArticleRepository,
     protected repository: ArticleRepository,
-    protected historyPort: HistoryRepository<Article>,
+    protected historyRepository: HistoryRepository<Article>,
     protected approversPort: ApproversPort,
     protected notificationPort: NotificationPort,
     protected log: Log
@@ -58,12 +58,12 @@ export class ArticleUseCase implements ArticleService {
     const res = await this.draftRepository.create(article)
 
     if (article.status === Status.Submitted) {
-      this.notifyApprovers(article.id, article.updatedBy)
+      this.notifyApprovers(article.id, article.submittedBy)
     }
     return res
   }
 
-  async update(article: Article, ctx?: any): Promise<number> {
+  async update(article: Article): Promise<number> {
     const isExist = await this.repository.exist(article.id)
     if (!isExist) {
       article.slug = slugify(article.title, article.id)
@@ -84,7 +84,7 @@ export class ArticleUseCase implements ArticleService {
     const res = await this.draftRepository.update(article)
 
     if (article.status === Status.Submitted) {
-      this.notifyApprovers(article.id, article.updatedBy)
+      this.notifyApprovers(article.id, article.submittedBy)
     }
     return res
   }
@@ -93,7 +93,7 @@ export class ArticleUseCase implements ArticleService {
   }
   protected async notifyApprovers(id: string, userId: string): Promise<number> {
     const approvers = await this.approversPort.getApprovers()
-    const msg = "Please review and approve an article"
+    const msg = `Please review and approve an article (id: '${id}').`
     const url = `/articles/${id}/approve`
     const notifications: Notification[] = []
     for (const approverId of approvers) {
@@ -126,9 +126,9 @@ export class ArticleUseCase implements ArticleService {
 
     await this.draftRepository.update(article)
     const res = await this.repository.save(article)
-    await this.historyPort.create(id, approvedBy, Action.Approve, article)
+    await this.historyRepository.create(id, approvedBy, article)
 
-    const msg = "This article was approved."
+    const msg = `This article was approved (id: '${id}').`
     this.notifySubmitter(id, approvedBy, article.submittedBy, msg)
 
     return res
@@ -150,9 +150,9 @@ export class ArticleUseCase implements ArticleService {
     article.approvedAt = new Date()
 
     const res = await this.draftRepository.update(article)
-    await this.historyPort.create(id, rejectedBy, Action.Reject, article)
+    await this.historyRepository.create(id, rejectedBy, article)
 
-    const msg = "This article was rejected."
+    const msg = `This article was rejected (id: '${id}').`
     this.notifySubmitter(id, rejectedBy, article.submittedBy, msg)
 
     return res
@@ -177,9 +177,9 @@ export class ArticleUseCase implements ArticleService {
 export function useArticleController(db: DB, log: Log): ArticleController {
   const draftRepository = new SqlDraftArticleRepository(db)
   const repository = new SqlArticleRepository(db)
-  const historyRepository = new HistoryAdapter<Article>(db, "article", "histories", ["id", "createdBy", "createdAt", "updatedBy", "updatedAt"], "history_id", "entity", "id", "author", "time", "action", "data")
+  const historyRepository = new HistoryAdapter<Article>(db, "article", "histories", ignoreFields, "history_id", "entity", "id", "author", "time")
   const approversPort = new ApproversAdapter("article", db)
   const notificationPort = new NotificationAdapter(db, "notifications", "U", "time", "url", "id", "sender", "receiver", "message", "status")
   const service = new ArticleUseCase(draftRepository, repository, historyRepository, approversPort, notificationPort, log)
-  return new ArticleController(service, log)
+  return new ArticleController(service)
 }

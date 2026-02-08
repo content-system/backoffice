@@ -98,6 +98,7 @@ export const userModel: Attributes = {
     column: "created_at",
     type: "datetime",
     noupdate: true,
+    createdAt: true,
   },
   updatedBy: {
     column: "updated_by",
@@ -105,6 +106,7 @@ export const userModel: Attributes = {
   updatedAt: {
     column: "updated_at",
     type: "datetime",
+    updatedAt: true
   },
 
   roles: {

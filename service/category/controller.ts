@@ -11,10 +11,10 @@ import {
   getSearch,
   handleError,
   hasSearch,
+  isSuccessful,
   resources,
   respondError
 } from "express-ext"
-import { isSuccessful, Log } from "onecore"
 import { write } from "security-express"
 import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
@@ -28,7 +28,7 @@ function createCategory(): Category {
 }
 const fields = ["id", "name", "path", "icon", "type", "resource", "parent", "sequence", "status"]
 export class CategoryController {
-  constructor(private service: CategoryService, private log: Log) {
+  constructor(private service: CategoryService) {
     this.search = this.search.bind(this)
     this.view = this.view.bind(this)
     this.submit = this.submit.bind(this)
@@ -109,13 +109,11 @@ export class CategoryController {
     }
     const userId = res.locals.userId
     category.updatedBy = userId
-    category.updatedAt = new Date()
     const id = req.params.id
     const editMode = id !== "new"
     try {
       if (!editMode) {
         category.createdBy = userId
-        category.createdAt = new Date()
         const result = await this.service.create(category)
         const status = isSuccessful(result) ? 201 : 409
         res.status(status).json(result).end()
@@ -125,7 +123,7 @@ export class CategoryController {
         res.status(status).json(result).end()
       }
     } catch (err) {
-      handleError(err, res, this.log)
+      handleError(err, res)
     }
   }
 }

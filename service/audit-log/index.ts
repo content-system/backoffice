@@ -14,19 +14,18 @@ import {
   hasSearch,
   resources
 } from "express-ext"
-import { Log, Search } from "onecore"
+import { Search } from "onecore"
 import { DB, SearchBuilder } from "query-core"
 import { formatFullDateTime, getDateFormat } from "ui-formatter"
 import { getLang, getResource } from "../resources"
 import { render, renderError500 } from "../template"
 import { AuditLog, AuditLogFilter, auditLogModel } from "./audit-log"
-
 export * from "./audit-log"
 
 const fields = ["id", "time", "resource", "action", "status", "userId", "ip", "remark"]
 
 export class AuditLogController {
-  constructor(private search: Search<AuditLog, AuditLogFilter>, private log: Log) {
+  constructor(private search: Search<AuditLog, AuditLogFilter>) {
     this.render = this.render.bind(this)
   }
   async render(req: Request, res: Response) {
@@ -70,9 +69,9 @@ export class AuditLogController {
   }
 }
 
-export function useAuditLogController(db: DB, log: Log): AuditLogController {
-  const builder = new SearchBuilder<AuditLog, AuditLogFilter>(db.query, "audit_logs", auditLogModel, db.driver)
+export function useAuditLogController(db: DB): AuditLogController {
+  const builder = new SearchBuilder<AuditLog, AuditLogFilter>(db, "audit_logs", auditLogModel)
   // const getAuditLog = useGet<AuditLog, string>(db.query, "audit_logs", auditLogModel, db.param)
   // return useSearchController(log, builder.search, getAuditLog, ["status"], ["timestamp"])
-  return new AuditLogController(builder.search, log)
+  return new AuditLogController(builder.search)
 }

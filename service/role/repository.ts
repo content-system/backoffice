@@ -39,8 +39,8 @@ export class SqlRoleRepository extends SearchRepository<Role, RoleFilter> implem
   private roleModuleMap: StringMap
   map?: StringMap
   attributes: Attributes
-  constructor(private db: DB, query?: Query) {
-    super(db.query, "roles", roleModel, db.driver, query)
+  constructor(protected db: DB, query?: Query) {
+    super(db, "roles", roleModel, query)
     this.attributes = roleModel
     this.metadata = this.metadata.bind(this)
     this.search = this.search.bind(this)
@@ -75,7 +75,7 @@ export class SqlRoleRepository extends SearchRepository<Role, RoleFilter> implem
     const stmt = buildToInsert(role, "roles", roleModel, this.db.param)
     stmts.push(stmt)
     insertRoleModules(stmts, role.roleId, role.privileges, this.db.param)
-    return this.db.execBatch(stmts, true)
+    return this.db.executeBatch(stmts, true)
   }
   update(role: Role): Promise<number> {
     const stmts: Statement[] = []
@@ -90,7 +90,7 @@ export class SqlRoleRepository extends SearchRepository<Role, RoleFilter> implem
       stmts.push({ query, params: [role.roleId] })
       insertRoleModules(stmts, role.roleId, role.privileges, this.db.param)
     }
-    return this.db.execBatch(stmts, firstSuccess)
+    return this.db.executeBatch(stmts, firstSuccess)
   }
   patch(role: Role): Promise<number> {
     return this.update(role)
@@ -99,7 +99,7 @@ export class SqlRoleRepository extends SearchRepository<Role, RoleFilter> implem
     const stmts: Statement[] = []
     stmts.push({ query: `delete from role_modules where role_id = ${this.db.param(1)}`, params: [id] })
     stmts.push({ query: `delete from roles where role_id = ${this.db.param(1)}`, params: [id] })
-    return this.db.execBatch(stmts)
+    return this.db.executeBatch(stmts)
   }
   assign(roleId: string, users: string[]): Promise<number> {
     const stmts: Statement[] = []
@@ -113,7 +113,7 @@ export class SqlRoleRepository extends SearchRepository<Role, RoleFilter> implem
         stmts.push(stmt)
       }
     }
-    return this.db.execBatch(stmts)
+    return this.db.executeBatch(stmts)
   }
 }
 

@@ -11,10 +11,10 @@ import {
   getSearch,
   handleError,
   hasSearch,
+  isSuccessful,
   resources,
   respondError
 } from "express-ext"
-import { isSuccessful, Log } from "onecore"
 import { write } from "security-express"
 import { validate } from "xvalidators"
 import { getLang, getResource } from "../resources"
@@ -42,7 +42,7 @@ const positions = [
 const fields = ["userId", "username", "email", "displayName", "status"]
 
 export class UserController {
-  constructor(private service: UserService, private roleQuery: RoleQuery, private log: Log) {
+  constructor(private service: UserService, private roleQuery: RoleQuery) {
     this.search = this.search.bind(this)
     this.view = this.view.bind(this)
     this.submit = this.submit.bind(this)
@@ -128,13 +128,11 @@ export class UserController {
     }
     const userId = res.locals.userId
     user.updatedBy = userId
-    user.updatedAt = new Date()
     const id = req.params.id
     const editMode = id !== "new"
     try {
       if (!editMode) {
         user.createdBy = userId
-        user.createdAt = new Date()
         const result = await this.service.create(user)
         const status = isSuccessful(result) ? 201 : 409
         res.status(status).json(result).end()
@@ -144,7 +142,7 @@ export class UserController {
         res.status(status).json(result).end()
       }
     } catch (err) {
-      handleError(err, res, this.log)
+      handleError(err, res)
     }
   }
   async renderAssign(req: Request, res: Response) {
@@ -181,7 +179,7 @@ export class UserController {
       await this.service.assign(id, roles)
       res.status(204).end()
     } catch (err) {
-      handleError(err, res, this.log)
+      handleError(err, res)
     }
   }
 }

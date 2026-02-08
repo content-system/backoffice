@@ -75,18 +75,18 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: C
     auth.lockedMinutes,
     2,
   )
-  const login = new LoginController(authenticator, cfg.auth.token.secret, cfg.auth.token.expires, logger.error)
+  const login = new LoginController(authenticator, cfg.auth.token.secret, cfg.auth.token.expires)
 
   const userService = useUserService(db, mapper)
-  const role = useRoleController(db, userService, logger.error, mapper)
-  const user = useUserController(logger.error, db, mapper)
-  const auditLog = useAuditLogController(db, logger.error)
+  const role = useRoleController(db, userService, mapper)
+  const user = useUserController(db, mapper)
+  const auditLog = useAuditLogController(db)
 
-  const category = useCategoryController(db, logger.error)
-  const content = useContentController(db, logger.error)
+  const category = useCategoryController(db)
+  const content = useContentController(db)
   const article = useArticleController(db, logger.error)
-  const job = useJobController(db, logger.error)
-  const contact = useContactController(db, logger.error)
+  const job = useJobController(db)
+  const contact = useContactController(db)
 
   return { health, log, middleware, authorize: authorizer.authorize, menu, login, role, user, auditLog, category, content, article, job, contact }
 }
