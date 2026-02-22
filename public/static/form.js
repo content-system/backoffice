@@ -710,60 +710,41 @@ function submitForm(e, skipValidate, skipConfirm, f1, v1, f2, v2) {
   var resource = getResource()
   var successMsg = getSuccessMessage(target, resource)
   if (skipConfirm) {
-    var data = decode(form)
-    if (f1 && f1.length > 0) {
-      data[f1] = v1
-    }
-    if (f2 && f2.length > 0) {
-      data[f2] = v2
-    }
-    var url = getCurrentURL()
-    fetch(url, {
-      method: "POST",
-      headers: getHttpHeaders(),
-      body: JSON.stringify(data),
-    })
-      .then(function (response) {
-        hideLoading()
-        if (response.ok) {
-          alertSuccess(successMsg)
-        } else {
-          handleJsonError(response, resource, form)
-        }
-      })
-      .catch(function (err) {
-        return handleError(err, resource.error_network)
-      })
+    handleSubmitForm(form, successMsg, f1, v1, f2, v2)
   } else {
     var confirmMsg = getConfirmMessage(target, resource)
     showConfirm(confirmMsg, function () {
-      showLoading()
-      var data = decode(form)
-      if (f1 && f1.length > 0) {
-        data[f1] = v1
-      }
-      if (f2 && f2.length > 0) {
-        data[f2] = v2
-      }
-      var url = getCurrentURL()
-      fetch(url, {
-        method: "POST",
-        headers: getHttpHeaders(),
-        body: JSON.stringify(data),
-      })
-        .then(function (response) {
-          hideLoading()
-          if (response.ok) {
-            alertSuccess(successMsg)
-          } else {
-            handleJsonError(response, resource, form)
-          }
-        })
-        .catch(function (err) {
-          return handleError(err, resource.error_network)
-        })
+      handleSubmitForm(form, successMsg, f1, v1, f2, v2)
     })
   }
+}
+function handleSubmitForm(form, successMsg, f1, v1, f2, v2) {
+  showLoading()
+  var data = decode(form)
+  if (f1 && f1.length > 0) {
+    data[f1] = v1
+  }
+  if (f2 && f2.length > 0) {
+    data[f2] = v2
+  }
+  var resource = getResource()
+  var url = getCurrentURL()
+  fetch(url, {
+    method: "POST",
+    headers: getHttpHeaders(),
+    body: JSON.stringify(data),
+  })
+    .then(function (response) {
+      hideLoading()
+      if (response.ok) {
+        alertSuccess(successMsg)
+      } else {
+        handleJsonError(response, resource, form)
+      }
+    })
+    .catch(function (err) {
+      return handleError(err, resource.error_network)
+    })
 }
 function handleJsonError(response, resource, form, showErrors, allErrors) {
   if (response.status === 401) {

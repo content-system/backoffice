@@ -415,7 +415,7 @@ function registerEvents(form: HTMLFormElement): void {
             const firstChild = parent.firstChild
             if (firstChild && firstChild.nodeName === "LABEL") {
               if (!(firstChild as HTMLLabelElement).classList.contains("required")) {
-                ;(firstChild as HTMLLabelElement).classList.add("required")
+                ; (firstChild as HTMLLabelElement).classList.add("required")
               }
             }
           }
