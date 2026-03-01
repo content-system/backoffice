@@ -1,6 +1,6 @@
 import { MenuBuilder } from "admin-menu"
 import { Authenticator, initializeStatus, PrivilegeRepository, SqlAuthTemplateConfig, useUserRepository } from "authen-service"
-import { compare } from "bcrypt"
+import { compare, hash } from "bcryptjs"
 import { HealthController, LogController, Logger, Middleware, MiddlewareController, resources } from "express-ext"
 import { buildJwtError, Payload, verify } from "jsonwebtoken-plus"
 import { StringMap } from "onecore"
@@ -49,6 +49,21 @@ export interface Context {
   article: ArticleController
   job: JobController
   contact: ContactController
+}
+
+export class Comparator {
+  constructor(saltOrRounds?: string | number) {
+    this.saltOrRounds = (saltOrRounds ? saltOrRounds : 10);
+    this.compare = this.compare.bind(this);
+    this.hash = this.hash.bind(this);
+  }
+  saltOrRounds: string | number;
+  compare(data: string, encrypted: string): Promise<boolean> {
+    return compare(data, encrypted);
+  }
+  hash(data: string): Promise<string> {
+    return hash(data, this.saltOrRounds);
+  }
 }
 
 export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: Config, mapper?: TemplateMap): Context {
