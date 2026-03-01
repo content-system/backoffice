@@ -70,7 +70,7 @@ export class LoginController {
               })
               res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "strict" })
               const redirectUrl = query(req, "redirectUrl")
-              if (redirectUrl && redirectUrl.length > 0) {
+              if (redirectUrl) {
                 res.redirect(redirectUrl)
                 return
               } else {
@@ -81,7 +81,7 @@ export class LoginController {
                     res.redirect(firstPath)
                     return
                   }
-                } else if (account.language && account.language.length > 0) {
+                } else if (account.language) {
                   resource = getResourceByLang(account.language)
                 }
               }
