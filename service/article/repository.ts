@@ -21,7 +21,7 @@ export class SqlArticleRepository extends SqlViewRepository<Article, string> imp
 
 export function buildQuery(filter: ArticleFilter): Statement {
   let query = `select * from draft_articles `
-  const where = []
+  const where: string[] = []
   const params = []
   let i = 1
 
