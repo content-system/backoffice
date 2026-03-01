@@ -331,7 +331,7 @@ function decodeFromElement<T>(parent: HTMLElement | null | undefined, fields: st
             try {
               const val = new Date(ele.value) // DateUtil.parse(ele.value, 'YYYY-MM-DD');
               obj[field] = val
-            } catch (err) {}
+            } catch (err) { }
           }
         } else {
           const datatype = ele.getAttribute("data-type")
@@ -451,7 +451,7 @@ function decode<T>(form: HTMLFormElement, currencySymbol?: string | null): T {
         }
         if (type === "number" || datatype === "currency" || datatype === "integer" || datatype === "number") {
           const decimalSeparator = getDecimalSeparator(ele)
-          v = decimalSeparator === "," ? v.replace(r2, "") : (v = v.replace(r1, ""))
+          v = decimalSeparator === "," ? v.replace(r2, "") : (v.replace(r1, ""))
           val = isNaN(v) ? null : parseFloat(v)
         }
         setValue(obj, name, val) // obj[name] = val;
