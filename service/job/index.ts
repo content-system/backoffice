@@ -1,20 +1,14 @@
 import { nanoid } from "nanoid"
 import { SearchResult } from "onecore"
-import { DB, Repository } from "query-core"
+import { DB } from "query-core"
 import { slugify } from "../common/slug"
 import { JobController } from "./controller"
-import { Job, JobFilter, jobModel, JobRepository, JobService, Status } from "./job"
-import { buildQuery } from "./query"
+import { Job, JobFilter, JobRepository, JobService, Status } from "./job"
+import { SqlJobRepository } from "./query"
 export * from "./controller"
 
-export class SqlJobRepository extends Repository<Job, string, JobFilter> implements JobRepository {
-  constructor(db: DB) {
-    super(db, "jobs", jobModel, buildQuery)
-  }
-}
 export class JobUseCase implements JobService {
   constructor(protected repository: JobRepository) {
-
   }
   search(filter: JobFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Job>> {
     return this.repository.search(filter, limit, page, fields)

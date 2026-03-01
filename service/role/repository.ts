@@ -134,7 +134,7 @@ function insertRoleModules(stmts: Statement[], roleId: string, privileges: strin
       return ms
     })
     const stmt = buildToInsertBatch(modules, "role_modules", roleModuleModel, param)
-    if (stmt) {
+    if (stmt.query) {
       stmts.push(stmt)
     }
   }
