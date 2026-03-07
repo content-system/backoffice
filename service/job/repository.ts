@@ -44,6 +44,5 @@ export function buildQuery(filter: JobFilter): Statement {
   if (orderBy) {
     query = query + ` order by ${orderBy}`
   }
-
   return { query, params }
 }
