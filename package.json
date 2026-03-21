@@ -13,7 +13,7 @@
   "author": "",
   "dependencies": {
     "admin-menu": "^0.0.3",
-    "authen-service": "^0.4.0",
+    "authen-service": "^0.4.1",
     "bcryptjs": "^3.0.3",
     "config-plus": "^0.0.4",
     "cookie-parser": "^1.4.7",
