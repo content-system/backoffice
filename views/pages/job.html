@@ -1,6 +1,6 @@
 <form id="jobForm" name="jobForm" class="form" novalidate aria-readonly="{{readonly}}">
   <header>
-    <button type="button" id="btnBack" name="btnBack" class="btn-back" onclick="goBack()"></button>
+    <button type="button" id="backBtn" name="backBtn" class="btn-back" onclick="goBack()"></button>
     <h2>{{resource.job}}</h2>
     <button class="btn-group btn-right"><i class="material-icons">group</i></button>
   </header>
@@ -49,7 +49,7 @@
         <div class="chip-input-container">
           <input type="text" id="txtSkill" name="txtSkill" data-skip="true" onkeydown="chipOnKeydown(event)"
             placeholder="Enter a skill..." />
-          <button type="button" id="btnAddSkill" name="btnAddSkill" class="btn-add" onclick="addChip(this)"></button>
+          <button type="button" id="addSkillBtn" name="addSkillBtn" class="btn-add" onclick="addChip(this)"></button>
         </div>
       </div>
     </label>
@@ -111,14 +111,15 @@
         <!-- Editor -->
         <div id="editor" style="display: none;" class="editor" aria-label="Rich text editor"></div>
         <div class="controls">
-          <button type="button" id="btnToggleView" onclick="toggleView(this, 'description', 'editor', 'toolbar')">Toggle
-            View</button>
+          <button type="button" id="toggleViewBtn" onclick="toggleView(this, 'description', 'editor', 'toolbar')">
+            Toggle View
+          </button>
         </div>
       </div>
     </label>
   </div>
   <footer>
-    <button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)" {% if readonly %} disabled {% endif
+    <button type="submit" id="saveBtn" name="saveBtn" onclick="submitForm(event)" {% if readonly %} disabled {% endif
       %}>{{resource.save}}</button>
   </footer>
   <script data-init-script="true">

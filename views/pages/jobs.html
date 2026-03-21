@@ -2,14 +2,14 @@
   <header>
     <h2>Careers</h2>
     <div class="btn-group">
-      <button type="button" id="btnTable" name="btnTable" class="btn-table" data-view="table"></button>
-      {% if readonly == false %}<a id="btnNew" class="btn-new" href="/jobs/new"></a>{% endif %}
+      <button type="button" id="tableBtn" name="tableBtn" class="btn-table" data-view="table"></button>
+      {% if readonly == false %}<a id="newBtn" class="btn-new" href="/jobs/new"></a>{% endif %}
     </div>
   </header>
   <div class="search-body">
     <form id="jobsForm" name="jobsForm" class="form" novalidate>
       <span class="hidden-message">{{message}}</span>
-      <section class="row search-group">{% include "partials/search.html" %} {% include "partials/pagination.html" %}
+      <section class="row search-group">{% include "partials/advance-search.html" %} {% include "partials/pagination.html" %}
       </section>
       <section class="row search-group advance-search">
         <label class="col s12 m6 auto-height">
@@ -17,7 +17,7 @@
           <div class="chip-list" data-name="skills">{{generateTags(filter.skills)}}
             <div class="chip-input-container">
               <input type="text" id="txtSkill" name="txtSkill" data-skip="true" onkeydown="chipOnKeydown(event)" placeholder="Enter a skill..." />
-              <button type="button" id="btnAddSkill" name="btnAddSkill" class="btn-add" onclick="addChip(this)"></button>
+              <button type="button" id="addSkillBtn" name="addSkillBtn" class="btn-add" onclick="addChip(this)"></button>
             </div>
           </div>
         </label>

@@ -2,14 +2,14 @@
   <header>
     <h2>{{resource.users}}</h2>
     <div class="btn-group">
-      <button type="button" id="btnListView" name="btnListView" class="btn-list" data-view="listview"></button>
-      {% if readonly == false %}<a id="btnNew" class="btn-new" href="/users/new"></a>{% endif %}
+      <button type="button" id="listBtn" name="listBtn" class="btn-list" data-view="listview"></button>
+      {% if readonly == false %}<a id="newBtn" class="btn-new" href="/users/new"></a>{% endif %}
     </div>
   </header>
   <div class="search-body">
     <form id="usersForm" name="usersForm" class="form" novalidate>
       <span class="hidden-message">{{message}}</span>
-      <section class="row search-group">{% include "partials/search.html" %} {% include "partials/pagination.html" %}</section>
+      <section class="row search-group">{% include "partials/advance-search.html" %} {% include "partials/pagination.html" %}</section>
       <section class="row search-group inline advance-search">
         <label class="col s12 m4">
           {{resource.username}}

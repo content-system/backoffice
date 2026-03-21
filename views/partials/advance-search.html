@@ -7,5 +7,6 @@
   <input type="text" id="q" name="q" maxlength="100" onchange="qOnChange(event)" placeholder="{{resource.search}}"
     value="{{filter.q}}" />
   <button type="button" id="clearQBtn" name="clearQBtn" hidden class="btn-remove-text" onclick="clearText(event)"></button>
+  <button type="button" id="toggleSearchBtn" name="toggleSearchBtn" class="btn-filter off" onclick="toggleSearch(event)"></button>
   <button type="submit" id="searchBtn" name="searchBtn" class="btn-search" onclick="search(event)"></button>
 </label>

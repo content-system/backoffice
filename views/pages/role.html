@@ -1,6 +1,6 @@
 <form id="roleForm" name="roleForm" class="form" novalidate aria-readonly="{{readonly}}">
   <header>
-    <button type="button" id="btnBack" name="btnBack" class="btn-back" onclick="goBack()"></button>
+    <button type="button" id="backBtn" name="backBtn" class="btn-back" onclick="goBack()"></button>
     <h2>{{resource.role}}</h2>
     <a class="btn-group btn-right" href="/roles/{{role.roleId}}/assign" onclick="navigate(event)"><i class="material-icons">group</i></a>
   </header>
@@ -50,6 +50,6 @@
     </section>
   </div>
   <footer>
-    <button type="submit" id="btnSave" name="btnSave" onclick="submitForm(event)" {% if readonly %} disabled {% endif %}>{{resource.save}}</button>
+    <button type="submit" id="saveBtn" name="saveBtn" onclick="submitForm(event)" {% if readonly %} disabled {% endif %}>{{resource.save}}</button>
   </footer>
 </form>
