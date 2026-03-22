@@ -52,16 +52,16 @@
           <tr>
             <th>{{resource.number}}</th>
             <th data-field="id">
-              <a href="{{sort.id.url}}" onclick="navigate(event)">{{resource.id}} {{sort.id.tag}}</a>
+              <a id="idSort" href="{{sort.id.url}}" onclick="navigate(event)">{{resource.id}} {{sort.id.tag}}</a>
             </th>
             <th data-field="title">
-              <a href="{{sort.title.url}}" onclick="navigate(event)">{{resource.title}} {{sort.title.tag}}</a>
+              <a id="titleSort" href="{{sort.title.url}}" onclick="navigate(event)">{{resource.title}} {{sort.title.tag}}</a>
             </th>
             <th data-field="publishedAt" class="datetime">
-              <a href="{{sort.publishedAt.url}}" onclick="navigate(event)">{{resource.published_at}} {{sort.publishedAt.tag}}</a>
+              <a id="publishedAtSort" href="{{sort.publishedAt.url}}" onclick="navigate(event)">{{resource.published_at}} {{sort.publishedAt.tag}}</a>
             </th>
             <th data-field="description">
-              <a href="{{sort.description.url}}" onclick="navigate(event)">{{resource.description}} {{sort.description.tag}}</a>
+              <a id="descriptionSort" href="{{sort.description.url}}" onclick="navigate(event)">{{resource.description}} {{sort.description.tag}}</a>
             </th>
             <th class="action">{{resource.action}}</th>
           </tr>

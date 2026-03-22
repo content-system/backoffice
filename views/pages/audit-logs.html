@@ -39,25 +39,25 @@
           <tr>
             <th>{{resource.number}}</th>
             <th data-field="time">
-              <a href="{{sort.time.url}}" onclick="navigate(event)">{{resource.audit_log_time}} {{sort.time.tag}}</a>
+              <a id="timeSort" href="{{sort.time.url}}" onclick="navigate(event)">{{resource.audit_log_time}} {{sort.time.tag}}</a>
             </th>
             <th data-field="resource">
-              <a href="{{sort.resource.url}}" onclick="navigate(event)">{{resource.resource}} {{sort.resource.tag}}</a>
+              <a id="resourceSort" href="{{sort.resource.url}}" onclick="navigate(event)">{{resource.resource}} {{sort.resource.tag}}</a>
             </th>
             <th data-field="action">
-              <a href="{{sort.action.url}}" onclick="navigate(event)">{{resource.action}} {{sort.action.tag}}</a>
+              <a id="actionSort" href="{{sort.action.url}}" onclick="navigate(event)">{{resource.action}} {{sort.action.tag}}</a>
             </th>
             <th data-field="status">
-              <a href="{{sort.status.url}}" onclick="navigate(event)">{{resource.status}} {{sort.status.tag}}</a>
+              <a id="statusSort" href="{{sort.status.url}}" onclick="navigate(event)">{{resource.status}} {{sort.status.tag}}</a>
             </th>
             <th data-field="userId">
-              <a href="{{sort.userId.url}}" onclick="navigate(event)">{{resource.audit_log_user}} {{sort.userId.tag}}</a>
+              <a id="userIdSort" href="{{sort.userId.url}}" onclick="navigate(event)">{{resource.audit_log_user}} {{sort.userId.tag}}</a>
             </th>
             <th data-field="ip">
-              <a href="{{sort.ip.url}}" onclick="navigate(event)">{{resource.ip}} {{sort.ip.tag}}</a>
+              <a id="ipSort" id="Sort" href="{{sort.ip.url}}" onclick="navigate(event)">{{resource.ip}} {{sort.ip.tag}}</a>
             </th>
             <th data-field="remark">
-              <a href="{{sort.remark.url}}" onclick="navigate(event)">{{resource.remark}} {{sort.remark.tag}}</a>
+              <a id="remarkSort" href="{{sort.remark.url}}" onclick="navigate(event)">{{resource.remark}} {{sort.remark.tag}}</a>
             </th>
           </tr>
         </thead>
