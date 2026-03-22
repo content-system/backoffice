@@ -33,12 +33,12 @@
         maxlength="255"
         required
         onblur="requiredOnBlur(event)"
-        placeholder="{{resource.article_name}}"
+        placeholder="{{resource.title}}"
       />
     </label>
     <label class="col s12 auto-height required">
       {{resource.body}}
-      <textarea id="name" name="name" rows="20" maxlength="5000" placeholder="{{resource.name}}"/>{{content.body}}</textarea>
+      <textarea id="body" name="body" rows="20" maxlength="10000" placeholder="{{resource.body}}"/>{{content.body}}</textarea>
     </label>
   </div>
   <footer>

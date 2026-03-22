@@ -6,14 +6,14 @@
     <form id="contactsForm" name="contactsForm" class="form" novalidate>
       <span class="hidden-message">{{message}}</span>
       <section class="row search-group">{% include "partials/advance-search.html" %} {% include "partials/pagination.html" %}</section>
-      <section class="row search-group inline advance-search">
+      <section class="row search-group inline advance-search" hidden>
         <label class="col s12 m4">
           {{resource.name}}
-          <input type="text" id="name" name="name" value="{{filter.name}}" />
+          <input type="text" id="name" name="name" value="{{filter.name}}" maxlength="40" placeholder="{{resource.fullname}}" />
         </label>
         <label class="col s12 m4">
           {{resource.email}}
-          <input type="text" id="email" name="email" value="{{filter.email}}" />
+          <input type="text" id="email" name="email" value="{{filter.email}}" maxlength="100" placeholder="{{resource.email}}"/>
         </label>
       </section>
       <input type="hidden" id="page" name="page" value="{{filter.page}}" />

@@ -10,7 +10,7 @@
     <form id="categoriesForm" name="categoriesForm" class="form" novalidate>
       <span class="hidden-message">{{message}}</span>
       <section class="row search-group">{% include "partials/advance-search.html" %} {% include "partials/pagination.html" %}</section>
-      <section class="row search-group inline">
+      <section class="row search-group inline" hidden>
         <label class="col s12 m6">
           {{resource.status}}
           <section class="checkbox-group">

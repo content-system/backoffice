@@ -10,7 +10,7 @@
     <form id="contentsForm" name="contentsForm" class="form" novalidate>
       <span class="hidden-message">{{message}}</span>
       <section class="row search-group">{% include "partials/advance-search.html" %} {% include "partials/pagination.html" %}</section>
-      <section class="row search-group inline advance-search">
+      <section class="row search-group inline advance-search" hidden>
         <label class="col s12 m6">
           {{resource.published_at_from}}
           <input
@@ -35,11 +35,7 @@
         </label>
         <label class="col s12 m4">
           {{resource.title}}
-          <input type="text" id="title" name="title" value="{{filter.title}}" />
-        </label>
-        <label class="col s12 m4">
-          {{resource.description}}
-          <input type="text" id="description" name="description" value="{{filter.description}}" />
+          <input type="text" id="title" name="title" value="{{filter.title}}" maxlength="120" placeholder="{{resource.title}}"/>
         </label>
         <label class="col s12 m4">
           {{resource.status}}

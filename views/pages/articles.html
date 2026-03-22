@@ -11,12 +11,12 @@
       <span class="hidden-message">{{message}}</span>
       <section class="row search-group">{% include "partials/advance-search.html" %} {% include "partials/pagination.html" %}
       </section>
-      <section class="row search-group advance-search">
+      <section class="row search-group advance-search" hidden>
         <label class="col s12 m6 auto-height">
           {{resource.tags}}
           <div class="chip-list" data-name="tags">{{generateTags(filter.tags)}}
             <div class="chip-input-container">
-              <input type="text" id="txtTag" name="txtTag" data-skip="true" onkeydown="chipOnKeydown(event)" placeholder="Enter a tag value..." />
+              <input type="text" id="txtTag" name="txtTag" data-skip="true" onkeydown="chipOnKeydown(event)" maxlength="100" placeholder="Enter a tag value..." />
               <button type="button" id="tagBtn" name="tagBtn" class="btn-add" onclick="addChip(this)"></button>
             </div>
           </div>

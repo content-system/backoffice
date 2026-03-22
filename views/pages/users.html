@@ -10,14 +10,14 @@
     <form id="usersForm" name="usersForm" class="form" novalidate>
       <span class="hidden-message">{{message}}</span>
       <section class="row search-group">{% include "partials/advance-search.html" %} {% include "partials/pagination.html" %}</section>
-      <section class="row search-group inline advance-search">
+      <section class="row search-group inline advance-search" hidden>
         <label class="col s12 m4">
           {{resource.username}}
-          <input type="text" id="username" name="username" value="{{filter.username}}" />
+          <input type="text" id="username" name="username" value="{{filter.username}}" maxlength="40" />
         </label>
         <label class="col s12 m4">
           {{resource.display_name}}
-          <input type="text" id="displayName" name="displayName" value="{{filter.displayName}}" />
+          <input type="text" id="displayName" name="displayName" value="{{filter.displayName}}" maxlength="100" />
         </label>
         <label class="col s12 m4 checkbox-section">
           {{resource.status}}
