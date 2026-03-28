@@ -1,10 +1,7 @@
 <div>
   <header>
     <h2>{{resource.roles}}</h2>
-    <div class="btn-group">
-      <button type="button" id="listBtn" name="listBtn" class="btn-list" data-view="listview"></button>
-      {% if readonly == false %}<a id="newBtn" class="btn-new" href="/roles/new"></a>{% endif %}
-    </div>
+    {% if readonly == false %}<a id="newBtn" class="btn-new" href="/roles/new" onclick="navigate(event)"></a>{% endif %}
   </header>
   <div class="search-body">
     <form id="rolesForm" name="rolesForm" class="form" novalidate>

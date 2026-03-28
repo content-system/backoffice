@@ -1,7 +1,7 @@
 <form id="roleAssignmentForm" name="roleAssignmentForm" class="form">
   <header>
     <button type="button" id="backBtn" name="backBtn" class="btn-back" onclick="goBack()"></button>
-    <h2>Role Assignment</h2>
+    <h2>{{resource.role_assignment_subject}}</h2>
   </header>
   <div>
     <section class="row section">
@@ -14,7 +14,7 @@
       <ul class="row list">
         <li class="col check-item header">
           <input id="roleAssignmentForm_checkAll" type="checkbox" name="checkAll" />
-          <p>Check All</p>
+          <p>{{resource.check_all}}</p>
         </li>
         {% for item in roles %}
         <li class="col check-item">

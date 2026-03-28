@@ -391,6 +391,10 @@ header > .btn-group {
   padding-top: 4px;
   height: 100%;
 }
+header > a.btn-new {
+  top: 2px;
+  right: 34px;
+}
 .modal-portal-content header > .btn-group {
   right: 39px;
 }
