@@ -3,7 +3,7 @@
     <h2>{{resource.articles}}</h2>
     {% if readonly == false %}<a id="newBtn" class="btn-new" href="/articles/new" onclick="navigate(event)"></a>{% endif %}
   </header>
-  <div class="search-body">
+  <div class="main-body">
     <form id="articlesForm" name="articlesForm" class="form" novalidate>
       <span class="hidden-message">{{message}}</span>
       <section class="row search-group">{% include "partials/advance-search.html" %} {% include "partials/pagination.html" %}

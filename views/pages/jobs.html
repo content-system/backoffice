@@ -3,7 +3,7 @@
     <h2>Careers</h2>
     {% if readonly == false %}<a id="newBtn" class="btn-new" href="/jobs/new" onclick="navigate(event)"></a>{% endif %}
   </header>
-  <div class="search-body">
+  <div class="main-body">
     <form id="jobsForm" name="jobsForm" class="form" novalidate>
       <span class="hidden-message">{{message}}</span>
       <section class="row search-group">{% include "partials/advance-search.html" %} {% include "partials/pagination.html" %}
