@@ -634,6 +634,18 @@ function correctNumber(v, locale, keepFormat) {
   }
   return r
 }
+function integerOnFocus(event) {
+  var ele = event.currentTarget
+  handleMaterialFocus(ele)
+  if (ele.readOnly || ele.disabled || ele.value.length === 0) {
+    return
+  } else {
+    var v = removeSeparators(ele.value)
+    if (v !== ele.value) {
+      ele.value = v
+    }
+  }
+}
 function numberOnFocus(event) {
   var ele = event.currentTarget
   handleMaterialFocus(ele)
@@ -726,7 +738,7 @@ function checkNumber(target, locale, r) {
 }
 function checkNumberOnBlur(event) {
   var target = event.currentTarget
-  var separator = target.getAttribute("data-decimal-separator")
+  var separator = getDecimalSeparator(target)
   var v = checkNumberEvent(event, separator)
   if (typeof v === "string") {
     target.value = v
@@ -734,7 +746,7 @@ function checkNumberOnBlur(event) {
 }
 function numberOnBlur(event) {
   var target = event.currentTarget
-  var separator = target.getAttribute("data-decimal-separator")
+  var separator = getDecimalSeparator(target)
   var v = checkNumberEvent(event, separator)
   if (typeof v === "string") {
     var attr = target.getAttribute("data-scale")
@@ -745,7 +757,7 @@ function numberOnBlur(event) {
 }
 function currencyOnBlur(event) {
   var target = event.currentTarget
-  var separator = target.getAttribute("data-decimal-separator")
+  var separator = getDecimalSeparator(target)
   var v = checkNumberEvent(event, separator)
   if (typeof v === "string") {
     var attr = target.getAttribute("data-scale")
@@ -773,6 +785,45 @@ function formatCurrency(v, ele) {
       return symbol + v
     }
   }
+}
+function removeSeparators(input) {
+  if (!input) return ""
+  var len = input.length
+  var buffer = new Array(len)
+  var write = 0
+  for (var i = 0; i < len; i++) {
+    var c = input[i]
+    if (c === " " || c === "\u00A0" || c === "," || c === "." || c === "٬" || c === "$" || c === "€" || c === "£" || c === "¥") {
+      continue
+    }
+    buffer[write++] = c
+  }
+  return write === len ? input : buffer.slice(0, write).join("")
+}
+function formatInteger(v, groupSeparator) {
+  if (groupSeparator === void 0) {
+    groupSeparator = ","
+  }
+  if (v == null || !Number.isFinite(v)) {
+    return ""
+  }
+  var isNegative = v < 0
+  var n = Math.abs(Math.trunc(v))
+  if (n < 1000) {
+    return isNegative ? "-" + n : "" + n
+  }
+  var result = ""
+  var count = 0
+  while (n > 0) {
+    var digit = n % 10
+    n = (n / 10) | 0
+    if (count > 0 && count % 3 === 0) {
+      result = groupSeparator + result
+    }
+    result = digit + result
+    count++
+  }
+  return isNegative ? "-" + result : result
 }
 function formatNumber(v, scale, d, g) {
   if (v == null) {

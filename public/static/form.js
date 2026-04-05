@@ -37,7 +37,17 @@ function getDecimalSeparator(ele) {
       separator = form.getAttribute("data-decimal-separator")
     }
   }
-  return separator === "," ? "," : "."
+  return separator ? separator : "."
+}
+function getGroupSeparator(ele) {
+  var separator = ele.getAttribute("data-group-separator")
+  if (!separator) {
+    var form = ele.form
+    if (form) {
+      separator = form.getAttribute("data-group-separator")
+    }
+  }
+  return separator === "." ? "." : ","
 }
 var d = "data-value"
 function selectOnChange(ele, attr) {

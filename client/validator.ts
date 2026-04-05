@@ -650,6 +650,18 @@ function correctNumber(v: string, locale?: Locale | null | string, keepFormat?: 
   return r
 }
 
+function integerOnFocus(event: Event): void {
+  const ele = event.currentTarget as HTMLInputElement
+  handleMaterialFocus(ele)
+  if (ele.readOnly || ele.disabled || ele.value.length === 0) {
+    return
+  } else {
+    const v = removeSeparators(ele.value)
+    if (v !== ele.value) {
+      ele.value = v
+    }
+  }
+}
 function numberOnFocus(event: Event): void {
   const ele = event.currentTarget as HTMLInputElement
   handleMaterialFocus(ele)
@@ -742,7 +754,7 @@ function checkNumber(target: HTMLInputElement, locale?: Locale | string | null, 
 }
 function checkNumberOnBlur(event: Event) {
   const target = event.currentTarget as HTMLInputElement
-  const separator = target.getAttribute("data-decimal-separator")
+  const separator = getDecimalSeparator(target)
   const v = checkNumberEvent(event, separator)
   if (typeof v === "string") {
     target.value = v
@@ -750,7 +762,7 @@ function checkNumberOnBlur(event: Event) {
 }
 function numberOnBlur(event: Event) {
   const target = event.currentTarget as HTMLInputElement
-  const separator = target.getAttribute("data-decimal-separator")
+  const separator = getDecimalSeparator(target)
   const v = checkNumberEvent(event, separator)
   if (typeof v === "string") {
     const attr = target.getAttribute("data-scale")
@@ -761,7 +773,7 @@ function numberOnBlur(event: Event) {
 }
 function currencyOnBlur(event: Event) {
   const target = event.currentTarget as HTMLInputElement
-  const separator = target.getAttribute("data-decimal-separator")
+  const separator = getDecimalSeparator(target)
   const v = checkNumberEvent(event, separator)
   if (typeof v === "string") {
     const attr = target.getAttribute("data-scale")
@@ -789,6 +801,67 @@ function formatCurrency(v: string, ele: HTMLInputElement): string {
       return symbol + v
     }
   }
+}
+function removeSeparators(input?: string | null): string {
+  if (!input) return ""
+
+  const len = input.length
+  const buffer = new Array<string>(len)
+  let write = 0
+
+  for (let i = 0; i < len; i++) {
+    const c = input[i]
+
+    // skip unwanted characters
+    if (
+      c === " " || // normal space
+      c === "\u00A0" || // non-breaking space
+      c === "," ||
+      c === "." ||
+      c === "٬" || // Arabic thousands separator
+      c === "$" ||
+      c === "€" ||
+      c === "£" ||
+      c === "¥"
+    ) {
+      continue
+    }
+
+    buffer[write++] = c
+  }
+
+  // Avoid creating a large intermediate array via slice
+  return write === len ? input : buffer.slice(0, write).join("")
+}
+function formatInteger(v?: number | null, groupSeparator: string = ","): string {
+  if (v == null || !Number.isFinite(v)) {
+    return ""
+  }
+
+  const isNegative = v < 0
+  let n = Math.abs(Math.trunc(v))
+
+  // Fast path for small numbers (no separator needed)
+  if (n < 1000) {
+    return isNegative ? `-${n}` : `${n}`
+  }
+
+  let result = ""
+  let count = 0
+
+  while (n > 0) {
+    const digit = n % 10
+    n = (n / 10) | 0 // faster floor for positive integers
+
+    if (count > 0 && count % 3 === 0) {
+      result = groupSeparator + result
+    }
+
+    result = digit + result
+    count++
+  }
+
+  return isNegative ? `-${result}` : result
 }
 function formatNumber(v?: number | null, scale?: number, d?: string | null, g?: string): string {
   if (v == null) {
