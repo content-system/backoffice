@@ -13,6 +13,7 @@ var resources = (function () {
   resources.token = "token"
   resources.partial = "partial"
   resources.subPartial = "sub"
+  resources.lang = "lang"
   resources.page = "page"
   resources.limit = "limit"
   resources.fields = "fields"

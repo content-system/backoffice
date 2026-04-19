@@ -107,7 +107,7 @@ function toggleMenuItem(e: Event) {
   }
 }
 const cacheScript = new Map<string, string>()
-function navigate(e: Event, ignoreLang?: boolean, partId?: string) {
+function navigate(e: Event, partId?: string, includeLang?: boolean) {
   e.preventDefault()
   const target = e.target as HTMLElement
   const link = findParentNode(target, "A") as HTMLLinkElement
@@ -118,20 +118,15 @@ function navigate(e: Event, ignoreLang?: boolean, partId?: string) {
       histories.shift()
     }
     const search = window.location.search.length > 0 ? window.location.search.substring(1) : ""
-    const lang = getField(search, "lang")
+    const lang = getField(search, resources.lang)
     let url = link.href
-    /*
-    if (!ignoreLang && lang.length > 0) {
-      url = url + (url.indexOf("?") > 0 ? "&" : "?") + lang
-    }
-    */
     let pageId = resources.pageBody
     let sub = ""
     if (partId && partId.length > 0) {
       pageId = partId
       sub = `&${resources.subPartial}=true`
     }
-    const lang1 = lang.length > 0 && !ignoreLang ? "&" + lang : ""
+    const lang1 = lang.length > 0 && includeLang ? "&" + lang : ""
     const newUrl = url + (url.indexOf("?") > 0 ? "&" : "?") + `${resources.partial}=true${sub}` + lang1
     showLoading()
     fetch(newUrl, { method: "GET", headers: getHeaders() })

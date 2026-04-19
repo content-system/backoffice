@@ -107,7 +107,7 @@ function toggleMenuItem(e) {
   }
 }
 var cacheScript = new Map()
-function navigate(e, ignoreLang, partId) {
+function navigate(e, partId, includeLang) {
   e.preventDefault()
   var target = e.target
   var link = findParentNode(target, "A")
@@ -118,7 +118,7 @@ function navigate(e, ignoreLang, partId) {
       histories.shift()
     }
     var search_1 = window.location.search.length > 0 ? window.location.search.substring(1) : ""
-    var lang = getField(search_1, "lang")
+    var lang = getField(search_1, resources.lang)
     var url_1 = link.href
     var pageId_1 = resources.pageBody
     var sub = ""
@@ -126,7 +126,7 @@ function navigate(e, ignoreLang, partId) {
       pageId_1 = partId
       sub = "&" + resources.subPartial + "=true"
     }
-    var lang1 = lang.length > 0 && !ignoreLang ? "&" + lang : ""
+    var lang1 = lang.length > 0 && includeLang ? "&" + lang : ""
     var newUrl = url_1 + (url_1.indexOf("?") > 0 ? "&" : "?") + (resources.partial + "=true" + sub) + lang1
     showLoading()
     fetch(newUrl, { method: "GET", headers: getHeaders() })

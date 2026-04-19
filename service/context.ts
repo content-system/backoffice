@@ -1,12 +1,12 @@
 import { MenuBuilder } from "admin-menu"
-import { Authenticator, initializeStatus, PrivilegeRepository, SqlAuthTemplateConfig, useUserRepository } from "authen-service"
+import { Authenticator, initializeStatus, PrivilegeRepository, SqlAuthTemplateConfig, Token, useUserRepository } from "authen-service"
 import { compare, hash } from "bcryptjs"
 import { HealthController, LogController, Logger, Middleware, MiddlewareController, resources } from "express-ext"
 import { buildJwtError, Payload, verify } from "jsonwebtoken-plus"
 import { StringMap } from "onecore"
-import { createChecker, DB } from "query-core"
 import { TemplateMap } from "query-mappers"
 import { Authorize, Authorizer, PrivilegeLoader, useToken } from "security-express"
+import { createChecker, DB } from "sql-core"
 import { check } from "types-validation"
 import { createValidator } from "xvalidators"
 import { ArticleController, useArticleController } from "./article"
@@ -26,6 +26,7 @@ resources.check = check
 
 export interface Config {
   cookie?: boolean
+  token: Token
   auth: SqlAuthTemplateConfig
   sql: {
     allPrivileges: string
@@ -73,7 +74,7 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: C
   const sqlChecker = createChecker(db)
   const health = new HealthController([sqlChecker])
   const privilegeLoader = new PrivilegeLoader(cfg.sql.permission, db.query)
-  const token = useToken<Payload>(auth.token.secret, verify, buildJwtError, cfg.cookie, "account")
+  const token = useToken<Payload>(cfg.token.secret, verify, buildJwtError, cfg.cookie, "account")
   const authorizer = new Authorizer<Payload>(token, privilegeLoader.privilege, buildJwtError, true, "id", "userId", "permissions")
 
   const privilegeRepository = new PrivilegeRepository(db.query, cfg.sql.privileges)
@@ -90,7 +91,7 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: C
     auth.lockedMinutes,
     2,
   )
-  const login = new LoginController(authenticator, cfg.auth.token.secret, cfg.auth.token.expires)
+  const login = new LoginController(authenticator, cfg.token.secret, cfg.token.expires)
 
   const userService = useUserService(db, mapper)
   const role = useRoleController(db, userService, mapper)

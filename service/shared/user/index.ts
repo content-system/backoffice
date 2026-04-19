@@ -1,6 +1,6 @@
 import { Attribute, Attributes, StringMap } from "onecore"
-import { buildMap, buildMetadata, DB, SearchBuilder } from "query-core"
 import { Query, TemplateMap, useQuery } from "query-mappers"
+import { buildMap, buildMetadata, DB, SearchBuilder } from "sql-core"
 import { User, UserFilter, userModel, UserService } from "./user"
 
 export * from "./user"

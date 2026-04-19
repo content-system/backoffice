@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid"
 import { ApproversPort, Log, Notification, NotificationPort, SearchResult } from "onecore"
-import { DB } from "query-core"
+import { DB } from "sql-core"
 import { slugify } from "../common/slug"
 import { ApproversAdapter } from "../shared/approvers"
 import { Action, History, HistoryAdapter, HistoryRepository, ignoreFields } from "../shared/history"
@@ -58,7 +58,7 @@ export class ArticleUseCase implements ArticleService {
       tx.commit()
       return res
     } catch (err) {
-      tx.rollback()
+      await tx.rollback()
       throw err
     }
   }
@@ -93,7 +93,7 @@ export class ArticleUseCase implements ArticleService {
       tx.commit()
       return res
     } catch (err) {
-      tx.rollback()
+      await tx.rollback()
       throw err
     }
   }
@@ -145,7 +145,7 @@ export class ArticleUseCase implements ArticleService {
       tx.commit()
       return res
     } catch (err) {
-      tx.rollback()
+      await tx.rollback()
       throw err
     }
   }
@@ -176,7 +176,7 @@ export class ArticleUseCase implements ArticleService {
       tx.commit()
       return res
     } catch (err) {
-      tx.rollback()
+      await tx.rollback()
       throw err
     }
   }

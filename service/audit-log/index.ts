@@ -15,7 +15,7 @@ import {
   resources
 } from "express-ext"
 import { Search } from "onecore"
-import { DB, SearchBuilder } from "query-core"
+import { DB, SearchBuilder } from "sql-core"
 import { formatFullDateTime, getDateFormat } from "ui-formatter"
 import { getLang, getResource } from "../resources"
 import { render, renderError500 } from "../template"

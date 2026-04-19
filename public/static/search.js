@@ -29,6 +29,13 @@ function toggleSearch(e) {
     }
   }
 }
+function toggleSort(e) {
+  var btn = e.target
+  var parent = btn.parentElement
+  if (parent) {
+    toggleClass(parent, "on")
+  }
+}
 var o = "object"
 function trimNull(obj) {
   if (!obj || typeof obj !== o) {
@@ -217,12 +224,17 @@ function search(e, partId) {
   if (!partId) {
     partId = form.getAttribute("data-part")
   }
+  var searchUrl = window.location.search.length > 0 ? window.location.search.substring(1) : ""
+  var lang = getField(searchUrl, resources.lang)
   var initFilter = decode(form)
   var filter = trimNull(initFilter)
   filter.page = 1
   var search = buildSearchUrl(filter)
   if (partId && partId.length > 0) {
     search = search + ("&" + resources.subPartial + "=true")
+  }
+  if (lang && lang.length > 0) {
+    search = search + ("&" + lang)
   }
   var url = getCurrentURL() + search
   var newUrl = getCurrentURL()

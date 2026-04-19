@@ -23,6 +23,7 @@ class resources {
   static token = "token"
   static partial = "partial"
   static subPartial = "sub"
+  static lang = "lang"
   static page = "page"
   static limit = "limit"
   static fields = "fields"
