@@ -13,7 +13,7 @@ import {
   getSearch,
   hasSearch,
   resources
-} from "express-ext"
+} from "express-core-web"
 import { Search } from "onecore"
 import { DB, SearchBuilder } from "sql-core"
 import { formatFullDateTime, getDateFormat } from "ui-formatter"

@@ -6,7 +6,7 @@ function createChip(container: HTMLElement, value: string, text: string, inputCo
 
   if (star) {
     const i = document.createElement("i")
-    i.className = "star highlight"
+    i.className = "star"
     chip.appendChild(i)
   }
   const close = document.createElement("span")

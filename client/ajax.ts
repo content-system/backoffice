@@ -45,7 +45,7 @@ function loadAjax(url: string, container: HTMLElement, handleSuccess?: () => voi
 function hideOtherElements(form: HTMLFormElement, target: HTMLButtonElement, className: string) {
   if (form) {
     for (let i = 0; i < form.length; i++) {
-      const ele = form[i] as HTMLInputElement
+      const ele = form[i] as HTMLElement
       if (ele !== target && ele.classList.contains(className)) {
         ele.hidden = true
       }
@@ -55,7 +55,7 @@ function hideOtherElements(form: HTMLFormElement, target: HTMLButtonElement, cla
 function showOtherElements(form: HTMLFormElement, target: HTMLButtonElement | undefined, className: string) {
   if (form) {
     for (let i = 0; i < form.length; i++) {
-      const ele = form[i] as HTMLInputElement
+      const ele = form[i] as HTMLElement
       if (ele !== target && ele.classList.contains(className)) {
         ele.hidden = false
       }

@@ -15,10 +15,10 @@ import {
   isSuccessful,
   resources,
   respondError
-} from "express-ext"
+} from "express-core-web"
 import { write } from "security-express"
 import { formatDateTime, formatPhone, getDateFormat } from "ui-formatter"
-import { validate } from "xvalidators"
+import { validate } from "validation-core"
 import { getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
 import { Contact, ContactFilter, contactModel, ContactService } from "./contact"

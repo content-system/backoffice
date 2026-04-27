@@ -341,7 +341,7 @@ function decodeFromElement<T>(parent: HTMLElement | null | undefined, fields: st
             try {
               const val = new Date(ele.value) // DateUtil.parse(ele.value, 'YYYY-MM-DD');
               obj[field] = val
-            } catch (err) { }
+            } catch (err) {}
           }
         } else {
           const datatype = ele.getAttribute("data-type")
@@ -547,7 +547,7 @@ function unhideElement(ele: HTMLElement | null | undefined): boolean {
 }
 function isHidden(ele: HTMLElement | null | undefined): boolean {
   if (ele) {
-    return ele.hidden || ele.style.display === "none"
+    return (ele.hidden as boolean) || ele.style.display === "none"
   }
   return true
 }

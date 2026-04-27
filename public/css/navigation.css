@@ -353,7 +353,6 @@ nav.collapsed-all .sidebar-off-menu > .collapse {
   display: inline;
   font-size: 15px;
   font-weight: 100;
-  content: url("../images/pin.svg");
 }
 .menu.sidebar nav ul li:hover button.btn-pin {
   display: inline-block;
@@ -366,11 +365,21 @@ nav.collapsed-all .sidebar-off-menu > .collapse {
   display: inline-block;
   transform: rotate(45deg);
 }
+.sub-list {
+  border: 1px solid #00574b;
+  border-top: 0;
+}
 @media screen and (min-width: 769px) {
   .top-menu .entity-icon.down,
   .top-menu .entity-icon.up,
   .top-menu .sidebar-off-menu {
     display: none;
+  }
+
+  .top-menu .sidebar > nav > ul > li:hover .sub-list {
+    display: block;
+    border: 1px solid #ddd;
+    border-top: 0;
   }
 
   .top-menu .menu.sidebar {

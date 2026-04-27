@@ -15,10 +15,10 @@ import {
   isSuccessful,
   resources,
   respondError
-} from "express-ext"
+} from "express-core-web"
 import { write } from "security-express"
 import { formatDateTime } from "ui-formatter"
-import { validate } from "xvalidators"
+import { validate } from "validation-core"
 import { getDateFormat, getLang, getResource } from "../resources"
 import { render, renderError404, renderError500 } from "../template"
 import { Content, ContentFilter, contentModel, ContentService } from "./content"

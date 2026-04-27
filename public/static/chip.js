@@ -6,7 +6,7 @@ function createChip(container, value, text, inputContainer, star) {
   chip.setAttribute("data-value", value)
   if (star) {
     var i = document.createElement("i")
-    i.className = "star highlight"
+    i.className = "star"
     chip.appendChild(i)
   }
   var close = document.createElement("span")

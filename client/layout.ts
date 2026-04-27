@@ -26,23 +26,26 @@ function changeMenu(e: Event) {
 function changeMode(e: Event) {
   const body = document.getElementById("sysBody")
   if (body) {
-    const dark = body.classList.toggle("dark")
-    let ele = e.target as HTMLElement
-    if (ele) {
-      if (ele.nodeName !== "LI") {
-        ele = ele.parentElement as HTMLElement
-      }
-      const attr = dark ? "data-light" : "data-dark"
-      const icon = dark ? "radio_button_checked" : "timelapse"
-      const i = ele.querySelector("i")
-      if (i) {
-        i.innerText = icon
-      }
-      const text = ele.getAttribute(attr)
-      if (text) {
-        const span = ele.querySelector("span")
-        if (span) {
-          span.innerHTML = text
+    const parent = body.parentElement
+    if (parent) {
+      const dark = parent.classList.toggle("dark")
+      let ele = e.target as HTMLElement
+      if (ele) {
+        if (ele.nodeName !== "LI") {
+          ele = ele.parentElement as HTMLElement
+        }
+        const attr = dark ? "data-light" : "data-dark"
+        const icon = dark ? "radio_button_checked" : "timelapse"
+        const i = ele.querySelector("i")
+        if (i) {
+          i.innerText = icon
+        }
+        const text = ele.getAttribute(attr)
+        if (text) {
+          const span = ele.querySelector("span")
+          if (span) {
+            span.innerHTML = text
+          }
         }
       }
     }

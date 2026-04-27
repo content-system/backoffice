@@ -1,9 +1,9 @@
 import { Authenticator, Privilege } from "authen-service"
 import { Request, Response } from "express"
-import { buildError, getView, query, queryLang, toMap } from "express-ext"
+import { buildError, getView, query, queryLang, toMap } from "express-core-web"
 import * as jsonwebtoken from "jsonwebtoken"
 import { Attributes, StringMap } from "onecore"
-import { validate } from "xvalidators"
+import { validate } from "validation-core"
 import { getResource, getResourceByLang } from "../resources"
 import { renderError500 } from "../template"
 

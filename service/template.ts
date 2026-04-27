@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { buildError404, buildError500, generateChips, generateTags, getView, toString } from "express-ext"
+import { buildError404, buildError500, generateChips, generateTags, getView, toString } from "express-core-web"
 import fs from "fs"
 import nunjucks, { Template } from "nunjucks"
 import { Log, StringMap } from "onecore"

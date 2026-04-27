@@ -27,23 +27,26 @@ function changeMenu(e) {
 function changeMode(e) {
   var body = document.getElementById("sysBody")
   if (body) {
-    var dark = body.classList.toggle("dark")
-    var ele = e.target
-    if (ele) {
-      if (ele.nodeName !== "LI") {
-        ele = ele.parentElement
-      }
-      var attr = dark ? "data-light" : "data-dark"
-      var icon = dark ? "radio_button_checked" : "timelapse"
-      var i = ele.querySelector("i")
-      if (i) {
-        i.innerText = icon
-      }
-      var text = ele.getAttribute(attr)
-      if (text) {
-        var span = ele.querySelector("span")
-        if (span) {
-          span.innerHTML = text
+    var parent_1 = body.parentElement
+    if (parent_1) {
+      var dark = parent_1.classList.toggle("dark")
+      var ele = e.target
+      if (ele) {
+        if (ele.nodeName !== "LI") {
+          ele = ele.parentElement
+        }
+        var attr = dark ? "data-light" : "data-dark"
+        var icon = dark ? "radio_button_checked" : "timelapse"
+        var i = ele.querySelector("i")
+        if (i) {
+          i.innerText = icon
+        }
+        var text = ele.getAttribute(attr)
+        if (text) {
+          var span = ele.querySelector("span")
+          if (span) {
+            span.innerHTML = text
+          }
         }
       }
     }
