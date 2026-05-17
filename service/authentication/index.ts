@@ -1,4 +1,4 @@
-import { Authenticator, Privilege } from "authen-service"
+import { Authenticator, getFirstPath } from "authen-service"
 import { Request, Response } from "express"
 import { buildError, getView, query, queryLang, toMap } from "express-core-web"
 import * as jsonwebtoken from "jsonwebtoken"
@@ -96,18 +96,4 @@ export class LoginController {
         .catch((err) => renderError500(req, res, resource, err))
     }
   }
-}
-
-function getFirstPath(items: Privilege[]): string | undefined {
-  for (let i = 0; i < items.length; i++) {
-    const children = items[i].children
-    if (children && children.length > 0) {
-      return getFirstPath(children)
-    } else {
-      if (items[i].path) {
-        return items[i].path
-      }
-    }
-  }
-  return undefined
 }
