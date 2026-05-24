@@ -191,27 +191,30 @@ function navigate(e, partId, includeLang) {
                 setTimeout(function () {
                   var _a
                   var parent = findParentNode(target, "LI")
-                  if (parent) {
-                    var nav = findParentNode(parent, "NAV")
-                    if (nav) {
-                      var elI = nav.querySelector(".active")
-                      if (elI) {
-                        elI.classList.remove("active")
-                      }
-                      elI = nav.querySelector(".active")
-                      if (elI) {
-                        elI.classList.remove("active")
-                      }
-                      elI = nav.querySelector(".active")
-                      if (elI) {
-                        elI.classList.remove("active")
-                      }
+                  var sub = parent ? parent : target
+                  var nav = findParentNode(sub, "NAV")
+                  if (nav) {
+                    var elI = nav.querySelector(".active")
+                    if (elI) {
+                      elI.classList.remove("active")
                     }
+                    elI = nav.querySelector(".active")
+                    if (elI) {
+                      elI.classList.remove("active")
+                    }
+                    elI = nav.querySelector(".active")
+                    if (elI) {
+                      elI.classList.remove("active")
+                    }
+                  }
+                  if (parent) {
                     parent.classList.add("active")
                     var pp = (_a = parent.parentElement) === null || _a === void 0 ? void 0 : _a.parentElement
                     if (pp && pp.nodeName === "LI") {
                       pp.classList.add("active")
                     }
+                  } else {
+                    target.classList.add("active")
                   }
                 }, 0)
               }
