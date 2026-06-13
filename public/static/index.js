@@ -17,8 +17,6 @@ var resources = (function () {
   resources.page = "page"
   resources.limit = "limit"
   resources.fields = "fields"
-  resources.num1 = / |,|\$|€|£|¥|'|٬|،| /g
-  resources.num2 = / |\.|\$|€|£|¥|'|٬|،| /g
   resources.email = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,4})$/i
   resources.phone = /^\d{5,14}$/
   resources.password = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/

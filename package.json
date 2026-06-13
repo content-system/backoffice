@@ -22,7 +22,7 @@
     "express-core-web": "^0.1.5",
     "jsonwebtoken": "^9.0.3",
     "jsonwebtoken-plus": "^0.0.7",
-    "locale-service": "^0.2.0",
+    "locale-service": "^0.2.2",
     "logger-core": "^0.3.1",
     "nanoid": "^3.3.4",
     "nunjucks": "^3.2.4",

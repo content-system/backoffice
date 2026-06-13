@@ -1,12 +1,12 @@
-<label class="col s12 m6 search-input">
-  <select id="limit" name="limit" onchange="search(event)">
-    {% for pageSize in limits %}
-    <option value="{{pageSize}}" {% if pageSize==filter.limit %} selected {% endif %}>{{pageSize}}</option>
-    {% endfor %}
-  </select>
-  <input type="text" id="q" name="q" maxlength="100" onchange="qOnChange(event)" placeholder="{{resource.search}}"
-    value="{{filter.q}}" />
-  <button type="button" id="clearQBtn" name="clearQBtn" hidden class="btn-remove-text" onclick="clearText(event)"></button>
-  <button type="button" id="toggleSearchBtn" name="toggleSearchBtn" class="btn-filter off" onclick="toggleSearch(event)"></button>
-  <button type="submit" id="searchBtn" name="searchBtn" class="btn-search" onclick="search(event)"></button>
-</label>
+<select id="limit" name="limit" onchange="search(event)">
+  {% for pageSize in limits %}
+  <option value="{{pageSize}}" {% if pageSize==filter.limit %} selected {% endif %}>{{pageSize}}</option>
+  {% endfor %}
+</select>
+<input type="text" id="q" name="q" maxlength="100" onchange="qOnChange(event)" value="{{filter.q}}"
+  placeholder="{{resource.search}}" />
+<button type="button" id="clearQBtn" name="clearQBtn" hidden class="btn-remove-text"
+  onclick="clearText(event)"></button>
+<button type="button" id="toggleSearchBtn" name="toggleSearchBtn" class="btn-filter off"
+  onclick="toggleSearch(event)"></button>
+<button type="submit" id="searchBtn" name="searchBtn" class="btn-search" onclick="search(event)"></button>

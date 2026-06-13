@@ -29,9 +29,6 @@ class resources {
   static fields = "fields"
 
   static load?: (pageBody: HTMLElement) => void
-
-  static num1 = / |,|\$|€|£|¥|'|٬|،| /g
-  static num2 = / |\.|\$|€|£|¥|'|٬|،| /g
   static phonecodes?: Phones
   static email = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,4})$/i
   static phone = /^\d{5,14}$/
@@ -416,7 +413,7 @@ function registerEvents(form: HTMLFormElement): void {
             const firstChild = parent.firstChild
             if (firstChild && firstChild.nodeName === "LABEL") {
               if (!(firstChild as HTMLLabelElement).classList.contains("required")) {
-                ;(firstChild as HTMLLabelElement).classList.add("required")
+                ; (firstChild as HTMLLabelElement).classList.add("required")
               }
             }
           }

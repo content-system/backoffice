@@ -1,6 +1,4 @@
 "use strict"
-var r1 = / |,|\$|€|£|¥|'|٬|،| /g
-var r2 = / |\.|\$|€|£|¥|'|٬|،| /g
 function parseDate(v, format) {
   if (!format || format.length === 0) {
     format = "MM/DD/YYYY"
@@ -47,7 +45,7 @@ function getGroupSeparator(ele) {
       separator = form.getAttribute("data-group-separator")
     }
   }
-  return separator === "." ? "." : ","
+  return separator
 }
 var d = "data-value"
 function selectOnChange(ele, attr) {
@@ -151,74 +149,54 @@ function addDays(d, n) {
   newDate.setDate(newDate.getDate() + n)
   return newDate
 }
-function formatDate(d, dateFormat, full, upper) {
-  if (!d) {
+function formatDate(d, format) {
+  if (!d || !format) {
     return ""
   }
-  var format = dateFormat && dateFormat.length > 0 ? dateFormat : "M/D/YYYY"
-  if (upper) {
-    format = format.toUpperCase()
-  }
-  var arr = ["", "", ""]
-  var items = format.split(/\/|\.| |-/)
-  var iday = items.indexOf("D")
-  var im = items.indexOf("M")
-  var iyear = items.indexOf("YYYY")
-  var fm = full ? full : false
-  var fd = full ? full : false
-  var fy = true
-  if (iday === -1) {
-    iday = items.indexOf("DD")
-    fd = true
-  }
-  if (im === -1) {
-    im = items.indexOf("MM")
-    fm = true
-  }
-  if (iyear === -1) {
-    iyear = items.indexOf("YY")
-    fy = full ? full : false
-  }
-  arr[iday] = getD(d.getDate(), fd)
-  arr[im] = getD(d.getMonth() + 1, fm)
-  arr[iyear] = getYear(d.getFullYear(), fy)
-  var s = detectSeparator(format)
-  var e = detectLastSeparator(format)
-  var l = items.length === 4 ? format[format.length - 1] : ""
-  return arr[0] + s + arr[1] + e + arr[2] + l
-}
-function detectSeparator(format) {
-  var len = format.length
-  for (var i = 0; i < len; i++) {
-    var c = format[i]
-    if (!((c >= "A" && c <= "Z") || (c >= "a" && c <= "z"))) {
-      return c
+  var y = d.getFullYear()
+  var m = d.getMonth() + 1
+  var day = d.getDate()
+  var out = ""
+  var i = 0
+  while (i < format.length) {
+    var c = format.charCodeAt(i)
+    if (c === 121) {
+      var len = count(format, i, 121)
+      if (len >= 4) {
+        out += y.toString()
+        i += 4
+      } else {
+        out += shortYear(y)
+        i += 2
+      }
+      continue
     }
-  }
-  return "/"
-}
-function detectLastSeparator(format) {
-  var len = format.length - 3
-  for (var i = len; i > -0; i--) {
-    var c = format[i]
-    if (!((c >= "A" && c <= "Z") || (c >= "a" && c <= "z"))) {
-      return c
+    if (c === 77) {
+      var len = count(format, i, 77)
+      out += len >= 2 ? pad(m) : m.toString()
+      i += len >= 2 ? 2 : 1
+      continue
     }
+    if (c === 100) {
+      var len = count(format, i, 100)
+      out += len >= 2 ? pad(day) : day.toString()
+      i += len >= 2 ? 2 : 1
+      continue
+    }
+    out += format[i]
+    i++
   }
-  return "/"
+  return out
 }
-function getYear(y, full) {
-  if (full || (y <= 99 && y >= -99)) {
-    return y.toString()
+function shortYear(y) {
+  return ((y % 100) + 100) % 100 < 10 ? "0" + (((y % 100) + 100) % 100) : "" + (((y % 100) + 100) % 100)
+}
+function count(s, i, ch) {
+  var n = 0
+  while (i + n < s.length && s.charCodeAt(i + n) === ch) {
+    n++
   }
-  var s = y.toString()
-  return s.substring(s.length - 2)
-}
-function getD(n, fu) {
-  return fu ? pad(n) : n.toString()
-}
-function formatLongTime(d) {
-  return pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds())
+  return n
 }
 function pad(n) {
   return n < 10 ? "0" + n : n.toString()
@@ -229,15 +207,46 @@ function pad3(n) {
   }
   return n < 10 ? "00" + n : "0" + n.toString()
 }
-function formatLongDateTime(date, dateFormat, full, upper) {
+var et = ""
+function formatDateTime(date, dateFormat) {
   if (!date) {
-    return ""
+    return et
   }
-  var sd = formatDate(date, dateFormat, full, upper)
+  var sd = formatDate(date, dateFormat)
+  if (sd.length === 0) {
+    return sd
+  }
+  return sd + " " + formatTime(date)
+}
+function formatLongDateTime(date, dateFormat) {
+  if (!date) {
+    return et
+  }
+  var sd = formatDate(date, dateFormat)
   if (sd.length === 0) {
     return sd
   }
   return sd + " " + formatLongTime(date)
+}
+function formatFullDateTime(date, dateFormat, s) {
+  if (!date) {
+    return et
+  }
+  var sd = formatDate(date, dateFormat)
+  if (sd.length === 0) {
+    return sd
+  }
+  return sd + " " + formatFullTime(date, s)
+}
+function formatTime(d) {
+  return pad(d.getHours()) + ":" + pad(d.getMinutes())
+}
+function formatLongTime(d) {
+  return pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds())
+}
+function formatFullTime(d, s) {
+  var se = s && s.length > 0 ? s : "."
+  return formatLongTime(d) + se + pad3(d.getMilliseconds())
 }
 function getValue(form, name) {
   if (form) {
@@ -311,7 +320,69 @@ function setKey(_object, _isArrayKey, _key, _nextValue) {
   }
   return _object
 }
-function decodeFromElement(parent, fields, currencySymbol) {
+function normalizePhone(s) {
+  if (!s) {
+    return ""
+  }
+  var len = s.length
+  var buf = new Array(len)
+  var j = 0
+  for (var i = 0; i < len; i++) {
+    var c = s.charCodeAt(i)
+    if (c === 43 || (c >= 48 && c <= 57)) {
+      buf[j++] = s[i]
+    }
+  }
+  return j === len ? buf.join("") : buf.slice(0, j).join("")
+}
+function normalizeInteger(s) {
+  if (!s) {
+    return ""
+  }
+  var len = s.length
+  var buf = new Array(len)
+  var j = 0
+  for (var i = 0; i < len; i++) {
+    var c = s.charCodeAt(i)
+    if (c >= 48 && c <= 57) {
+      buf[j++] = s[i]
+    }
+  }
+  return j === len ? buf.join("") : buf.slice(0, j).join("")
+}
+function removeSeparators(s) {
+  if (!s) {
+    return ""
+  }
+  var len = s.length
+  var buffer = new Uint16Array(len)
+  var write = 0
+  for (var i = 0; i < len; i++) {
+    var c = s.charCodeAt(i)
+    if ((c >= 48 && c <= 57) || c === 46) {
+      buffer[write++] = c
+    }
+  }
+  return String.fromCharCode.apply(null, buffer.subarray(0, write))
+}
+function normalizeNumber(s) {
+  if (!s) {
+    return ""
+  }
+  var len = s.length
+  var buf = new Array(len)
+  var j = 0
+  for (var i = 0; i < len; i++) {
+    var c = s.charCodeAt(i)
+    if (c >= 48 && c <= 57) {
+      buf[j++] = s[i]
+    } else if (c === 44 || c === 1643) {
+      buf[j++] = "."
+    }
+  }
+  return j === len ? buf.join("") : buf.slice(0, j).join("")
+}
+function decodeFromElement(parent, fields) {
   var obj = {}
   if (parent) {
     for (var _i = 0, fields_1 = fields; _i < fields_1.length; _i++) {
@@ -334,22 +405,26 @@ function decodeFromElement(parent, fields, currencySymbol) {
           }
         } else {
           var datatype = ele.getAttribute("data-type")
-          var symbol = void 0
           var v = ele.value.trim()
-          if (datatype === "currency" || datatype === "string-currency") {
-            symbol = ele.getAttribute("data-currency-symbol")
-            if (!symbol) {
-              symbol = currencySymbol
+          if (datatype === "phone" || datatype === "fax") {
+            obj[field] = normalizePhone(v)
+          } else if (datatype === "integer") {
+            if (v) {
+              v = normalizeInteger(v)
+              var val = isNaN(v) ? null : parseFloat(v)
+              obj[field] = val
+            } else {
+              obj[field] = undefined
             }
-            if (symbol && symbol.length > 0 && v.indexOf(symbol) >= 0) {
-              v = v.replace(symbol, "")
-            }
-          }
-          if (type === "number" || datatype === "currency" || datatype === "integer" || datatype === "number") {
+          } else if (datatype === "number" || datatype === "currency") {
             var decimalSeparator = getDecimalSeparator(ele)
-            v = decimalSeparator === "," ? v.replace(r2, "") : (v = v.replace(r1, ""))
-            var val = isNaN(v) ? null : parseFloat(v)
-            obj[field] = val
+            v = decimalSeparator === "," || decimalSeparator === "٫" ? normalizeNumber(v) : removeSeparators(v)
+            if (v) {
+              var val = isNaN(v) ? null : parseFloat(v)
+              obj[field] = val
+            } else {
+              obj[field] = undefined
+            }
           } else {
             obj[field] = v
           }
@@ -385,7 +460,7 @@ function decode(form, currencySymbol) {
     if (name_1 != null && name_1 !== "") {
       var nodeName = ele.nodeName
       var type = ele.getAttribute("type")
-      if (nodeName === "INPUT" && type !== null) {
+      if (nodeName === "INPUT" && type != null) {
         nodeName = type.toUpperCase()
       }
       if (nodeName !== "BUTTON" && nodeName !== "RESET" && nodeName !== "SUBMIT" && ele.getAttribute("data-skip") !== "true") {
@@ -437,20 +512,15 @@ function decode(form, currencySymbol) {
         }
         var datatype = ele.getAttribute("data-type")
         var v = ele.value
-        var symbol = void 0
-        if (datatype === "currency" || datatype === "string-currency") {
-          symbol = ele.getAttribute("data-currency-symbol")
-          if (!symbol) {
-            symbol = currencySymbol
-          }
-          if (symbol && symbol.length > 0 && v.indexOf(symbol) >= 0) {
-            v = v.replace(symbol, "")
-          }
-        }
-        if (type === "number" || datatype === "currency" || datatype === "integer" || datatype === "number") {
+        if (datatype === "phone" || datatype === "fax") {
+          val = normalizePhone(v)
+        } else if (datatype === "integer") {
+          var n0 = normalizeInteger(v)
+          val = isNaN(n0) ? undefined : parseFloat(v)
+        } else if (datatype === "number" || datatype === "currency") {
           var decimalSeparator = getDecimalSeparator(ele)
-          v = decimalSeparator === "," ? v.replace(r2, "") : v.replace(r1, "")
-          val = isNaN(v) ? null : parseFloat(v)
+          var n0 = decimalSeparator === "," || decimalSeparator === "٫" ? normalizeNumber(v) : removeSeparators(v)
+          val = isNaN(n0) ? undefined : parseFloat(v)
         }
         setValue(obj, name_1, val)
       }
