@@ -56,65 +56,33 @@ function selectOnChange(ele, attr) {
     ele.setAttribute(at, ele.value)
   }
 }
+var CTRL_KEYS = {
+  a: true,
+  c: true,
+  v: true,
+  x: true,
+}
 function detectCtrlKeyCombination(e) {
-  var forbiddenKeys = new Array("v", "a", "x", "c")
-  var key
-  var isCtrl
-  var browser = navigator.appName
-  if (browser == "Microsoft Internet Explorer") {
-    key = e.keyCode
-    if (e.ctrlKey) {
-      isCtrl = true
-    } else {
-      isCtrl = false
-    }
-  } else {
-    if (browser == "Netscape") {
-      key = e.which
-      if (e.ctrlKey) isCtrl = true
-      else isCtrl = false
-    } else return true
-  }
-  if (isCtrl) {
-    var chr = String.fromCharCode(key).toLowerCase()
-    for (var i = 0; i < forbiddenKeys.length; i++) {
-      if (forbiddenKeys[i] == chr) {
-        return true
-      }
-    }
-  }
-  return false
+  return e.ctrlKey && !!CTRL_KEYS[e.key.toLowerCase()]
 }
 function digitOnKeyPress(e) {
-  if (detectCtrlKeyCombination(e)) {
+  var key = e.key
+  if ((e.ctrlKey && CTRL_KEYS[key.toLowerCase()]) || key === "Enter" || key === "Backspace" || key === "Tab" || key === "Delete") {
     return true
   }
-  var key = window.event ? e.keyCode : e.which
-  if (key == 13 || key == 8 || key == 9 || key == 11 || key == 127 || key == "\t") {
-    return key
-  }
-  var keychar = String.fromCharCode(key)
-  var reg = /\d/
-  return reg.test(keychar)
+  return key.length === 1 && key >= "0" && key <= "9"
 }
 function integerOnKeyPress(e) {
-  if (detectCtrlKeyCombination(e)) {
+  var key = e.key
+  if ((e.ctrlKey && CTRL_KEYS[key.toLowerCase()]) || key === "Enter" || key === "Backspace" || key === "Tab" || key === "Delete") {
     return true
   }
-  var key = window.event ? e.keyCode : e.which
-  if (key == 13 || key == 8 || key == 9 || key == 11 || key == 127 || key == "\t") {
-    return key
+  var input = e.target
+  if (key === "-") {
+    var min = Number(input.min)
+    return !input.value.includes("-") && !Number.isNaN(min) && min < 0
   }
-  var ele = e.target
-  var keychar = String.fromCharCode(key)
-  if (keychar == "-") {
-    if (ele.value.indexOf("-") >= 0 || isNaN(ele.min) || parseInt(ele.min) >= 0) {
-      return false
-    }
-    return key
-  }
-  var reg = /\d/
-  return reg.test(keychar)
+  return key.length === 1 && key >= "0" && key <= "9"
 }
 function numberOnKeyPress(e) {
   if (detectCtrlKeyCombination(e)) {

@@ -764,50 +764,77 @@ function formatInteger(v, groupSeparator) {
   if (n < 1000) {
     return isNegative ? "-" + n : "" + n
   }
-  var result = ""
-  var count = 0
+  var buffer = new Array(32)
+  var i = buffer.length
+  var digitCount = 0
   while (n > 0) {
-    var digit = n % 10
-    n = (n / 10) | 0
-    if (count > 0 && count % 3 === 0) {
-      result = groupSeparator + result
+    if (digitCount > 0 && digitCount % 3 === 0) {
+      buffer[--i] = groupSeparator
     }
-    result = digit + result
-    count++
+    var digit = n % 10
+    buffer[--i] = String.fromCharCode(48 + digit)
+    n = Math.floor(n / 10)
+    digitCount++
   }
-  return isNegative ? "-" + result : result
+  if (isNegative) {
+    buffer[--i] = "-"
+  }
+  return buffer.slice(i).join("")
 }
-function formatNumber(v, scale, d, g) {
-  if (v == null) {
+function formatNumber(v, precision, decimalSeparator, groupSeparator) {
+  if (precision === void 0) {
+    precision = 0
+  }
+  if (v == null || !Number.isFinite(v)) {
     return ""
   }
-  if (!d && !g) {
-    g = ","
-    d = "."
-  } else if (!g) {
+  var d = "."
+  var g = ","
+  if (decimalSeparator && groupSeparator) {
+    d = decimalSeparator
+    g = groupSeparator
+  } else if (decimalSeparator && !groupSeparator) {
+    d = decimalSeparator
     if (d === "٫") {
       g = "٬"
     } else {
       g = d === "," ? "." : ","
     }
   }
-  var s = scale === 0 || scale ? v.toFixed(scale) : v.toString()
-  var x = s.split(".", 2)
-  var y = x[0]
-  var arr = []
-  var len = y.length - 1
-  for (var k = 0; k < len; k++) {
-    arr.push(y[len - k])
-    if ((k + 1) % 3 === 0) {
-      arr.push(g)
+  var negative = v < 0
+  var s = Math.abs(v).toFixed(precision)
+  var dot = s.indexOf(".")
+  var intEnd = dot >= 0 ? dot : s.length
+  var fracLen = dot >= 0 ? s.length - dot - 1 : 0
+  var intLen = intEnd
+  var groups = intLen > 3 ? ((intLen - 1) / 3) | 0 : 0
+  var outLen = (negative ? 1 : 0) + intLen + groups * g.length + (fracLen > 0 ? d.length + fracLen : 0)
+  var out = new Array(outLen)
+  var p = 0
+  if (negative) {
+    out[p++] = "-"
+  }
+  var firstGroup = intLen % 3
+  if (firstGroup === 0) {
+    firstGroup = 3
+  }
+  for (var i = 0; i < intLen; i++) {
+    if (i > 0 && (i === firstGroup || (i > firstGroup && (i - firstGroup) % 3 === 0))) {
+      for (var j = 0; j < g.length; j++) {
+        out[p++] = g[j]
+      }
+    }
+    out[p++] = s[i]
+  }
+  if (fracLen > 0) {
+    for (var j = 0; j < d.length; j++) {
+      out[p++] = d[j]
+    }
+    for (var i = dot + 1; i < s.length; i++) {
+      out[p++] = s[i]
     }
   }
-  arr.push(y[0])
-  if (x.length === 1) {
-    return arr.reverse().join("")
-  } else {
-    return arr.reverse().join("") + d + x[1]
-  }
+  return out.join("")
 }
 function validateOnBlur(event, includeReadOnly) {
   var target = event.target

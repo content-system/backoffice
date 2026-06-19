@@ -413,7 +413,7 @@ function registerEvents(form: HTMLFormElement): void {
             const firstChild = parent.firstChild
             if (firstChild && firstChild.nodeName === "LABEL") {
               if (!(firstChild as HTMLLabelElement).classList.contains("required")) {
-                ; (firstChild as HTMLLabelElement).classList.add("required")
+                ;(firstChild as HTMLLabelElement).classList.add("required")
               }
             }
           }
@@ -428,7 +428,7 @@ function registerEvents(form: HTMLFormElement): void {
     }
   }
 }
-let debounceTimer: NodeJS.Timeout
+let debounceTimer: number
 
 function textChange(event: Event, url: string) {
   const target = event.target as HTMLInputElement

@@ -58,72 +58,44 @@ function selectOnChange(ele: HTMLSelectElement, attr?: string): void {
   }
 }
 //detect Ctrl + [a, v, c, x]
-function detectCtrlKeyCombination(e: KeyboardEvent) {
-  // list all CTRL + key combinations
-  var forbiddenKeys = new Array("v", "a", "x", "c")
-  var key
-  var isCtrl
-  var browser = navigator.appName
+const CTRL_KEYS = {
+  a: true,
+  c: true,
+  v: true,
+  x: true,
+} as const
 
-  if (browser == "Microsoft Internet Explorer") {
-    key = e.keyCode
-    // IE
-    if (e.ctrlKey) {
-      isCtrl = true
-    } else {
-      isCtrl = false
-    }
-  } else {
-    if (browser == "Netscape") {
-      key = e.which
-      // firefox, Netscape
-      if (e.ctrlKey) isCtrl = true
-      else isCtrl = false
-    } else return true
-  }
-
-  // if ctrl is pressed check if other key is in forbidenKeys array
-  if (isCtrl) {
-    var chr = String.fromCharCode(key).toLowerCase()
-    for (let i = 0; i < forbiddenKeys.length; i++) {
-      if (forbiddenKeys[i] == chr) {
-        return true
-      }
-    }
-  }
-  return false
+function detectCtrlKeyCombination(e: KeyboardEvent): boolean {
+  return e.ctrlKey && !!CTRL_KEYS[e.key.toLowerCase() as keyof typeof CTRL_KEYS]
 }
-function digitOnKeyPress(e: KeyboardEvent) {
-  if (detectCtrlKeyCombination(e)) {
+function digitOnKeyPress(e: KeyboardEvent): boolean {
+  const key = e.key
+
+  if ((e.ctrlKey && CTRL_KEYS[key.toLowerCase() as keyof typeof CTRL_KEYS]) || key === "Enter" || key === "Backspace" || key === "Tab" || key === "Delete") {
     return true
   }
-  const key = window.event ? (e as any).keyCode : (e as any).which
-  if (key == 13 || key == 8 || key == 9 || key == 11 || key == 127 || key == "\t") {
-    return key
-  }
-  var keychar = String.fromCharCode(key)
-  var reg = /\d/
-  return reg.test(keychar)
+
+  return key.length === 1 && key >= "0" && key <= "9"
 }
-function integerOnKeyPress(e: KeyboardEvent) {
-  if (detectCtrlKeyCombination(e)) {
+
+function integerOnKeyPress(e: KeyboardEvent): boolean {
+  const key = e.key
+
+  if ((e.ctrlKey && CTRL_KEYS[key.toLowerCase() as keyof typeof CTRL_KEYS]) || key === "Enter" || key === "Backspace" || key === "Tab" || key === "Delete") {
     return true
   }
-  const key = window.event ? (e as any).keyCode : (e as any).which
-  if (key == 13 || key == 8 || key == 9 || key == 11 || key == 127 || key == "\t") {
-    return key
+
+  const input = e.target as HTMLInputElement
+
+  if (key === "-") {
+    const min = Number(input.min)
+
+    return !input.value.includes("-") && !Number.isNaN(min) && min < 0
   }
-  var ele = e.target as HTMLInputElement
-  var keychar = String.fromCharCode(key)
-  if (keychar == "-") {
-    if (ele.value.indexOf("-") >= 0 || isNaN(ele.min as any) || parseInt(ele.min) >= 0) {
-      return false
-    }
-    return key
-  }
-  var reg = /\d/
-  return reg.test(keychar)
+
+  return key.length === 1 && key >= "0" && key <= "9"
 }
+
 function numberOnKeyPress(e: KeyboardEvent) {
   if (detectCtrlKeyCombination(e)) {
     return true
@@ -428,7 +400,7 @@ function decodeFromElement<T>(parent: HTMLElement | null | undefined, fields: st
             try {
               const val = new Date(ele.value) // DateUtil.parse(ele.value, 'YYYY-MM-DD');
               obj[field] = val
-            } catch (err) { }
+            } catch (err) {}
           }
         } else {
           const datatype = ele.getAttribute("data-type")
