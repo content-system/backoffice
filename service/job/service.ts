@@ -1,15 +1,10 @@
 import { nanoid } from "nanoid"
 import { SearchResult } from "onecore"
-import { DB } from "sql-core"
 import { slugify } from "../common/slug"
-import { JobController } from "./controller"
 import { Job, JobFilter, JobRepository, JobService, Status } from "./job"
-import { SqlJobRepository } from "./repository"
-export * from "./controller"
 
 export class JobUseCase implements JobService {
-  constructor(protected repository: JobRepository) {
-  }
+  constructor(protected repository: JobRepository) {}
   search(filter: JobFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Job>> {
     return this.repository.search(filter, limit, page, fields)
   }
@@ -52,10 +47,4 @@ export class JobUseCase implements JobService {
   delete(id: string): Promise<number> {
     return this.repository.delete(id)
   }
-}
-
-export function useJobController(db: DB): JobController {
-  const repository = new SqlJobRepository(db)
-  const service = new JobUseCase(repository)
-  return new JobController(service)
 }

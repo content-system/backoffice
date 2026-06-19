@@ -1,16 +1,10 @@
 import { nanoid } from "nanoid"
-import { ApproversPort, Log, Notification, NotificationPort, SearchResult } from "onecore"
-import { DB } from "sql-core"
+import { ApproversPort, DB, Log, Notification, NotificationPort, SearchResult } from "onecore"
 import { slugify } from "../common/slug"
-import { ApproversAdapter } from "../shared/approvers"
-import { Action, History, HistoryAdapter, HistoryRepository, ignoreFields } from "../shared/history"
-import { createNotification, NotificationAdapter } from "../shared/notification"
+import { Action, History, HistoryRepository } from "../shared/history"
+import { createNotification } from "../shared/notification"
 import { canReject, canUpdate, Status } from "../shared/status"
 import { Article, ArticleFilter, ArticleRepository, ArticleService, DraftArticleRepository } from "./article"
-import { ArticleController } from "./controller"
-import { SqlArticleRepository, SqlDraftArticleRepository } from "./repository"
-export * from "./article"
-export * from "./controller"
 
 export class ArticleUseCase implements ArticleService {
   constructor(
@@ -20,9 +14,8 @@ export class ArticleUseCase implements ArticleService {
     protected historyRepository: HistoryRepository<Article>,
     protected approversPort: ApproversPort,
     protected notificationPort: NotificationPort,
-    protected log: Log
-  ) {
-  }
+    protected log: Log,
+  ) {}
   search(filter: ArticleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Article>> {
     return this.draftRepository.search(filter, limit, page, fields)
   }
@@ -195,14 +188,4 @@ export class ArticleUseCase implements ArticleService {
   delete(id: string): Promise<number> {
     return this.draftRepository.delete(id)
   }
-}
-
-export function useArticleController(db: DB, log: Log): ArticleController {
-  const draftRepository = new SqlDraftArticleRepository(db)
-  const repository = new SqlArticleRepository(db)
-  const historyRepository = new HistoryAdapter<Article>(db, "article", "histories", ignoreFields, "history_id", "entity", "id", "author")
-  const approversPort = new ApproversAdapter(db, "article")
-  const notificationPort = new NotificationAdapter(db, "notifications", "U", "time", "url", "id", "sender", "receiver", "message", "status")
-  const service = new ArticleUseCase(db, draftRepository, repository, historyRepository, approversPort, notificationPort, log)
-  return new ArticleController(service)
 }
