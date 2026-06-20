@@ -38,11 +38,15 @@
         type="tel"
         id="sequence"
         name="sequence"
+        data-type="integer"
         class="right-align"
         value="{{category.sequence}}"
         maxlength="3"
+        min="0"
         required
         onkeypress="return integerOnKeyPress(event)"
+        onfocus="numberOnFocus(event)"
+        onblur="numberOnBlur(event)"
         placeholder="{{resource.sequence}}" />
     </label>
     <div class="col s12 m6 radio-section">

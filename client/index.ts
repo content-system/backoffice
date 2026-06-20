@@ -428,7 +428,7 @@ function registerEvents(form: HTMLFormElement): void {
     }
   }
 }
-let debounceTimer: number
+let debounceTimer: NodeJS.Timeout
 
 function textChange(event: Event, url: string) {
   const target = event.target as HTMLInputElement

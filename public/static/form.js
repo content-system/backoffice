@@ -62,9 +62,6 @@ var CTRL_KEYS = {
   v: true,
   x: true,
 }
-function detectCtrlKeyCombination(e) {
-  return e.ctrlKey && !!CTRL_KEYS[e.key.toLowerCase()]
-}
 function digitOnKeyPress(e) {
   var key = e.key
   if ((e.ctrlKey && CTRL_KEYS[key.toLowerCase()]) || key === "Enter" || key === "Backspace" || key === "Tab" || key === "Delete") {
@@ -79,35 +76,38 @@ function integerOnKeyPress(e) {
   }
   var input = e.target
   if (key === "-") {
-    var min = Number(input.min)
-    return !input.value.includes("-") && !Number.isNaN(min) && min < 0
+    if (input.min) {
+      var min = Number(input.min)
+      return !Number.isNaN(min) && min < 0 && !input.value.includes("-")
+    }
+    if (input.max) {
+      var max = Number(input.max)
+      return !Number.isNaN(max) && max < 0 && !input.value.includes("-")
+    }
   }
   return key.length === 1 && key >= "0" && key <= "9"
 }
 function numberOnKeyPress(e) {
-  if (detectCtrlKeyCombination(e)) {
+  var key = e.key
+  if ((e.ctrlKey && CTRL_KEYS[key.toLowerCase()]) || key === "Enter" || key === "Backspace" || key === "Tab" || key === "Delete") {
     return true
   }
-  var key = window.event ? e.keyCode : e.which
-  if (key == 13 || key == 8 || key == 9 || key == 11 || key == 127 || key == "\t") {
-    return key
-  }
-  var ele = e.target
-  var keychar = String.fromCharCode(key)
-  if (keychar == "-") {
-    if (ele.value.indexOf("-") >= 0 || isNaN(ele.min) || parseInt(ele.min) >= 0) {
-      return false
+  var input = e.target
+  if (key === "-") {
+    if (input.min) {
+      var min = Number(input.min)
+      return !Number.isNaN(min) && min < 0 && !input.value.includes("-")
     }
-    return key
-  }
-  if (keychar == "." || keychar == ",") {
-    if (ele.value.indexOf(keychar) >= 0 || keychar !== getDecimalSeparator(ele)) {
-      return false
+    if (input.max) {
+      var max = Number(input.max)
+      return !Number.isNaN(max) && max < 0 && !input.value.includes("-")
     }
-    return key
   }
-  var reg = /\d/
-  return reg.test(keychar)
+  if (key === "." || key === "," || key === "٫") {
+    var separator = getDecimalSeparator(input)
+    return key === separator && !input.value.includes(separator)
+  }
+  return key.length === 1 && key >= "0" && key <= "9"
 }
 function trimTime(d) {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate())
@@ -297,7 +297,7 @@ function normalizePhone(s) {
   var j = 0
   for (var i = 0; i < len; i++) {
     var c = s.charCodeAt(i)
-    if (c === 43 || (c >= 48 && c <= 57)) {
+    if ((c >= 48 && c <= 57) || c === 43) {
       buf[j++] = s[i]
     }
   }
@@ -312,7 +312,7 @@ function normalizeInteger(s) {
   var j = 0
   for (var i = 0; i < len; i++) {
     var c = s.charCodeAt(i)
-    if (c >= 48 && c <= 57) {
+    if ((c >= 48 && c <= 57) || c === 45) {
       buf[j++] = s[i]
     }
   }
@@ -327,7 +327,7 @@ function removeSeparators(s) {
   var write = 0
   for (var i = 0; i < len; i++) {
     var c = s.charCodeAt(i)
-    if ((c >= 48 && c <= 57) || c === 46) {
+    if ((c >= 48 && c <= 57) || c === 45 || c === 46) {
       buffer[write++] = c
     }
   }
@@ -342,7 +342,7 @@ function normalizeNumber(s) {
   var j = 0
   for (var i = 0; i < len; i++) {
     var c = s.charCodeAt(i)
-    if (c >= 48 && c <= 57) {
+    if ((c >= 48 && c <= 57) || c === 45) {
       buf[j++] = s[i]
     } else if (c === 44 || c === 1643) {
       buf[j++] = "."

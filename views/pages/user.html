@@ -30,7 +30,9 @@
         name="username"
         class="form-control"
         value="{{user.username}}"
-        readonly=""
+      {% if editMode %}
+        readonly
+      {% endif %}
         maxlength="40"
         required
         onblur="requiredOnBlur(event)"
