@@ -85,13 +85,11 @@ function integerOnKeyPress(e: KeyboardEvent): boolean {
   const input = e.target as HTMLInputElement
 
   if (key === "-") {
-    if (input.min) {
+    if (!input.min) {
+      return true
+    } else {
       const min = Number(input.min)
       return !Number.isNaN(min) && min < 0 && !input.value.includes("-")
-    }
-    if (input.max) {
-      const max = Number(input.max)
-      return !Number.isNaN(max) && max < 0 && !input.value.includes("-")
     }
   }
 
@@ -108,15 +106,14 @@ function numberOnKeyPress(e: KeyboardEvent) {
   const input = e.target as HTMLInputElement
 
   if (key === "-") {
-    if (input.min) {
+    if (!input.min) {
+      return true
+    } else {
       const min = Number(input.min)
       return !Number.isNaN(min) && min < 0 && !input.value.includes("-")
     }
-    if (input.max) {
-      const max = Number(input.max)
-      return !Number.isNaN(max) && max < 0 && !input.value.includes("-")
-    }
   }
+
   if (key === "." || key === "," || key === "٫") {
     const separator = getDecimalSeparator(input)
     return key === separator && !input.value.includes(separator)
@@ -403,7 +400,7 @@ function decodeFromElement<T>(parent: HTMLElement | null | undefined, fields: st
             try {
               const val = new Date(ele.value) // DateUtil.parse(ele.value, 'YYYY-MM-DD');
               obj[field] = val
-            } catch (err) {}
+            } catch (err) { }
           }
         } else {
           const datatype = ele.getAttribute("data-type")

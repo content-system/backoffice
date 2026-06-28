@@ -76,13 +76,11 @@ function integerOnKeyPress(e) {
   }
   var input = e.target
   if (key === "-") {
-    if (input.min) {
+    if (!input.min) {
+      return true
+    } else {
       var min = Number(input.min)
       return !Number.isNaN(min) && min < 0 && !input.value.includes("-")
-    }
-    if (input.max) {
-      var max = Number(input.max)
-      return !Number.isNaN(max) && max < 0 && !input.value.includes("-")
     }
   }
   return key.length === 1 && key >= "0" && key <= "9"
@@ -94,13 +92,11 @@ function numberOnKeyPress(e) {
   }
   var input = e.target
   if (key === "-") {
-    if (input.min) {
+    if (!input.min) {
+      return true
+    } else {
       var min = Number(input.min)
       return !Number.isNaN(min) && min < 0 && !input.value.includes("-")
-    }
-    if (input.max) {
-      var max = Number(input.max)
-      return !Number.isNaN(max) && max < 0 && !input.value.includes("-")
     }
   }
   if (key === "." || key === "," || key === "٫") {

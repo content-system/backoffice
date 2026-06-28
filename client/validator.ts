@@ -726,7 +726,16 @@ function numberOnBlur(event: Event) {
     const scale = attr && attr.length > 0 ? parseInt(attr, 10) : undefined
     const n = parseFloat(v)
     const groupSeparator = getGroupSeparator(target)
-    target.value = formatNumber(n, scale, separator, groupSeparator)
+    let s = formatNumber(n, scale, separator, groupSeparator)
+    const datatype = target.getAttribute("data-type")
+    if (datatype === "currency" || datatype === "string-currency") {
+      s = formatCurrency(s, target)
+    }
+    if (target.value !== s) {
+      target.value = s
+    }
+  } else if (target.value.length > 0 && isNaN(target.value as any)) {
+    target.value = ""
   }
 }
 function currencyOnBlur(event: Event) {
