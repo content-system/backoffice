@@ -57,31 +57,73 @@ function selectOnChange(ele: HTMLSelectElement, attr?: string): void {
     ele.setAttribute(at, ele.value)
   }
 }
-//detect Ctrl + [a, v, c, x]
-const CTRL_KEYS = {
-  a: true,
-  c: true,
-  v: true,
-  x: true,
-} as const
 
-function digitOnKeyPress(e: KeyboardEvent): boolean {
-  const key = e.key
+const SHORTCUT_KEYS = new Set(["a", "c", "v", "x", "z", "y"])
 
-  if ((e.ctrlKey && CTRL_KEYS[key.toLowerCase() as keyof typeof CTRL_KEYS]) || key === "Enter" || key === "Backspace" || key === "Tab" || key === "Delete") {
-    return true
-  }
+// Non-printable keys that should always be allowed
+const CONTROL_KEYS = new Set([
+  "Backspace",
+  "Delete",
+  "Tab",
+  "Enter",
+  "Escape",
 
+  "ArrowLeft",
+  "ArrowRight",
+  "ArrowUp",
+  "ArrowDown",
+
+  "Home",
+  "End",
+
+  "PageUp",
+  "PageDown",
+
+  "Insert",
+])
+
+function detectShortcut(e: KeyboardEvent): boolean {
+  return (e.ctrlKey || e.metaKey) && SHORTCUT_KEYS.has(e.key.toLowerCase())
+}
+
+function isDigit(key: string): boolean {
   return key.length === 1 && key >= "0" && key <= "9"
 }
 
-function integerOnKeyPress(e: KeyboardEvent): boolean {
-  const key = e.key
+function isControlKey(key: string): boolean {
+  return CONTROL_KEYS.has(key)
+}
 
-  if ((e.ctrlKey && CTRL_KEYS[key.toLowerCase() as keyof typeof CTRL_KEYS]) || key === "Enter" || key === "Backspace" || key === "Tab" || key === "Delete") {
+/**
+ * Digits only
+ * Allow:
+ *   0-9
+ */
+function digitOnKeyDown(e: KeyboardEvent): boolean {
+  if (detectShortcut(e)) {
     return true
   }
+  const key = e.key
+  if (isControlKey(key)) {
+    return true
+  }
+  return isDigit(key)
+}
 
+/**
+ * Integer input
+ * Allow:
+ *   -123
+ *   123
+ */
+function integerOnKeyDown(e: KeyboardEvent): boolean {
+  if (detectShortcut(e)) {
+    return true
+  }
+  const key = e.key
+  if (isControlKey(key)) {
+    return true
+  }
   const input = e.target as HTMLInputElement
 
   if (key === "-") {
@@ -93,18 +135,28 @@ function integerOnKeyPress(e: KeyboardEvent): boolean {
     }
   }
 
-  return key.length === 1 && key >= "0" && key <= "9"
+  return isDigit(key)
 }
 
-function numberOnKeyPress(e: KeyboardEvent) {
+/**
+ * Decimal numbers
+ * Allow:
+ *   -123.45
+ *   -123,45
+ * depending on getDecimalSeparator()
+ */
+function numberOnKeyDown(e: KeyboardEvent): boolean {
+  if (detectShortcut(e)) {
+    return true
+  }
+
   const key = e.key
 
-  if ((e.ctrlKey && CTRL_KEYS[key.toLowerCase() as keyof typeof CTRL_KEYS]) || key === "Enter" || key === "Backspace" || key === "Tab" || key === "Delete") {
+  if (isControlKey(key)) {
     return true
   }
 
   const input = e.target as HTMLInputElement
-
   if (key === "-") {
     if (!input.min) {
       return true
@@ -119,8 +171,9 @@ function numberOnKeyPress(e: KeyboardEvent) {
     return key === separator && !input.value.includes(separator)
   }
 
-  return key.length === 1 && key >= "0" && key <= "9"
+  return isDigit(key)
 }
+
 function trimTime(d: Date): Date {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate())
 }
@@ -400,7 +453,7 @@ function decodeFromElement<T>(parent: HTMLElement | null | undefined, fields: st
             try {
               const val = new Date(ele.value) // DateUtil.parse(ele.value, 'YYYY-MM-DD');
               obj[field] = val
-            } catch (err) { }
+            } catch (err) {}
           }
         } else {
           const datatype = ele.getAttribute("data-type")

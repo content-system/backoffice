@@ -56,22 +56,48 @@ function selectOnChange(ele, attr) {
     ele.setAttribute(at, ele.value)
   }
 }
-var CTRL_KEYS = {
-  a: true,
-  c: true,
-  v: true,
-  x: true,
+var SHORTCUT_KEYS = new Set(["a", "c", "v", "x", "z", "y"])
+var CONTROL_KEYS = new Set([
+  "Backspace",
+  "Delete",
+  "Tab",
+  "Enter",
+  "Escape",
+  "ArrowLeft",
+  "ArrowRight",
+  "ArrowUp",
+  "ArrowDown",
+  "Home",
+  "End",
+  "PageUp",
+  "PageDown",
+  "Insert",
+])
+function detectShortcut(e) {
+  return (e.ctrlKey || e.metaKey) && SHORTCUT_KEYS.has(e.key.toLowerCase())
 }
-function digitOnKeyPress(e) {
-  var key = e.key
-  if ((e.ctrlKey && CTRL_KEYS[key.toLowerCase()]) || key === "Enter" || key === "Backspace" || key === "Tab" || key === "Delete") {
-    return true
-  }
+function isDigit(key) {
   return key.length === 1 && key >= "0" && key <= "9"
 }
-function integerOnKeyPress(e) {
+function isControlKey(key) {
+  return CONTROL_KEYS.has(key)
+}
+function digitOnKeyDown(e) {
+  if (detectShortcut(e)) {
+    return true
+  }
   var key = e.key
-  if ((e.ctrlKey && CTRL_KEYS[key.toLowerCase()]) || key === "Enter" || key === "Backspace" || key === "Tab" || key === "Delete") {
+  if (isControlKey(key)) {
+    return true
+  }
+  return isDigit(key)
+}
+function integerOnKeyDown(e) {
+  if (detectShortcut(e)) {
+    return true
+  }
+  var key = e.key
+  if (isControlKey(key)) {
     return true
   }
   var input = e.target
@@ -83,11 +109,14 @@ function integerOnKeyPress(e) {
       return !Number.isNaN(min) && min < 0 && !input.value.includes("-")
     }
   }
-  return key.length === 1 && key >= "0" && key <= "9"
+  return isDigit(key)
 }
-function numberOnKeyPress(e) {
+function numberOnKeyDown(e) {
+  if (detectShortcut(e)) {
+    return true
+  }
   var key = e.key
-  if ((e.ctrlKey && CTRL_KEYS[key.toLowerCase()]) || key === "Enter" || key === "Backspace" || key === "Tab" || key === "Delete") {
+  if (isControlKey(key)) {
     return true
   }
   var input = e.target
@@ -103,7 +132,7 @@ function numberOnKeyPress(e) {
     var separator = getDecimalSeparator(input)
     return key === separator && !input.value.includes(separator)
   }
-  return key.length === 1 && key >= "0" && key <= "9"
+  return isDigit(key)
 }
 function trimTime(d) {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate())
