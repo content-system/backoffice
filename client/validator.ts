@@ -722,7 +722,7 @@ function numberOnBlur(event: Event) {
   const separator = getDecimalSeparator(target)
   const v = checkNumberEvent(event, separator)
   if (typeof v === "string") {
-    const attr = target.getAttribute("data-scale")
+    const attr = target.getAttribute("data-decimals")
     const scale = attr && attr.length > 0 ? parseInt(attr, 10) : undefined
     const n = parseFloat(v)
     const groupSeparator = getGroupSeparator(target)
@@ -743,7 +743,7 @@ function currencyOnBlur(event: Event) {
   const separator = getDecimalSeparator(target)
   const v = checkNumberEvent(event, separator)
   if (typeof v === "string") {
-    const attr = target.getAttribute("data-scale")
+    const attr = target.getAttribute("data-decimals")
     const scale = attr && attr.length > 0 ? parseInt(attr, 10) : undefined
     const n = parseFloat(v)
     const groupSeparator = getGroupSeparator(target)
@@ -983,7 +983,7 @@ function validateElement(ele: HTMLInputElement, decimalSeparator?: string | null
     const separator = getDecimalSeparator(ele)
     const groupSeparator = getGroupSeparator(ele)
     if (typeof v === "string") {
-      const attr = ele.getAttribute("data-scale")
+      const attr = ele.getAttribute("data-decimals")
       const scale = attr && attr.length > 0 ? parseInt(attr, 10) : undefined
       const n = parseFloat(v)
       const str = formatNumber(n, scale, separator, groupSeparator)

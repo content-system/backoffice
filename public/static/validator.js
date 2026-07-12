@@ -713,7 +713,7 @@ function numberOnBlur(event) {
   var separator = getDecimalSeparator(target)
   var v = checkNumberEvent(event, separator)
   if (typeof v === "string") {
-    var attr = target.getAttribute("data-scale")
+    var attr = target.getAttribute("data-decimals")
     var scale = attr && attr.length > 0 ? parseInt(attr, 10) : undefined
     var n = parseFloat(v)
     var groupSeparator = getGroupSeparator(target)
@@ -734,7 +734,7 @@ function currencyOnBlur(event) {
   var separator = getDecimalSeparator(target)
   var v = checkNumberEvent(event, separator)
   if (typeof v === "string") {
-    var attr = target.getAttribute("data-scale")
+    var attr = target.getAttribute("data-decimals")
     var scale = attr && attr.length > 0 ? parseInt(attr, 10) : undefined
     var n = parseFloat(v)
     var groupSeparator = getGroupSeparator(target)
@@ -941,7 +941,7 @@ function validateElement(ele, decimalSeparator, includeReadOnly) {
     var separator = getDecimalSeparator(ele)
     var groupSeparator = getGroupSeparator(ele)
     if (typeof v === "string") {
-      var attr = ele.getAttribute("data-scale")
+      var attr = ele.getAttribute("data-decimals")
       var scale = attr && attr.length > 0 ? parseInt(attr, 10) : undefined
       var n = parseFloat(v)
       var str = formatNumber(n, scale, separator, groupSeparator)

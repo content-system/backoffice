@@ -1355,7 +1355,7 @@ function numberOnBlur(event) {
   var separator = target.getAttribute("data-decimal-separator")
   var v = checkNumberEvent(event, separator)
   if (typeof v === "string") {
-    var attr = target.getAttribute("data-scale")
+    var attr = target.getAttribute("data-decimals")
     var scale = attr && attr.length > 0 ? parseInt(attr, 10) : undefined
     var n = parseFloat(v)
     target.value = formatNumber(n, scale, separator)
@@ -1366,7 +1366,7 @@ function currencyOnBlur(event) {
   var separator = target.getAttribute("data-decimal-separator")
   var v = checkNumberEvent(event, separator)
   if (typeof v === "string") {
-    var attr = target.getAttribute("data-scale")
+    var attr = target.getAttribute("data-decimals")
     var scale = attr && attr.length > 0 ? parseInt(attr, 10) : undefined
     var n = parseFloat(v)
     var value = formatNumber(n, scale, separator)
@@ -1515,7 +1515,7 @@ function validateElement(ele, locale, includeReadOnly) {
     var v = checkNumber(ele, locale, resource)
     var separator = getDecimalSeparator(ele)
     if (typeof v === "string") {
-      var attr = ele.getAttribute("data-scale")
+      var attr = ele.getAttribute("data-decimals")
       var scale = attr && attr.length > 0 ? parseInt(attr, 10) : undefined
       var n = parseFloat(v)
       if (datatype === "currency" || datatype === "string-currency") {
