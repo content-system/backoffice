@@ -14,8 +14,8 @@ import {
   hasSearch,
   isSuccessful,
   resources,
-  respondError
-} from "express-core-web"
+  respondError,
+} from "express-web-kit"
 import { write } from "security-express"
 import { getDateFormat } from "ui-formatter"
 import { validate } from "validation-core"
@@ -69,7 +69,7 @@ export class JobController {
   async view(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
-    const id = req.params.id
+    const id = req.params.id as string
     const editMode = id !== "new"
     const permissions = res.locals.permissions as number
     const readonly = write != (write & permissions)

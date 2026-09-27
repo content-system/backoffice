@@ -12,8 +12,8 @@ import {
   getOffset,
   getSearch,
   hasSearch,
-  resources
-} from "express-core-web"
+  resources,
+} from "express-web-kit"
 import { Search } from "onecore"
 import { DB, SearchBuilder } from "sql-core"
 import { formatFullDateTime, getDateFormat } from "ui-formatter"

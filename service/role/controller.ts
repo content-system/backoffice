@@ -13,8 +13,8 @@ import {
   hasSearch,
   isSuccessful,
   resources,
-  respondError
-} from "express-core-web"
+  respondError,
+} from "express-web-kit"
 import { write } from "security-express"
 import { validate } from "validation-core"
 import { getLang, getResource } from "../resources"
@@ -30,7 +30,10 @@ function createRole(): Role {
   return role
 }
 export class RoleController {
-  constructor(private service: RoleService, private userService: UserService) {
+  constructor(
+    private service: RoleService,
+    private userService: UserService,
+  ) {
     this.search = this.search.bind(this)
     this.view = this.view.bind(this)
     this.submit = this.submit.bind(this)
@@ -73,7 +76,7 @@ export class RoleController {
   async view(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
-    const id = req.params.id
+    const id = req.params.id as string
     const editMode = id !== "new"
     const permissions = res.locals.permissions as number
     const readonly = write != (write & permissions)
@@ -134,7 +137,7 @@ export class RoleController {
   async renderAssign(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
-    const id = req.params.id
+    const id = req.params.id as string
     try {
       const role = await this.service.load(id)
       if (!role) {
@@ -154,7 +157,7 @@ export class RoleController {
     }
   }
   async assign(req: Request, res: Response) {
-    const id = req.params.id
+    const id = req.params.id as string
     const roles = req.body as string[]
     try {
       await this.service.assign(id, roles)

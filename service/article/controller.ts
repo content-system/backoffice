@@ -14,8 +14,8 @@ import {
   hasSearch,
   isSuccessful,
   resources,
-  respondError
-} from "express-core-web"
+  respondError,
+} from "express-web-kit"
 import { write } from "security-express"
 import { formatDateTime, getDateFormat } from "ui-formatter"
 import { validate } from "validation-core"
@@ -81,7 +81,7 @@ export class ArticleController {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
-    const id = req.params.id
+    const id = req.params.id as string
     const permissions = res.locals.permissions as number
     const readonly = write != (write & permissions)
     const editMode = id !== "new"
@@ -159,7 +159,7 @@ export class ArticleController {
     const lang = getLang(req, res)
     const resource = getResource(lang)
     const dateFormat = getDateFormat(lang)
-    const id = req.params.id
+    const id = req.params.id as string
     try {
       const article = await this.service.load(id)
       if (!article) {
@@ -167,7 +167,7 @@ export class ArticleController {
       }
       article.publishedAt = formatDateTime(article.publishedAt, dateFormat)
       const permissions = res.locals.permissions as number
-      const canApprove = (approve === (approve & permissions))
+      const canApprove = approve === (approve & permissions)
       render(req, res, "approve-article", {
         resource,
         canApprove,

@@ -1,8 +1,9 @@
 import { MenuBuilder } from "admin-menu"
 import { Authenticator, initializeStatus, PrivilegeRepository, SqlAuthTemplateConfig, Token, useUserRepository } from "authen-service"
 import { compare, hash } from "bcryptjs"
-import { HealthController, LogController, Logger, Middleware, MiddlewareController, resources } from "express-core-web"
+import { HealthController, LogController, Logger, Middleware, MiddlewareController, resources } from "express-web-kit"
 import { buildJwtError, Payload, verify } from "jsonwebtoken-plus"
+import { updateLogger } from "logger-core"
 import { StringMap } from "onecore"
 import { TemplateMap } from "query-mappers"
 import { Authorize, Authorizer, PrivilegeLoader, useToken } from "security-express"
@@ -54,22 +55,22 @@ export interface Context {
 
 export class Comparator {
   constructor(saltOrRounds?: string | number) {
-    this.saltOrRounds = (saltOrRounds ? saltOrRounds : 10);
-    this.compare = this.compare.bind(this);
-    this.hash = this.hash.bind(this);
+    this.saltOrRounds = saltOrRounds ? saltOrRounds : 10
+    this.compare = this.compare.bind(this)
+    this.hash = this.hash.bind(this)
   }
-  saltOrRounds: string | number;
+  saltOrRounds: string | number
   compare(data: string, encrypted: string): Promise<boolean> {
-    return compare(data, encrypted);
+    return compare(data, encrypted)
   }
   hash(data: string): Promise<string> {
-    return hash(data, this.saltOrRounds);
+    return hash(data, this.saltOrRounds)
   }
 }
 
 export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: Config, mapper?: TemplateMap): Context {
   const auth = cfg.auth
-  const log = new LogController(logger)
+  const log = new LogController(logger, updateLogger)
   const middleware = new MiddlewareController(midLogger)
   const sqlChecker = createChecker(db)
   const health = new HealthController([sqlChecker])
@@ -82,15 +83,7 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: C
 
   const status = initializeStatus(cfg.auth.status)
   const userRepository = useUserRepository<string, SqlAuthTemplateConfig>(db, cfg.auth, cfg.map)
-  const authenticator = new Authenticator(
-    status,
-    compare,
-    auth.account,
-    userRepository,
-    privilegeRepository.privileges,
-    auth.lockedMinutes,
-    2,
-  )
+  const authenticator = new Authenticator(status, compare, auth.account, userRepository, privilegeRepository.privileges, auth.lockedMinutes, 2)
   const login = new LoginController(authenticator, cfg.token.secret, cfg.token.expires)
 
   const userService = useUserService(db, mapper)

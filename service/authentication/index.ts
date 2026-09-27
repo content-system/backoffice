@@ -1,6 +1,6 @@
 import { Authenticator, getFirstPath } from "authen-service"
 import { Request, Response } from "express"
-import { buildError, getView, query, queryLang, toMap } from "express-core-web"
+import { buildError, getView, query, queryLang, toMap } from "express-web-kit"
 import * as jsonwebtoken from "jsonwebtoken"
 import { Attributes, StringMap } from "onecore"
 import { validate } from "validation-core"
@@ -29,7 +29,11 @@ export const map: StringMap = {
   "9": "fail_disabled_account",
 }
 export class LoginController {
-  constructor(private authenticator: Authenticator<User, string>, private secret: string, private expiresIn: number) {
+  constructor(
+    private authenticator: Authenticator<User, string>,
+    private secret: string,
+    private expiresIn: number,
+  ) {
     this.render = this.render.bind(this)
     this.submit = this.submit.bind(this)
   }

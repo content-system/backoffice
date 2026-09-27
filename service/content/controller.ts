@@ -14,8 +14,8 @@ import {
   hasSearch,
   isSuccessful,
   resources,
-  respondError
-} from "express-core-web"
+  respondError,
+} from "express-web-kit"
 import { write } from "security-express"
 import { formatDateTime } from "ui-formatter"
 import { validate } from "validation-core"
@@ -67,8 +67,8 @@ export class ContentController {
     }
   }
   async view(req: Request, res: Response) {
-    const id = req.params.id
-    const lang = req.params.lang
+    const id = req.params.id as string
+    const lang = req.params.lang as string
     const language = getLang(req, res)
     const resource = getResource(language)
     if (!id || !lang) {

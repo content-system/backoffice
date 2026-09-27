@@ -14,8 +14,8 @@ import {
   hasSearch,
   isSuccessful,
   resources,
-  respondError
-} from "express-core-web"
+  respondError,
+} from "express-web-kit"
 import { write } from "security-express"
 import { formatDateTime, formatPhone, getDateFormat } from "ui-formatter"
 import { validate } from "validation-core"
@@ -71,7 +71,7 @@ export class ContactController {
   async view(req: Request, res: Response) {
     const lang = getLang(req, res)
     const resource = getResource(lang)
-    const id = req.params.id
+    const id = req.params.id as string
     try {
       const contact = await this.service.load(id)
       if (!contact) {
