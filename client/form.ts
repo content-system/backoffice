@@ -143,6 +143,7 @@ function integerOnKeyDown(e: KeyboardEvent): boolean {
  * Allow:
  *   -123.45
  *   -123,45
+ *   -123٫45 (Arabic decimal separator)
  * depending on getDecimalSeparator()
  */
 function numberOnKeyDown(e: KeyboardEvent): boolean {
@@ -453,7 +454,7 @@ function decodeFromElement<T>(parent: HTMLElement | null | undefined, fields: st
             try {
               const val = new Date(ele.value) // DateUtil.parse(ele.value, 'YYYY-MM-DD');
               obj[field] = val
-            } catch (err) {}
+            } catch (err) { }
           }
         } else {
           const datatype = ele.getAttribute("data-type")

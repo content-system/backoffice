@@ -120,7 +120,7 @@ function navigate(e: Event, partId?: string, includeLang?: boolean) {
     if (histories.length > historyMax) {
       histories.shift()
     }
-    const search = window.location.search.length > 0 ? window.location.search.substring(1) : ""
+    let search = window.location.search.length > 0 ? window.location.search.substring(1) : ""
     const lang = getField(search, resources.lang)
     let url = link.href
     let pageId = resources.pageBody
@@ -130,7 +130,8 @@ function navigate(e: Event, partId?: string, includeLang?: boolean) {
       sub = `&${resources.subPartial}=true`
     }
     const lang1 = lang.length > 0 && includeLang ? "&" + lang : ""
-    const newUrl = url + (url.indexOf("?") > 0 ? "&" : "?") + `${resources.partial}=true${sub}` + lang1
+    const i = url.indexOf("?")
+    const newUrl = url + (i > 0 ? "&" : "?") + `${resources.partial}=true${sub}` + lang1
     showLoading()
     fetch(newUrl, { method: "GET", headers: getHeaders() })
       .then((response) => {
@@ -146,6 +147,11 @@ function navigate(e: Event, partId?: string, includeLang?: boolean) {
                 }
                 const span = link.querySelector("span")
                 const title = span ? span.innerText : link.innerText
+                if (i > 0 && resources.hiddenField) {
+                  let newSearch = url.substring(i + 1)
+                  newSearch = removeField(newSearch, resources.hiddenField)
+                  url = url.substring(0, i) + (newSearch ? "?" + newSearch : "")
+                }
                 window.history.pushState({ pageTitle: title }, "", url)
                 const tmpScript = document.getElementById("tmpScript")
                 if (tmpScript) {

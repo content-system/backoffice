@@ -169,6 +169,9 @@ function changePage(e: Event, partId?: string) {
   }
   search = removeField(search, resources.partial)
   search = removeField(search, resources.subPartial)
+  if (resources.hiddenField) {
+    search = removeField(search, resources.hiddenField)
+  }
   const p = getField(search, resources.page)
   if (p === `${resources.page}=1`) {
     search = removeField(search, resources.page)
@@ -183,6 +186,9 @@ function changePage(e: Event, partId?: string) {
   let sub = ""
   if (partId && partId.length > 0) {
     sub = `&${resources.subPartial}=true`
+  }
+  if (resources.hiddenField) {
+    sub = sub + `&${resources.hiddenField}=true`
   }
   url = url + (search.length === 0 ? `?${resources.partial}=true${sub}` : `?${search}&${resources.partial}=true${sub}`)
 

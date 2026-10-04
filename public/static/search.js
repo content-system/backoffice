@@ -165,6 +165,9 @@ function changePage(e, partId) {
   }
   search = removeField(search, resources.partial)
   search = removeField(search, resources.subPartial)
+  if (resources.hiddenField) {
+    search = removeField(search, resources.hiddenField)
+  }
   var p = getField(search, resources.page)
   if (p === resources.page + "=1") {
     search = removeField(search, resources.page)
@@ -179,6 +182,9 @@ function changePage(e, partId) {
   var sub = ""
   if (partId && partId.length > 0) {
     sub = "&" + resources.subPartial + "=true"
+  }
+  if (resources.hiddenField) {
+    sub = sub + ("&" + resources.hiddenField + "=true")
   }
   url = url + (search.length === 0 ? "?" + resources.partial + "=true" + sub : "?" + search + "&" + resources.partial + "=true" + sub)
   var newUrl = window.location.origin + window.location.pathname

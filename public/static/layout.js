@@ -130,7 +130,8 @@ function navigate(e, partId, includeLang) {
       sub = "&" + resources.subPartial + "=true"
     }
     var lang1 = lang.length > 0 && includeLang ? "&" + lang : ""
-    var newUrl = url_1 + (url_1.indexOf("?") > 0 ? "&" : "?") + (resources.partial + "=true" + sub) + lang1
+    var i_1 = url_1.indexOf("?")
+    var newUrl = url_1 + (i_1 > 0 ? "&" : "?") + (resources.partial + "=true" + sub) + lang1
     showLoading()
     fetch(newUrl, { method: "GET", headers: getHeaders() })
       .then(function (response) {
@@ -146,6 +147,11 @@ function navigate(e, partId, includeLang) {
                 }
                 var span = link.querySelector("span")
                 var title = span ? span.innerText : link.innerText
+                if (i_1 > 0 && resources.hiddenField) {
+                  var newSearch = url_1.substring(i_1 + 1)
+                  newSearch = removeField(newSearch, resources.hiddenField)
+                  url_1 = url_1.substring(0, i_1) + (newSearch ? "?" + newSearch : "")
+                }
                 window.history.pushState({ pageTitle: title }, "", url_1)
                 var tmpScript = document.getElementById("tmpScript")
                 if (tmpScript) {
