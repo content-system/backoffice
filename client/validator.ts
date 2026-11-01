@@ -426,7 +426,7 @@ function checkOnBlur(event: Event, key: string, check: (v: string | null | undef
     ele.value = ele.value.trim()
     const label = getLabel(ele)
     const resource = getResource()
-    if (checkRequired(ele, label, resource) || checkMinLength(ele, label, resource) || checkMaxLength(ele, label, resource)) {
+    if (checkRequired(ele, label, resource) != null || checkMinLength(ele, label, resource) != null || checkMaxLength(ele, label, resource) != null) {
       return
     }
     let value = ele.value
@@ -493,7 +493,7 @@ function patternOnBlur(event: Event): void {
   removeError(ele)
   setTimeout(() => {
     ele.value = ele.value.trim()
-    if (checkRequired(ele)) {
+    if (checkRequired(ele) != null) {
       return
     }
     const value = ele.value
@@ -689,7 +689,7 @@ function checkNumberEvent(event: Event, decimalSeparator?: string | null): boole
 function checkNumber(target: HTMLInputElement, decimalSeparator?: string | null, r?: StringMap): boolean | string {
   const value = correctNumber(target.value, decimalSeparator)
   const label = getLabel(target)
-  if (checkRequired(target, label)) {
+  if (checkRequired(target, label) != null) {
     return false
   }
   const resource = r ? r : getResource()
@@ -928,20 +928,32 @@ function validateElement(ele: HTMLInputElement, decimalSeparator?: string | null
   const label = getLabel(ele)
   const resource = getResource()
   let msg0 = checkRequired(ele, label, resource)
-  if (msg0) {
+  if (msg0 != null) {
     return msg0
   }
   msg0 = checkMinLength(ele, label, resource)
-  if (msg0) {
+  if (msg0 != null) {
     return msg0
   }
   msg0 = checkMaxLength(ele, label, resource)
-  if (msg0) {
+  if (msg0 != null) {
     return msg0
   }
 
   if (!value || value === "") {
     return null
+  }
+
+  if (ele.pattern && ele.pattern.length > 0) {
+    let flags = ele.getAttribute("data-flags")
+    if (!isValidPattern(value, ele.pattern, flags)) {
+      let msg = ele.getAttribute("data-error-message")
+      if (!msg) {
+        msg = "Pattern Error"
+      }
+      addErrorMessage(ele, msg)
+      return msg
+    }
   }
 
   let ctype = ele.getAttribute("type")
@@ -958,18 +970,6 @@ function validateElement(ele: HTMLInputElement, decimalSeparator?: string | null
       datatype = "number"
     } else if (ctype === "date" || ctype === "datetime-local") {
       datatype = "date"
-    }
-  }
-
-  if (ele.pattern && ele.pattern.length > 0) {
-    let flags = ele.getAttribute("data-flags")
-    if (!isValidPattern(value, ele.pattern, flags)) {
-      let msg = ele.getAttribute("data-error-message")
-      if (!msg) {
-        msg = "Pattern Error"
-      }
-      addErrorMessage(ele, msg)
-      return msg
     }
   }
   if (datatype === "email") {
@@ -1137,7 +1137,7 @@ function validateForm(form?: HTMLFormElement, decimalSeparator?: string | null, 
       continue
     } else {
       const msg = validateElement(ele, decimalSeparator, includeReadOnly)
-      if (msg) {
+      if (msg != null) {
         if (divMessage && !errorShown) {
           if (!divMessage.classList.contains("alert-error")) {
             divMessage.classList.add("alert-error")
@@ -1169,7 +1169,8 @@ function validateElements(elements: HTMLInputElement[], decimalSeparator?: strin
   let valid = true
   let errorCtrl: HTMLInputElement | null = null
   for (const c of elements) {
-    if (!validateElement(c, decimalSeparator)) {
+    const msg = validateElement(c, decimalSeparator)
+    if (msg != null) {
       valid = false
       if (!errorCtrl) {
         errorCtrl = c

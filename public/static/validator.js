@@ -420,7 +420,7 @@ function checkOnBlur(event, key, check, formatF) {
     ele.value = ele.value.trim()
     var label = getLabel(ele)
     var resource = getResource()
-    if (checkRequired(ele, label, resource) || checkMinLength(ele, label, resource) || checkMaxLength(ele, label, resource)) {
+    if (checkRequired(ele, label, resource) != null || checkMinLength(ele, label, resource) != null || checkMaxLength(ele, label, resource) != null) {
       return
     }
     var value = ele.value
@@ -487,7 +487,7 @@ function patternOnBlur(event) {
   removeError(ele)
   setTimeout(function () {
     ele.value = ele.value.trim()
-    if (checkRequired(ele)) {
+    if (checkRequired(ele) != null) {
       return
     }
     var value = ele.value
@@ -680,7 +680,7 @@ function checkNumberEvent(event, decimalSeparator) {
 function checkNumber(target, decimalSeparator, r) {
   var value = correctNumber(target.value, decimalSeparator)
   var label = getLabel(target)
-  if (checkRequired(target, label)) {
+  if (checkRequired(target, label) != null) {
     return false
   }
   var resource = r ? r : getResource()
@@ -889,19 +889,30 @@ function validateElement(ele, decimalSeparator, includeReadOnly) {
   var label = getLabel(ele)
   var resource = getResource()
   var msg0 = checkRequired(ele, label, resource)
-  if (msg0) {
+  if (msg0 != null) {
     return msg0
   }
   msg0 = checkMinLength(ele, label, resource)
-  if (msg0) {
+  if (msg0 != null) {
     return msg0
   }
   msg0 = checkMaxLength(ele, label, resource)
-  if (msg0) {
+  if (msg0 != null) {
     return msg0
   }
   if (!value || value === "") {
     return null
+  }
+  if (ele.pattern && ele.pattern.length > 0) {
+    var flags = ele.getAttribute("data-flags")
+    if (!isValidPattern(value, ele.pattern, flags)) {
+      var msg = ele.getAttribute("data-error-message")
+      if (!msg) {
+        msg = "Pattern Error"
+      }
+      addErrorMessage(ele, msg)
+      return msg
+    }
   }
   var ctype = ele.getAttribute("type")
   if (ctype) {
@@ -917,17 +928,6 @@ function validateElement(ele, decimalSeparator, includeReadOnly) {
       datatype = "number"
     } else if (ctype === "date" || ctype === "datetime-local") {
       datatype = "date"
-    }
-  }
-  if (ele.pattern && ele.pattern.length > 0) {
-    var flags = ele.getAttribute("data-flags")
-    if (!isValidPattern(value, ele.pattern, flags)) {
-      var msg = ele.getAttribute("data-error-message")
-      if (!msg) {
-        msg = "Pattern Error"
-      }
-      addErrorMessage(ele, msg)
-      return msg
     }
   }
   if (datatype === "email") {
@@ -1093,7 +1093,7 @@ function validateForm(form, decimalSeparator, focusFirst, scroll, includeReadOnl
       continue
     } else {
       var msg = validateElement(ele, decimalSeparator, includeReadOnly)
-      if (msg) {
+      if (msg != null) {
         if (divMessage && !errorShown) {
           if (!divMessage.classList.contains("alert-error")) {
             divMessage.classList.add("alert-error")
@@ -1126,7 +1126,8 @@ function validateElements(elements, decimalSeparator) {
   var errorCtrl = null
   for (var _i = 0, elements_1 = elements; _i < elements_1.length; _i++) {
     var c = elements_1[_i]
-    if (!validateElement(c, decimalSeparator)) {
+    var msg = validateElement(c, decimalSeparator)
+    if (msg != null) {
       valid = false
       if (!errorCtrl) {
         errorCtrl = c

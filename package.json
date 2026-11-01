@@ -28,7 +28,7 @@
     "nunjucks": "^3.2.4",
     "onecore": "^0.6.7",
     "pg": "^8.23.0",
-    "postgres-kit": "^0.0.7",
+    "postgres-kit": "^0.0.8",
     "query-mappers": "^0.1.1",
     "security-express": "^0.2.0",
     "sql-core": "^0.1.10",
