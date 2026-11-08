@@ -2,18 +2,19 @@
   "compileOnSave": true,
   "compilerOptions": {
     "pretty": true,
-    "target": "es5",
-    "baseUrl": "service",
-    "outDir": "./es5",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "target": "es6",
+    "rootDir": "./",
+    "outDir": "./",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "strict": true,
     "sourceMap": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "removeComments": true
   },
   "include": ["service/**/*.ts", "server.ts", "config.ts", "client/**/*.ts", "build/**/*.ts"],
   "exclude": ["node_modules"]
