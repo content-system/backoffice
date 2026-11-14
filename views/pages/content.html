@@ -16,13 +16,13 @@
       {{resource.published_at}}
       <input type="datetime-local" id="publishedAt" name="publishedAt" value="{{datetimeToString(content.publishedAt)}}" step=".010" />
     </label>
-    <div class="col s12 m6 radio-section">
+    <label class="col s12 m6">
       {{resource.status}}
       <div class="radio-group">
         <label><input type="radio" id="active" name="status" value="A" {{isChecked('A', content.status)}}/>{{resource.active}}</label>
         <label><input type="radio" id="inactive" name="status" value="I" {{isChecked('I', content.status)}}/>{{resource.inactive}}</label>
       </div>
-    </div>
+    </label>
     <label class="col s12">
       {{resource.title}}
       <input

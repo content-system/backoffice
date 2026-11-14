@@ -1,13 +1,12 @@
 import { Attribute, Attributes, StringMap } from "onecore"
-import { Query, TemplateMap, useQuery } from "query-mappers"
 import { buildMap, buildMetadata, DB, SearchBuilder } from "sql-core"
 import { User, UserFilter, userModel, UserService } from "./user"
 
 export * from "./user"
 
 export class SqlUserService extends SearchBuilder<User, UserFilter> implements UserService {
-  constructor(protected db: DB, query?: Query) {
-    super(db, "users", userModel, query)
+  constructor(protected db: DB) {
+    super(db, "users", userModel)
     this.attributes = userModel
     const meta = buildMetadata(userModel)
     this.primaryKeys = meta.keys
@@ -33,7 +32,6 @@ export class SqlUserService extends SearchBuilder<User, UserFilter> implements U
   }
 }
 
-export function useUserService(db: DB, mapper?: TemplateMap): UserService {
-  const query = useQuery("user", mapper, userModel, true)
-  return new SqlUserService(db, query)
+export function useUserService(db: DB): UserService {
+  return new SqlUserService(db)
 }

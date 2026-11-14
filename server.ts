@@ -2,13 +2,13 @@ import { merge } from "config-plus"
 import cookieParser from "cookie-parser"
 import dotenv from "dotenv"
 import express from "express"
-import { resources as expressResources, loadTemplates, MiddlewareLogger } from "express-web-kit"
+import { TokenVerifier } from "express-jsonwebtoken"
+import { resources as expressResources, MiddlewareLogger } from "express-web-kit"
 import http from "http"
 import { createLogger } from "logger-core"
 import nunjucks from "nunjucks"
 import { Pool } from "pg"
 import { PoolManager } from "postgres-kit"
-import { buildTemplates, trim } from "query-mappers"
 import { config, env } from "./config"
 import { route, useContext } from "./service"
 import { resources } from "./service/template"
@@ -41,13 +41,23 @@ expressResources.log = logger.error
 resources.log = logger.error
 
 const middleware = new MiddlewareLogger(logger.info, cfg.middleware)
-app.use(cookieParser())
+const verifier = new TokenVerifier(
+  "account",
+  "userId",
+  "id",
+  "accessToken",
+  cfg.token.secret,
+  cfg.token.expires,
+  "lax",
+  "rememberToken",
+  cfg.rememberToken.secret,
+)
+app.use(cookieParser(), verifier.verify)
 // app.use(allow(cfg.allow), json(), cookieParser(), middleware.log)
 
-const templates = loadTemplates(cfg.template, buildTemplates, trim, ["./config/query.xml"])
 const pool = new Pool(cfg.db)
 const db = new PoolManager(pool)
-const ctx = useContext(db, logger, middleware, cfg, templates)
+const ctx = useContext(db, logger, middleware, cfg)
 
 route(app, ctx)
 // start(app, cfg)

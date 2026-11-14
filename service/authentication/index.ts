@@ -31,8 +31,12 @@ export const map: StringMap = {
 export class LoginController {
   constructor(
     private authenticator: Authenticator<User, string>,
+    private token: string,
     private secret: string,
     private expiresIn: number,
+    private remember: string,
+    private rememberSecret: string,
+    private rememberExpiresIn: number,
   ) {
     this.render = this.render.bind(this)
     this.submit = this.submit.bind(this)
@@ -73,6 +77,15 @@ export class LoginController {
                 expiresIn: this.expiresIn,
               })
               res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "strict" })
+              const remember = jsonwebtoken.sign(
+                { id: account.id, username: user.username, displayName: account.displayName, language: account.language, dateFormat: account.dateFormat },
+                this.rememberSecret,
+                { expiresIn: this.rememberExpiresIn },
+              )
+              console.log("Login successfully with token = " + token)
+              res.cookie(this.token, token, { httpOnly: true, secure: true, sameSite: "lax", maxAge: this.expiresIn })
+              res.cookie(this.remember, remember, { httpOnly: true, secure: true, sameSite: "lax", maxAge: this.rememberExpiresIn })
+
               const redirectUrl = query(req, "redirectUrl")
               if (redirectUrl) {
                 res.redirect(redirectUrl)

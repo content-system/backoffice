@@ -2,11 +2,9 @@ import { MenuBuilder } from "admin-menu"
 import { Authenticator, initializeStatus, PrivilegeRepository, SqlAuthTemplateConfig, Token, useUserRepository } from "authen-service"
 import { compare, hash } from "bcryptjs"
 import { HealthController, LogController, Logger, Middleware, MiddlewareController, resources } from "express-web-kit"
-import { buildJwtError, Payload, verify } from "jsonwebtoken-plus"
 import { updateLogger } from "logger-core"
 import { StringMap } from "onecore"
-import { TemplateMap } from "query-mappers"
-import { Authorize, Authorizer, PrivilegeLoader, useToken } from "security-express"
+import { Authorize, Authorizer, PrivilegeLoader } from "security-express"
 import { createChecker, DB } from "sql-core"
 import { check } from "types-validation"
 import { createValidator } from "validation-core"
@@ -28,6 +26,7 @@ resources.check = check
 export interface Config {
   cookie?: boolean
   token: Token
+  rememberToken: Token
   auth: SqlAuthTemplateConfig
   sql: {
     allPrivileges: string
@@ -68,15 +67,14 @@ export class Comparator {
   }
 }
 
-export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: Config, mapper?: TemplateMap): Context {
+export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: Config): Context {
   const auth = cfg.auth
   const log = new LogController(logger, updateLogger)
   const middleware = new MiddlewareController(midLogger)
   const sqlChecker = createChecker(db)
   const health = new HealthController([sqlChecker])
   const privilegeLoader = new PrivilegeLoader(cfg.sql.permission, db.query)
-  const token = useToken<Payload>(cfg.token.secret, verify, buildJwtError, cfg.cookie, "account")
-  const authorizer = new Authorizer<Payload>(token, privilegeLoader.privilege, buildJwtError, true, "id", "userId", "permissions")
+  const authorizer = new Authorizer(privilegeLoader.privilege, logger.error, true, "userId", "permissions")
 
   const privilegeRepository = new PrivilegeRepository(db.query, cfg.sql.privileges)
   const menu = new MenuBuilder(getResourceByLang, privilegeRepository.privileges, "menu", "id", "lang", "account")
@@ -84,11 +82,19 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: C
   const status = initializeStatus(cfg.auth.status)
   const userRepository = useUserRepository<string, SqlAuthTemplateConfig>(db, cfg.auth, cfg.map)
   const authenticator = new Authenticator(status, compare, auth.account, userRepository, privilegeRepository.privileges, auth.lockedMinutes, 2)
-  const login = new LoginController(authenticator, cfg.token.secret, cfg.token.expires)
+  const login = new LoginController(
+    authenticator,
+    "accessToken",
+    cfg.token.secret,
+    cfg.token.expires,
+    "rememberToken",
+    cfg.rememberToken.secret,
+    cfg.rememberToken.expires,
+  )
 
-  const userService = useUserService(db, mapper)
-  const role = useRoleController(db, userService, mapper)
-  const user = useUserController(db, mapper)
+  const userService = useUserService(db)
+  const role = useRoleController(db, userService)
+  const user = useUserController(db)
   const auditLog = useAuditLogController(db)
 
   const category = useCategoryController(db)

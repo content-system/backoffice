@@ -3,8 +3,6 @@
     <button type="button" id="backBtn" name="backBtn" class="btn-back" onclick="goBack()"></button>
     <h2>{{resource.user}}</h2>
     <div class="btn-group">
-      <button class="btn-group btn-right"><i class="material-icons">group</i></button>
-      <button class="btn-group btn-right"><i class="material-icons">group</i></button>
       <a href="/users/{{user.userId}}/assign" onclick="navigate(event)"><i class="material-icons">group</i></a>
     </div>
   </header>
@@ -94,13 +92,13 @@
         <label><input type="radio" id="gender" name="gender" disabled value="F" {{isChecked('F', user.gender)}}/>{{resource.female}}</label>
       </div>
     </label>
-    <div class="col s12 m6 radio-section">
+    <label class="col s12 m6">
       {{resource.status}}
       <div class="radio-group">
         <label><input type="radio" id="active" name="status" value="A" {{isChecked('A', user.status)}}/>{{resource.active}}</label>
         <label><input type="radio" id="inactive" name="status" value="I" {{isChecked('I', user.status)}}/>{{resource.inactive}}</label>
       </div>
-    </div>
+    </label>
   </div>
   <footer class="view-footer">
     <button type="submit" id="saveBtn" name="saveBtn" onclick="submitForm(event)" {% if readonly %} disabled {% endif %}>{{resource.save}}</button>

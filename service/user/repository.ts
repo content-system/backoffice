@@ -1,7 +1,70 @@
-import { Attributes, StringMap } from "onecore"
-import { Query } from "query-mappers"
-import { buildMap, buildToInsert, buildToInsertBatch, buildToUpdate, DB, SearchRepository, Statement } from "sql-core"
+import { Attributes, DB, StringMap } from "onecore"
+import { param } from "postgres-kit"
+import { buildMap, buildSort, buildToInsert, buildToInsertBatch, buildToUpdate, SearchRepository, Statement } from "sql-core"
 import { User, UserFilter, userModel, UserRepository } from "./user"
+
+export function buildQuery(filter: UserFilter): Statement {
+  let query = `select * from users`
+  const where: string[] = []
+  const params = []
+  let i = 1
+
+  if (filter.userId) {
+    where.push(`id = $${param(i++)}`)
+    params.push(filter.userId)
+  }
+
+  if (filter.status && filter.status.length > 0) {
+    const arr: string[] = []
+    for (const status of filter.status) {
+      params.push(status)
+      arr.push(`${param(i++)}`)
+    }
+    where.push(`status in (${arr.join(",")})`)
+  }
+
+  if (filter.excluding && filter.excluding.length > 0) {
+    const arr: string[] = []
+    for (const id of filter.excluding) {
+      params.push(id)
+      arr.push(`${param(i++)}`)
+    }
+    where.push(`user_id not in (${arr.join(",")})`)
+  }
+
+  if (filter.email) {
+    where.push(`email ilike $${param(i++)}`)
+    params.push(`${filter.email}%`)
+  }
+  if (filter.username) {
+    where.push(`username ilike $${param(i++)}`)
+    params.push(`${filter.username}%`)
+  }
+  if (filter.displayName) {
+    where.push(`display_name ilike $${param(i++)}`)
+    params.push(`%${filter.displayName}%`)
+  }
+
+  if (filter.q) {
+    const q = filter.q.replace(/%/g, "\\%").replace(/_/g, "\\_")
+    where.push(`(email ilike ${param(i++)} or username ilike ${param(i++)} or display_name ilike ${param(i++)})`)
+    params.push(`${q}%`, `%${q}%`, `%${q}%`)
+  }
+
+  if (where.length > 0) {
+    query = query + ` where ` + where.join(` and `)
+  }
+  if (!filter.sort) {
+    filter.sort = "userId"
+  }
+  const orderBy = buildSort(filter.sort, userModel)
+  if (orderBy) {
+    query = query + ` order by ${orderBy}`
+  }
+
+  console.log(query)
+  return { query, params }
+}
 
 const userRoleModel: Attributes = {
   userId: {
@@ -22,17 +85,33 @@ export class SqlUserRepository extends SearchRepository<User, UserFilter> implem
   map: StringMap
   roleMap: StringMap
   attributes: Attributes
-  constructor(protected db: DB, query?: Query) {
-    super(db, "users", userModel, query)
+  constructor(protected db: DB) {
+    super(db, "users", userModel, buildQuery)
     this.attributes = userModel
     this.map = buildMap(userModel)
     this.roleMap = buildMap(userRoleModel)
+    this.getUsersOfRole = this.getUsersOfRole.bind(this)
     this.search = this.search.bind(this)
     this.create = this.create.bind(this)
     this.update = this.update.bind(this)
     this.patch = this.patch.bind(this)
     this.delete = this.delete.bind(this)
     this.assign = this.assign.bind(this)
+  }
+  getUsersOfRole(roleId: string): Promise<User[]> {
+    if (!roleId || roleId.length === 0) {
+      return Promise.resolve([])
+    }
+    const sql = `
+      select u.*
+      from user_roles ur
+        inner join users u on u.user_id = ur.user_id
+      where ur.role_id = ${this.db.param(1)}
+      order by user_id`
+    return this.db.query(sql, [roleId], this.map)
+  }
+  all(): Promise<User[]> {
+    return this.db.query("select * from users order by user_id asc", undefined, this.map)
   }
   async load(id: string): Promise<User | null> {
     let query = `select * from users where user_id = ${this.db.param(1)}`

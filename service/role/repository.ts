@@ -1,7 +1,43 @@
-import { Attributes } from "onecore"
-import { Query } from "query-mappers"
-import { buildMap, buildToInsert, buildToInsertBatch, buildToUpdate, DB, SearchRepository, Statement, StringMap } from "sql-core"
+import { Attributes, DB } from "onecore"
+import { param } from "postgres-kit"
+import { buildMap, buildSort, buildToInsert, buildToInsertBatch, buildToUpdate, SearchRepository, Statement, StringMap } from "sql-core"
 import { Role, RoleFilter, roleModel, RoleRepository } from "./role"
+
+export function buildQuery(filter: RoleFilter): Statement {
+  let query = `select * from roles`
+  const where: string[] = []
+  const params = []
+  let i = 1
+
+  if (filter.status && filter.status.length > 0) {
+    const arr: string[] = []
+    for (const status of filter.status) {
+      params.push(status)
+      arr.push(`${param(i++)}`)
+    }
+    where.push(`status in (${arr.join(",")})`)
+  }
+
+  if (filter.q) {
+    const q = filter.q.replace(/%/g, "\\%").replace(/_/g, "\\_")
+    where.push(`(role_id ilike ${param(i++)} or role_name ilike ${param(i++)})`)
+    params.push(`%${q}%`, `%${q}%`)
+  }
+
+  if (where.length > 0) {
+    query = query + ` where ` + where.join(` and `)
+  }
+  if (!filter.sort) {
+    filter.sort = "roleId"
+  }
+  const orderBy = buildSort(filter.sort, roleModel)
+  if (orderBy) {
+    query = query + ` order by ${orderBy}`
+  }
+
+  console.log(query)
+  return { query, params }
+}
 
 const userRoleModel: Attributes = {
   userId: {
@@ -39,11 +75,12 @@ export class SqlRoleRepository extends SearchRepository<Role, RoleFilter> implem
   private roleModuleMap: StringMap
   map?: StringMap
   attributes: Attributes
-  constructor(protected db: DB, query?: Query) {
-    super(db, "roles", roleModel, query)
+  constructor(protected db: DB) {
+    super(db, "roles", roleModel, buildQuery)
     this.attributes = roleModel
     this.metadata = this.metadata.bind(this)
     this.search = this.search.bind(this)
+    this.all = this.all.bind(this)
     this.load = this.load.bind(this)
     this.create = this.create.bind(this)
     this.update = this.update.bind(this)
@@ -55,6 +92,9 @@ export class SqlRoleRepository extends SearchRepository<Role, RoleFilter> implem
   }
   metadata(): Attributes {
     return roleModel
+  }
+  all(): Promise<Role[]> {
+    return this.db.query("select * from roles order by role_id asc", undefined, this.map)
   }
   async load(id: string): Promise<Role | null> {
     let query = `select * from roles where role_id = ${this.db.param(1)}`
@@ -70,12 +110,19 @@ export class SqlRoleRepository extends SearchRepository<Role, RoleFilter> implem
     }
     return role
   }
-  create(role: Role): Promise<number> {
+  async create(role: Role): Promise<number> {
     const stmts: Statement[] = []
     const stmt = buildToInsert(role, "roles", roleModel, this.db.param)
     stmts.push(stmt)
     insertRoleModules(stmts, role.roleId, role.privileges, this.db.param)
-    return this.db.executeBatch(stmts, true)
+    try {
+      return await this.db.executeBatch(stmts, true)
+    } catch (err: any) {
+      if (err.code === "23505") {
+        return 0
+      }
+      throw err
+    }
   }
   update(role: Role): Promise<number> {
     const stmts: Statement[] = []

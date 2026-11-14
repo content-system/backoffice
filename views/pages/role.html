@@ -40,13 +40,13 @@
         {{resource.remark}}
         <input type="text" id="remark" name="remark" value="{{role.remark}}" maxlength="255" placeholder="{{resource.remark}}" />
       </label>
-      <div class="col s12 m6 radio-section">
+      <label class="col s12 m6">
         {{resource.status}}
         <div class="radio-group">
           <label><input type="radio" id="active" name="status" value="A" {{isChecked('A', role.status)}}>{{resource.active}}</label>
           <label><input type="radio" id="inactive" name="status" value="I" {{isChecked('I', role.status)}}/>{{resource.inactive}}</label>
         </div>
-      </div>
+      </label>
     </section>
   </div>
   <footer>

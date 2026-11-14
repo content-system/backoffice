@@ -49,13 +49,13 @@
         onblur="numberOnBlur(event)"
         placeholder="{{resource.sequence}}" />
     </label>
-    <div class="col s12 m6 radio-section">
+    <label class="col s12 m6">
       {{resource.status}}
       <div class="radio-group">
         <label><input type="radio" id="active" name="status" value="A" {{isChecked('A', category.status)}}/>{{resource.active}}</label>
         <label><input type="radio" id="inactive" name="status" value="I" {{isChecked('I', category.status)}}/>{{resource.inactive}}</label>
       </div>
-    </div>
+    </label>
   </div>
   <footer>
     <button type="submit" id="saveBtn" name="saveBtn" onclick="submitForm(event)" {% if readonly %} disabled {% endif %}>{{resource.save}}</button>
