@@ -1,53 +1,54 @@
-# backoffice
+# Backoffice
 
-## Available Scripts
+A TypeScript back-office application built with Express 5, PostgreSQL, Nunjucks server-side templates, and vanilla JavaScript. It provides user/role administration, authorization, audit logs, categories, multilingual content, article publishing, jobs, and contact management.
 
-### `npm start`
+> **Architecture note:** despite occasional references to Next.js in project discussions, this repository is not a Next.js application. Its server entry point is `server.ts`; HTML pages are rendered with Nunjucks under `views/`.
 
-Runs the app in the development mode.
+## Technology
 
-### `npm run build`
+- TypeScript with strict compiler settings
+- Express 5
+- PostgreSQL (`pg`, `postgres-kit`, `sql-core`)
+- Nunjucks templates
+- Vanilla JavaScript and CSS
+- `authen-service`, JWT, and `security-express` for authentication/authorization
+- `validation-core` for model-based request validation
+- Webpack for the production server bundle
 
-Builds the app for production to the `dist` folder.
+## Available scripts
 
-### `npm run prod`
+```bash
+npm ci
+npm start       # Development server (ts-node-dev)
+npm run build   # Webpack bundle to server.js in the project root
+npm run prod    # Run the generated server.js
+```
 
-Runs the app for production in the `dist` folder.
+`npm test` is currently a placeholder and does not run a test suite.
 
-## Architecture
+## Architecture overview
 
-![User Role Service](https://cdn-images-1.medium.com/max/800/1*Gm0dypLuYaPwGM8UzrzV7w.png)
+- `server.ts` — application bootstrap, Nunjucks, PostgreSQL pool, route setup, and HTTP listener.
+- `config.ts` — application, authentication, database, logging, and environment configuration.
+- `service/context.ts` — dependency composition root.
+- `service/index.ts` — Express routes and authorization middleware.
+- `service/<feature>/` — domain contracts, repositories, use cases, controllers, and feature composition.
+- `service/shared/` — reusable adapters and shared domain utilities.
+- `service/resources/` — English and Vietnamese server-side resources.
+- `views/` — Nunjucks layouts, pages, and partials.
+- `public/static/` and `public/css/` — browser scripts and styles.
 
-## Business Features
+## AI-assisted development guidance
 
-- User management
-- Role management
+Start with [`AGENTS.md`](AGENTS.md). It links to focused documentation for architecture, feature implementation, data access, UI conventions, domain behavior, and development checks:
 
-## Other Features
+- [Architecture](docs/architecture.md)
+- [Feature development](docs/feature-development.md)
+- [Data access](docs/data-access.md)
+- [UI conventions](docs/ui-conventions.md)
+- [Domain reference](docs/domain-reference.md)
+- [Development workflow](docs/development.md)
 
-- Authentication
-  - Log in by LDAP
-  - After logged in, get all privileges based on roles of that user
-- Authorization: Separate the "read" and "write" permissions for 1 role, using bitwise. For example:
-  - 001 (1 in decimal) is "read" permission
-  - 010 (2 in decimal) is "write" permission
-  - 100 (4 in decimal) is "delete" permission
-  - "read" and "write" permission will be "001 | 010 = 011" (011 is 3 in decimal)
+## Configuration
 
-## Libraries
-
-### libraries for authentication
-
-- authen-service
-- multer: handle form-data for authentication
-
-### libraries for authorization
-
-- security-express
-- jsonwebtoken
-- jsonwebtoken-plus
-- cookie-parser: for cookie token
-
-### libraries for xml mapper (use to search users and search roles)
-
-- query-templates
+The application loads `.env` and merges the defaults in `config.ts` with environment-specific configuration. Supply database credentials and authentication secrets through the deployment environment; do not use source-code fallback values as production secrets.
