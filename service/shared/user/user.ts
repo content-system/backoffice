@@ -20,11 +20,11 @@ export interface UserFilter extends Filter {
 }
 
 export interface UserRepository {
-  search(filter: UserFilter, limit: number, page?: number | string, fields?: string[], ctx?: any): Promise<SearchResult<User>>
+  search(filter: UserFilter, limit: number, page?: number, fields?: string[], ctx?: any): Promise<SearchResult<User>>
   getUsersOfRole(roleId: string): Promise<User[]>
 }
 export interface UserService {
-  search(filter: UserFilter, limit: number, page?: number | string, fields?: string[], ctx?: any): Promise<SearchResult<User>>
+  search(filter: UserFilter, limit: number, page?: number, fields?: string[], ctx?: any): Promise<SearchResult<User>>
   getUsersOfRole(roleId: string): Promise<User[]>
 }
 
@@ -33,7 +33,7 @@ export const userModel: Attributes = {
     column: "user_id",
     key: true,
     length: 40,
-    operator: "="
+    operator: "=",
   },
   username: {
     required: true,
@@ -53,7 +53,7 @@ export const userModel: Attributes = {
   },
   status: {
     length: 1,
-    operator: "="
+    operator: "=",
   },
   gender: {
     length: 1,
@@ -90,7 +90,7 @@ export const userModel: Attributes = {
   updatedAt: {
     column: "updated_at",
     type: "datetime",
-    updatedAt: true
+    updatedAt: true,
   },
 
   roles: {
